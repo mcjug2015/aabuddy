@@ -90,11 +90,12 @@ def setup_user():
     ''' creates the user under which guru will run  '''
     user = env.user
     env.user = env.start_user
-    sudo('adduser %s' % user)
-    sudo('adduser %s admin' % user)
+    run('useradd %s' % user)
+    run('passwd %s' % user)
+    run('usermod -a -G wheel %s' % user)
     if (env.use_ssh_keys):
-        sudo('mkdir -p /home/{0}/.ssh && chmod 0700 /home/{0}/.ssh'.format(user), user=user)
-        sudo('cp ~/.ssh/authorized_keys /home/{0}/.ssh && chown {0} /home/{0}/.ssh/authorized_keys'.format(user))
+        run('mkdir -p /home/{0}/.ssh && chmod 0700 /home/{0}/.ssh'.format(user), user=user)
+        run('cp ~/.ssh/authorized_keys /home/{0}/.ssh && chown {0} /home/{0}/.ssh/authorized_keys'.format(user))
     env.user = user
 
 
