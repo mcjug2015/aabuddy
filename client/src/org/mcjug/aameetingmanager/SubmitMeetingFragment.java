@@ -1,11 +1,8 @@
 package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
-import java.util.List;
 
 import android.app.TimePickerDialog;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -28,35 +25,39 @@ public class SubmitMeetingFragment extends Fragment {
 		// Inflate the layout for this fragment		
 		View view = inflater.inflate(R.layout.submit_meeting_fragment, container, false);		
 		
-		Calendar calendar = Calendar.getInstance();
-		final int hour = calendar.get(Calendar.HOUR);
-		final int minute = calendar.get(Calendar.MINUTE);		
+		final Calendar c = Calendar.getInstance();
 		
-		startTimeButton = (Button) view.findViewById(R.id.startTimeButton); 
-		startTimeButton.setText(new StringBuilder().append(pad(hour)).append(":").append(pad(minute)));
+		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
+		startTimeButton.setText(DateTimeUtil.getTimeStr(c));
 		startTimeButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), startTimePickerListener, hour, minute, true);
+				Calendar c = Calendar.getInstance();
+				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), startTimePickerListener, 
+						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 				timePicker.show();
 			} 
 		}); 
 		
-		endTimeButton = (Button) view.findViewById(R.id.endTimeButton); 
-		endTimeButton.setText(new StringBuilder().append(pad(hour)).append(":").append(pad(minute)));
+		c.add(Calendar.HOUR_OF_DAY, 1);
+		
+		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
+		endTimeButton.setText(DateTimeUtil.getTimeStr(c));
 		endTimeButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), endTimePickerListener, hour, minute, true);
+				Calendar c = Calendar.getInstance();
+				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), endTimePickerListener, 
+						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
 				timePicker.show();
 			} 
 		}); 
 		
-		addressEditText = (EditText) view.findViewById(R.id.addressEditText);
-
-		validateAddressButton = (Button) view.findViewById(R.id.validateAddressButton); 
+		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
+		
+		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				if (!validateAddress()) {
-					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG);
+				if (!LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext())) {
+					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
 			} 
 		}); 
@@ -64,36 +65,22 @@ public class SubmitMeetingFragment extends Fragment {
 		return view;
 	}
 	
-	private TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-			startTimeButton.setText(new StringBuilder().append(pad(selectedHour)).append(":").append(pad(selectedMinute)));
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		String address = LocationUtil.getLastKnownLocation(this.getActivity());
+		addressEditText.setText(address);
+	}
+
+	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hour, int minute) {
+			startTimeButton.setText(DateTimeUtil.getTimeStr(hour, minute));
 		}		
 	};
 	
-	private TimePickerDialog.OnTimeSetListener endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int selectedHour, int selectedMinute) {
-			endTimeButton.setText(new StringBuilder().append(pad(selectedHour)).append(":").append(pad(selectedMinute)));
+	private final TimePickerDialog.OnTimeSetListener endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hour, int minute) {
+			endTimeButton.setText(DateTimeUtil.getTimeStr(hour, minute));
 		}		
 	};
-	
-	private boolean validateAddress() {
-		boolean isValid = false;
-        try {
-			Geocoder gc = new Geocoder(getActivity());
-			String address = addressEditText.getText().toString();
-			List<Address> addresses = gc.getFromLocationName(address, 1);
-            if (addresses.size() > 0) {
-            	isValid = true;
-            } 
-		} catch (Exception e) {
-		}
-        return isValid;
-	}
-	
-	private static String pad(int c) {
-		if (c >= 10)
-		   return String.valueOf(c);
-		else
-		   return "0" + String.valueOf(c);
-	}
 }

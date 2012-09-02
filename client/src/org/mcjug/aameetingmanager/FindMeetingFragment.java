@@ -1,6 +1,5 @@
 package org.mcjug.aameetingmanager;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import android.app.DatePickerDialog;
@@ -13,12 +12,12 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 public class FindMeetingFragment extends Fragment {
 	
-	private SimpleDateFormat dateFormatter = new SimpleDateFormat("MM.dd.yyyy");
-	private SimpleDateFormat timeFormatter = new SimpleDateFormat("hh:mm a");
+	private EditText addressEditText = null;
 	private Button startDateButton = null;
 	private Button endDateButton = null;
 	private Button startTimeButton = null;
@@ -28,115 +27,88 @@ public class FindMeetingFragment extends Fragment {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 
-		startDateButton = (Button) view.findViewById(R.id.startDateButton);
-		final OnClickListener startDateButtonListener = new OnClickListener() {
+		final Calendar c = Calendar.getInstance();
+
+		startDateButton = (Button) view.findViewById(R.id.findMeetingStartDateButton);
+		startDateButton.setText(DateTimeUtil.getDateStr(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
+		startDateButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startDateButtonClicked();
+				Calendar c = Calendar.getInstance();
+				DatePickerDialog d = new DatePickerDialog(getActivity(), startDateDialogListener, 
+						c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+				d.show();				
 			}
-		};
-		startDateButton.setOnClickListener(startDateButtonListener);
+		});
 		
-		endDateButton = (Button) view.findViewById(R.id.endDateButton);
-		final OnClickListener endDateButtonListener = new OnClickListener() {
+		c.add(Calendar.MONTH, 1);
+		
+		endDateButton = (Button) view.findViewById(R.id.findMeetingEndDateButton);
+		endDateButton.setText(DateTimeUtil.getDateStr(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
+		endDateButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				endDateButtonClicked();
+				Calendar c = Calendar.getInstance();
+				DatePickerDialog d = new DatePickerDialog(getActivity(), endDateDialogListener, 
+						c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+				d.show();
 			}
-		};
-		endDateButton.setOnClickListener(endDateButtonListener);
+		});
 		
-		startTimeButton = (Button) view.findViewById(R.id.startTimeButton);
-		final OnClickListener startTimeButtonListener = new OnClickListener() {
+		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
+		startTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		startTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				startTimeButtonClicked();
+				Calendar c = Calendar.getInstance();
+				TimePickerDialog d = new TimePickerDialog(getActivity(), startTimeDialogListener, 
+						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+				d.show();			
 			}
-		};
-		startTimeButton.setOnClickListener(startTimeButtonListener);
+		});
 		
-		endTimeButton = (Button) view.findViewById(R.id.endTimeButton);
-		final OnClickListener endTimeButtonListener = new OnClickListener() {
+		c.add(Calendar.HOUR_OF_DAY, 1);
+		
+		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
+		endTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		endTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				endTimeButtonClicked();
+				TimePickerDialog d = new TimePickerDialog(getActivity(), endTimeDialogListener, 
+						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+				d.show();			
 			}
-		};
-		endTimeButton.setOnClickListener(endTimeButtonListener);
+		});
 		
+		addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
+
 		return view;
 	}
 	
-	public void startDateButtonClicked() {
-		final DatePickerDialog.OnDateSetListener startDateDialogListener =
-			new DatePickerDialog.OnDateSetListener() {
-				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-					Calendar c = Calendar.getInstance();
-					c.set(Calendar.MONTH, monthOfYear);
-					c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-					c.set(Calendar.YEAR, year);
-					String startDate = dateFormatter.format(c.getTime());
-					startDateButton.setText(startDate);
-				}
-			};
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
-		DatePickerDialog d = new DatePickerDialog(getActivity(), startDateDialogListener, year, month, day);
-		d.show();
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		String address = LocationUtil.getLastKnownLocation(this.getActivity());
+		addressEditText.setText(address);
 	}
 	
-	public void endDateButtonClicked() {
-		final DatePickerDialog.OnDateSetListener endDateDialogListener =
-			new DatePickerDialog.OnDateSetListener() {
-				public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-					Calendar c = Calendar.getInstance();
-					c.set(Calendar.MONTH, monthOfYear);
-					c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-					c.set(Calendar.YEAR, year);
-					String endDate = dateFormatter.format(c.getTime());
-					endDateButton.setText(endDate);
-				}
-			};
-		Calendar c = Calendar.getInstance();
-		int year = c.get(Calendar.YEAR);
-		int month = c.get(Calendar.MONTH);
-		int day = c.get(Calendar.DAY_OF_MONTH);
-		DatePickerDialog d = new DatePickerDialog(getActivity(), endDateDialogListener, year, month, day);
-		d.show();
-	}
+	private final DatePickerDialog.OnDateSetListener startDateDialogListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			startDateButton.setText(DateTimeUtil.getDateStr(year, monthOfYear, dayOfMonth));
+		}
+	};
 	
-	public void startTimeButtonClicked() {
-		final TimePickerDialog.OnTimeSetListener startTimeDialogListener =
-			new TimePickerDialog.OnTimeSetListener() {
-				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-					Calendar c = Calendar.getInstance();
-					c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-					c.set(Calendar.MINUTE, minute);
-					String startTime = timeFormatter.format(c.getTime());
-					startTimeButton.setText(startTime);
-				}
-			};
-		Calendar c = Calendar.getInstance();
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int minute = c.get(Calendar.MINUTE);
-		TimePickerDialog d = new TimePickerDialog(getActivity(), startTimeDialogListener, hour, minute, false);
-		d.show();
-	}
-	
-	public void endTimeButtonClicked() {
-		final TimePickerDialog.OnTimeSetListener endTimeDialogListener =
-			new TimePickerDialog.OnTimeSetListener() {
-				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-					Calendar c = Calendar.getInstance();
-					c.set(Calendar.HOUR_OF_DAY, hourOfDay);
-					c.set(Calendar.MINUTE, minute);
-					String endTime = timeFormatter.format(c.getTime());
-					endTimeButton.setText(endTime);
-				}
-			};
-		Calendar c = Calendar.getInstance();
-		int hour = c.get(Calendar.HOUR_OF_DAY);
-		int minute = c.get(Calendar.MINUTE);
-		TimePickerDialog d = new TimePickerDialog(getActivity(), endTimeDialogListener, hour, minute, false);
-		d.show();
-	}
-	
+	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			startTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
+		}
+	};
+
+	private final DatePickerDialog.OnDateSetListener endDateDialogListener = new DatePickerDialog.OnDateSetListener() {
+		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			endDateButton.setText(DateTimeUtil.getDateStr(year, monthOfYear, dayOfMonth));
+		}
+	};
+
+	private final TimePickerDialog.OnTimeSetListener endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			endTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
+		}
+	};
 }
