@@ -3,114 +3,118 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
+    <Button
+        android:id="@+id/submitMeetingStartTimeButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:drawableRight="@drawable/clock" />
+    
     <TextView
-        android:id="@+id/startTimeTextView"
+        android:id="@+id/submitMeetingStartTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBaseline="@+id/submitMeetingStartTimeButton"
         android:text="@string/start_time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/startTimeButton"
-        style="?android:attr/buttonStyleSmall"        
+        android:id="@+id/submitMeetingEndTimeButton"
+        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startTimeTextView"
-        android:layout_below="@+id/startTimeTextView"
-        android:text="@string/start_time_button"
-        android:width="80dp" />
+        android:layout_alignLeft="@+id/submitMeetingStartTimeButton"
+        android:layout_below="@+id/submitMeetingStartTimeButton"
+        android:layout_marginTop="5dp"
+        android:drawableRight="@drawable/clock" />
 
     <TextView
-        android:id="@+id/endTimeTextView"
+        android:id="@+id/submitMeetingEndTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/startTimeButton"
-        android:layout_centerHorizontal="true"
+        android:layout_alignBaseline="@+id/submitMeetingEndTimeButton"
+        android:layout_alignLeft="@+id/submitMeetingStartTimeTextView"
         android:text="@string/end_time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
-        android:id="@+id/dayOfWeekTextView"
+        android:id="@+id/submitMeetingDayOfWeekTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startTimeTextView"
-        android:layout_below="@+id/startTimeButton"
-        android:layout_marginTop="35dp"
+        android:layout_alignLeft="@+id/submitMeetingEndTimeTextView"
+        android:layout_below="@+id/submitMeetingEndTimeButton"
+        android:layout_marginTop="15dp"
         android:text="@string/day_of_week"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Spinner
-        android:id="@+id/dayOfweekSpinner"
+        android:id="@+id/submitMeetingDayOfweekSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/endTimeTextView"
-        android:layout_alignTop="@+id/dayOfWeekTextView"
+        android:layout_alignLeft="@+id/submitMeetingEndTimeButton"
+        android:layout_alignBaseline="@+id/submitMeetingDayOfWeekTextView"
         android:entries="@array/daysOfWeek" />
-
+    
     <TextView
-        android:id="@+id/addressTextView"
+        android:id="@+id/submitMeetingAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/dayOfWeekTextView"
-        android:layout_below="@+id/dayOfWeekTextView"
-        android:layout_marginTop="58dp"
+        android:layout_alignLeft="@+id/submitMeetingDayOfWeekTextView"
+        android:layout_below="@+id/submitMeetingDayOfWeekTextView"
+        android:layout_marginTop="25dp"
         android:text="@string/meeting_address"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/currentLocationButton"
+        android:id="@+id/submitMeetingCurrentLocationButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/addressTextView"
-        android:layout_alignBottom="@+id/addressTextView"
-        android:layout_alignLeft="@+id/dayOfweekSpinner"
+        android:layout_alignBaseline="@+id/submitMeetingAddressTextView"
+        android:layout_alignBottom="@+id/submitMeetingAddressTextView"
+        android:layout_alignLeft="@+id/submitMeetingDayOfweekSpinner"       
         android:text="@string/current_location_button" />
 
-    <Button
-        android:id="@+id/endTimeButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/dayOfWeekTextView"
-        android:layout_alignLeft="@+id/dayOfweekSpinner"
-        android:text="@string/end_time_button"
-        android:width="80dp" />
-
-    <Button
-        android:id="@+id/validateAddressButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/addressTextView"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
-        android:text="@string/validate_address_button" />
-
     <EditText
-        android:id="@+id/addressEditText"
+        android:id="@+id/submitMeetingAddressEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/addressTextView"
-        android:layout_alignRight="@+id/currentLocationButton"
-        android:layout_below="@+id/currentLocationButton"
-        android:layout_marginTop="22dp"
+        android:layout_alignLeft="@+id/submitMeetingAddressTextView"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/submitMeetingCurrentLocationButton"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="textPostalAddress"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium" >
+
+        <requestFocus />
+    </EditText>
 
     <Button
-        android:id="@+id/submitButton"
+        android:id="@+id/submitMeetingValidateAddressButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/validateAddressButton"
-        android:layout_alignBottom="@+id/validateAddressButton"
-        android:layout_toRightOf="@+id/endTimeTextView"
+        android:layout_alignLeft="@+id/submitMeetingAddressEditText"
+        android:layout_below="@+id/submitMeetingAddressEditText"
+        android:layout_marginTop="25dp"
+        android:text="@string/validate_address_button" />
+
+    <Button
+        android:id="@+id/submitMeetingButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/submitMeetingValidateAddressButton"
+        android:layout_alignBottom="@+id/submitMeetingValidateAddressButton"
+        android:layout_marginLeft="35dp"
+        android:layout_toRightOf="@+id/submitMeetingValidateAddressButton"
         android:text="@string/submit_button" />
 
 </RelativeLayout>
