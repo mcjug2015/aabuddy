@@ -20,6 +20,7 @@
 	<string name="current_location_button">Fill with current location</string>
 	<string name="validate_address_button">Validate Address</string>
 	<string name="submit_button">Submit</string>
+	<string name="search_within">Within:</string>
 	<string name="search_button">Search</string>
 		
 	<string-array name="daysOfWeek">
@@ -40,6 +41,15 @@
 		<item>THU</item>
 		<item>FRI</item>
 		<item>SAT</item>	
+	</string-array>
+	
+	<string-array name="searchDistances">
+	    <item>1 mile</item>
+	    <item>2 mile</item>
+	    <item>5 miles</item>
+	    <item>10 miles</item>
+	    <item>20 miles</item>
+		<item>50 miles</item>
 	</string-array>
 	
 </resources>
