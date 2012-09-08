@@ -21,6 +21,7 @@ public class LocationUtil {
     		}
   			address = getAddress(location, context);
 		} catch (Exception e) {
+			//TODO XXX add logging
 		}
         return address;
 	}

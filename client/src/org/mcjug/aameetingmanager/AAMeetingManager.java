@@ -1,7 +1,6 @@
 package org.mcjug.aameetingmanager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import android.content.Context;
@@ -17,21 +16,7 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 
 	private TabHost mTabHost;
 	private ViewPager mViewPager;
-	private HashMap<String, TabInfo> mapTabInfo = new HashMap<String, AAMeetingManager.TabInfo>();
 	private PagerAdapter mPagerAdapter;
-
-	private class TabInfo {
-		 private String tag;
-         private Class<?> clss;
-         private Bundle args;
-         
-         TabInfo(String tag, Class<?> clazz, Bundle args) {
-        	 this.tag = tag;
-        	 this.clss = clazz;
-        	 this.args = args;
-         }
-
-	}
 	
 	/**
 	 * A simple factory that returns dummy views to the Tabhost
@@ -99,13 +84,8 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
         
-        AAMeetingManager.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("SubmitMeeting").setIndicator("Submit Meeting"));
-        TabInfo tabInfo = new TabInfo("SubmitMeeting", SubmitMeetingFragment.class, args);
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
-        
-        AAMeetingManager.AddTab(this, this.mTabHost, this.mTabHost.newTabSpec("FindMeeting").setIndicator("Find Meeting"));
-        tabInfo = new TabInfo("FindMeeting", FindMeetingFragment.class, args);
-        this.mapTabInfo.put(tabInfo.tag, tabInfo);
+        AAMeetingManager.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("SubmitMeeting").setIndicator("Submit Meeting"));
+        AAMeetingManager.addTab(this, this.mTabHost, this.mTabHost.newTabSpec("FindMeeting").setIndicator("Find Meeting"));
         
         mTabHost.setOnTabChangedListener(this);
 	}
@@ -116,16 +96,11 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 	 * @param tabHost
 	 * @param tabSpec
 	 */
-	private static void AddTab(AAMeetingManager activity, TabHost tabHost, TabHost.TabSpec tabSpec) {
+	private static void addTab(AAMeetingManager activity, TabHost tabHost, TabHost.TabSpec tabSpec) {
 		// Attach a Tab view factory to the spec
 		tabSpec.setContent(activity.new TabFactory(activity));
         tabHost.addTab(tabSpec);
 	}
-
-	public void onTabChanged(String tag) {
-		int pos = this.mTabHost.getCurrentTab();
-		this.mViewPager.setCurrentItem(pos);
-    }
 
 	public void onPageScrolled(int arg0, float arg1, int arg2) {
 	}
@@ -135,6 +110,11 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 	}
 
 	public void onPageScrollStateChanged(int arg0) {
+	}
+
+	public void onTabChanged(String tabId) {
+		int pos = this.mTabHost.getCurrentTab();
+		this.mViewPager.setCurrentItem(pos);
 	}
 }
 
