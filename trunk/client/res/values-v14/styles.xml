@@ -1,5 +1,6 @@
 <resources>
 
+    <!-- TODO XXX use one that does not break 2.3.3 build target -->
     <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar" />
 
 </resources>
