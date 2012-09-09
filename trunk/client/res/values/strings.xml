@@ -5,17 +5,11 @@
     <string name="title_activity_main">AA Meeting Manager</string>
     
 	<string name="start_time">Start time:</string>
-	<string name="start_time_button">Pick a start time</string>
 	<string name="end_time">End time:</string>
-	<string name="end_time_button">Pick an end time</string>	
 
-	<string name="start_date">Start date:</string>
-	<string name="start_date_button">Pick a start date</string>
-	<string name="end_date">End date:</string>
-	<string name="end_date_button">Pick an end date</string>
-		
     <string name="day_of_week">Day of week:</string>
-	<string name="meeting_address">Address:</string>	
+    <string name="days_of_week">Days of week:</string>
+    <string name="meeting_address">Address:</string>	
 		
 	<string name="current_location_button">Fill with current location</string>
 	<string name="validate_address_button">Validate Address</string>
