@@ -21,36 +21,38 @@ public class SubmitMeetingFragment extends Fragment {
 	private EditText addressEditText;
 	private Button currentLocationButton;
 	private Button validateAddressButton;
+	private Button submitMeetingButton;
 	private Button startTimeButton;
 	private Button endTimeButton;
+	private Calendar startTimeCalendar;
+	private Calendar endTimeCalendar;
   
 	@Override	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment		
 		View view = inflater.inflate(R.layout.submit_meeting_fragment, container, false);		
 		
-		final Calendar c = Calendar.getInstance();
+		startTimeCalendar = Calendar.getInstance();
 		
 		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
-		startTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		startTimeButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				Calendar c = Calendar.getInstance();
 				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), startTimePickerListener, 
-						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+						startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
 				timePicker.show();
 			} 
 		}); 
 		
-		c.add(Calendar.HOUR_OF_DAY, 1);
+		endTimeCalendar = Calendar.getInstance();
+		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
 		
 		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
-		endTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		endTimeButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				Calendar c = Calendar.getInstance();
 				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), endTimePickerListener, 
-						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+						endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
 				timePicker.show();
 			} 
 		}); 
@@ -66,11 +68,17 @@ public class SubmitMeetingFragment extends Fragment {
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				if (!LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext())) {
+				if (LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext())) {
+					submitMeetingButton.setEnabled(true);
+				} else {	
+					submitMeetingButton.setEnabled(false);
 					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
 			} 
 		}); 
+		
+		submitMeetingButton = (Button) view.findViewById(R.id.submitMeetingButton); 
+		submitMeetingButton.setEnabled(false);
 		
 		return view;
 	}
@@ -83,14 +91,18 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 
 	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hour, int minute) {
-			startTimeButton.setText(DateTimeUtil.getTimeStr(hour, minute));
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			startTimeCalendar.set(Calendar.MINUTE, minute);
+			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		}		
 	};
 	
 	private final TimePickerDialog.OnTimeSetListener endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hour, int minute) {
-			endTimeButton.setText(DateTimeUtil.getTimeStr(hour, minute));
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			endTimeCalendar.set(Calendar.MINUTE, minute);
+			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		}		
 	};
 }
