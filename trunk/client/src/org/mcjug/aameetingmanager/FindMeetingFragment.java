@@ -1,8 +1,13 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
-import android.app.DatePickerDialog;
+import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.aameetingmanager.util.LocationUtil;
+
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,15 +16,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TimePicker;
+
 
 public class FindMeetingFragment extends Fragment {
 	
 	private EditText addressEditText = null;
-	private Button startDateButton = null;
-	private Button endDateButton = null;
 	private Button startTimeButton = null;
 	private Button endTimeButton = null;
 	
@@ -29,30 +32,6 @@ public class FindMeetingFragment extends Fragment {
 
 		final Calendar c = Calendar.getInstance();
 
-		startDateButton = (Button) view.findViewById(R.id.findMeetingStartDateButton);
-		startDateButton.setText(DateTimeUtil.getDateStr(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
-		startDateButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Calendar c = Calendar.getInstance();
-				DatePickerDialog d = new DatePickerDialog(getActivity(), startDateDialogListener, 
-						c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-				d.show();				
-			}
-		});
-		
-		c.add(Calendar.MONTH, 1);
-		
-		endDateButton = (Button) view.findViewById(R.id.findMeetingEndDateButton);
-		endDateButton.setText(DateTimeUtil.getDateStr(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH)));
-		endDateButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				Calendar c = Calendar.getInstance();
-				DatePickerDialog d = new DatePickerDialog(getActivity(), endDateDialogListener, 
-						c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
-				d.show();
-			}
-		});
-		
 		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
 		startTimeButton.setText(DateTimeUtil.getTimeStr(c));
 		startTimeButton.setOnClickListener(new OnClickListener() {
@@ -76,7 +55,12 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 		
-		addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
+		MultiSpinner multiSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
+		String[] daysOfWeek = getResources().getStringArray(R.array.daysOfWeek);
+		List<String> items = Arrays.asList(daysOfWeek);
+	    multiSpinner.setItems(items, "All", daysOfWeekSpinnerListener);
+
+	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
 		return view;
 	}
@@ -88,27 +72,20 @@ public class FindMeetingFragment extends Fragment {
 		addressEditText.setText(address);
 	}
 	
-	private final DatePickerDialog.OnDateSetListener startDateDialogListener = new DatePickerDialog.OnDateSetListener() {
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			startDateButton.setText(DateTimeUtil.getDateStr(year, monthOfYear, dayOfMonth));
-		}
-	};
-	
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
 		}
 	};
 
-	private final DatePickerDialog.OnDateSetListener endDateDialogListener = new DatePickerDialog.OnDateSetListener() {
-		public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-			endDateButton.setText(DateTimeUtil.getDateStr(year, monthOfYear, dayOfMonth));
-		}
-	};
-
 	private final TimePickerDialog.OnTimeSetListener endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			endTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
+		}
+	};
+	
+	private final MultiSpinnerListener daysOfWeekSpinnerListener = new MultiSpinnerListener() {
+		public void onItemsSelected(boolean[] selected) {
 		}
 	};
 }
