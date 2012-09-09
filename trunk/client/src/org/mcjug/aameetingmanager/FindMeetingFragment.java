@@ -25,32 +25,34 @@ public class FindMeetingFragment extends Fragment {
 	private EditText addressEditText = null;
 	private Button startTimeButton = null;
 	private Button endTimeButton = null;
-	
+	private Calendar startTimeCalendar;
+	private Calendar endTimeCalendar;
+ 
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 
-		final Calendar c = Calendar.getInstance();
+		startTimeCalendar = Calendar.getInstance();
 
 		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
-		startTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		startTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				Calendar c = Calendar.getInstance();
 				TimePickerDialog d = new TimePickerDialog(getActivity(), startTimeDialogListener, 
-						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+						startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
 				d.show();			
 			}
 		});
 		
-		c.add(Calendar.HOUR_OF_DAY, 1);
+		endTimeCalendar = Calendar.getInstance();
+		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
 		
 		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
-		endTimeButton.setText(DateTimeUtil.getTimeStr(c));
+		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		endTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				TimePickerDialog d = new TimePickerDialog(getActivity(), endTimeDialogListener, 
-						c.get(Calendar.HOUR_OF_DAY), c.get(Calendar.MINUTE), true);
+						endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
 				d.show();			
 			}
 		});
@@ -74,13 +76,17 @@ public class FindMeetingFragment extends Fragment {
 	
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			startTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
+			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			startTimeCalendar.set(Calendar.MINUTE, minute);
+			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		}
 	};
 
 	private final TimePickerDialog.OnTimeSetListener endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			endTimeButton.setText(DateTimeUtil.getTimeStr(hourOfDay, minute));
+			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+			endTimeCalendar.set(Calendar.MINUTE, minute);
+			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		}
 	};
 	
