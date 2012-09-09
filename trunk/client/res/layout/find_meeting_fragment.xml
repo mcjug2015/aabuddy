@@ -4,61 +4,23 @@
     android:layout_height="match_parent" >
 
     <Button
-        android:id="@+id/findMeetingStartDateButton"
+        android:id="@+id/findMeetingStartTimeButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:drawableRight="@drawable/calendar" />
-
-    <TextView
-        android:id="@+id/findMeetingStartDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_alignBaseline="@+id/findMeetingStartDateButton"
-        android:text="@string/start_date"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/findMeetingStartTimeButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingStartDateButton"
-        android:layout_below="@+id/findMeetingStartDateButton"
-        android:layout_marginTop="5dp"
         android:drawableRight="@drawable/clock" />
 
     <TextView
         android:id="@+id/findMeetingStartTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
         android:layout_alignBaseline="@+id/findMeetingStartTimeButton"
-        android:layout_alignLeft="@+id/findMeetingStartDateTextView"
         android:text="@string/start_time"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <Button
-        android:id="@+id/findMeetingEndDateButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingStartTimeButton"
-        android:layout_below="@+id/findMeetingStartTimeButton"
-        android:layout_marginTop="5dp"
-        android:drawableRight="@drawable/calendar" />
-
-    <TextView
-        android:id="@+id/findMeetingEndDateTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/findMeetingEndDateButton"
-        android:layout_alignLeft="@+id/findMeetingStartTimeTextView"
-        android:text="@string/end_date"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
@@ -66,8 +28,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingEndDateButton"
-        android:layout_below="@+id/findMeetingEndDateButton"
+        android:layout_alignLeft="@+id/findMeetingStartTimeButton"
+        android:layout_below="@+id/findMeetingStartTimeButton"
         android:layout_marginTop="5dp"
         android:drawableRight="@drawable/clock" />
 
@@ -76,18 +38,36 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/findMeetingEndTimeButton"
-        android:layout_alignLeft="@+id/findMeetingEndDateTextView"
+        android:layout_alignLeft="@+id/findMeetingStartTimeTextView"
         android:text="@string/end_time"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <TextView
+        android:id="@+id/findMeetingDayOfWeekTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/findMeetingEndTimeTextView"
+        android:layout_below="@+id/findMeetingEndTimeButton"
+        android:layout_marginTop="15dp"
+        android:text="@string/days_of_week"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+    
+    <org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner
+        android:id="@+id/findMeetingDaysOfWeekSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/findMeetingEndTimeButton"
+        android:layout_alignBaseline="@+id/findMeetingDayOfWeekTextView"
+        android:entries="@array/daysOfWeek" />
+    
     <Button
         android:id="@+id/findMeetingCurrentLocationButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingEndTimeButton"
-        android:layout_below="@+id/findMeetingEndTimeButton"
-        android:layout_marginTop="5dp"
+        android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
+        android:layout_below="@+id/findMeetingDayOfWeekTextView"
+        android:layout_marginTop="15dp"
         android:text="@string/current_location_button" />
 
     <TextView
