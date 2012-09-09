@@ -2,6 +2,9 @@ package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
 
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.aameetingmanager.util.LocationUtil;
+
 import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,10 +19,11 @@ import android.widget.Toast;
 
 public class SubmitMeetingFragment extends Fragment {
 	private EditText addressEditText;
+	private Button currentLocationButton;
 	private Button validateAddressButton;
 	private Button startTimeButton;
 	private Button endTimeButton;
-	
+  
 	@Override	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment		
@@ -53,6 +57,12 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
 		
+		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
+		currentLocationButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+			} 
+		}); 		
+		
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
@@ -64,11 +74,11 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		return view;
 	}
-	
+		
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		String address = LocationUtil.getLastKnownLocation(this.getActivity());
+		String address = LocationUtil.getLastKnownLocation(getActivity());
 		addressEditText.setText(address);
 	}
 
