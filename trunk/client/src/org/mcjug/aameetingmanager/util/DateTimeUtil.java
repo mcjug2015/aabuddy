@@ -10,11 +10,15 @@ public class DateTimeUtil {
 		return String.format("%1$tm/%1$td/%1$ty ", calendar);
 	}
 	
-	public static String getTimeStr(int hour, int minute) {
-		return String.format("%2d:%2d ", hour, minute);
-	}
-	
 	public static String getTimeStr(Calendar calendar) {
 		return String.format("%1$tH:%1$tM ", calendar);
+	}
+	
+	public static boolean checkTimes(Calendar startTime, Calendar endTime) {
+		if (startTime.compareTo(endTime) == 1) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 }
