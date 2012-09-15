@@ -68,12 +68,11 @@ public class SubmitMeetingFragment extends Fragment {
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				if (LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext())) {
-					submitMeetingButton.setEnabled(true);
-				} else {	
-					submitMeetingButton.setEnabled(false);
+				boolean isValid = LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext());
+				if (!isValid) {
 					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
+				submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 			} 
 		}); 
 		
@@ -95,6 +94,12 @@ public class SubmitMeetingFragment extends Fragment {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
+			
+			boolean isValid = DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar);
+			if (!isValid) {
+				Toast.makeText(view.getContext(), "Start time must be less than end time", Toast.LENGTH_LONG).show();		
+			}
+			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 		}		
 	};
 	
@@ -103,6 +108,12 @@ public class SubmitMeetingFragment extends Fragment {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+			
+			boolean isValid = DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar);
+			if (!isValid) {
+				Toast.makeText(view.getContext(), "End time must be greater than start time", Toast.LENGTH_LONG).show();		
+			}
+			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 		}		
 	};
 }
