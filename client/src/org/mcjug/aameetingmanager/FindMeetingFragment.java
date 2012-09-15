@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 
 public class FindMeetingFragment extends Fragment {
@@ -79,6 +80,10 @@ public class FindMeetingFragment extends Fragment {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
+			
+			if (!DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar)) {
+				Toast.makeText(view.getContext(), "Start time must be less than end time", Toast.LENGTH_LONG).show();		
+			}
 		}
 	};
 
@@ -87,6 +92,10 @@ public class FindMeetingFragment extends Fragment {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+			
+			if (!DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar)) {
+				Toast.makeText(view.getContext(), "End time must be greater than start time", Toast.LENGTH_LONG).show();		
+			}
 		}
 	};
 	
