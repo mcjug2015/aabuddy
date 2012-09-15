@@ -8,12 +8,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
 public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
-
+	private static final String TAG = "AAMeetingManager";
 	private TabHost mTabHost;
 	private ViewPager mViewPager;
 	private PagerAdapter mPagerAdapter;
@@ -64,7 +65,13 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 		this.intializeViewPager();
 	}
 
-    protected void onSaveInstanceState(Bundle outState) {
+    @Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+	protected void onSaveInstanceState(Bundle outState) {
         outState.putString("tab", mTabHost.getCurrentTabTag()); //save the tab selected
         super.onSaveInstanceState(outState);
     }
@@ -114,7 +121,8 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 
 	public void onTabChanged(String tabId) {
 		int pos = this.mTabHost.getCurrentTab();
-		this.mViewPager.setCurrentItem(pos);
+		if (this.mViewPager != null)
+			this.mViewPager.setCurrentItem(pos);
 	}
 }
 
