@@ -106,16 +106,13 @@ def setup():
     """
     require('hosts')
     require('path')
+
     setup_user()
 
     # ensure apt is up to date
     sudo('yum update')
-    # install Python environment
-    sudo('yum install -y build-essential python-dev python-setuptools python-virtualenv')
     # install subversion
     sudo('yum install -y subversion')
-
-    sudo('easy_install pip')
 
     # install webserver and database server
     sudo('yum install -y apache2 apache2-dev apache2-utils') # apache2-threaded
@@ -136,9 +133,12 @@ def setup():
         with settings(warn_only=True):
             run('mkdir -m a+w logs; mkdir releases; mkdir shared; mkdir backup;', pty=True)
             run('cd releases; ln -s . current; ln -s . previous;', pty=True)
-
-    install_db()
-
+            
+    ''' 
+    TODO XXX !!!
+    easy_install psycopg2
+    for psql
+    '''
 
 def _get_default_db():
     sys.path.append(os.path.dirname(__file__))
