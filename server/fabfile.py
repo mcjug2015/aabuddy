@@ -19,14 +19,13 @@ env.mysql_super_user = 'root'
 # environments
 def localvm():
     "Use a local vmware instance"
-    env.hosts = ['192.168.1.4'] # replace by the one appropriate for you
+    env.hosts = ['127.0.0.1:2222'] # replace by the one appropriate for you
     env.start_user = 'root' # the initial user pre-installed on image
     env.path = '/var/www/%(prj_name)s' % env
     env.virtualhost_path = env.path
     env.tmppath = '/var/tmp/django_cache/%(prj_name)s' % env
     env.deployment = 'localvm'
     env.use_ssh_keys = False
-    env.mysql_super_user = 'root'
 
 
 def _ensure_virtualenv():
@@ -66,28 +65,13 @@ def test():
     local("python manage.py test --verbosity=2 --with-xunit --with-xcoverage --xunit-file=reports/nosetests.xml --xcoverage-file=reports/coverage.xml --cover-package=aabuddy --cover-html --cover-erase --cover-html-dir=reports/coverage")
 
 
-def local_db_init():
-    db_config = base_settings.DATABASES
-    env.db_user, env.db_pass, env.db_name, env.db_host, env.db_port = (db_config['default'][key] for key in
-                                                                       ('USER', 'PASSWORD', 'NAME', 'HOST', 'PORT'))
-    local('''mysql -h localhost -u %(mysql_super_user)s -p -e "grant usage on *.* to '%(db_user)s'@'localhost';
-                                                drop user '%(db_user)s'@'localhost';
-                                                drop database if exists %(db_name)s;
-                                                create user '%(db_user)s'@'localhost' identified by '%(db_pass)s';
-                                                create database %(db_name)s character set 'utf8';
-                                                grant all privileges on %(db_name)s.* to '%(db_user)s'@'localhost';
-                                                flush privileges;"''' % env)
-    local('''python manage.py syncdb --noinput''')
-    local('''python manage.py migrate''')
-
-
 def clean():
     '''Cleans up generated files from the local file system'''
     local('rm -rf reports')
 
 
 def setup_user():
-    ''' creates the user under which guru will run  '''
+    ''' creates the user under which guru will run; localvm password is 1chpok1  '''
     user = env.user
     env.user = env.start_user
     run('useradd %s' % user)
@@ -115,10 +99,55 @@ def setup():
     sudo('yum install -y subversion')
 
     # install webserver and database server
-    sudo('yum install -y apache2 apache2-dev apache2-utils') # apache2-threaded
-    sudo('yum install -y libapache2-mod-wsgi') # outdated on hardy!
-    sudo('yum install -y mysql-client libmysqlclient-dev python-mysqldb')
-
+    # from here: http://www.venkysblog.com/install-python264-modwsgi-and-django-on-cento
+    sudo('yum install -y httpd httpd-devel') # apache2-threaded
+    with cd(''):
+        sudo('wget http://modwsgi.googlecode.com/files/mod_wsgi-3.1.tar.gz')
+        sudo('tar xvfz mod_wsgi-3.1.tar.gz')
+    with cd('mod_wsgi-3.1'):
+        sudo('./configure --with-python=/opt/python2.7.2/bin/python')
+        sudo('make')
+        sudo('make install')
+        #nano /etc/httpd/conf/httpd.conf  
+        #LoadModule wsgi_module /usr/lib64/httpd/modules/mod_wsgi.so
+        #service httpd restart
+        #httpd -M
+        
+        #nano -w /etc/httpd/conf/httpd.conf
+            # append WSGISocketPrefix /etc/httpd/run/wsgi
+        #/etc/httpd/conf.d/ <- .conf goes here
+    
+    #postgress
+    #wget http://yum.pgrpms.org/9.1/redhat/rhel-5-x86_64/pgdg-centos91-9.1-4.noarch.rpm
+    #rpm -i pgdg-centos91-9.1-4.noarch.rpm
+    #nano -w /etc/yum.repos.d/CentOS-Base.repo
+        #for [base] and [update]
+        #exclude=postgresql*  
+    #yum list postgres*  to verify 9.1
+    #yum install postgresql-devel postgresql-server postgresql-contrib
+    #service postgresql-9.1 initdb
+    #service postgresql-9.1 start
+    #service postgresql-9.1 stop
+    #nano -w /var/lib/pgsql/9.1/data/postgresql.conf
+        #listen_addresses = '*'
+        #port = 5432
+    #nano -w /var/lib/pgsql/9.1/data/pg_hba.conf
+        #local    all    all    trust
+        #host    all         all         127.0.0.1/32          trust
+    #service postgresql-9.1 start
+    #su - postgres
+    #createdb aabuddy
+    #psql aabuddy
+    #CREATE ROLE aabuddy WITH SUPERUSER LOGIN PASSWORD '1chpok1';
+    #su - root
+    #psql -Uaabuddy aabuddy
+    
+    #chkconfig httpd on
+    #chkconfig postgresql-9.1 on
+    
+    #psycopg2
+    #run('cd ~/; source .profile; cd %(path)s; source local-python/bin/activate; easy_install psycopg2' % env, pty=True)
+    
     # disable default site
     with settings(warn_only=True):
         sudo('rm /etc/apache2/sites-enabled/*-default', pty=True)
@@ -133,45 +162,6 @@ def setup():
         with settings(warn_only=True):
             run('mkdir -m a+w logs; mkdir releases; mkdir shared; mkdir backup;', pty=True)
             run('cd releases; ln -s . current; ln -s . previous;', pty=True)
-            
-    ''' 
-    TODO XXX !!!
-    easy_install psycopg2
-    for psql
-    '''
-
-def _get_default_db():
-    sys.path.append(os.path.dirname(__file__))
-    deployment_settings = __import__('environments.%(deployment)s.%(deployment)s_settings' % env, globals(), locals(), ['DATABASES'])
-    db_config = getattr(deployment_settings, 'DATABASES', None) or base_settings.DATABASES
-    return db_config['default']
-
-
-def install_db():
-    default_db = _get_default_db()
-    env.db_user, env.db_pass, env.db_name, env.db_host, env.db_port = (default_db[key] for key in
-                                                                       ('USER', 'PASSWORD', 'NAME', 'HOST', 'PORT'))
-
-    if env.db_host == 'localhost':
-        sudo('yum install -y mysql-server')
-    run('''mysql -h %(db_host)s -P %(db_port)s -u %(mysql_super_user)s -p -e "create user '%(db_user)s' identified by '%(db_pass)s';
-                                                create database %(db_name)s character set 'utf8';
-                                                grant all privileges on %(db_name)s.* to '%(db_user)s'@'%%';
-                                                flush privileges;"''' % env, pty=True)
-
-
-def reinstall_db():
-    default_db = _get_default_db()
-    env.db_user, env.db_pass, env.db_name, env.db_host, env.db_port = (default_db[key] for key in
-                                                                       ('USER', 'PASSWORD', 'NAME', 'HOST', 'PORT'))
-
-    run('''mysql -h %(db_host)s -P %(db_port)s -u %(mysql_super_user)s -p -e "grant usage on *.* to '%(db_user)s';
-                                                drop user '%(db_user)s';
-                                                drop database if exists %(db_name)s;
-                                                create user '%(db_user)s' identified by '%(db_pass)s';
-                                                create database %(db_name)s character set 'utf8';
-                                                grant all privileges on %(db_name)s.* to '%(db_user)s'@'%%';
-                                                flush privileges;"''' % env, pty=True)
 
 
 def deploy_workingenv():
@@ -221,21 +211,15 @@ def install_site():
     "Add the virtualhost config file to the webserver's config, activate logrotate"
     require('release')
     with cd('%(path)s/releases/%(release)s/%(prj_name)s' % env):
-        sudo('cp environments/%(deployment)s/pluginwarehouse.conf /etc/apache2/sites-available/%(prj_name)s' % env, pty=True)
-        # try logrotate
-        with settings(warn_only=True):
-            sudo('cp logrotate.conf /etc/logrotate.d/website-%(prj_name)s' % env, pty=True)
+        sudo('cp environments/%(deployment)s/aabuddy.conf /etc/httpd/conf.d/%(prj_name)s.conf' % env, pty=True)
     with cd('%(path)s/releases/%(release)s' % env):
-        run('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.6/site-packages/django/contrib/admin/media admin' % env)
-    with settings(warn_only=True):
-        sudo('cd /etc/apache2/sites-enabled/; ln -s ../sites-available/%(prj_name)s %(prj_name)s' % env, pty=True)
-        run('gpg --import %(path)s/releases/current/%(prj_name)s/environments/secret.key' % env)
+        run('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.7/site-packages/django/contrib/admin/static/admin/ admin' % env)
 
 
 def install_requirements():
     "Install the required packages from the requirements file using pip"
     require('release')
-    run('cd %(path)s; local-python/bin/pip install -r ./releases/%(release)s/%(prj_name)s/deploy_requirements.txt' % env, pty=True)
+    run('cd %(path)s; source local-python/bin/activate; local-python/bin/pip install -r ./releases/%(release)s/%(prj_name)s/deploy_requirements.txt' % env, pty=True)
 
 
 def symlink_current_release():
@@ -252,11 +236,12 @@ def migrate():
     require('path')
     with cd('%(path)s/releases/current/%(prj_name)s' % env):
         run('cp environments/%(deployment)s/%(deployment)s_settings.py local_settings.py' % env, pty=True)
-        run('%(path)s/local-python/bin/python manage.py syncdb --noinput' % env, pty=True)
-        run('%(path)s/local-python/bin/python manage.py migrate' % env)
+        run('%(path)s/local-python/bin/python manage.py syncdb --noinput --settings=settings' % env, pty=True)
+        run('%(path)s/local-python/bin/python manage.py migrate --settings=settings' % env)
+        run('%(path)s/local-python/bin/python manage.py loaddata aabuddy initial_users --settings=settings' % env)
 
 
 def restart_webserver():
     "Restart the web server"
     with settings(warn_only=True):
-        sudo('/etc/init.d/apache2 reload', pty=True)
+        sudo('service httpd restart', pty=True)
