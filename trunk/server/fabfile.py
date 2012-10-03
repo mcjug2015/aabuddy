@@ -142,6 +142,16 @@ def setup():
     #su - root
     #psql -Uaabuddy aabuddy
     
+    #postgis 1.5:
+    #yum install postgis91 postgis91-utils
+    #psql -d aabuddy -f /usr/pgsql-9.1/share/contrib/postgis-1.5/postgis.sql -U aabuddy
+    #psql -d aabuddy -f /usr/pgsql-9.1/share/contrib/postgis-1.5/spatial_ref_sys.sql -U aabuddy
+    #
+    #
+    #
+    #
+    
+    
     #chkconfig httpd on
     #chkconfig postgresql-9.1 on
     
@@ -237,7 +247,7 @@ def migrate():
     with cd('%(path)s/releases/current/%(prj_name)s' % env):
         run('cp environments/%(deployment)s/%(deployment)s_settings.py local_settings.py' % env, pty=True)
         run('%(path)s/local-python/bin/python manage.py syncdb --noinput --settings=settings' % env, pty=True)
-        run('%(path)s/local-python/bin/python manage.py migrate --settings=settings' % env)
+        run('%(path)s/local-python/bin/python manage.py migrate --settings=settings aabuddy' % env)
         run('%(path)s/local-python/bin/python manage.py loaddata aabuddy initial_users --settings=settings' % env)
 
 
