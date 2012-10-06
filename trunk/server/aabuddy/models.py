@@ -1,11 +1,13 @@
 ''' module for aabuddy models '''
 from django.contrib.gis.db import models
 import datetime
+from django.contrib.gis.db.models.manager import GeoManager
 
 
 class Meeting(models.Model):
     ''' meeting models class '''
 
+    objects = GeoManager()
     day_of_week = models.CharField(null=False, blank=False, default="Monday", max_length=10)
     start_time = models.TimeField(null=False, blank=False, default=datetime.time(11, 30))
     end_time = models.TimeField(null=False, blank=False, default=datetime.time(11, 30))
