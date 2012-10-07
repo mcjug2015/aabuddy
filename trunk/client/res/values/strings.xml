@@ -16,7 +16,9 @@
 	<string name="submit_button">Submit</string>
 	<string name="search_within">Within:</string>
 	<string name="search_button">Search</string>
-		
+	
+	<string name="meeting_base_url">http://localhost:8888/aabuddy/api/v1/meeting/</string>
+			
 	<string-array name="daysOfWeek">
 		<item>Sunday</item>
 		<item>Monday</item>
