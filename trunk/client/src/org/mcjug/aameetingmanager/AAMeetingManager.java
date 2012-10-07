@@ -8,13 +8,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
 
 public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabChangeListener, ViewPager.OnPageChangeListener {
-	private static final String TAG = "AAMeetingManager";
+	private static final String TAG = AAMeetingManager.class.getSimpleName();
+
 	private TabHost mTabHost;
 	private ViewPager mViewPager;
 	private PagerAdapter mPagerAdapter;
