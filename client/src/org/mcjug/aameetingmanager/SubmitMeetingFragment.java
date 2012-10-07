@@ -2,10 +2,21 @@ package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
 import android.app.TimePickerDialog;
+import android.location.Address;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,10 +25,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class SubmitMeetingFragment extends Fragment {
+	private static final String TAG = SubmitMeetingFragment.class.getSimpleName();
+
 	private EditText addressEditText;
 	private Button currentLocationButton;
 	private Button validateAddressButton;
@@ -26,6 +40,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private Button endTimeButton;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
+	private Spinner dayOfWeekSpinner;
   
 	@Override	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -78,7 +93,14 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		submitMeetingButton = (Button) view.findViewById(R.id.submitMeetingButton); 
 		submitMeetingButton.setEnabled(false);
+		submitMeetingButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+				 new SubmitMeetingTask().execute();
+			} 
+		}); 
 		
+		dayOfWeekSpinner = (Spinner) view.findViewById(R.id.submitMeetingDayOfWeekSpinner); 
+
 		return view;
 	}
 		
@@ -116,4 +138,62 @@ public class SubmitMeetingFragment extends Fragment {
 			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 		}		
 	};
+	
+	private class SubmitMeetingTask extends AsyncTask<Void, String, String> {
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			HttpClient client = new DefaultHttpClient();  
+			try {  
+				String baseUrl = getActivity().getString(R.string.meeting_base_url);
+				HttpPost request = new HttpPost(baseUrl);  
+				StringEntity se = new StringEntity(createSubmitMeetingJson());  
+				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+				request.setEntity(se);
+				HttpResponse response = client.execute(request);
+		        int statusCode = response.getStatusLine().getStatusCode();
+		        if (statusCode != HttpStatus.SC_CREATED) {
+		        	return "Error submitting meeting: " +  response.getStatusLine().toString();
+		        }
+			} catch (Exception e) {  
+				return "Error submitting meeting: " + e;
+			} finally {
+				client.getConnectionManager().shutdown();  
+			}
+
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+			if (result != null) {
+				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
+			}
+		}
+		
+	}
+
+	private String createSubmitMeetingJson() throws Exception {
+		JSONObject json = new JSONObject();
+		json.put("internal_type", "Submitted");
+		json.put("name", "");
+		json.put("description", "");
+		
+		String addressName = addressEditText.getText().toString();
+		json.put("address", addressName);
+	
+		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
+		if (address != null) {
+			json.put("latitude", address.getLatitude());
+			json.put("longitude",  address.getLongitude());
+		}
+		
+		json.put("day_of_week", dayOfWeekSpinner.getSelectedItem());
+		json.put("start_time", DateTimeUtil.getTimeStr(startTimeCalendar));
+		json.put("end_time", DateTimeUtil.getTimeStr(endTimeCalendar));
+		
+		return json.toString();
+	}
+
 }
