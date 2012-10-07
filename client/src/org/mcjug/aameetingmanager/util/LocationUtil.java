@@ -7,26 +7,11 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 
 public class LocationUtil {
 
 	public static String getLastKnownLocation(Context context) {
-		String address = "";
-        try {
-    		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    		if (location == null) {
-    			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-    		}
-  			address = getAddress(location, context);
-		} catch (Exception e) {
-		}
-        return address;
-	}
-	
-	public static String getCurrentLocation(Context context, LocationListener locationListener) {
 		String address = "";
         try {
     		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -65,12 +50,12 @@ public class LocationUtil {
 		return addressStr;
 	}
 	
-	public static boolean validateAddress(String address, Context context) {
+	public static boolean validateAddress(String addressName, Context context) {
 		boolean isValid = false;
         try {
 			Geocoder gc = new Geocoder(context, Locale.getDefault());
-			List<Address> addresses = gc.getFromLocationName(address, 1);
-            if (addresses.size() > 0) {
+			List<Address> address = gc.getFromLocationName(addressName, 1);
+			if (address != null && address.size() > 0) {
             	isValid = true;
             } 
 		} catch (Exception e) {
@@ -78,4 +63,13 @@ public class LocationUtil {
         return isValid;
 	}
 	
+	public static Address getAddressFromLocationName(String addressName, Context context) throws Exception{
+		Address location = null;
+		Geocoder gc = new Geocoder(context, Locale.getDefault());
+		List<Address> address = gc.getFromLocationName(addressName, 1);
+		if (address != null && address.size() > 0) {
+			location = address.get(0);
+		} 
+		return location;
+	}	
 }
