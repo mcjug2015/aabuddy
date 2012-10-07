@@ -1,16 +1,32 @@
 package org.mcjug.aameetingmanager;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
 import android.app.TimePickerDialog;
+import android.location.Address;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -20,15 +36,17 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-
 public class FindMeetingFragment extends Fragment {
-	
+	private static final String TAG = FindMeetingFragment.class.getSimpleName();
+
 	private EditText addressEditText = null;
 	private Button startTimeButton = null;
 	private Button endTimeButton = null;
+	private Button findMeetingButton = null;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
- 
+	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
+	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
@@ -58,13 +76,20 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 		
-		MultiSpinner multiSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
+		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		String[] daysOfWeek = getResources().getStringArray(R.array.daysOfWeek);
 		List<String> items = Arrays.asList(daysOfWeek);
-	    multiSpinner.setItems(items, "All", daysOfWeekSpinnerListener);
+		daysOfWeekSpinner.setItems(items, "All", daysOfWeekSpinnerListener);
 
 	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
+	    findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton); 
+		findMeetingButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+				 new FindMeetingTask().execute();
+			} 
+		}); 
+		
 		return view;
 	}
 	
@@ -103,4 +128,81 @@ public class FindMeetingFragment extends Fragment {
 		public void onItemsSelected(boolean[] selected) {
 		}
 	};
+	
+	private class FindMeetingTask extends AsyncTask<Void, String, String> {
+		@Override
+		protected String doInBackground(Void... arg0) {
+			HttpClient client = new DefaultHttpClient();  
+			try {  
+				String baseUrl = getActivity().getString(R.string.meeting_base_url);
+				//String url = baseUrl + "?" + getFindMeetingParams();
+				String url = baseUrl + "?format=json";
+				HttpGet request = new HttpGet(url);
+				HttpResponse httpResponse = client.execute(request);
+			    String jsonResponse = getMeetingsResponse(httpResponse);
+			    Log.d(TAG, "Find meeting jsonResponse: " + jsonResponse);
+			} catch (Exception e) {  
+				return "Error in find meeting: " + e;
+			} finally {
+				client.getConnectionManager().shutdown();  
+			}
+			return null;
+		}
+	}
+	
+	private String getFindMeetingParams() throws Exception {
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+	        
+		// params.add(new BasicNameValuePair("internal_type", "Submitted"));
+		params.add(new BasicNameValuePair("name", ""));
+		params.add(new BasicNameValuePair("description", ""));
+		
+		String addressName = addressEditText.getText().toString();
+		params.add(new BasicNameValuePair("address", addressName));
+		
+		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
+		if (address != null) {
+			params.add(new BasicNameValuePair("latitude", String.valueOf(address.getLatitude())));
+			params.add(new BasicNameValuePair("longitude", String.valueOf(address.getLongitude())));
+		} else {
+		    Log.d(TAG, "Address is invalid: " + address);
+			throw new Exception("Address is invalid: " + address);
+		}
+		
+		params.add(new BasicNameValuePair("start_time", DateTimeUtil.getTimeStr(startTimeCalendar)));
+		params.add(new BasicNameValuePair("end_time", DateTimeUtil.getTimeStr(endTimeCalendar)));
+		
+		String daysOfWeekStr = (String)daysOfWeekSpinner.getSelectedItem();
+		params.add(new BasicNameValuePair("day_of_week", daysOfWeekStr));
+		
+		String paramStr = URLEncodedUtils.format(params, "utf-8");
+	    Log.d(TAG, "Find meeting request params: " + paramStr);
+
+		return paramStr;
+	}
+
+	private String getMeetingsResponse(HttpResponse httpResponse) throws Exception {
+		StringBuilder builder = new StringBuilder();
+		HttpEntity entity = httpResponse.getEntity();
+		if (entity != null) {
+			InputStream inputStream = entity.getContent();
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+			} finally {
+				inputStream.close();
+			}
+		}
+		return builder.toString();
+	}
+	
+	private void getMeetings(String jsonResponse) throws Exception {
+		if (jsonResponse != null) {
+			JSONObject jsonObject = new JSONObject(jsonResponse);
+		}
+	}
+
 }
