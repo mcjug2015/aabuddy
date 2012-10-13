@@ -33,7 +33,7 @@ def temp_json_obj_to_meeting(json_obj):
     meeting.name = json_obj['name']
     meeting.description = json_obj['description']
     meeting.address = json_obj['address']
-    meeting.internal_type = json_obj['internal_type']
+    meeting.internal_type = json_obj['internal_type'].lower()
     meeting.geo_location = fromstr('POINT(%s %s)' % (json_obj['lat'], json_obj['long']), srid=4326)
     return meeting
     
