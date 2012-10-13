@@ -14,6 +14,14 @@ public class DateTimeUtil {
 		return String.format("%1$tH:%1$tM ", calendar);
 	}
 	
+	public static String getFindMeetingTimeStr(Calendar calendar) {
+		return String.format("%1$tH%1$tM00", calendar);
+	}
+	
+	public static String getSubmitMeetingTimeStr(Calendar calendar) {
+		return String.format("%1$tH:%1$tM:00", calendar);
+	}
+	
 	public static boolean checkTimes(Calendar startTime, Calendar endTime) {
 		if (startTime.compareTo(endTime) == 1) {
 			return false;
