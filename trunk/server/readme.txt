@@ -18,7 +18,7 @@ $> fab localvm setup
 $> fab localvm deploy_workingenv
 
 ** test uploading a meeting with curl:
-day_of_week goes from 0 to 6
+day_of_week goes from 1 to 7
 1 = Monday
 2 = Tuesday
 ...
