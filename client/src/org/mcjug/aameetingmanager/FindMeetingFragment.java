@@ -46,6 +46,7 @@ public class FindMeetingFragment extends Fragment {
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
+	private List<String> daysOfWeekListItems;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
@@ -77,9 +78,8 @@ public class FindMeetingFragment extends Fragment {
 		});
 		
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
-		String[] daysOfWeek = getResources().getStringArray(R.array.daysOfWeek);
-		List<String> items = Arrays.asList(daysOfWeek);
-		daysOfWeekSpinner.setItems(items, "All", daysOfWeekSpinnerListener);
+		daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
+		daysOfWeekSpinner.setItems(daysOfWeekListItems, "All", daysOfWeekSpinnerListener);
 
 	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
@@ -134,9 +134,8 @@ public class FindMeetingFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();  
 			try {  
-				String baseUrl = getActivity().getString(R.string.meeting_base_url);
-				//String url = baseUrl + "?" + getFindMeetingParams();
-				String url = baseUrl + "?format=json";
+				String baseUrl = getActivity().getString(R.string.get_meeting_base_url);
+				String url = baseUrl + "?" + getFindMeetingParams();
 				HttpGet request = new HttpGet(url);
 				HttpResponse httpResponse = client.execute(request);
 			    String jsonResponse = getMeetingsResponse(httpResponse);
@@ -153,27 +152,40 @@ public class FindMeetingFragment extends Fragment {
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 	        
-		// params.add(new BasicNameValuePair("internal_type", "Submitted"));
 		params.add(new BasicNameValuePair("name", ""));
 		params.add(new BasicNameValuePair("description", ""));
 		
+		String[] daysOfWeekSelections = ((String)daysOfWeekSpinner.getSelectedItem()).split(",");
+		if (daysOfWeekSelections[0].equalsIgnoreCase("all")) {
+			params.add(new BasicNameValuePair("day_of_week", getString(R.string.all_days_of_week)));
+	    } else {
+			StringBuffer daysOfWeekStr = new StringBuffer("");
+			List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
+			for (String str: daysOfWeekSelections) {				
+				int idx = daysOfWeekAbbr.indexOf(str.trim());
+				if (idx == 0) {
+					idx = 7;
+				}
+				daysOfWeekStr.append(idx + ",");
+			}
+			String str = daysOfWeekStr.substring(0, daysOfWeekStr.length() - 1);
+			params.add(new BasicNameValuePair("day_of_week", str));
+	    }
+
 		String addressName = addressEditText.getText().toString();
 		params.add(new BasicNameValuePair("address", addressName));
-		
+
 		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
 		if (address != null) {
-			params.add(new BasicNameValuePair("latitude", String.valueOf(address.getLatitude())));
-			params.add(new BasicNameValuePair("longitude", String.valueOf(address.getLongitude())));
+			params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
+			params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
 		} else {
 		    Log.d(TAG, "Address is invalid: " + address);
 			throw new Exception("Address is invalid: " + address);
 		}
 		
-		params.add(new BasicNameValuePair("start_time", DateTimeUtil.getTimeStr(startTimeCalendar)));
-		params.add(new BasicNameValuePair("end_time", DateTimeUtil.getTimeStr(endTimeCalendar)));
-		
-		String daysOfWeekStr = (String)daysOfWeekSpinner.getSelectedItem();
-		params.add(new BasicNameValuePair("day_of_week", daysOfWeekStr));
+		params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getTimeStr(startTimeCalendar).replace(":", "") + "00"));
+		params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getTimeStr(endTimeCalendar).replace(":", "") + "00"));
 		
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
 	    Log.d(TAG, "Find meeting request params: " + paramStr);
