@@ -1,6 +1,8 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -87,7 +89,8 @@ public class SubmitMeetingFragment extends Fragment {
 				if (!isValid) {
 					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
-				submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
+				// submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
+				submitMeetingButton.setEnabled(true);
 			} 
 		}); 
 		
@@ -176,20 +179,29 @@ public class SubmitMeetingFragment extends Fragment {
 
 	private String createSubmitMeetingJson() throws Exception {
 		JSONObject json = new JSONObject();
-		json.put("internal_type", "Submitted");
 		json.put("name", "");
 		json.put("description", "");
+		
+		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
+		String dayOfWeek = ((String)dayOfWeekSpinner.getSelectedItem()).trim();
+		int idx = daysOfWeekListItems.indexOf(dayOfWeek);
+		if (idx == 0) {
+			idx = 7;
+		}
+		json.put("day_of_week", idx);
 		
 		String addressName = addressEditText.getText().toString();
 		json.put("address", addressName);
 	
 		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
 		if (address != null) {
-			json.put("latitude", address.getLatitude());
-			json.put("longitude",  address.getLongitude());
+			json.put("lat", address.getLatitude());
+			json.put("long",  address.getLongitude());
+		} else {
+			json.put("lat", -77.4108);
+			json.put("long", 39.4142);
 		}
 		
-		json.put("day_of_week", dayOfWeekSpinner.getSelectedItem());
 		json.put("start_time", DateTimeUtil.getTimeStr(startTimeCalendar));
 		json.put("end_time", DateTimeUtil.getTimeStr(endTimeCalendar));
 		
