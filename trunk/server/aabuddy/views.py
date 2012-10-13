@@ -9,6 +9,66 @@ import datetime
 logger = logging.getLogger(__name__)
 
 
+class DayOfWeekGetParams():
+    ''' god damn it, none of this ugliness would be here if tastypie 0.9.12 would come out already '''
+    possible_vals = ['day_of_week__eq', 'day_of_week__gt', 'day_of_week__gte', 'day_of_week__lt', 'day_of_week__lte']
+    
+    def __init__(self, param_dict):
+        self.vals = {}
+        for p_val in self.possible_vals:
+            actual = param_dict.get(p_val, None)
+            if actual:
+                self.vals[p_val] = actual
+        logger.debug('DayOfWeekGetParams vals are: %s' % str(self.vals))
+    
+    def apply_filters(self, queryset):
+        if 'day_of_week__eq' in self.vals:
+            queryset = queryset.filter(day_of_week__eq=self.vals['day_of_week__eq'])
+        if 'day_of_week__gt' in self.vals:
+            queryset = queryset.filter(day_of_week__gt=self.vals['day_of_week__gt'])
+        if 'day_of_week__gte' in self.vals:
+            queryset = queryset.filter(day_of_week__gte=self.vals['day_of_week__gte'])
+        if 'day_of_week__lt' in self.vals:
+            queryset = queryset.filter(day_of_week__lt=self.vals['day_of_week__lt'])
+        if 'day_of_week__lte' in self.vals:
+            queryset = queryset.filter(day_of_week__lte=self.vals['day_of_week__lte'])
+        return queryset
+    
+class TimeParams():
+    possible_vars = ['start_time', 'end_time']
+    possible_appendixes = ['gt', 'gte', 'lt', 'lte']
+    
+    def __init__(self, param_dict):
+        self.vals = {}
+        for var in self.possible_vars:
+            for appendix in self.possible_appendixes:
+                var_name = '%s__%s' % (var, appendix)
+                param_value = param_dict.get(var_name, None)
+                if param_value:
+                    self.vals[var_name] = datetime.datetime.strptime(param_value, '%H%M%S')
+        logger.debug('TimeParams vals are: %s' % str(self.vals))
+    
+    def apply_filters(self, queryset):
+        if 'start_time__gt' in self.vals:
+            queryset = queryset.filter(start_time__gt=self.vals['start_time__gt'])
+        if 'start_time__gte' in self.vals:
+            queryset = queryset.filter(start_time__gte=self.vals['start_time__gte'])
+        if 'start_time__lt' in self.vals:
+            queryset = queryset.filter(start_time__lt=self.vals['start_time__lt'])
+        if 'start_time__lte' in self.vals:
+            queryset = queryset.filter(start_time__lte=self.vals['start_time__lte'])
+        
+        if 'end_time__gt' in self.vals:
+            queryset = queryset.filter(end_time__gt=self.vals['end_time__gt'])
+        if 'end_time__gte' in self.vals:
+            queryset = queryset.filter(end_time__gte=self.vals['end_time__gte'])
+        if 'end_time__lt' in self.vals:
+            queryset = queryset.filter(end_time__lt=self.vals['end_time__lt'])
+        if 'end_time__lte' in self.vals:
+            queryset = queryset.filter(end_time__lte=self.vals['end_time__lte'])
+        return queryset
+
+
 def temp_meeting_to_json_obj(meeting):
     ''' tastypie not gonna support geodjango fields till 0.9.1.2, gotta whip something up in the meantime '''
     json_obj = {}
@@ -27,7 +87,8 @@ def temp_meeting_to_json_obj(meeting):
 def temp_json_obj_to_meeting(json_obj):
     meeting = Meeting()
     meeting.day_of_week = json_obj['day_of_week']
-    logger.debug("MOOOOOO " + json_obj['start_time'] + " OOO " + json_obj['end_time'])
+    if not (meeting.day_of_week >= 1 and meeting.day_of_week) <= 7:
+        raise ValueError("Day of week must be an integer between 1 and 7 inclusive")
     meeting.start_time = datetime.datetime.strptime(json_obj['start_time'], '%H:%M:%S')
     meeting.end_time = datetime.datetime.strptime(json_obj['end_time'], '%H:%M:%S')
     meeting.name = json_obj['name']
@@ -38,14 +99,25 @@ def temp_json_obj_to_meeting(json_obj):
     return meeting
     
 
+def get_meetings_query_set(distance_miles, latitude, longitude, day_of_week_params, time_params):
+    meetings = Meeting.objects.all()
+    meetings = day_of_week_params.apply_filters(meetings)
+    meetings = time_params.apply_filters(meetings)
+    if distance_miles and latitude and longitude:
+        pnt = fromstr('POINT(%s %s)' % (latitude, longitude), srid=4326)
+        meetings = meetings.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
+    return meetings
+
+
 def get_meetings_within_distance(request):
     ''' get all meetings within distance miles from passed in lat/long '''
     if request.method == 'GET':
-        distance_miles = request.GET.get('distance_miles', 500)
-        latitude = request.GET.get('lat', -77.1531)
-        longitude = request.GET.get('long', 39.0839)
-        pnt = fromstr('POINT(%s %s)' % (latitude, longitude), srid=4326)
-        meetings = Meeting.objects.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
+        distance_miles = request.GET.get('distance_miles', None)
+        latitude = request.GET.get('lat', None)
+        longitude = request.GET.get('long', None)
+        day_of_week_params = DayOfWeekGetParams(request.GET)
+        time_params = TimeParams(request.GET)
+        meetings = get_meetings_query_set(distance_miles, latitude, longitude, day_of_week_params, time_params)
         retval_obj = []
         for meeting in meetings:
             retval_obj.append(temp_meeting_to_json_obj(meeting))
