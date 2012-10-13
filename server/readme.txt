@@ -54,6 +54,9 @@ http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_m
 VM u/p:
 root/reverse
 
+Django admin u/p:
+admin/1chpok1
+
 ** CentOS commands:
 list users:
 cat /etc/passwd | cut -d ":" -f1
