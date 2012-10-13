@@ -19,6 +19,8 @@
 	
 	<string name="meeting_base_url">http://localhost:8888/aabuddy/api/v1/meeting/</string>
 			
+	<string name="all_days_of_week">1,2,3,4,5,6,7</string>
+	
 	<string-array name="daysOfWeek">
 		<item>Sunday</item>
 		<item>Monday</item>
@@ -28,17 +30,17 @@
 		<item>Friday</item>
 		<item>Saturday</item>
 	</string-array>
-
-	<string-array name="daysOfWeekValues">
-		<item>SUN</item>
-		<item>MON</item>
-		<item>TUE</item>
-		<item>WED</item>
-		<item>THU</item>
-		<item>FRI</item>
-		<item>SAT</item>	
-	</string-array>
 	
+	<string-array name="daysOfWeekAbbr">
+		<item>Su</item>
+		<item>M</item>
+		<item>T</item>
+		<item>W</item>
+		<item>Th</item>
+		<item>F</item>
+		<item>Sa</item>
+	</string-array>
+
 	<string-array name="searchDistances">
 	    <item>1 mile</item>
 	    <item>2 mile</item>
