@@ -148,7 +148,7 @@ public class SubmitMeetingFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();  
 			try {  
-				String baseUrl = getActivity().getString(R.string.meeting_base_url);
+				String baseUrl = getActivity().getString(R.string.save_meeting_base_url);
 				HttpPost request = new HttpPost(baseUrl);  
 				StringEntity se = new StringEntity(createSubmitMeetingJson());  
 				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -202,8 +202,8 @@ public class SubmitMeetingFragment extends Fragment {
 			json.put("long", 39.4142);
 		}
 		
-		json.put("start_time", DateTimeUtil.getTimeStr(startTimeCalendar));
-		json.put("end_time", DateTimeUtil.getTimeStr(endTimeCalendar));
+		json.put("start_time", DateTimeUtil.getTimeStr(startTimeCalendar) + ":00");
+		json.put("end_time", DateTimeUtil.getTimeStr(endTimeCalendar) + ":00");
 		
 		return json.toString();
 	}
