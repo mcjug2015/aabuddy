@@ -33,20 +33,21 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class FindMeetingFragment extends Fragment {
 	private static final String TAG = FindMeetingFragment.class.getSimpleName();
 
-	private EditText addressEditText = null;
-	private Button startTimeButton = null;
-	private Button endTimeButton = null;
-	private Button findMeetingButton = null;
+	private EditText addressEditText;
+	private Button startTimeButton;
+	private Button endTimeButton;
+	private Button findMeetingButton;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
-	private List<String> daysOfWeekListItems;
+	private Spinner distanceSpinner;
 	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
@@ -78,8 +79,8 @@ public class FindMeetingFragment extends Fragment {
 		});
 		
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
-		daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
-		daysOfWeekSpinner.setItems(daysOfWeekListItems, "All", daysOfWeekSpinnerListener);
+		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
+		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
 
 	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
@@ -90,6 +91,8 @@ public class FindMeetingFragment extends Fragment {
 			} 
 		}); 
 		
+	    distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner); 
+
 		return view;
 	}
 	
@@ -147,6 +150,11 @@ public class FindMeetingFragment extends Fragment {
 			}
 			return null;
 		}
+		
+		@Override
+		protected void onPostExecute(String result) {
+			super.onPostExecute(result);
+		}
 	}
 	
 	private String getFindMeetingParams() throws Exception {
@@ -155,9 +163,15 @@ public class FindMeetingFragment extends Fragment {
 		params.add(new BasicNameValuePair("name", ""));
 		params.add(new BasicNameValuePair("description", ""));
 		
+		params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
+		params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
+
+		String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
+		params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
+
 		String[] daysOfWeekSelections = ((String)daysOfWeekSpinner.getSelectedItem()).split(",");
-		if (daysOfWeekSelections[0].equalsIgnoreCase("all")) {
-			params.add(new BasicNameValuePair("day_of_week", getString(R.string.all_days_of_week)));
+		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all_days_of_week))) {
+			params.add(new BasicNameValuePair("day_of_week", getString(R.string.all_days_of_week_value)));
 	    } else {
 			StringBuffer daysOfWeekStr = new StringBuffer("");
 			List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
@@ -169,7 +183,7 @@ public class FindMeetingFragment extends Fragment {
 				daysOfWeekStr.append(idx + ",");
 			}
 			String str = daysOfWeekStr.substring(0, daysOfWeekStr.length() - 1);
-			params.add(new BasicNameValuePair("day_of_week", str));
+			// params.add(new BasicNameValuePair("day_of_week", str));
 	    }
 
 		String addressName = addressEditText.getText().toString();
@@ -180,12 +194,12 @@ public class FindMeetingFragment extends Fragment {
 			params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
 			params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
 		} else {
-		    Log.d(TAG, "Address is invalid: " + address);
-			throw new Exception("Address is invalid: " + address);
+			params.add(new BasicNameValuePair("lat", "-77.4108"));
+			params.add(new BasicNameValuePair("long", "39.4142"));
+
+		    //Log.d(TAG, "Address is invalid: " + address);
+			//throw new Exception("Address is invalid: " + address);
 		}
-		
-		params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getTimeStr(startTimeCalendar).replace(":", "") + "00"));
-		params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getTimeStr(endTimeCalendar).replace(":", "") + "00"));
 		
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
 	    Log.d(TAG, "Find meeting request params: " + paramStr);
