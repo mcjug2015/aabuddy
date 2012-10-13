@@ -1,8 +1,6 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -155,7 +153,7 @@ public class SubmitMeetingFragment extends Fragment {
 				request.setEntity(se);
 				HttpResponse response = client.execute(request);
 		        int statusCode = response.getStatusLine().getStatusCode();
-		        if (statusCode != HttpStatus.SC_CREATED) {
+		        if (statusCode != HttpStatus.SC_OK) {
 		        	return "Error submitting meeting: " +  response.getStatusLine().toString();
 		        }
 			} catch (Exception e) {  
@@ -174,22 +172,21 @@ public class SubmitMeetingFragment extends Fragment {
 				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
 			}
 		}
-		
 	}
 
 	private String createSubmitMeetingJson() throws Exception {
 		JSONObject json = new JSONObject();
 		json.put("name", "");
 		json.put("description", "");
+		json.put("internal_type", getString(R.string.submitted));
+
+		// Day of week is 1-7 where 1 is Monday and 7 is Sunday
+		int idx = dayOfWeekSpinner.getSelectedItemPosition();
+		json.put("day_of_week", (idx == 0) ? 7 : idx);
 		
-		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
-		String dayOfWeek = ((String)dayOfWeekSpinner.getSelectedItem()).trim();
-		int idx = daysOfWeekListItems.indexOf(dayOfWeek);
-		if (idx == 0) {
-			idx = 7;
-		}
-		json.put("day_of_week", idx);
-		
+		json.put("start_time", DateTimeUtil.getSubmitMeetingTimeStr(startTimeCalendar));
+		json.put("end_time", DateTimeUtil.getSubmitMeetingTimeStr(endTimeCalendar));
+
 		String addressName = addressEditText.getText().toString();
 		json.put("address", addressName);
 	
@@ -200,12 +197,11 @@ public class SubmitMeetingFragment extends Fragment {
 		} else {
 			json.put("lat", -77.4108);
 			json.put("long", 39.4142);
+			
+		    // Log.d(TAG, "Address is invalid: " + address);
+			// throw new Exception("Address is invalid: " + address);
 		}
-		
-		json.put("start_time", DateTimeUtil.getTimeStr(startTimeCalendar) + ":00");
-		json.put("end_time", DateTimeUtil.getTimeStr(endTimeCalendar) + ":00");
 		
 		return json.toString();
 	}
-
 }
