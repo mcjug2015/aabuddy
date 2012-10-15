@@ -16,12 +16,12 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONObject;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -135,7 +135,7 @@ public class FindMeetingFragment extends Fragment {
 	private class FindMeetingTask extends AsyncTask<Void, String, String> {
 		@Override
 		protected String doInBackground(Void... arg0) {
-			HttpClient client = new DefaultHttpClient();  
+			HttpClient client = new DefaultHttpClient();
 			try {  
 				String baseUrl = getActivity().getString(R.string.get_meeting_base_url);
 				String url = baseUrl + "?" + getFindMeetingParams();
@@ -143,6 +143,12 @@ public class FindMeetingFragment extends Fragment {
 				HttpResponse httpResponse = client.execute(request);
 			    String jsonResponse = getMeetingsResponse(httpResponse);
 			    Log.d(TAG, "Find meeting jsonResponse: " + jsonResponse);
+			    
+			    Intent intent = new Intent(getActivity(), MeetingListFragmentActivity.class);
+			    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			    intent.putExtra("MEETINGS_JSON", jsonResponse);
+			    startActivity(intent);
+
 			} catch (Exception e) {  
 				return "Error in find meeting: " + e;
 			} finally {
@@ -154,6 +160,9 @@ public class FindMeetingFragment extends Fragment {
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);
+			if (result != null) {
+				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();		
+			}
 		}
 	}
 	
@@ -223,12 +232,6 @@ public class FindMeetingFragment extends Fragment {
 			}
 		}
 		return builder.toString();
-	}
-	
-	private void getMeetings(String jsonResponse) throws Exception {
-		if (jsonResponse != null) {
-			JSONObject jsonObject = new JSONObject(jsonResponse);
-		}
 	}
 
 }
