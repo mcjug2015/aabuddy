@@ -34,6 +34,11 @@ LOGGING = {
         'aabuddy': {
             'handlers': ['default'],
             'level': 'DEBUG'
-        }
+        },
+        'django.request': {
+            'handlers': ['default'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     }
 }

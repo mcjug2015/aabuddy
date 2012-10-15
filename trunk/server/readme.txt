@@ -57,6 +57,9 @@ root/reverse
 Django admin u/p:
 admin/1chpok1
 
+Virtualbox Log location - /var/www/aabuddy/logs/aabuddy.log
+
+
 ** CentOS commands:
 list users:
 cat /etc/passwd | cut -d ":" -f1
