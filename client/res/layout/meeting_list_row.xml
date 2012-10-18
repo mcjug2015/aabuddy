@@ -2,26 +2,92 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#00000000"
     android:orientation="vertical"
     android:padding="3dp" >
+
+    <TextView
+        android:id="@+id/startTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/startTimeLabel"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/startTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:textColor="#FFFFFF"
-        android:textSize="16dp" />
+        android:layout_alignBaseline="@+id/startTimeLabel"
+        android:layout_toRightOf="@+id/startTimeLabel"
+        android:layout_marginLeft="5dp"
+        android:text="@string/startTime"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/endTimeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/startTime"
+        android:layout_toRightOf="@+id/startTime"
+        android:text="@string/endTimeLabel"
+        android:layout_marginLeft="20dp"
+        android:textSize="14dp" />
+    
+    <TextView
+        android:id="@+id/endTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/endTimeLabel"
+        android:layout_toRightOf="@+id/endTimeLabel"
+        android:text="@string/endTime"
+        android:layout_marginLeft="5dp"
+        android:textSize="14dp" />
+    
+    <TextView
+        android:id="@+id/dayLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/endTime"
+        android:layout_toRightOf="@+id/endTime"
+        android:text="@string/dayLabel"
+        android:layout_marginLeft="20dp"
+        android:textSize="14dp" />
+    
+    <TextView
+        android:id="@+id/day"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/dayLabel"
+        android:layout_toRightOf="@+id/dayLabel"
+        android:text="@string/day"
+        android:layout_marginLeft="5dp"
+        android:textSize="14dp" />
+    
+    <TextView
+        android:id="@+id/meetingNameLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/startTimeLabel"
+        android:text="@string/meetingNameLabel"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/meetingName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/meetingNameLabel"
+        android:layout_toRightOf="@+id/meetingNameLabel"
+        android:layout_marginLeft="5dp"
+        android:text="@string/meetingName"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/startTime"
-        android:textColor="#FFFFFF"
-        android:textSize="16dp" />
+        android:layout_below="@+id/meetingNameLabel"
+        android:textSize="14dp" />
 
     <TextView
         android:id="@+id/latitude"
@@ -31,17 +97,17 @@
         android:layout_below="@id/address"
         android:text="@string/latitude"
         android:textColor="#007FFF"
-        android:textSize="14dp" />
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/longitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/latitude"
-        android:layout_marginLeft="18dp"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/latitude"
         android:text="@string/longitude"
         android:textColor="#007FFF"
-        android:textSize="14dp" />
+        android:textSize="12dp" />
 
 </RelativeLayout>
