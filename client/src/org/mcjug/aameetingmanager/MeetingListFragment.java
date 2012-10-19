@@ -7,6 +7,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
@@ -37,8 +38,8 @@ public class MeetingListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-        String[] from = new String[] {START_TIME, ADDRESS, LATITUDE, LONGITUDE};
-        int[] to = new int[] {R.id.startTime, R.id.address, R.id.latitude, R.id.longitude};
+        String[] from = new String[] {NAME,  DAY_OF_WEEK, START_TIME, END_TIME, ADDRESS, LATITUDE, LONGITUDE};
+        int[] to = new int[] {R.id.meetingName, R.id.day, R.id.startTime, R.id.endTime,  R.id.address, R.id.latitude, R.id.longitude};
         
 		try {
 	        MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
@@ -53,16 +54,32 @@ public class MeetingListFragment extends ListFragment {
 	protected List<HashMap<String, String>> getListItems(String meetingsJson) throws Exception {
 		List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
 		if (meetingsJson != null) {
+			Activity activity = getActivity();
 			JSONArray meetingListJson = new JSONArray(meetingsJson);
 			JSONObject meetingJson;
 			for (int i = 0; i < meetingListJson.length(); i++) {
 				meetingJson = meetingListJson.getJSONObject(i);
 				
 				HashMap<String, String> map = new HashMap<String, String>();
+				map.put(NAME, meetingJson.getString(NAME));
+				
+				String[] daysOfWeek = activity.getResources().getStringArray(R.array.daysOfWeek);
+				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
+				if (dayOfWeek == 7) {
+					map.put(DAY_OF_WEEK, daysOfWeek[0]);
+				} else {
+					map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
+				}
+				
 				map.put(START_TIME, meetingJson.getString(START_TIME));
+				map.put(END_TIME, meetingJson.getString(END_TIME));
 				map.put(ADDRESS, meetingJson.getString(ADDRESS));
-				map.put(LATITUDE, String.valueOf(meetingJson.getLong(LATITUDE)));
-				map.put(LONGITUDE, String.valueOf(meetingJson.getLong(LONGITUDE)));
+				
+				String latitudeStr = String.format(activity.getString(R.string.latitudeFormatted), meetingJson.getDouble(LATITUDE));
+				map.put(LATITUDE, latitudeStr);
+				
+				String longitudeStr = String.format(activity.getString(R.string.longitudeFormatted), meetingJson.getDouble(LONGITUDE));
+				map.put(LONGITUDE, longitudeStr);
 				
 				list.add(map);
 			}
