@@ -96,7 +96,6 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/address"
         android:text="@string/latitude"
-        android:textColor="#007FFF"
         android:textSize="12dp" />
 
     <TextView
@@ -107,7 +106,6 @@
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/latitude"
         android:text="@string/longitude"
-        android:textColor="#007FFF"
         android:textSize="12dp" />
 
 </RelativeLayout>
