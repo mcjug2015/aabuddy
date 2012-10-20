@@ -169,9 +169,6 @@ public class FindMeetingFragment extends Fragment {
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 	        
-		params.add(new BasicNameValuePair("name", ""));
-		params.add(new BasicNameValuePair("description", ""));
-		
 		params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
 		params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
 
@@ -180,24 +177,19 @@ public class FindMeetingFragment extends Fragment {
 
 		String[] daysOfWeekSelections = ((String)daysOfWeekSpinner.getSelectedItem()).split(",");
 		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all_days_of_week))) {
-			params.add(new BasicNameValuePair("day_of_week", getString(R.string.all_days_of_week_value)));
-	    } else {
-			StringBuffer daysOfWeekStr = new StringBuffer("");
-			List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
-			for (String str: daysOfWeekSelections) {				
-				int idx = daysOfWeekAbbr.indexOf(str.trim());
-				if (idx == 0) {
-					idx = 7;
-				}
-				daysOfWeekStr.append(idx + ",");
+			daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
+	    } 
+		
+		List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
+		for (String str: daysOfWeekSelections) {				
+			int idx = daysOfWeekAbbr.indexOf(str.trim());
+			if (idx == 0) {
+				idx = 7;
 			}
-			String str = daysOfWeekStr.substring(0, daysOfWeekStr.length() - 1);
-			// params.add(new BasicNameValuePair("day_of_week", str));
-	    }
+			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx)));
+		}
 
 		String addressName = addressEditText.getText().toString();
-		params.add(new BasicNameValuePair("address", addressName));
-
 		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
 		if (address != null) {
 			params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
