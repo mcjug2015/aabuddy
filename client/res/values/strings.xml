@@ -35,7 +35,7 @@
 	<string name="get_meeting_base_url">http://192.168.1.201:8888/aabuddy/get_meetings/</string>
 	
 	<string name="all_days_of_week">All</string>
-	<string name="all_days_of_week_value">1,2,3,4,5,6,7</string>
+	<string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
 	
 	<string-array name="daysOfWeek">
         <item>Sunday</item>
@@ -64,6 +64,9 @@
 	    <item>10 miles</item>
 	    <item>20 miles</item>
 		<item>50 miles</item>
+		<item>100 miles</item>
+		<item>200 miles</item>
+		<item>300 miles</item>
 	</string-array>
 	
 	<string-array name="searchDistanceValues">
