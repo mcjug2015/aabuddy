@@ -49,7 +49,8 @@ http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_m
 http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3
 -- within 50 miles of specified location between monday and wednesday inclusive, starting at or after 4:30pm and ending before 6:30pm:
 http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
-
+-- within 50 miles of specified location on either monday or saturday
+http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week_in=1&day_of_week_in=6
 
 VM u/p:
 root/reverse

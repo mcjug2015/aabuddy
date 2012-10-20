@@ -94,14 +94,17 @@ def temp_json_obj_to_meeting(json_obj):
     meeting.name = json_obj['name']
     meeting.description = json_obj['description']
     meeting.address = json_obj['address']
-    meeting.internal_type = json_obj['internal_type'].lower()
+    meeting.internal_type = Meeting.SUBMITTED
     meeting.geo_location = fromstr('POINT(%s %s)' % (json_obj['lat'], json_obj['long']), srid=4326)
     return meeting
     
 
-def get_meetings_query_set(distance_miles, latitude, longitude, day_of_week_params, time_params):
+def get_meetings_query_set(distance_miles, latitude, longitude,
+                           day_of_week_params, day_of_week_in_params, time_params):
     meetings = Meeting.objects.all()
     meetings = day_of_week_params.apply_filters(meetings)
+    if day_of_week_in_params:
+        meetings = meetings.filter(day_of_week__in=day_of_week_in_params)
     meetings = time_params.apply_filters(meetings)
     if distance_miles and latitude and longitude:
         pnt = fromstr('POINT(%s %s)' % (latitude, longitude), srid=4326)
@@ -116,8 +119,10 @@ def get_meetings_within_distance(request):
         latitude = request.GET.get('lat', None)
         longitude = request.GET.get('long', None)
         day_of_week_params = DayOfWeekGetParams(request.GET)
+        day_of_week_in_params = request.GET.getlist('day_of_week_in')
         time_params = TimeParams(request.GET)
-        meetings = get_meetings_query_set(distance_miles, latitude, longitude, day_of_week_params, time_params)
+        meetings = get_meetings_query_set(distance_miles, latitude, longitude,
+                                          day_of_week_params, day_of_week_in_params, time_params)
         retval_obj = []
         for meeting in meetings:
             retval_obj.append(temp_meeting_to_json_obj(meeting))

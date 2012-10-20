@@ -16,7 +16,7 @@
             "user_permissions":[
                 
             ],
-            "password":"sha256$10000$Tlamv7Xzam0v$KXoGRKJhsI9KDV35D4Wlo2vRCN/MZSTnKFCfPVeXgFM=",
+            "password":"pbkdf2_sha256$10000$xaIbX4f411ce$WYJKktGH8xQ4qjZ+aSBAxJQ4RhqiGME3g7VX5pXGlAQ=",
             "email":"codecleric@gmail.com",
             "date_joined":"2012-09-29 12:00:00"
         }
