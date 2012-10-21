@@ -2,7 +2,6 @@ package org.mcjug.aameetingmanager.util;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 public class DateTimeUtil {
 
 	public static String getDateStr(int year, int monthOfYear, int dayOfMonth) {
@@ -22,11 +21,22 @@ public class DateTimeUtil {
 		return String.format("%1$tH:%1$tM:00", calendar);
 	}
 	
+	public static long getTimeDurationMinutes(Calendar startTime, Calendar endTime) {
+		 long startMillis = startTime.getTimeInMillis();
+	     long endMillis = endTime.getTimeInMillis();
+	     if (startMillis > endMillis) {
+	    	 endMillis += (24 * 60 * 60 * 1000);
+	     }
+	     
+	     long diffMinutes = (endMillis - startMillis) / (60 * 1000);
+	     return diffMinutes;
+	}
+	
 	public static boolean checkTimes(Calendar startTime, Calendar endTime) {
-		if (startTime.compareTo(endTime) == 1) {
-			return false;
-		} else {
+		if (endTime.compareTo(startTime) == 1) {
 			return true;
+		} else {
+			return false;
 		}
 	}
 }
