@@ -28,9 +28,13 @@
 	<string name="endTime">19:00</string>
 	<string name="dayLabel">Day:</string>
 	<string name="day">Monday</string>
-		<string name="meetingNameLabel">Name:</string>	
+	<string name="meetingNameLabel">Name:</string>	
 	<string name="meetingName">The meeting name goes here</string>	
-				
+	
+	<string name="startAndEndTimesAreEqual">Please change start and end times so they are not equal.</string>	
+	<string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>	
+	<string name="meetingDuration">"Meeting time duration: %d minutes."</string>	
+						
 	<string name="save_meeting_base_url">http://192.168.1.201:8888/aabuddy/save_meeting/</string>
 	<string name="get_meeting_base_url">http://192.168.1.201:8888/aabuddy/get_meetings/</string>
 	
