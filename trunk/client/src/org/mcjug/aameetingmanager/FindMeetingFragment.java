@@ -20,6 +20,7 @@ import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.location.Address;
@@ -92,7 +93,9 @@ public class FindMeetingFragment extends Fragment {
 		}); 
 		
 	    distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner); 
-
+		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
+	    distanceSpinner.setSelection(distanceValues.indexOf("20"));
+	    
 		return view;
 	}
 	
@@ -108,10 +111,6 @@ public class FindMeetingFragment extends Fragment {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
-			
-			if (!DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar)) {
-				Toast.makeText(view.getContext(), "Start time must be less than end time", Toast.LENGTH_LONG).show();		
-			}
 		}
 	};
 
@@ -120,10 +119,6 @@ public class FindMeetingFragment extends Fragment {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
-			
-			if (!DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar)) {
-				Toast.makeText(view.getContext(), "End time must be greater than start time", Toast.LENGTH_LONG).show();		
-			}
 		}
 	};
 	
@@ -137,14 +132,18 @@ public class FindMeetingFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();
 			try {  
-				String baseUrl = getActivity().getString(R.string.get_meeting_base_url);
+				Activity activity = getActivity();
+				String baseUrl = activity.getString(R.string.get_meeting_base_url);
 				String url = baseUrl + "?" + getFindMeetingParams();
 				HttpGet request = new HttpGet(url);
 				HttpResponse httpResponse = client.execute(request);
 			    String jsonResponse = getMeetingsResponse(httpResponse);
 			    Log.d(TAG, "Find meeting jsonResponse: " + jsonResponse);
+			    if (jsonResponse == null || jsonResponse.equals("[]")) {
+			    	return activity.getString(R.string.noMeetingsFound);
+			    }
 			    
-			    Intent intent = new Intent(getActivity(), MeetingListFragmentActivity.class);
+			    Intent intent = new Intent(activity, MeetingListFragmentActivity.class);
 			    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			    intent.putExtra("MEETINGS_JSON", jsonResponse);
 			    startActivity(intent);
