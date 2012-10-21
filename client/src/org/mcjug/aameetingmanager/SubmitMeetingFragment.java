@@ -15,6 +15,7 @@ import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class SubmitMeetingFragment extends Fragment {
 		View view = inflater.inflate(R.layout.submit_meeting_fragment, container, false);		
 		
 		startTimeCalendar = Calendar.getInstance();
+		clearTimeFields(startTimeCalendar);
 		
 		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
@@ -61,6 +63,7 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		endTimeCalendar = Calendar.getInstance();
 		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+		clearTimeFields(endTimeCalendar);
 		
 		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
@@ -96,7 +99,7 @@ public class SubmitMeetingFragment extends Fragment {
 		submitMeetingButton.setEnabled(false);
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				 new SubmitMeetingTask().execute();
+				new SubmitMeetingTask().execute();
 			} 
 		}); 
 		
@@ -117,12 +120,14 @@ public class SubmitMeetingFragment extends Fragment {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
+			clearTimeFields(startTimeCalendar);			
 			
 			boolean isValid = DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar);
 			if (!isValid) {
-				Toast.makeText(view.getContext(), "Start time must be less than end time", Toast.LENGTH_LONG).show();		
+				endTimeCalendar.setTime(startTimeCalendar.getTime());
+				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 			}
-			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 		}		
 	};
 	
@@ -131,17 +136,32 @@ public class SubmitMeetingFragment extends Fragment {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+			clearTimeFields(endTimeCalendar);
 			
-			boolean isValid = DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar);
-			if (!isValid) {
-				Toast.makeText(view.getContext(), "End time must be greater than start time", Toast.LENGTH_LONG).show();		
+			Context context = view.getContext();
+			boolean isValid = true;
+			if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
+				isValid = false;
+				Toast.makeText(context, context.getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
+			
+			} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
+				long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
+				String msg = String.format(context.getString(R.string.meetingDuration), timeDurationMins);
+				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 			}
+			
 			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 		}		
 	};
 	
+	private void clearTimeFields(Calendar calendar) {
+		calendar.set(Calendar.DAY_OF_YEAR, 1);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+	}
+	
 	private class SubmitMeetingTask extends AsyncTask<Void, String, String> {
-
+		
 		@Override
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();  
