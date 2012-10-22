@@ -40,10 +40,13 @@ import android.widget.Toast;
 
 public class FindMeetingFragment extends Fragment {
 	private static final String TAG = FindMeetingFragment.class.getSimpleName();
+	private static final String EMPTY_TIME = "--:--";
 
 	private EditText addressEditText;
 	private Button startTimeButton;
+	private Button startTimeClearButton;
 	private Button endTimeButton;
+	private Button endTimeClearButton;
 	private Button findMeetingButton;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
@@ -66,6 +69,15 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 		
+		startTimeClearButton = (Button) view.findViewById(R.id.findMeetingStartTimeClearButton);
+		startTimeClearButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int width = startTimeButton.getWidth();
+				startTimeButton.setText(EMPTY_TIME);
+				startTimeButton.setWidth(width);
+			}
+		});
+
 		endTimeCalendar = Calendar.getInstance();
 		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
 		
@@ -79,6 +91,15 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 		
+		endTimeClearButton = (Button) view.findViewById(R.id.findMeetingEndTimeClearButton);
+		endTimeClearButton.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				int width = endTimeButton.getWidth();
+				endTimeButton.setText(EMPTY_TIME);
+				endTimeButton.setWidth(width);
+			}
+		});
+
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
@@ -168,9 +189,14 @@ public class FindMeetingFragment extends Fragment {
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 	        
-		params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
-		params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
-
+		if (!startTimeButton.getText().equals(EMPTY_TIME)) {
+			params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
+		}
+		
+		if (!endTimeButton.getText().equals(EMPTY_TIME )) {
+			params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
+		}
+		
 		String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
 		params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
 
@@ -189,16 +215,15 @@ public class FindMeetingFragment extends Fragment {
 		}
 
 		String addressName = addressEditText.getText().toString();
-		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
-		if (address != null) {
-			params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
-			params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
-		} else {
-			params.add(new BasicNameValuePair("lat", "-77.4108"));
-			params.add(new BasicNameValuePair("long", "39.4142"));
-
-		    //Log.d(TAG, "Address is invalid: " + address);
-			//throw new Exception("Address is invalid: " + address);
+		if (!addressName.trim().equals("")) {
+			Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
+			if (address != null) {
+				params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
+				params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
+			} else {
+			    Log.d(TAG, "Address is invalid: " + address);
+				throw new Exception("Address is invalid: " + address);
+			}
 		}
 		
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
