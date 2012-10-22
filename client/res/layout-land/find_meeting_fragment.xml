@@ -32,7 +32,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="25dp"
                 android:text="@string/start_time"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <Button
                 android:id="@+id/findMeetingStartTimeButton"
@@ -44,6 +44,16 @@
                 android:drawableRight="@drawable/clock" />
 
             <Button
+                android:id="@+id/findMeetingStartTimeClearButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/findMeetingStartTimeTextView"
+                android:layout_toRightOf="@+id/findMeetingStartTimeButton"
+                android:background="@null"
+                android:drawableRight="@android:drawable/ic_delete" />
+
+            <Button
                 android:id="@+id/findMeetingEndTimeButton"
                 style="?android:attr/buttonStyleSmall"
                 android:layout_width="wrap_content"
@@ -53,6 +63,17 @@
                 android:layout_marginTop="15dp"
                 android:drawableRight="@drawable/clock" />
 
+            <Button
+                android:id="@+id/findMeetingEndTimeClearButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/findMeetingStartTimeButton"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@+id/findMeetingEndTimeButton"
+                android:background="@null"
+                android:drawableRight="@android:drawable/ic_delete" />
+
             <TextView
                 android:id="@+id/findMeetingEndTimeTextView"
                 android:layout_width="wrap_content"
@@ -60,7 +81,7 @@
                 android:layout_alignBaseline="@+id/findMeetingEndTimeButton"
                 android:layout_alignLeft="@+id/findMeetingStartTimeTextView"
                 android:text="@string/end_time"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <TextView
                 android:id="@+id/findMeetingDayOfWeekTextView"
@@ -70,7 +91,7 @@
                 android:layout_below="@+id/findMeetingEndTimeButton"
                 android:layout_marginTop="15dp"
                 android:text="@string/days_of_week"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner
                 android:id="@+id/findMeetingDaysOfWeekSpinner"
@@ -95,7 +116,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="25dp"
                 android:text="@string/search_within"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <Spinner
                 android:id="@+id/findMeetingDistanceSpinner"
@@ -113,7 +134,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="10dp"
                 android:text="@string/meeting_address"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <EditText
                 android:id="@+id/findMeetingAddressEditText"
@@ -145,7 +166,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent" >
 
         <Button
             android:id="@+id/findMeetingFindButton"
@@ -153,7 +174,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/search_button" />
-        
     </RelativeLayout>
 
 </LinearLayout>
