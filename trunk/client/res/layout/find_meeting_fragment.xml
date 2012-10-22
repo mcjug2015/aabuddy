@@ -13,15 +13,27 @@
         android:layout_marginTop="10dp"
         android:drawableRight="@drawable/clock" />
 
+    <Button
+        android:id="@+id/findMeetingStartTimeClearButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_toRightOf="@+id/findMeetingStartTimeButton"
+        android:background="@null"
+        android:drawableRight="@android:drawable/ic_delete" />
+
     <TextView
         android:id="@+id/findMeetingStartTimeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/findMeetingStartTimeButton"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="10dp"
-        android:layout_alignBaseline="@+id/findMeetingStartTimeButton"
         android:text="@string/start_time"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
         android:id="@+id/findMeetingEndTimeButton"
@@ -33,6 +45,17 @@
         android:layout_marginTop="5dp"
         android:drawableRight="@drawable/clock" />
 
+    <Button
+        android:id="@+id/findMeetingEndTimeClearButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/findMeetingStartTimeButton"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/findMeetingEndTimeButton"
+        android:background="@null"
+        android:drawableRight="@android:drawable/ic_delete" />
+
     <TextView
         android:id="@+id/findMeetingEndTimeTextView"
         android:layout_width="wrap_content"
@@ -40,7 +63,7 @@
         android:layout_alignBaseline="@+id/findMeetingEndTimeButton"
         android:layout_alignLeft="@+id/findMeetingStartTimeTextView"
         android:text="@string/end_time"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/findMeetingDayOfWeekTextView"
@@ -50,16 +73,16 @@
         android:layout_below="@+id/findMeetingEndTimeButton"
         android:layout_marginTop="15dp"
         android:text="@string/days_of_week"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-    
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
     <org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner
         android:id="@+id/findMeetingDaysOfWeekSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingEndTimeButton"
         android:layout_alignBaseline="@+id/findMeetingDayOfWeekTextView"
+        android:layout_alignLeft="@+id/findMeetingEndTimeButton"
         android:entries="@array/daysOfWeek" />
-    
+
     <Button
         android:id="@+id/findMeetingCurrentLocationButton"
         style="?android:attr/buttonStyleSmall"
@@ -77,7 +100,7 @@
         android:layout_alignBaseline="@+id/findMeetingCurrentLocationButton"
         android:layout_alignLeft="@+id/findMeetingEndTimeTextView"
         android:text="@string/meeting_address"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <EditText
         android:id="@+id/findMeetingAddressEditText"
@@ -102,14 +125,14 @@
         android:layout_below="@+id/findMeetingAddressEditText"
         android:layout_marginTop="15dp"
         android:text="@string/search_within"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Spinner
         android:id="@+id/findMeetingDistanceSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingCurrentLocationButton"
         android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
+        android:layout_alignLeft="@+id/findMeetingCurrentLocationButton"
         android:entries="@array/searchDistances" />
 
     <Button
@@ -120,5 +143,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="15dp"
         android:text="@string/search_button" />
-    
+
 </RelativeLayout>
