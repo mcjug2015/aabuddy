@@ -26,7 +26,7 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
             android:text="@string/start_time"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button
             android:id="@+id/submitMeetingEndTimeButton"
@@ -45,7 +45,7 @@
             android:layout_alignBaseline="@+id/submitMeetingEndTimeButton"
             android:layout_alignLeft="@+id/submitMeetingStartTimeTextView"
             android:text="@string/end_time"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <TextView
             android:id="@+id/submitMeetingDayOfWeekTextView"
@@ -55,7 +55,7 @@
             android:layout_below="@+id/submitMeetingEndTimeButton"
             android:layout_marginTop="15dp"
             android:text="@string/day_of_week"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Spinner
             android:id="@+id/submitMeetingDayOfWeekSpinner"
@@ -73,7 +73,7 @@
             android:layout_below="@+id/submitMeetingDayOfWeekTextView"
             android:layout_marginTop="25dp"
             android:text="@string/meeting_address"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <Button
             android:id="@+id/submitMeetingCurrentLocationButton"
@@ -96,7 +96,7 @@
             android:layout_marginTop="20dp"
             android:ems="10"
             android:inputType="textPostalAddress"
-            android:textAppearance="?android:attr/textAppearanceMedium" >
+            android:textAppearance="?android:attr/textAppearanceSmall" >
 
             <requestFocus />
         </EditText>
