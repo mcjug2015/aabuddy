@@ -23,7 +23,7 @@
         android:layout_marginTop="10dp"
         android:layout_toRightOf="@+id/findMeetingStartTimeButton"
         android:background="@null"
-        android:drawableLeft="@android:drawable/ic_delete" />
+        android:drawableLeft="@drawable/delete" />
 
     <TextView
         android:id="@+id/findMeetingStartTimeTextView"
@@ -54,7 +54,7 @@
         android:layout_marginTop="5dp"
         android:layout_toRightOf="@+id/findMeetingEndTimeButton"
         android:background="@null"
-        android:drawableLeft="@android:drawable/ic_delete" />
+        android:drawableLeft="@drawable/delete" />
 
     <TextView
         android:id="@+id/findMeetingEndTimeTextView"
