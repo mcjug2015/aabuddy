@@ -27,6 +27,14 @@ def localvm():
     env.deployment = 'localvm'
     env.use_ssh_keys = False
 
+def prod():
+    env.hosts = ['108.179.217.242'] # replace by the one appropriate for you
+    env.start_user = 'root' # the initial user pre-installed on image
+    env.path = '/var/www/%(prj_name)s' % env
+    env.virtualhost_path = env.path
+    env.tmppath = '/var/tmp/django_cache/%(prj_name)s' % env
+    env.deployment = 'prod'
+    env.use_ssh_keys = False
 
 def _ensure_virtualenv():
     if "VIRTUAL_ENV" not in os.environ:
@@ -155,7 +163,22 @@ def setup():
     #chkconfig httpd on
     #chkconfig postgresql-9.1 on
     
-    #psycopg2
+    # easy_install(as root):
+    # wget http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11-py2.7.egg
+    # sh ./setuptools-0.6c11-py2.7.egg
+    # pip:
+    # sudo easy_install-2.7 pip
+    # 
+    # virutalenv
+    # sudo pip-2.7 install virtualenv
+    
+    
+    # CREATE AND SOURCE AABUDDY VIRTUALENV!
+    # fabric:
+    # pip install Fabric==1.4.3
+    
+    
+    #psycopg2 make sure pg_config is on the path.
     #run('cd ~/; source .profile; cd %(path)s; source local-python/bin/activate; easy_install psycopg2' % env, pty=True)
     
     # disable default site
@@ -221,7 +244,10 @@ def install_site():
     "Add the virtualhost config file to the webserver's config, activate logrotate"
     require('release')
     with cd('%(path)s/releases/%(release)s/%(prj_name)s' % env):
-        sudo('cp environments/%(deployment)s/aabuddy.conf /etc/httpd/conf.d/%(prj_name)s.conf' % env, pty=True)
+        if env.deployment == 'localvm':
+            sudo('cp environments/%(deployment)s/aabuddy.conf /etc/httpd/conf.d/%(prj_name)s.conf' % env, pty=True)
+        elif env.deployment == 'prod':
+            sudo('cp environments/%(deployment)s/aabuddy.conf /usr/local/apache/conf/includes/%(prj_name)s.conf' % env, pty=True)
     with cd('%(path)s/releases/%(release)s' % env):
         run('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.7/site-packages/django/contrib/admin/static/admin/ admin' % env)
 
@@ -254,4 +280,4 @@ def migrate():
 def restart_webserver():
     "Restart the web server"
     with settings(warn_only=True):
-        sudo('service httpd restart', pty=True)
+        sudo('cd /usr/local/apache/bin; ./apachectl restart;', pty=True)

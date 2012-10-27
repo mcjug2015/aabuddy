@@ -115,6 +115,7 @@ def get_meetings_query_set(distance_miles, latitude, longitude,
 def get_meetings_within_distance(request):
     ''' get all meetings within distance miles from passed in lat/long '''
     if request.method == 'GET':
+        logger.info("Got request with params: %s" % str(request.GET))
         distance_miles = request.GET.get('distance_miles', None)
         latitude = request.GET.get('lat', None)
         longitude = request.GET.get('long', None)
