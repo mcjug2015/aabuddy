@@ -23,12 +23,17 @@ import org.mcjug.aameetingmanager.util.LocationUtil;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -53,6 +58,13 @@ public class FindMeetingFragment extends Fragment {
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
 	private Spinner distanceSpinner;
 	
+	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
@@ -154,7 +166,7 @@ public class FindMeetingFragment extends Fragment {
 			HttpClient client = new DefaultHttpClient();
 			try {  
 				Activity activity = getActivity();
-				String baseUrl = activity.getString(R.string.get_meeting_base_url);
+				String baseUrl = getGetMeetingBaseUrl();
 				String url = baseUrl + "?" + getFindMeetingParams();
 				HttpGet request = new HttpGet(url);
 				HttpResponse httpResponse = client.execute(request);
@@ -184,6 +196,22 @@ public class FindMeetingFragment extends Fragment {
 				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();		
 			}
 		}
+	}
+	
+	private String getGetMeetingBaseUrl() {
+		Activity activity = getActivity();
+
+		StringBuilder baseUrl = new StringBuilder();
+		
+		String defaultServerBase = activity.getString(R.string.meetingServerBaseUrlDefaultValue);
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+		String serverBaseUrl = prefs.getString(activity.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
+		
+		baseUrl.append(serverBaseUrl);
+		baseUrl.append(activity.getString(R.string.get_meeting_url_path));
+		
+		return baseUrl.toString();
 	}
 	
 	private String getFindMeetingParams() throws Exception {
@@ -249,5 +277,32 @@ public class FindMeetingFragment extends Fragment {
 		}
 		return builder.toString();
 	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.activity_main, menu);
+	}
+
+	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		
+        switch (item.getItemId()) {
+
+	        // Admin prefs
+	        case R.id.adminPrefs:
+	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
+	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+	            return true;
+        }
+
+		
+		return false;
+	}
+	
+	
 
 }
