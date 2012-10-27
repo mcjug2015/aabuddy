@@ -14,11 +14,14 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
+import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,7 +169,7 @@ public class SubmitMeetingFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();  
 			try {  
-				String baseUrl = getActivity().getString(R.string.save_meeting_base_url);
+				String baseUrl = getSaveMeetingBaseUrl();
 				HttpPost request = new HttpPost(baseUrl);  
 				StringEntity se = new StringEntity(createSubmitMeetingJson());  
 				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
@@ -185,6 +188,22 @@ public class SubmitMeetingFragment extends Fragment {
 			return null;
 		}
 
+		private String getSaveMeetingBaseUrl() {
+			Activity activity = getActivity();
+
+			StringBuilder baseUrl = new StringBuilder();
+			
+			String defaultServerBase = activity.getString(R.string.meetingServerBaseUrlDefaultValue);
+			
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
+			String serverBaseUrl = prefs.getString(activity.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
+			
+			baseUrl.append(serverBaseUrl);
+			baseUrl.append(activity.getString(R.string.save_meeting_url_path));
+			
+			return baseUrl.toString();
+		}
+		
 		@Override
 		protected void onPostExecute(String result) {
 			super.onPostExecute(result);

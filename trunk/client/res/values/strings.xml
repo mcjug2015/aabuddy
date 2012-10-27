@@ -35,8 +35,22 @@
 	<string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>	
 	<string name="meetingDuration">"Meeting time duration: %d minutes."</string>	
 						
-	<string name="save_meeting_base_url">http://192.168.1.201:8888/aabuddy/save_meeting/</string>
-	<string name="get_meeting_base_url">http://192.168.1.201:8888/aabuddy/get_meetings/</string>
+	
+	
+	<string name="adminPrefActivityTitle">Admin Preferences</string>
+	<string name="adminPrefFragmentTitle">Admin Preferences</string>
+	<string name="adminPrefFragmentSummary">Set admin preferences</string>
+	
+	<string name="serverPreferencesTitle">Server Preferences</string>
+	<string name="serverPreferencesSummary">Configure the Meeting Server</string>
+	
+	<string name="meetingServerBaseUrlPreferenceName">meetingServerBaseUrl</string>
+	<string name="meetingServerBaseUrlTitle">Meeting Server Base URL</string>
+	<string name="meetingServerBaseUrlSummary">Protocol, host name and port of meeting server</string>
+	<string name="meetingServerBaseUrlDefaultValue">http://192.168.1.201:8888</string>
+	
+	<string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
+	<string name="get_meeting_url_path">/aabuddy/get_meetings/</string>
 	
 	<string name="all_days_of_week">All</string>
 	<string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>

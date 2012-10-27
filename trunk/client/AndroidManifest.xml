@@ -27,6 +27,8 @@
         
         <activity android:name=".MeetingListFragmentActivity" android:label="@string/title_activity_main" />
         
+        <activity android:name=".AdminPrefsActivity" android:label="@string/adminPrefActivityTitle"/>
+        
     </application>
 
 </manifest>
