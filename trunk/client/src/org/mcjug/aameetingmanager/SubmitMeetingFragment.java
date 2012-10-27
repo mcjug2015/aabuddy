@@ -17,6 +17,7 @@ import org.mcjug.aameetingmanager.util.LocationUtil;
 import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.os.AsyncTask;
@@ -24,6 +25,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -46,6 +50,12 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
   
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true);
+	}
+
 	@Override	
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment		
@@ -243,4 +253,27 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		return json.toString();
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.activity_main, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		
+        switch (item.getItemId()) {
+
+	        // Admin prefs
+	        case R.id.adminPrefs:
+	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
+	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+	            return true;
+        }
+
+		
+		return false;
+	}	
 }
