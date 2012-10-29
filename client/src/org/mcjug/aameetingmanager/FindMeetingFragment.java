@@ -48,6 +48,7 @@ public class FindMeetingFragment extends Fragment {
 	private static final String EMPTY_TIME = "--:--";
 
 	private EditText addressEditText;
+	private Button currentLocationButton;
 	private Button startTimeButton;
 	private Button startTimeClearButton;
 	private Button endTimeButton;
@@ -56,8 +57,7 @@ public class FindMeetingFragment extends Fragment {
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
-	private Spinner distanceSpinner;
-	
+	private Spinner distanceSpinner;	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -118,6 +118,14 @@ public class FindMeetingFragment extends Fragment {
 
 	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
+	    currentLocationButton = (Button) view.findViewById(R.id.findMeetingCurrentLocationButton); 
+	    currentLocationButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+				String address = LocationUtil.getLastKnownLocation(getActivity());
+				addressEditText.setText(address);
+			} 
+		}); 
+
 	    findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton); 
 		findMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
@@ -134,9 +142,6 @@ public class FindMeetingFragment extends Fragment {
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		String address = LocationUtil.getLastKnownLocation(this.getActivity());
-		addressEditText.setText(address);
 	}
 	
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
@@ -283,8 +288,6 @@ public class FindMeetingFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.activity_main, menu);
 	}
-
-	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -302,7 +305,4 @@ public class FindMeetingFragment extends Fragment {
 		
 		return false;
 	}
-	
-	
-
 }
