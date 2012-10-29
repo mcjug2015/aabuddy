@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="3dp" >
+    android:padding="2dp" >
 
     <TextView
         android:id="@+id/startTimeLabel"
@@ -12,100 +12,145 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:text="@string/startTimeLabel"
-        android:textSize="14dp" />
+        android:textColor="#565656"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/startTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/startTimeLabel"
+        android:layout_marginLeft="4dp"
         android:layout_toRightOf="@+id/startTimeLabel"
-        android:layout_marginLeft="5dp"
-        android:text="@string/startTime"
-        android:textSize="14dp" />
+        android:textColor="#565656"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/endTimeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/startTime"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/startTime"
         android:text="@string/endTimeLabel"
-        android:layout_marginLeft="20dp"
-        android:textSize="14dp" />
-    
+        android:textColor="#565656"
+        android:textSize="16dp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/endTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/endTimeLabel"
+        android:layout_marginLeft="4dp"
         android:layout_toRightOf="@+id/endTimeLabel"
-        android:text="@string/endTime"
-        android:layout_marginLeft="5dp"
-        android:textSize="14dp" />
-    
+        android:textColor="#565656"
+        android:textSize="16dp" />
+
     <TextView
         android:id="@+id/dayLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/endTime"
+        android:layout_marginLeft="15dp"
         android:layout_toRightOf="@+id/endTime"
         android:text="@string/dayLabel"
-        android:layout_marginLeft="20dp"
-        android:textSize="14dp" />
-    
+        android:textColor="#565656"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/day"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/dayLabel"
+        android:layout_marginLeft="4dp"
         android:layout_toRightOf="@+id/dayLabel"
-        android:text="@string/day"
-        android:layout_marginLeft="5dp"
-        android:textSize="14dp" />
-    
+        android:textColor="#565656"
+        android:textSize="15dp" />
+
     <TextView
         android:id="@+id/meetingNameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/startTimeLabel"
         android:text="@string/meetingNameLabel"
-        android:textSize="14dp" />
+        android:textColor="#565656"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/meetingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/meetingNameLabel"
-        android:layout_toRightOf="@+id/meetingNameLabel"
         android:layout_marginLeft="5dp"
-        android:text="@string/meetingName"
-        android:textSize="14dp" />
+        android:layout_toRightOf="@+id/meetingNameLabel"
+        android:textColor="#565656"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/addressLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/meetingNameLabel"
+        android:text="@string/meeting_address"
+        android:textColor="#565656"
+        android:textSize="15dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/meetingNameLabel"
-        android:textSize="14dp" />
+        android:layout_alignBaseline="@+id/addressLabel"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/addressLabel"
+        android:autoLink="map"
+        android:textColor="#565656"
+        android:textSize="15dp" />
+
+    <TextView
+        android:id="@+id/latitudeLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/addressLabel"
+        android:text="@string/latitude"
+        android:textColor="#808080"
+        android:textSize="14dp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/latitude"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/address"
-        android:text="@string/latitude"
-        android:textSize="12dp" />
+        android:layout_alignBaseline="@+id/latitudeLabel"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/latitudeLabel"
+        android:textColor="#808080"
+        android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/longitude"
+        android:id="@+id/longitudeLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/latitude"
         android:layout_marginLeft="15dp"
         android:layout_toRightOf="@id/latitude"
         android:text="@string/longitude"
-        android:textSize="12dp" />
+        android:textColor="#808080"
+        android:textSize="14dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/longitudeLabel"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@id/longitudeLabel"
+        android:textColor="#808080"
+        android:textSize="14dp" />
 
 </RelativeLayout>
