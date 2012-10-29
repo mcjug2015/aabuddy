@@ -10,7 +10,7 @@
     <string name="day_of_week">Day of week:</string>
     <string name="days_of_week">Days of week:</string>
     <string name="meeting_address">Address:</string>	
-		
+    		
 	<string name="current_location_button">Fill with current location</string>
 	<string name="validate_address_button">Validate Address</string>
 	<string name="submit_button">Submit</string>
@@ -20,22 +20,16 @@
 
 	<string name="latitude">Latitude:</string>
 	<string name="longitude">Longitude:</string>
-	<string name="latitudeFormatted">Latitude: %.3f</string>
-	<string name="longitudeFormatted">Longitude: %.3f</string>		
 	<string name="startTimeLabel">Start:</string>
-	<string name="startTime">18:00</string>
 	<string name="endTimeLabel">End:</string>
-	<string name="endTime">19:00</string>
 	<string name="dayLabel">Day:</string>
 	<string name="day">Monday</string>
 	<string name="meetingNameLabel">Name:</string>	
-	<string name="meetingName">The meeting name goes here</string>	
-	
+	<string name="meetingName">AA Meeting</string>	
+		
 	<string name="startAndEndTimesAreEqual">Please change start and end times so they are not equal.</string>	
 	<string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>	
 	<string name="meetingDuration">"Meeting time duration: %d minutes."</string>	
-						
-	
 	
 	<string name="adminPrefActivityTitle">Admin Preferences</string>
 	<string name="adminPrefFragmentTitle">Admin Preferences</string>
