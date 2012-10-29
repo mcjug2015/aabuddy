@@ -75,11 +75,11 @@ public class MeetingListFragment extends ListFragment {
 				map.put(END_TIME, meetingJson.getString(END_TIME));
 				map.put(ADDRESS, meetingJson.getString(ADDRESS));
 				
-				String latitudeStr = String.format(activity.getString(R.string.latitudeFormatted), meetingJson.getDouble(LATITUDE));
-				map.put(LATITUDE, latitudeStr);
+				double latitude = meetingJson.getDouble(LATITUDE);
+				map.put(LATITUDE, String.format("%.3f", latitude));
 				
-				String longitudeStr = String.format(activity.getString(R.string.longitudeFormatted), meetingJson.getDouble(LONGITUDE));
-				map.put(LONGITUDE, longitudeStr);
+				double longitude = meetingJson.getDouble(LONGITUDE);
+				map.put(LONGITUDE, String.format("%.3f", longitude));
 				
 				list.add(map);
 			}
