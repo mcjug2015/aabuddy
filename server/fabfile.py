@@ -280,4 +280,7 @@ def migrate():
 def restart_webserver():
     "Restart the web server"
     with settings(warn_only=True):
-        sudo('cd /usr/local/apache/bin; ./apachectl restart;', pty=True)
+        if env.deployment == 'localvm':
+            sudo('service httpd restart')
+        elif env.deployment == 'prod':
+            sudo('cd /usr/local/apache/bin; ./apachectl restart;', pty=True)
