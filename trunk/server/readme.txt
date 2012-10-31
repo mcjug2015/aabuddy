@@ -51,6 +51,20 @@ http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_m
 http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
 -- within 50 miles of specified location on either monday or saturday
 http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week_in=1&day_of_week_in=6
+-- the 0th to the 2nd meeting of all meetings, sorted by description; total returned - 3 meetings, notice the n+1 passed to the limit.
+http://localhost:8888/aabuddy/get_meetings/?offset=0&limit=3&order_by=description
+-- the 3rd meeting out of the list of all meetings sorted by start_time
+http://localhost:8888/aabuddy/get_meetings/?offset=2&limit=3&order_by=start_time
+
+The returned json object looks like this:
+{
+    "meta": {"total_count": 3,
+             "current_count": 1}, 
+    "objects": [{"internal_type": "submitted", "description": "Awesome meeting", "start_time": "07:45:00", "long": 39.05995, "day_of_week": 7, "end_time": "08:45:00", "address": "1850 Rockville pike, Rockville, MD, 20852", "lat": -77.121946, "name": "Rockville meeting"}]
+}
+total_count is the number of meetings you would have gotten back if didn't pass in a limit and an offset
+current_count is the number of meetings currently in the "objects" list(with limit and offset applied if you passed them in) 
+
 
 VM u/p:
 root/reverse

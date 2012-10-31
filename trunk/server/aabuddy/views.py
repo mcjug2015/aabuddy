@@ -99,8 +99,9 @@ def temp_json_obj_to_meeting(json_obj):
     return meeting
     
 
-def get_meetings_query_set(distance_miles, latitude, longitude,
-                           day_of_week_params, day_of_week_in_params, time_params):
+def get_meetings_count_query_set(distance_miles, latitude, longitude,
+                           day_of_week_params, day_of_week_in_params,
+                           time_params, limit, offset, order_by_column):
     meetings = Meeting.objects.all()
     meetings = day_of_week_params.apply_filters(meetings)
     if day_of_week_in_params:
@@ -109,7 +110,18 @@ def get_meetings_query_set(distance_miles, latitude, longitude,
     if distance_miles and latitude and longitude:
         pnt = fromstr('POINT(%s %s)' % (latitude, longitude), srid=4326)
         meetings = meetings.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
-    return meetings
+
+    if order_by_column:
+        meetings = meetings.order_by(order_by_column)
+
+    pre_offset_count = meetings.count()
+
+    if offset and limit:
+        meetings = meetings[offset:limit]
+    elif offset or limit:
+        raise ValueError("You must pass in both an offset and a limit, or neither of them.")
+    
+    return (pre_offset_count, meetings)
 
 
 def get_meetings_within_distance(request):
@@ -122,11 +134,16 @@ def get_meetings_within_distance(request):
         day_of_week_params = DayOfWeekGetParams(request.GET)
         day_of_week_in_params = request.GET.getlist('day_of_week_in')
         time_params = TimeParams(request.GET)
-        meetings = get_meetings_query_set(distance_miles, latitude, longitude,
-                                          day_of_week_params, day_of_week_in_params, time_params)
-        retval_obj = []
+        limit = request.GET.get("limit", None)
+        offset = request.GET.get("offset", None)
+        order_by = request.GET.get("order_by", None)
+        (count, meetings) = get_meetings_count_query_set(distance_miles, latitude, longitude,
+                                          day_of_week_params, day_of_week_in_params,
+                                          time_params, limit, offset, order_by)
+        retval_obj = {'meta': {'total_count': count}, 'objects': []}
         for meeting in meetings:
-            retval_obj.append(temp_meeting_to_json_obj(meeting))
+            retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
+        retval_obj['meta']['current_count'] = len(meetings)
         return HttpResponse(json.dumps(retval_obj))
     
 
