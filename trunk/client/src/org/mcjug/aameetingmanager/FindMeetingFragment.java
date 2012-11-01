@@ -16,6 +16,8 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
@@ -177,13 +179,18 @@ public class FindMeetingFragment extends Fragment {
 				HttpResponse httpResponse = client.execute(request);
 			    String jsonResponse = getMeetingsResponse(httpResponse);
 			    Log.d(TAG, "Find meeting jsonResponse: " + jsonResponse);
-			    if (jsonResponse == null || jsonResponse.equals("[]")) {
+			    if (jsonResponse == null) {
 			    	return activity.getString(R.string.noMeetingsFound);
 			    }
 			    
+			    JSONObject jsonObj = new JSONObject(jsonResponse);
+			    JSONArray jsonMeetings = jsonObj.getJSONArray("objects");
+			    if (jsonMeetings == null || jsonMeetings.length() == 0) {
+			    	return activity.getString(R.string.noMeetingsFound);
+			    }
 			    Intent intent = new Intent(activity, MeetingListFragmentActivity.class);
 			    intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-			    intent.putExtra("MEETINGS_JSON", jsonResponse);
+			    intent.putExtra("MEETINGS_JSON", jsonMeetings.toString());
 			    startActivity(intent);
 
 			} catch (Exception e) {  
