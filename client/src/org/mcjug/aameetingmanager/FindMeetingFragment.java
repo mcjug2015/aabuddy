@@ -237,9 +237,6 @@ public class FindMeetingFragment extends Fragment {
 			params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
 		}
 		
-		String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
-		params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
-
 		String[] daysOfWeekSelections = ((String)daysOfWeekSpinner.getSelectedItem()).split(",");
 		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all_days_of_week))) {
 			daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
@@ -260,6 +257,10 @@ public class FindMeetingFragment extends Fragment {
 			if (address != null) {
 				params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
 				params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
+				
+				String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
+				params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
+
 			} else {
 			    Log.d(TAG, "Address is invalid: " + address);
 				throw new Exception("Address is invalid: " + address);
