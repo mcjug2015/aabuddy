@@ -108,7 +108,7 @@ def get_meetings_count_query_set(distance_miles, latitude, longitude,
         meetings = meetings.filter(day_of_week__in=day_of_week_in_params)
     meetings = time_params.apply_filters(meetings)
     if distance_miles and latitude and longitude:
-        pnt = fromstr('POINT(%s %s)' % (latitude, longitude), srid=4326)
+        pnt = fromstr('POINT(%s %s)' % (longitude, latitude), srid=4326)
         meetings = meetings.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
 
     if order_by_column:
