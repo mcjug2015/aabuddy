@@ -93,6 +93,8 @@ public class SubmitMeetingFragment extends Fragment {
 		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
 		currentLocationButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
+				String address = LocationUtil.getLastKnownLocation(getActivity());
+				addressEditText.setText(address);
 			} 
 		}); 		
 		
@@ -103,13 +105,12 @@ public class SubmitMeetingFragment extends Fragment {
 				if (!isValid) {
 					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
-				// submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
-				submitMeetingButton.setEnabled(true);
+				submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
 			} 
 		}); 
 		
 		submitMeetingButton = (Button) view.findViewById(R.id.submitMeetingButton); 
-		submitMeetingButton.setEnabled(false);
+		submitMeetingButton.setEnabled(true);
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				new SubmitMeetingTask().execute();
@@ -123,9 +124,6 @@ public class SubmitMeetingFragment extends Fragment {
 		
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
-		String address = LocationUtil.getLastKnownLocation(getActivity());
-		addressEditText.setText(address);
 	}
 
 	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
