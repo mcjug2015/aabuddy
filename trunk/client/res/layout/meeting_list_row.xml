@@ -2,155 +2,55 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:padding="2dp" >
-
-    <TextView
-        android:id="@+id/startTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:text="@string/startTimeLabel"
-        android:textColor="#565656"
-        android:textSize="16dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/startTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/startTimeLabel"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/startTimeLabel"
-        android:textColor="#565656"
-        android:textSize="16dp" />
-
-    <TextView
-        android:id="@+id/endTimeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/startTime"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/startTime"
-        android:text="@string/endTimeLabel"
-        android:textColor="#565656"
-        android:textSize="16dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/endTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/endTimeLabel"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/endTimeLabel"
-        android:textColor="#565656"
-        android:textSize="16dp" />
-
-    <TextView
-        android:id="@+id/dayLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/endTime"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/endTime"
-        android:text="@string/dayLabel"
-        android:textColor="#565656"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/day"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/dayLabel"
-        android:layout_marginLeft="4dp"
-        android:layout_toRightOf="@+id/dayLabel"
-        android:textColor="#565656"
-        android:textSize="15dp" />
-
-    <TextView
-        android:id="@+id/meetingNameLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/startTimeLabel"
-        android:text="@string/meetingNameLabel"
-        android:textColor="#565656"
-        android:textSize="15dp"
-        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/meetingName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/meetingNameLabel"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/meetingNameLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
         android:textColor="#565656"
+        android:textStyle="bold"
         android:textSize="15dp" />
 
     <TextView
-        android:id="@+id/addressLabel"
+        android:id="@+id/meetingDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/meetingNameLabel"
-        android:text="@string/meeting_address"
+        android:layout_below="@id/meetingName"
         android:textColor="#565656"
-        android:textSize="15dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/addressLabel"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/addressLabel"
-        android:autoLink="map"
-        android:textColor="#565656"
-        android:textSize="15dp" />
-
-    <TextView
-        android:id="@+id/latitudeLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/addressLabel"
-        android:text="@string/latitude"
-        android:textColor="#808080"
-        android:textSize="14dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/latitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/latitudeLabel"
-        android:layout_marginLeft="5dp"
-        android:layout_toRightOf="@+id/latitudeLabel"
-        android:textColor="#808080"
+        android:layout_marginLeft="4dp"        
         android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/longitudeLabel"
+        android:id="@+id/meetingTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/latitude"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@id/latitude"
-        android:text="@string/longitude"
-        android:textColor="#808080"
-        android:textSize="14dp"
-        android:textStyle="bold" />
+        android:layout_alignBaseline="@+id/meetingDay"
+        android:layout_marginLeft="4dp"
+        android:layout_toRightOf="@+id/meetingDay"
+        android:textColor="#565656"
+        android:textSize="14dp" />
 
     <TextView
-        android:id="@+id/longitude"
+        android:id="@+id/meetingAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/longitudeLabel"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@id/longitudeLabel"
-        android:textColor="#808080"
+        android:layout_below="@id/meetingDay"
+        android:textColor="#797979"
+                android:layout_marginLeft="4dp"
+        
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/meetingDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/meetingAddress"
+        android:textColor="#797979"
+                android:layout_marginLeft="4dp"
+        
         android:textSize="14dp" />
 
 </RelativeLayout>
