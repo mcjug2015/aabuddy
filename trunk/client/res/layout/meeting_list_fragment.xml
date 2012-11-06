@@ -4,6 +4,25 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sortBy"
+            android:textSize="14dp" />
+
+        <Spinner
+            android:id="@+id/meetingListSortOrder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/sortOrder" />
+        
+    </LinearLayout>
+
     <ListView
         android:id="@id/android:list"
         android:layout_width="match_parent"
@@ -11,6 +30,6 @@
         android:layout_weight="1"
         android:background="#eeeeee"
         android:divider="#c7d6d6"
-        android:dividerHeight="4dp" />
+        android:dividerHeight="2dp" />
 
 </LinearLayout>
