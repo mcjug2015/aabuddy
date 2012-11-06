@@ -14,16 +14,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.Spinner;
 
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
 
 	private static final String NAME = "name";
+	private static final String DESCRIPTION = "description";
 	private static final String DAY_OF_WEEK = "day_of_week";
 	private static final String START_TIME = "start_time";
 	private static final String END_TIME = "end_time";
+	private static final String TIME_RANGE = "time_range";
 	private static final String ADDRESS = "address";
 	private static final String LATITUDE = "lat";
 	private static final String LONGITUDE = "long";
@@ -38,14 +42,21 @@ public class MeetingListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-        String[] from = new String[] {NAME,  DAY_OF_WEEK, START_TIME, END_TIME, ADDRESS, LATITUDE, LONGITUDE};
-        int[] to = new int[] {R.id.meetingName, R.id.day, R.id.startTime, R.id.endTime,  R.id.address, R.id.latitude, R.id.longitude};
+        String[] from = new String[] {NAME,  DAY_OF_WEEK, TIME_RANGE, ADDRESS, DESCRIPTION};
+        int[] to = new int[] {R.id.meetingName, R.id.meetingDay, R.id.meetingTime, R.id.meetingAddress, R.id.meetingDescription};
         
 		try {
 	        MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
 			List<HashMap<String, String>> list = getListItems(activity.getMeetingsJson());
-	        SimpleAdapter adapter = new SimpleAdapter(getActivity(), list, R.layout.meeting_list_row, from, to);
-	        setListAdapter(adapter);
+			
+			SimpleAdapter adapter = new SimpleAdapter(getActivity(), list, R.layout.meeting_list_row, from, to);
+			setListAdapter(adapter);
+			
+			Spinner sortOrder = (Spinner)getView().findViewById(R.id.meetingListSortOrder);
+			ArrayAdapter<CharSequence> sortOrderAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.sortOrder, R.layout.spinner_item);
+			sortOrderAdapter.setDropDownViewResource(R.layout.spinner_item);
+			sortOrder.setAdapter(sortOrderAdapter);
+		
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
@@ -61,7 +72,9 @@ public class MeetingListFragment extends ListFragment {
 				meetingJson = meetingListJson.getJSONObject(i);
 				
 				HashMap<String, String> map = new HashMap<String, String>();
+				
 				map.put(NAME, meetingJson.getString(NAME));
+				map.put(DESCRIPTION, meetingJson.getString(DESCRIPTION));
 				
 				String[] daysOfWeek = activity.getResources().getStringArray(R.array.daysOfWeek);
 				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
@@ -71,8 +84,10 @@ public class MeetingListFragment extends ListFragment {
 					map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
 				}
 				
-				map.put(START_TIME, meetingJson.getString(START_TIME));
-				map.put(END_TIME, meetingJson.getString(END_TIME));
+				String startTime = meetingJson.getString(START_TIME).substring(0, 5);
+				String endTime = meetingJson.getString(END_TIME).substring(0, 5);
+				map.put(TIME_RANGE, startTime + " - " +  endTime);
+				
 				map.put(ADDRESS, meetingJson.getString(ADDRESS));
 				
 				double latitude = meetingJson.getDouble(LATITUDE);
