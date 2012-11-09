@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
-import android.app.Activity;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -153,11 +152,11 @@ public class SubmitMeetingFragment extends Fragment {
 			boolean isValid = true;
 			if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
 				isValid = false;
-				Toast.makeText(context, context.getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
+				Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
 			
 			} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
 				long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
-				String msg = String.format(context.getString(R.string.meetingDuration), timeDurationMins);
+				String msg = String.format(getString(R.string.meetingDuration), timeDurationMins);
 				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 			}
 			
@@ -197,17 +196,15 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 
 		private String getSaveMeetingBaseUrl() {
-			Activity activity = getActivity();
-
 			StringBuilder baseUrl = new StringBuilder();
 			
-			String defaultServerBase = activity.getString(R.string.meetingServerBaseUrlDefaultValue);
+			String defaultServerBase = getString(R.string.meetingServerBaseUrlDefaultValue);
 			
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
-			String serverBaseUrl = prefs.getString(activity.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+			String serverBaseUrl = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
 			
 			baseUrl.append(serverBaseUrl);
-			baseUrl.append(activity.getString(R.string.save_meeting_url_path));
+			baseUrl.append(getString(R.string.save_meeting_url_path));
 			
 			return baseUrl.toString();
 		}
@@ -242,9 +239,6 @@ public class SubmitMeetingFragment extends Fragment {
 			json.put("lat", address.getLatitude());
 			json.put("long",  address.getLongitude());
 		} else {
-			json.put("lat", -77.4108);
-			json.put("long", 39.4142);
-			
 		    // Log.d(TAG, "Address is invalid: " + address);
 			// throw new Exception("Address is invalid: " + address);
 		}
