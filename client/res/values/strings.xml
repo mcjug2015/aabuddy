@@ -38,6 +38,7 @@
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
     <string name="sortBy">Sort By:</string>
+    <string name="meetingUrl">MEETING_URL</string>
     
     <string-array name="daysOfWeek">
         <item>Sunday</item>
@@ -84,22 +85,22 @@
     </string-array>
     
     <string-array name="sortOrder">
+        <item>Name</item>
         <item>Distance</item>
         <item>Day Of Week</item>
         <item>Start Time</item>
         <item>End Time</item>
         <item>Address</item>
-        <item>Name</item>
         <item>Description</item>
     </string-array>
     
     <string-array name="sortOrderValues">
+        <item>name</item>
         <item>distance</item>
         <item>day_of_week</item>
         <item>start_time</item>
         <item>end_time</item>
         <item>address</item>
-        <item>name</item>
         <item>description</item>
     </string-array>
     
