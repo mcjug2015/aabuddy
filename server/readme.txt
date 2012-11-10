@@ -44,13 +44,13 @@ start_time and end_time can be queried just like day_of_week, but do not support
 -- all:
 http://localhost:8888/aabuddy/get_meetings/
 -- within 50 miles of specified location
-http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50
+http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50
 -- within 50 miles of specified location between monday and wednesday inclusive:
-http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3
+http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3
 -- within 50 miles of specified location between monday and wednesday inclusive, starting at or after 4:30pm and ending before 6:30pm:
-http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
+http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
 -- within 50 miles of specified location on either monday or saturday
-http://localhost:8888/aabuddy/get_meetings/?lat=-77.1531&long=39.0839&distance_miles=50&day_of_week_in=1&day_of_week_in=6
+http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week_in=1&day_of_week_in=6
 -- the 0th to the 2nd meeting of all meetings, sorted by description; total returned - 3 meetings, notice the n+1 passed to the limit.
 http://localhost:8888/aabuddy/get_meetings/?offset=0&limit=3&order_by=description
 -- the 3rd meeting out of the list of all meetings sorted by start_time

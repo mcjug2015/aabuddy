@@ -79,8 +79,9 @@ def temp_meeting_to_json_obj(meeting):
     json_obj['description'] = meeting.description
     json_obj['address'] = meeting.address
     json_obj['internal_type'] = meeting.internal_type
-    json_obj['lat'] = meeting.geo_location.x
-    json_obj['long'] = meeting.geo_location.y
+    json_obj['lat'] = meeting.geo_location.y
+    json_obj['long'] = meeting.geo_location.x
+    json_obj['distance'] = meeting.distance.mi
     return json_obj
 
 
@@ -110,6 +111,7 @@ def get_meetings_count_query_set(distance_miles, latitude, longitude,
     if distance_miles and latitude and longitude:
         pnt = fromstr('POINT(%s %s)' % (longitude, latitude), srid=4326)
         meetings = meetings.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
+        meetings = meetings.distance(pnt).order_by('distance')
 
     if order_by_column:
         meetings = meetings.order_by(order_by_column)
@@ -128,9 +130,9 @@ def get_meetings_within_distance(request):
     ''' get all meetings within distance miles from passed in lat/long '''
     if request.method == 'GET':
         logger.info("Got request with params: %s" % str(request.GET))
-        distance_miles = request.GET.get('distance_miles', None)
-        latitude = request.GET.get('lat', None)
-        longitude = request.GET.get('long', None)
+        distance_miles = request.GET.get('distance_miles', 50)
+        latitude = request.GET.get('lat', 39.0839)
+        longitude = request.GET.get('long', -77.1531)
         day_of_week_params = DayOfWeekGetParams(request.GET)
         day_of_week_in_params = request.GET.getlist('day_of_week_in')
         time_params = TimeParams(request.GET)
