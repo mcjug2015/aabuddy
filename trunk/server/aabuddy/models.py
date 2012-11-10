@@ -1,7 +1,9 @@
 ''' module for aabuddy models '''
 from django.contrib.gis.db import models
+import django.db.models as classic_models
 import datetime
 from django.contrib.gis.db.models.manager import GeoManager
+from django.contrib.auth.models import User
 
 
 class Meeting(models.Model):
@@ -24,9 +26,17 @@ class Meeting(models.Model):
     objects = GeoManager()
     day_of_week = models.IntegerField(null=False, blank=False, default=1, choices=DAY_OF_WEEK_CHOICES)
     start_time = models.TimeField(null=False, blank=False, default=datetime.time(11, 30))
-    end_time = models.TimeField(null=False, blank=False, default=datetime.time(11, 30))
+    end_time = models.TimeField(null=False, blank=False, default=datetime.time(12, 30))
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=300)
     internal_type = models.CharField(max_length=10, default=SUBMITTED, choices=INTERNAL_TYPE_CHOICES)
     geo_location = models.PointField()
+
+'''
+class UserConfirmation(classic_models.Model):
+    user = classic_models.ForeignKey(User, related_name='confirmations')
+    created_date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
+    expiration_date = models.DateTimeField(null=False, blank=False)
+'''
+    
