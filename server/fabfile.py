@@ -274,6 +274,7 @@ def migrate():
         run('cp environments/%(deployment)s/%(deployment)s_settings.py local_settings.py' % env, pty=True)
         run('%(path)s/local-python/bin/python manage.py syncdb --noinput --settings=settings' % env, pty=True)
         run('%(path)s/local-python/bin/python manage.py migrate --settings=settings aabuddy' % env)
+        run('%(path)s/local-python/bin/python manage.py migrate --settings=settings tastypie' % env)
         run('%(path)s/local-python/bin/python manage.py loaddata aabuddy initial_users --settings=settings' % env)
 
 

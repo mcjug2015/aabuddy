@@ -6,6 +6,9 @@ from django.http import HttpResponse
 import logging
 from django.views.decorators.csrf import csrf_exempt
 import datetime
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+
 logger = logging.getLogger(__name__)
 
 
@@ -118,9 +121,9 @@ def get_meetings_count_query_set(distance_miles, latitude, longitude,
 
     pre_offset_count = meetings.count()
 
-    if offset and limit:
+    if offset is not None and limit is not None:
         meetings = meetings[offset:limit]
-    elif offset or limit:
+    elif offset is not None or limit is not None:
         raise ValueError("You must pass in both an offset and a limit, or neither of them.")
     
     return (pre_offset_count, meetings)
@@ -136,8 +139,8 @@ def get_meetings_within_distance(request):
         day_of_week_params = DayOfWeekGetParams(request.GET)
         day_of_week_in_params = request.GET.getlist('day_of_week_in')
         time_params = TimeParams(request.GET)
-        limit = request.GET.get("limit", None)
-        offset = request.GET.get("offset", None)
+        limit = request.GET.get("limit", 1000)
+        offset = request.GET.get("offset", 0)
         order_by = request.GET.get("order_by", None)
         (count, meetings) = get_meetings_count_query_set(distance_miles, latitude, longitude,
                                           day_of_week_params, day_of_week_in_params,
@@ -147,7 +150,27 @@ def get_meetings_within_distance(request):
             retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
         retval_obj['meta']['current_count'] = len(meetings)
         return HttpResponse(json.dumps(retval_obj))
-    
+
+
+@csrf_exempt
+def create_user(request):
+    ''' create a new user '''
+    if request.method == 'POST':
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
+                    is_superuser=False, is_staff=False)
+        user.set_password(password)
+        send_confirmation_email(user)
+        user.save()
+        return HttpResponse(200)
+
+
+def send_confirmation_email(user):
+    send_mail(subject="Thanks you for registering on AA Buddy", 
+              message="Click the link below to complete the registration perocess", 
+              from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
+
 
 @csrf_exempt
 def save_meeting(request):

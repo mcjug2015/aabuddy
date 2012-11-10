@@ -17,6 +17,10 @@ $> fab localvm setup
 
 $> fab localvm deploy_workingenv
 
+** test creating an inactive user with curl
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" http://localhost:8888/aabuddy/create_user
+
+
 ** test uploading a meeting with curl:
 day_of_week goes from 1 to 7
 1 = Monday
