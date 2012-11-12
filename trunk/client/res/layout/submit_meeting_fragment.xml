@@ -8,12 +8,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+        <TextView
+            android:id="@+id/submitMeetingNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/meetingNameEditText"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:text="@string/meeting_name"
+            android:textAppearance="?android:attr/textAppearanceSmall">
+            	<requestFocus />
+        </TextView>
+        
+	    <EditText
+	        android:id="@+id/meetingNameEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@+id/submitMeetingStartTimeButton"
+            android:layout_marginRight="10dp"
+	        android:layout_marginTop="10dp"
+	        android:ems="10"
+	        android:inputType="text"
+	        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        
         <Button
             android:id="@+id/submitMeetingStartTimeButton"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/meetingNameEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:drawableRight="@drawable/clock" />
@@ -23,8 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/submitMeetingStartTimeButton"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_alignLeft="@+id/submitMeetingNameTextView"
             android:text="@string/start_time"
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -93,13 +117,35 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/submitMeetingCurrentLocationButton"
             android:layout_marginRight="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:ems="10"
             android:inputType="textPostalAddress"
             android:textAppearance="?android:attr/textAppearanceSmall" >
-
-            <requestFocus />
         </EditText>
+        
+        <TextView
+            android:id="@+id/submitMeetingDescriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/meetingDescriptionEditText"
+            android:layout_alignLeft="@+id/submitMeetingAddressTextView"
+            android:text="@string/meeting_description"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+        
+	    <EditText
+	        android:id="@+id/meetingDescriptionEditText"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignLeft="@+id/submitMeetingCurrentLocationButton"
+            android:layout_below="@+id/submitMeetingAddressEditText"
+            android:layout_marginRight="10dp"
+	        android:layout_marginTop="10dp"
+	        android:ems="10"
+	        android:inputType="textMultiLine"
+	        android:textAppearance="?android:attr/textAppearanceSmall"/>
+        
+        
     </RelativeLayout>
 
     <LinearLayout
@@ -108,7 +154,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:orientation="horizontal" >
 
         <Button
@@ -116,7 +162,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginRight="4dp"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:text="@string/validate_address_button" />
 
