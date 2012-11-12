@@ -12,7 +12,7 @@
             android:id="@+id/submitMeetingNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/meetingNameEditText"
+            android:layout_alignBaseline="@+id/submitMeetingNameEditText"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="10dp"
             android:text="@string/meeting_name"
@@ -21,7 +21,7 @@
         </TextView>
         
 	    <EditText
-	        android:id="@+id/meetingNameEditText"
+	        android:id="@+id/submitMeetingNameEditText"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
@@ -38,7 +38,7 @@
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/meetingNameEditText"
+            android:layout_below="@+id/submitMeetingNameEditText"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp"
             android:drawableRight="@drawable/clock" />
