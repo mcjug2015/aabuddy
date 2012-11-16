@@ -8,13 +8,16 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -29,11 +32,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 public class FindMeetingFragment extends Fragment {
 	private static final String TAG = FindMeetingFragment.class.getSimpleName();
 	private static final String EMPTY_TIME = "--:--";
 
+	private EditText nameEditText;
 	private EditText addressEditText;
 	private Button currentLocationButton;
 	private Button startTimeButton;
@@ -44,7 +49,10 @@ public class FindMeetingFragment extends Fragment {
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
-	private Spinner distanceSpinner;	
+	private Spinner distanceSpinner;
+	
+	private ProgressDialog progress;
+	private LocationResult locationResult;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -103,13 +111,19 @@ public class FindMeetingFragment extends Fragment {
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
 
+		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
 	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
 	    currentLocationButton = (Button) view.findViewById(R.id.findMeetingCurrentLocationButton); 
 	    currentLocationButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				String address = LocationUtil.getLastKnownLocation(getActivity());
-				addressEditText.setText(address);
+				try {
+					progress = ProgressDialog.show(getActivity(), "Getting location", "Please wait...");
+					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
+					locationTask.requestLocation();
+				} catch (Exception ex) {
+				    Log.d(TAG, "Error current location " + ex);
+				}
 			} 
 		}); 
 
@@ -133,6 +147,28 @@ public class FindMeetingFragment extends Fragment {
 	}
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
+		locationResult =  new LocationResult() {
+			@Override
+			public void setLocation(Location location) {
+				progress.cancel();
+				
+				if (location == null) {
+					location = LocationUtil.getLastKnownLocation(getActivity());
+				}
+
+				if (location == null) {
+					Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+				} else {
+					String address = LocationUtil.getAddress(location, getActivity());
+					if (address.trim().equals("")) {
+						Toast.makeText(getActivity(), "Not able to get address from location. Please check for a network data connection", Toast.LENGTH_LONG).show();
+					} else {
+						addressEditText.setText(address);
+					}
+				}
+			}
+		};
+		
 		super.onActivityCreated(savedInstanceState);
 	}
 	
@@ -160,6 +196,11 @@ public class FindMeetingFragment extends Fragment {
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 	        
+		String name = nameEditText.getText().toString().trim();
+		if (!name.equals("")) {
+			params.add(new BasicNameValuePair("name", name));
+		}
+		
 		if (!startTimeButton.getText().equals(EMPTY_TIME)) {
 			params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
 		}
@@ -183,7 +224,16 @@ public class FindMeetingFragment extends Fragment {
 		}
 
 		String addressName = addressEditText.getText().toString();
-		if (!addressName.trim().equals("")) {
+		if (addressName.trim().equals("")) {
+			Location location = LocationUtil.getLastKnownLocation(getActivity());
+			if (location == null) {
+				Toast.makeText(getActivity(), "Please enter an address", Toast.LENGTH_LONG).show();
+			} else {
+				params.add(new BasicNameValuePair("lat", String.valueOf(location.getLatitude())));
+				params.add(new BasicNameValuePair("long", String.valueOf(location.getLongitude())));
+			}
+			
+		} else {	
 			Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
 			if (address != null) {
 				params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
@@ -198,7 +248,7 @@ public class FindMeetingFragment extends Fragment {
 			}
 		}
 		
-		params.add(new BasicNameValuePair("order_by", "name"));
+		params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
 
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
 	    Log.d(TAG, "Find meeting request params: " + paramStr);

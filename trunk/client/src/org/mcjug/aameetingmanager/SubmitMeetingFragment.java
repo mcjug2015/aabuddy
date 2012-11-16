@@ -11,18 +11,22 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
+import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +43,8 @@ import android.widget.Toast;
 public class SubmitMeetingFragment extends Fragment {
 	private static final String TAG = SubmitMeetingFragment.class.getSimpleName();
 
+	private EditText nameEditText;
+	private EditText descriptionEditText;
 	private EditText addressEditText;
 	private Button currentLocationButton;
 	private Button validateAddressButton;
@@ -49,6 +55,9 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
   
+	private ProgressDialog progress;
+	private LocationResult locationResult;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,16 +96,23 @@ public class SubmitMeetingFragment extends Fragment {
 			} 
 		}); 
 		
+		nameEditText = (EditText) view.findViewById(R.id.submitMeetingNameEditText);
+		descriptionEditText = (EditText) view.findViewById(R.id.submitMeetingDescriptionEditText);
 		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
 		
 		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
-		currentLocationButton.setOnClickListener(new OnClickListener() { 
+	    currentLocationButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				String address = LocationUtil.getLastKnownLocation(getActivity());
-				addressEditText.setText(address);
+				try {
+					progress = ProgressDialog.show(getActivity(), "Getting location", "Please wait...");
+					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
+					locationTask.requestLocation();
+				} catch (Exception ex) {
+				    Log.d(TAG, "Error getting meetings: " + ex);
+				}
 			} 
-		}); 		
-		
+		});
+	    
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
@@ -122,6 +138,28 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 		
 	public void onActivityCreated(Bundle savedInstanceState) {
+		locationResult =  new LocationResult() {
+			@Override
+			public void setLocation(Location location) {
+				progress.cancel();
+				
+				if (location == null) {
+					location = LocationUtil.getLastKnownLocation(getActivity());
+				}
+
+				if (location == null) {
+					Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+				} else {
+					String address = LocationUtil.getAddress(location, getActivity());
+					if (address.trim().equals("")) {
+						Toast.makeText(getActivity(), "Not able to get address from location. Please check for a network data connection", Toast.LENGTH_LONG).show();
+					} else {
+						addressEditText.setText(address);
+					}
+				}
+			}
+		};
+		
 		super.onActivityCreated(savedInstanceState);
 	}
 
@@ -220,8 +258,17 @@ public class SubmitMeetingFragment extends Fragment {
 
 	private String createSubmitMeetingJson() throws Exception {
 		JSONObject json = new JSONObject();
-		json.put("name", "");
-		json.put("description", "");
+		
+		String name = nameEditText.getText().toString().trim();
+		if (!name.equals("")) {
+			json.put("name", name);
+		}
+
+		String description = descriptionEditText.getText().toString().trim();
+		if (!description.equals("")) {
+			json.put("description", description);
+		}
+		
 		json.put("internal_type", getString(R.string.submitted));
 
 		// Day of week is 1-7 where 1 is Monday and 7 is Sunday
