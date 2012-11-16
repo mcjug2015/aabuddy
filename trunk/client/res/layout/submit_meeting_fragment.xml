@@ -127,13 +127,13 @@
             android:id="@+id/submitMeetingDescriptionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/meetingDescriptionEditText"
+            android:layout_alignBaseline="@+id/submitMeetingDescriptionEditText"
             android:layout_alignLeft="@+id/submitMeetingAddressTextView"
             android:text="@string/meeting_description"
             android:textAppearance="?android:attr/textAppearanceSmall" />
         
 	    <EditText
-	        android:id="@+id/meetingDescriptionEditText"
+	        android:id="@+id/submitMeetingDescriptionEditText"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
