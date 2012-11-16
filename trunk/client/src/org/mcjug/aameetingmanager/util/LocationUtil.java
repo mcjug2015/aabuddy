@@ -8,21 +8,42 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.util.Log;
 
 public class LocationUtil {
+    private static final String TAG = LocationUtil.class.getSimpleName();
 
-	public static String getLastKnownLocation(Context context) {
-		String address = "";
+	public static Location getLastKnownLocation(Context context) {
+		Location location = null;
         try {
+        	Location gpsLocation = null;
+    		Location networkLocation = null;
+    		
     		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-    		Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-    		if (location == null) {
-    			location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+    			gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     		}
-  			address = getAddress(location, context);
+    		
+      		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+      			networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+    		}
+      		
+      		if (gpsLocation != null && networkLocation != null) {
+      			if (gpsLocation.getTime() > networkLocation.getTime()) {
+      				location = gpsLocation;
+      			} else {
+      				location = networkLocation;
+      			}
+      		} else if (gpsLocation != null) {
+      			location = gpsLocation;
+      		} else {
+      			location = networkLocation;
+      		}
+    		
 		} catch (Exception e) {
+		    Log.d(TAG, "Error getting location");
 		}
-        return address;
+        return location;
 	}
 	
 	public static String getAddress(Location location, Context context) {
@@ -45,6 +66,7 @@ public class LocationUtil {
 				}
 				addressStr = sb.toString();
 			} catch (Exception e) {
+			    Log.d(TAG, "Error getting address");
 			}
 		}
 		return addressStr;
@@ -59,16 +81,21 @@ public class LocationUtil {
             	isValid = true;
             } 
 		} catch (Exception e) {
+		    Log.d(TAG, "Error validating address");
 		}
         return isValid;
 	}
 	
 	public static Address getAddressFromLocationName(String addressName, Context context) throws Exception{
 		Address location = null;
-		Geocoder gc = new Geocoder(context, Locale.getDefault());
-		List<Address> address = gc.getFromLocationName(addressName, 1);
-		if (address != null && address.size() > 0) {
-			location = address.get(0);
+		try {
+			Geocoder gc = new Geocoder(context, Locale.getDefault());
+			List<Address> address = gc.getFromLocationName(addressName, 1);
+			if (address != null && address.size() > 0) {
+				location = address.get(0);
+			}
+		} catch (Exception e) {
+		    Log.d(TAG, "Error getting address");
 		} 
 		return location;
 	}	
