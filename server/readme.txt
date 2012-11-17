@@ -31,8 +31,8 @@ day_of_week goes from 1 to 7
 
 internal_type valid values can be found in aabuddy/models.py/Meeting/INTERNAL_TYPE_CHOICES. They are case insensitive
 when submitted to the url below, so Submitted and submitted are both valid.
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' http://108.179.217.242/aabuddy/save_meeting
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 7, "description": "Awesome meeting", "end_time": "6:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "7:45:00"}' http://108.179.217.242/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD http://108.179.217.242/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 7, "description": "Awesome meeting", "end_time": "6:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "7:45:00"}' --user USERNAME:PASSWORD http://108.179.217.242/aabuddy/save_meeting
 
 
 For querying the day_of_week can be passed in with the following modifiers:
