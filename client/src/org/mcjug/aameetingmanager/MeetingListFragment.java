@@ -36,11 +36,12 @@ public class MeetingListFragment extends ListFragment {
 	private static final String END_TIME = "end_time";
 	private static final String TIME_RANGE = "time_range";
 	private static final String ADDRESS = "address";
+	private static final String DISTANCE = "distance";
 	private static final String LATITUDE = "lat";
 	private static final String LONGITUDE = "long";
 	
-    private static final String[] FROM = new String[] {NAME,  DAY_OF_WEEK, TIME_RANGE, ADDRESS, DESCRIPTION};
-    private static final int[] TO = new int[] {R.id.meetingName, R.id.meetingDay, R.id.meetingTime, R.id.meetingAddress, R.id.meetingDescription};
+    private static final String[] FROM = new String[] {NAME,  DAY_OF_WEEK, TIME_RANGE, ADDRESS, DISTANCE, DESCRIPTION};
+    private static final int[] TO = new int[] {R.id.meetingName, R.id.meetingDay, R.id.meetingTime, R.id.meetingAddress, R.id.meetingDistance, R.id.meetingDescription};
 
 	private SharedPreferences prefs;
     private String[] sortOrderValues;    
@@ -136,6 +137,9 @@ public class MeetingListFragment extends ListFragment {
 				map.put(TIME_RANGE, startTime + " - " +  endTime);
 				
 				map.put(ADDRESS, meetingJson.getString(ADDRESS));
+				
+				double distance = Double.parseDouble(meetingJson.getString(DISTANCE));
+				map.put(DISTANCE, String.format("%.2f", distance));
 				
 				double latitude = meetingJson.getDouble(LATITUDE);
 				map.put(LATITUDE, String.format("%.3f", latitude));
