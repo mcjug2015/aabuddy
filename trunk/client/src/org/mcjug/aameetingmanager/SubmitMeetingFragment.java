@@ -4,6 +4,8 @@ import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -55,6 +57,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
   
+	SharedPreferences prefs;
 	private ProgressDialog progress;
 	private LocationResult locationResult;
 
@@ -160,6 +163,8 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 		
 	public void onActivityCreated(Bundle savedInstanceState) {
+		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+
 		locationResult =  new LocationResult() {
 			@Override
 			public void setLocation(Location location) {
@@ -243,8 +248,15 @@ public class SubmitMeetingFragment extends Fragment {
 
 		@Override
 		protected String doInBackground(Void... arg0) {
-			HttpClient client = new DefaultHttpClient();  
-			try {  
+			DefaultHttpClient client = new DefaultHttpClient(); 
+			try {
+				String username = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), "");
+				String password = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), "");
+
+				client.getCredentialsProvider().setCredentials(
+		                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), 
+		                    new UsernamePasswordCredentials(username, password));
+				
 				String baseUrl = getSaveMeetingBaseUrl();
 				HttpPost request = new HttpPost(baseUrl);
 				StringEntity se = new StringEntity(createSubmitMeetingJson(username, password));  
@@ -267,9 +279,7 @@ public class SubmitMeetingFragment extends Fragment {
 		private String getSaveMeetingBaseUrl() {
 			StringBuilder baseUrl = new StringBuilder();
 			
-			String defaultServerBase = getString(R.string.meetingServerBaseUrlDefaultValue);
-			
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+			String defaultServerBase = getString(R.string.meetingServerBaseUrlDefaultValue);			
 			String serverBaseUrl = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
 			
 			baseUrl.append(serverBaseUrl);
