@@ -128,7 +128,29 @@ public class SubmitMeetingFragment extends Fragment {
 		submitMeetingButton.setEnabled(true);
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				new SubmitMeetingTask().execute();
+				
+				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+				
+				String username = prefs.getString(getString(R.string.usernamePreferenceName), "");
+				String password = prefs.getString(getString(R.string.passwordPreferenceName), "");
+
+				
+				if (username.equals("") && password.equals("")) {
+					//if no username and password, go to login screen
+					
+					//TODO: may want to change to just swap out the fragment
+
+					Bundle args = new Bundle();
+					//TODO:  pass in meeting info
+					
+					Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
+					loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+					getActivity().startActivity(loginIntent, args);
+											
+					return;
+				}
+				
+				new SubmitMeetingTask(username, password).execute();
 			} 
 		}); 
 		
@@ -210,13 +232,22 @@ public class SubmitMeetingFragment extends Fragment {
 	
 	private class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 		
+		private String username;
+		private String password;
+		
+		public SubmitMeetingTask(String username, String password) {
+			super();
+			this.username = username;
+			this.password = password;
+		}
+
 		@Override
 		protected String doInBackground(Void... arg0) {
 			HttpClient client = new DefaultHttpClient();  
 			try {  
 				String baseUrl = getSaveMeetingBaseUrl();
-				HttpPost request = new HttpPost(baseUrl);  
-				StringEntity se = new StringEntity(createSubmitMeetingJson());  
+				HttpPost request = new HttpPost(baseUrl);
+				StringEntity se = new StringEntity(createSubmitMeetingJson(username, password));  
 				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 				request.setEntity(se);
 				HttpResponse response = client.execute(request);
@@ -256,8 +287,10 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 	}
 
-	private String createSubmitMeetingJson() throws Exception {
+	private String createSubmitMeetingJson(String username, String password) throws Exception {
 		JSONObject json = new JSONObject();
+		
+		//TODO:  add username and password to request
 		
 		String name = nameEditText.getText().toString().trim();
 		if (!name.equals("")) {

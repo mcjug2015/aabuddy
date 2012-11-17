@@ -17,10 +17,11 @@
         android:theme="@style/AppTheme" 
         android:name="AAMeetingApplication"
         >
+
         <activity
             android:name=".AAMeetingManager"
             android:label="@string/title_activity_main" >
-            <intent-filter>
+             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,6 +31,11 @@
         <activity android:name=".MeetingListFragmentActivity" android:label="@string/title_activity_main" />
         
         <activity android:name=".AdminPrefsActivity" android:label="@string/adminPrefActivityTitle"/>
+        <activity android:name=".AdminPrefsWithFragmentActivity" android:label="@string/adminPrefActivityTitle"/>
+        
+        <activity android:name=".LoginFragmentActivity" android:label="@string/loginActivityTitle" />
+        
+        <activity android:name=".RegisterFragmentActivity" android:label="@string/registrationActivityTitle" />
         
     </application>
 
