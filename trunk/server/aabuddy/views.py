@@ -192,10 +192,24 @@ def send_confirmation_email(user, user_confirmation, abs_uri):
 @csrf_exempt
 def save_meeting(request):
     ''' save a meeting '''
-    if request.method == 'POST':
+    do_basic_auth(request)
+    logger.debug("request user is: " + request.user.username)
+    if request.method == 'POST' and request.user.is_authenticated():
         json_obj = json.loads(request.raw_post_data)
         logger.debug("About to try and save json: %s" % str(json_obj))
         meeting = temp_json_obj_to_meeting(json_obj)
         meeting.save()
         return HttpResponse(200)
+
+
+def do_basic_auth(request, *args, **kwargs):
+    from django.contrib.auth import authenticate, login
+    if request.META.has_key('HTTP_AUTHORIZATION'):
+        authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
+        if authmeth.lower() == 'basic':
+            auth = auth.strip().decode('base64')
+            username, password = auth.split(':', 1)
+            user = authenticate(username=username, password=password)
+            if user:
+                login(request, user)
     
