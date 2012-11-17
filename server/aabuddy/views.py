@@ -174,10 +174,11 @@ def create_user(request):
         conf_key = request.GET.get('confirmation', None)
         if conf_key:
             user_confirmation = UserConfirmation.objects.get(confirmation_key=conf_key)
-            user = user_confirmation.user
-            user.is_active = True
-            user.save()
-            return HttpResponse(content="Successfully Activated %s's account, you can now submit meetings" % user.username, status=200)
+            if user_confirmation.expiration_date < datetime.datetime.now():
+                user = user_confirmation.user
+                user.is_active = True
+                user.save()
+                return HttpResponse(content="Successfully Activated %s's account, you can now submit meetings" % user.username, status=200)
 
 
 def send_confirmation_email(user, user_confirmation, abs_uri):
@@ -194,13 +195,18 @@ def save_meeting(request):
     ''' save a meeting '''
     do_basic_auth(request)
     logger.debug("request user is: " + request.user.username)
-    if request.method == 'POST' and request.user.is_authenticated():
+    if request.method == 'POST' and request.user.is_authenticated() and request.user.is_active:
         json_obj = json.loads(request.raw_post_data)
         logger.debug("About to try and save json: %s" % str(json_obj))
         meeting = temp_json_obj_to_meeting(json_obj)
         meeting.save()
         return HttpResponse(200)
 
+@csrf_exempt
+def validate_user_creds(request):
+    do_basic_auth(request)
+    if request.user.is_authenticated() and request.user.is_active:
+        return HttpResponse(200)
 
 def do_basic_auth(request, *args, **kwargs):
     from django.contrib.auth import authenticate, login
