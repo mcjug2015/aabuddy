@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -250,16 +251,15 @@ public class SubmitMeetingFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			DefaultHttpClient client = new DefaultHttpClient(); 
 			try {
-				String username = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), "");
-				String password = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), "");
-
-				client.getCredentialsProvider().setCredentials(
-		                    new AuthScope(AuthScope.ANY_HOST, AuthScope.ANY_PORT), 
-		                    new UsernamePasswordCredentials(username, password));
-				
 				String baseUrl = getSaveMeetingBaseUrl();
 				HttpPost request = new HttpPost(baseUrl);
-				StringEntity se = new StringEntity(createSubmitMeetingJson(username, password));  
+		        String base64EncodedCredentials = Base64.encodeToString(
+		                (username+":"+password).getBytes(), Base64.DEFAULT);
+		        base64EncodedCredentials = base64EncodedCredentials.replace("\n", "");
+
+		        request.addHeader("Authorization", "Basic " + base64EncodedCredentials);
+				
+				StringEntity se = new StringEntity(createSubmitMeetingJson());  
 				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 				request.setEntity(se);
 				HttpResponse response = client.execute(request);
@@ -297,10 +297,8 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 	}
 
-	private String createSubmitMeetingJson(String username, String password) throws Exception {
+	private String createSubmitMeetingJson() throws Exception {
 		JSONObject json = new JSONObject();
-		
-		//TODO:  add username and password to request
 		
 		String name = nameEditText.getText().toString().trim();
 		if (!name.equals("")) {
