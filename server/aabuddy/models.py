@@ -33,10 +33,10 @@ class Meeting(models.Model):
     internal_type = models.CharField(max_length=10, default=SUBMITTED, choices=INTERNAL_TYPE_CHOICES)
     geo_location = models.PointField()
 
-'''
+
 class UserConfirmation(classic_models.Model):
-    user = classic_models.ForeignKey(User, related_name='confirmations')
-    created_date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
-    expiration_date = models.DateTimeField(null=False, blank=False)
-'''
+    user = classic_models.ForeignKey(User, related_name='confirmations', null=False, blank=False)
+    created_date = classic_models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
+    expiration_date = classic_models.DateTimeField(null=False, blank=False)
+    confirmation_key = classic_models.CharField(max_length=64, null=False, blank=False)
     
