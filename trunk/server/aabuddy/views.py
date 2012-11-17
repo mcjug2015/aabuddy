@@ -1,6 +1,6 @@
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
-from aabuddy.models import Meeting
+from aabuddy.models import Meeting, UserConfirmation
 import json
 from django.http import HttpResponse
 import logging
@@ -8,6 +8,8 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
+import random
+import string
 
 logger = logging.getLogger(__name__)
 
@@ -161,14 +163,29 @@ def create_user(request):
         user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
                     is_superuser=False, is_staff=False)
         user.set_password(password)
-        send_confirmation_email(user)
         user.save()
+        user_confirmation = UserConfirmation(user=user)
+        user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
+        user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
+        user_confirmation.save()
+        send_confirmation_email(user, user_confirmation, request.build_absolute_uri())
         return HttpResponse(200)
+    if request.method == 'GET':
+        conf_key = request.GET.get('confirmation', None)
+        if conf_key:
+            user_confirmation = UserConfirmation.objects.get(confirmation_key=conf_key)
+            user = user_confirmation.user
+            user.is_active = True
+            user.save()
+            return HttpResponse(content="Successfully Activated %s's account, you can now submit meetings" % user.username, status=200)
 
 
-def send_confirmation_email(user):
+def send_confirmation_email(user, user_confirmation, abs_uri):
+    link_address = abs_uri + '/?confirmation=' + user_confirmation.confirmation_key
+    message = "Click the link below to complete the registration perocess\n%s" % link_address
+    
     send_mail(subject="Thanks you for registering on AA Buddy", 
-              message="Click the link below to complete the registration perocess", 
+              message=message, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
 
