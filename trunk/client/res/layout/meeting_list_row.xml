@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="2dp" >
+    android:padding="10dp" >
 
     <TextView
         android:id="@+id/meetingName"
@@ -18,8 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/meetingName"
+        android:layout_marginLeft="10dp"
         android:textColor="#565656"
-        android:layout_marginLeft="4dp"        
         android:textSize="14dp" />
 
     <TextView
@@ -27,9 +27,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/meetingDay"
-        android:layout_marginLeft="4dp"
+        android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/meetingDay"
         android:textColor="#565656"
+        android:textSize="14dp" />
+
+    <TextView
+        android:id="@+id/meetingDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/meetingDay"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="4dp"
+        android:textColor="#10b0e4"
         android:textSize="14dp" />
 
     <TextView
@@ -37,9 +47,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/meetingDay"
+        android:layout_marginLeft="10dp"
         android:textColor="#797979"
-                android:layout_marginLeft="4dp"
-        
         android:textSize="14dp" />
 
     <TextView
@@ -47,9 +56,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/meetingAddress"
+        android:layout_marginLeft="10dp"
         android:textColor="#797979"
-                android:layout_marginLeft="4dp"
-        
         android:textSize="14dp" />
 
 </RelativeLayout>
