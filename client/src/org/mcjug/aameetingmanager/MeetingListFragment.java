@@ -12,7 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
@@ -21,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -106,6 +109,15 @@ public class MeetingListFragment extends ListFragment {
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
+        
+        ListView meetingListView = getListView();
+        meetingListView.setOnItemLongClickListener(new OnItemLongClickListener() {
+            public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
+            	HashMap<String, String> map = (HashMap<String, String>) listView.getItemAtPosition(position);
+                displayMap(map);
+                return false;
+            }
+        });
 
 		super.onResume();
 	}
@@ -156,4 +168,25 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
 	}
+	
+	private void displayMap(HashMap<String, String> map) {
+        String latitude = map.get(LATITUDE);
+        String longitude = map.get(LONGITUDE);
+        if (latitude != null && latitude.length() != 0 && longitude != null && longitude.length() != 0) {
+        	// Display a marker with the address at the latitude and longitude
+        	String intentURI = "geo:" + latitude + ","+ longitude + "?z=17&q=" + latitude + "," + longitude;
+        	/*
+        	// Display a marker with the address from the server and other meeting information
+    		String intentURI = "geo:0,0?z=17&q=" + latitude + "," + longitude
+					+ "(" + map.get(ADDRESS) + " " + map.get(NAME) + " "
+					+ map.get(DAY_OF_WEEK) + " " + map.get(START_TIME) + " - "
+					+ map.get(END_TIME) + ")";
+    		*/
+        	
+        	Uri geo = Uri.parse(intentURI);
+            Intent geoMap = new Intent(Intent.ACTION_VIEW, geo);
+            startActivity(geoMap);
+        }
+	}
+    
 }
