@@ -155,6 +155,8 @@ def get_meetings_within_distance(request):
             retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
         retval_obj['meta']['current_count'] = len(meetings)
         return HttpResponse(json.dumps(retval_obj))
+    else:
+        return HttpResponse("You must use GET to retrieve meetings", 400)
 
 
 @csrf_exempt
@@ -182,7 +184,13 @@ def create_user(request):
                 user = user_confirmation.user
                 user.is_active = True
                 user.save()
+                user_confirmation.expiration_date = datetime.datetime.now()
+                user_confirmation.save()
                 return HttpResponse(content="Successfully Activated %s's account, you can now submit meetings" % user.username, status=200)
+            else:
+                return HttpResponse(content="User Confirmation out of date!", status=400)
+        else:
+            return HttpResponse(content="No user confirmation specified!", status=400)
 
 
 def send_confirmation_email(user, user_confirmation, abs_uri):
@@ -205,12 +213,18 @@ def save_meeting(request):
         meeting = temp_json_obj_to_meeting(json_obj)
         meeting.save()
         return HttpResponse(200)
+    elif request.method == 'POST':
+        return HttpResponse("User not logged in or inactive", 400)
+    else:
+        return HttpResponse("You must use POST to submit meetings", 400)
+
 
 @csrf_exempt
 def validate_user_creds(request):
     do_basic_auth(request)
     if request.user.is_authenticated() and request.user.is_active:
         return HttpResponse(200)
+
 
 def do_basic_auth(request, *args, **kwargs):
     from django.contrib.auth import authenticate, login
@@ -222,4 +236,3 @@ def do_basic_auth(request, *args, **kwargs):
             user = authenticate(username=username, password=password)
             if user:
                 login(request, user)
-    
