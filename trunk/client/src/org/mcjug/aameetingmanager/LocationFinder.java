@@ -1,19 +1,26 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.Date;
+
+import org.mcjug.aameetingmanager.util.LocationUtil;
+
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class LocationFinder {
     private static final String TAG = LocationFinder.class.getSimpleName();
 
-	private static final int LOCATION_TIMEOUT = 1000 * 60;
+	private static final int LOCATION_TIMEOUT = 1000 * 30;
 	private static final int MIN_UPDATE_TIME = 1000 * 5;
 	private static final float MIN_UPDATE_DISTANCE = 50f;
+	private static final int LOCATION_TIME_LIMIT_THRESHOLD = 1000 * 60 * 10;
 
 	private LocationManager locationManager;
 	private LocationListener locationListener;
@@ -21,28 +28,47 @@ public class LocationFinder {
 	private LocationResult locationResult;
 	private Location networkOrPassiveLocation; 
 	
+	private Context context;
+	private Handler handler;
+	private SharedPreferences prefs;
+	
 	public LocationFinder(Context context, LocationResult locationResult) {
 		this.locationResult = locationResult;
+		this.context = context;
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE); 
+		prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 	
-	public void requestLocation() {		
-		Handler handler = new Handler();
-		locationTimeoutTask = new LocationTimeoutTask();		 
-		handler.postDelayed(locationTimeoutTask, LOCATION_TIMEOUT);
-
-		locationListener = new LocationUpdater();
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
-		}
+	public void requestLocation() {	
+		boolean findLocation = true;
 		
-		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
+		Location location = LocationUtil.getLastKnownLocation(context);
+		if (location != null && locationResult != null) {
+			long timeDiff = Math.abs(new Date().getTime() - location.getTime());
+			if (timeDiff < LOCATION_TIME_LIMIT_THRESHOLD) {
+				findLocation = false;
+				locationResult.setLocation(location);
+			}
 		}
-		
-		if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
-			requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
-		}		
+ 
+		if (findLocation) {
+			handler = new Handler();
+			locationTimeoutTask = new LocationTimeoutTask();		 
+			handler.postDelayed(locationTimeoutTask, LOCATION_TIMEOUT);
+	
+			locationListener = new LocationUpdater();
+			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+				requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
+			}
+			
+			if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+				requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
+			}
+			
+			if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
+				requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
+			}
+		}
 	}	
 	
 	private void requestLocationUpdates(String providerName, LocationListener locationListener) {
@@ -60,9 +86,13 @@ public class LocationFinder {
 	private class LocationUpdater implements LocationListener {
 		public void onLocationChanged(Location location) {
 			String provider = location.getProvider();
+			
 			if (provider.equals(LocationManager.GPS_PROVIDER)) {
+				handler.removeCallbacks(locationTimeoutTask);
 				locationManager.removeUpdates(locationListener);
-				locationResult.setLocation(location);
+				if (locationResult != null) {
+					locationResult.setLocation(location);
+				}
 			} else {
 				networkOrPassiveLocation = location;
 			}
