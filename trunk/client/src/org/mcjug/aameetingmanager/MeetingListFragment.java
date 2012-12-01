@@ -165,10 +165,6 @@ public class MeetingListFragment extends ListFragment {
 		return list;
 	}
 	   
-	@Override
-	public void onListItemClick(ListView listView, View view, int position, long id) {
-	}
-	
 	private void displayMap(HashMap<String, String> map) {
         String latitude = map.get(LATITUDE);
         String longitude = map.get(LONGITUDE);
