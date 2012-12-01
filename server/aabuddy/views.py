@@ -105,10 +105,12 @@ def temp_json_obj_to_meeting(json_obj):
     return meeting
     
 
-def get_meetings_count_query_set(distance_miles, latitude, longitude,
+def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                            day_of_week_params, day_of_week_in_params,
                            time_params, limit, offset, order_by_column):
     meetings = Meeting.objects.all()
+    if name:
+        meetings = meetings.filter(name__contains=name)
     meetings = day_of_week_params.apply_filters(meetings)
     if day_of_week_in_params:
         meetings = meetings.filter(day_of_week__in=day_of_week_in_params)
@@ -135,6 +137,7 @@ def get_meetings_within_distance(request):
     ''' get all meetings within distance miles from passed in lat/long '''
     if request.method == 'GET':
         logger.info("Got request with params: %s" % str(request.GET))
+        name = request.GET.get('name', None)
         distance_miles = request.GET.get('distance_miles', 50)
         latitude = request.GET.get('lat', 39.0839)
         longitude = request.GET.get('long', -77.1531)
@@ -144,7 +147,7 @@ def get_meetings_within_distance(request):
         limit = request.GET.get("limit", 1000)
         offset = request.GET.get("offset", 0)
         order_by = request.GET.get("order_by", None)
-        (count, meetings) = get_meetings_count_query_set(distance_miles, latitude, longitude,
+        (count, meetings) = get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                                           day_of_week_params, day_of_week_in_params,
                                           time_params, limit, offset, order_by)
         retval_obj = {'meta': {'total_count': count}, 'objects': []}
@@ -160,6 +163,7 @@ def create_user(request):
     if request.method == 'POST':
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
+        logger.debug("About to register %s:%s" % (username, password))
         user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
                     is_superuser=False, is_staff=False)
         user.set_password(password)
@@ -174,7 +178,7 @@ def create_user(request):
         conf_key = request.GET.get('confirmation', None)
         if conf_key:
             user_confirmation = UserConfirmation.objects.get(confirmation_key=conf_key)
-            if user_confirmation.expiration_date < datetime.datetime.now():
+            if user_confirmation.expiration_date > datetime.datetime.now():
                 user = user_confirmation.user
                 user.is_active = True
                 user.save()
@@ -184,7 +188,7 @@ def create_user(request):
 def send_confirmation_email(user, user_confirmation, abs_uri):
     link_address = abs_uri + '/?confirmation=' + user_confirmation.confirmation_key
     message = "Click the link below to complete the registration perocess\n%s" % link_address
-    
+    logger.debug("About to send conf email with message %s" % message)
     send_mail(subject="Thanks you for registering on AA Buddy", 
               message=message, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
