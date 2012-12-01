@@ -309,9 +309,9 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		json.put("internal_type", getString(R.string.submitted));
 
-		// Day of week is 1-7 where 1 is Monday and 7 is Sunday
+		// Day of week is 1-7 where 1 is Sunday and 7 is Saturday
 		int idx = dayOfWeekSpinner.getSelectedItemPosition();
-		json.put("day_of_week", (idx == 0) ? 7 : idx);
+		json.put("day_of_week", idx);
 		
 		json.put("start_time", DateTimeUtil.getSubmitMeetingTimeStr(startTimeCalendar));
 		json.put("end_time", DateTimeUtil.getSubmitMeetingTimeStr(endTimeCalendar));

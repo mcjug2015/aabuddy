@@ -138,12 +138,8 @@ public class MeetingListFragment extends ListFragment {
 				
 				String[] daysOfWeek = activity.getResources().getStringArray(R.array.daysOfWeek);
 				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
-				if (dayOfWeek == 7) {
-					map.put(DAY_OF_WEEK, daysOfWeek[0]);
-				} else {
-					map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
-				}
-				
+				map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
+					
 				String startTime = meetingJson.getString(START_TIME).substring(0, 5);
 				String endTime = meetingJson.getString(END_TIME).substring(0, 5);
 				map.put(TIME_RANGE, startTime + " - " +  endTime);

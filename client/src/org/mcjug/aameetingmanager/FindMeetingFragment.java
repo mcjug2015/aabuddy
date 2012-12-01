@@ -217,9 +217,6 @@ public class FindMeetingFragment extends Fragment {
 		List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
 		for (String str: daysOfWeekSelections) {				
 			int idx = daysOfWeekAbbr.indexOf(str.trim());
-			if (idx == 0) {
-				idx = 7;
-			}
 			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx)));
 		}
 
