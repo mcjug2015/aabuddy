@@ -4,9 +4,6 @@ import java.util.Calendar;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -149,7 +146,7 @@ public class SubmitMeetingFragment extends Fragment {
 					
 					Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
 					loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-					getActivity().startActivity(loginIntent, args);
+					getActivity().startActivity(loginIntent);
 											
 					return;
 				}
