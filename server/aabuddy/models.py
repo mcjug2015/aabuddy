@@ -15,7 +15,7 @@ class Meeting(models.Model):
                              (APPROVED, "Approved"),
                              (REMOVED, "Removed")]
     
-    DAY_OF_WEEK_CHOICES = [(1, "Sunday")
+    DAY_OF_WEEK_CHOICES = [(1, "Sunday"),
                            (2, "Monday"),
                            (3, "Tuesday"),
                            (4, "Wednesday"),
