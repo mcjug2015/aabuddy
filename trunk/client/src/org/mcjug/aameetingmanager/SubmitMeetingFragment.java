@@ -116,7 +116,8 @@ public class SubmitMeetingFragment extends Fragment {
 	    currentLocationButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				try {
-					progress = ProgressDialog.show(getActivity(), "Getting location", "Please wait...");
+					Context context = getActivity();
+					progress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
 					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
 					locationTask.requestLocation();
 					
