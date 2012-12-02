@@ -44,6 +44,12 @@
     <string name="sortingDefault">distance</string>
     <string name="meetingUrl">MEETING_URL</string>
     
+    <string name="submitMeetingError">Error submitting meeting: %s</string>
+    <string name="submitMeetingSuccess">Meeting has been submitted.</string>
+  
+    <string name="locationNotFound">Not able to get current location. Please check if GPS is turned or you have a network data connection.</string>
+    <string name="addressNotFound">"Not able to get address from location. Please check for a network data connection.</string>
+    
     <string-array name="daysOfWeek">
         <item>Sunday</item>
         <item>Monday</item>
