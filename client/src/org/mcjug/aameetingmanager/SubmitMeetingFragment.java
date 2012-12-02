@@ -2,13 +2,6 @@ package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicHeader;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
@@ -21,11 +14,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.util.Base64;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,10 +48,13 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
   
-	SharedPreferences prefs;
+	private boolean isLocationValid = false;
+	private boolean isTimeValid = true;
+	
+	private SharedPreferences prefs;
 	private ProgressDialog progress;
 	private LocationResult locationResult;
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -99,7 +95,22 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		nameEditText = (EditText) view.findViewById(R.id.submitMeetingNameEditText);
 		descriptionEditText = (EditText) view.findViewById(R.id.submitMeetingDescriptionEditText);
+		
 		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
+		addressEditText.addTextChangedListener(new TextWatcher() {			
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				isLocationValid = false;
+				validateAddressButton.setEnabled(true);	
+				submitMeetingButton.setEnabled(false);
+			}
+			
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+			}
+			
+			public void afterTextChanged(Editable s) {
+				
+			}
+		});		
 		
 		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
 	    currentLocationButton.setOnClickListener(new OnClickListener() { 
@@ -108,8 +119,12 @@ public class SubmitMeetingFragment extends Fragment {
 					progress = ProgressDialog.show(getActivity(), "Getting location", "Please wait...");
 					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
 					locationTask.requestLocation();
+					
+					isLocationValid = false;
+					validateAddressButton.setEnabled(true);	
+					submitMeetingButton.setEnabled(false);
 				} catch (Exception ex) {
-				    Log.d(TAG, "Error getting meetings: " + ex);
+				    Log.d(TAG, "Error getting location: " + ex);
 				}
 			} 
 		});
@@ -117,16 +132,18 @@ public class SubmitMeetingFragment extends Fragment {
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				boolean isValid = LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext());
-				if (!isValid) {
+				isLocationValid = LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext());
+				if (!isLocationValid) {
 					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
 				}
-				submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
+				
+				validateAddressButton.setEnabled(!isLocationValid);				
+				submitMeetingButton.setEnabled(isLocationValid && isTimeValid);
 			} 
 		}); 
 		
 		submitMeetingButton = (Button) view.findViewById(R.id.submitMeetingButton); 
-		submitMeetingButton.setEnabled(true);
+		submitMeetingButton.setEnabled(false);
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				
@@ -134,7 +151,6 @@ public class SubmitMeetingFragment extends Fragment {
 				
 				String username = prefs.getString(getString(R.string.usernamePreferenceName), "");
 				String password = prefs.getString(getString(R.string.passwordPreferenceName), "");
-
 				
 				if (username.equals("") && password.equals("")) {
 					//if no username and password, go to login screen
@@ -151,7 +167,13 @@ public class SubmitMeetingFragment extends Fragment {
 					return;
 				}
 				
-				new SubmitMeetingTask(username, password).execute();
+				try {
+					String submitMeetingParams = createSubmitMeetingJson();
+					new SubmitMeetingTask(getActivity(), submitMeetingParams, username, password).execute();
+				} catch (Exception ex) {
+		        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
+					Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+				}
 			} 
 		}); 
 		
@@ -173,11 +195,11 @@ public class SubmitMeetingFragment extends Fragment {
 				}
 
 				if (location == null) {
-					Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), getActivity().getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
 				} else {
 					String address = LocationUtil.getAddress(location, getActivity());
 					if (address.trim().equals("")) {
-						Toast.makeText(getActivity(), "Not able to get address from location. Please check for a network data connection", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), getActivity().getString(R.string.addressNotFound), Toast.LENGTH_LONG).show();
 					} else {
 						addressEditText.setText(address);
 					}
@@ -201,6 +223,9 @@ public class SubmitMeetingFragment extends Fragment {
 				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
 				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 			}
+			
+			isTimeValid = true;
+			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);			
 		}		
 	};
 	
@@ -212,9 +237,9 @@ public class SubmitMeetingFragment extends Fragment {
 			clearTimeFields(endTimeCalendar);
 			
 			Context context = view.getContext();
-			boolean isValid = true;
+			isTimeValid = true;
 			if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
-				isValid = false;
+				isTimeValid = false;
 				Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
 			
 			} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
@@ -223,7 +248,7 @@ public class SubmitMeetingFragment extends Fragment {
 				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 			}
 			
-			submitMeetingButton.setEnabled(submitMeetingButton.isEnabled() && isValid);
+			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);
 		}		
 	};
 	
@@ -233,67 +258,6 @@ public class SubmitMeetingFragment extends Fragment {
 		calendar.set(Calendar.MILLISECOND, 0);
 	}
 	
-	private class SubmitMeetingTask extends AsyncTask<Void, String, String> {
-		
-		private String username;
-		private String password;
-		
-		public SubmitMeetingTask(String username, String password) {
-			super();
-			this.username = username;
-			this.password = password;
-		}
-
-		@Override
-		protected String doInBackground(Void... arg0) {
-			DefaultHttpClient client = new DefaultHttpClient(); 
-			try {
-				String baseUrl = getSaveMeetingBaseUrl();
-				HttpPost request = new HttpPost(baseUrl);
-		        String base64EncodedCredentials = Base64.encodeToString(
-		                (username+":"+password).getBytes(), Base64.DEFAULT);
-		        base64EncodedCredentials = base64EncodedCredentials.replace("\n", "");
-
-		        request.addHeader("Authorization", "Basic " + base64EncodedCredentials);
-				
-				StringEntity se = new StringEntity(createSubmitMeetingJson());  
-				se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-				request.setEntity(se);
-				HttpResponse response = client.execute(request);
-		        int statusCode = response.getStatusLine().getStatusCode();
-		        if (statusCode != HttpStatus.SC_OK) {
-		        	return "Error submitting meeting: " +  response.getStatusLine().toString();
-		        }
-			} catch (Exception e) {  
-				return "Error submitting meeting: " + e;
-			} finally {
-				client.getConnectionManager().shutdown();  
-			}
-
-			return null;
-		}
-
-		private String getSaveMeetingBaseUrl() {
-			StringBuilder baseUrl = new StringBuilder();
-			
-			String defaultServerBase = getString(R.string.meetingServerBaseUrlDefaultValue);			
-			String serverBaseUrl = prefs.getString(getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
-			
-			baseUrl.append(serverBaseUrl);
-			baseUrl.append(getString(R.string.save_meeting_url_path));
-			
-			return baseUrl.toString();
-		}
-		
-		@Override
-		protected void onPostExecute(String result) {
-			super.onPostExecute(result);
-			if (result != null) {
-				Toast.makeText(getActivity(), result, Toast.LENGTH_LONG).show();
-			}
-		}
-	}
-
 	private String createSubmitMeetingJson() throws Exception {
 		JSONObject json = new JSONObject();
 		
