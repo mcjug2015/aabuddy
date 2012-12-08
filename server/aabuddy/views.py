@@ -101,7 +101,7 @@ def temp_json_obj_to_meeting(json_obj):
     meeting.description = json_obj['description']
     meeting.address = json_obj['address']
     meeting.internal_type = Meeting.SUBMITTED
-    meeting.geo_location = fromstr('POINT(%s %s)' % (json_obj['lat'], json_obj['long']), srid=4326)
+    meeting.geo_location = fromstr('POINT(%s %s)' % (json_obj['long'], json_obj['lat']), srid=4326)
     return meeting
     
 
@@ -110,7 +110,7 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                            time_params, limit, offset, order_by_column):
     meetings = Meeting.objects.all()
     if name:
-        meetings = meetings.filter(name__contains=name)
+        meetings = meetings.filter(name__icontains=name)
     meetings = day_of_week_params.apply_filters(meetings)
     if day_of_week_in_params:
         meetings = meetings.filter(day_of_week__in=day_of_week_in_params)
@@ -208,10 +208,12 @@ def save_meeting(request):
     do_basic_auth(request)
     logger.debug("request user is: " + request.user.username)
     if request.method == 'POST' and request.user.is_authenticated() and request.user.is_active:
+        logger.debug("posting meeting, username is %s; meeting raw data is %s" % (request.user.username, request.raw_post_data))
         json_obj = json.loads(request.raw_post_data)
         logger.debug("About to try and save json: %s" % str(json_obj))
         meeting = temp_json_obj_to_meeting(json_obj)
         meeting.save()
+        logger.debug("meeting %s posted!" % meeting.name)
         return HttpResponse(200)
     elif request.method == 'POST':
         return HttpResponse("User not logged in or inactive", 400)
@@ -229,10 +231,14 @@ def validate_user_creds(request):
 def do_basic_auth(request, *args, **kwargs):
     from django.contrib.auth import authenticate, login
     if request.META.has_key('HTTP_AUTHORIZATION'):
+        logger.debug("request header for auth present.")
         authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
         if authmeth.lower() == 'basic':
+            logger.debug("authmeth is goof")
             auth = auth.strip().decode('base64')
             username, password = auth.split(':', 1)
+            logger.debug("about to try and authenticate " + username)
             user = authenticate(username=username, password=password)
             if user:
+                logger.debug("user %s authenticated!" % username)
                 login(request, user)
