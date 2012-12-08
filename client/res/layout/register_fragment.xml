@@ -1,59 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+>
     
     <TextView 
+        android:id="@+id/emailAddressTextView"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
     	android:text="@string/emailAddressText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 	/>
 
     <EditText 
         android:id="@+id/emailAddressEditText"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/emailAddressTextView"
+        android:layout_alignBaseline="@id/emailAddressTextView"
+        android:layout_alignLeft="@+id/confirmPasswordEditText"
+        android:layout_alignParentRight="true"
+        android:ems="10"
     	android:inputType="textEmailAddress"
-    	android:minWidth="50sp"
-	/>
+        android:textAppearance="?android:attr/textAppearanceSmall"
+	    >
+       	<requestFocus />
+    </EditText>
  
     <TextView 
+        android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+    	android:layout_below="@id/emailAddressEditText"
+		android:layout_alignParentLeft="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
     	android:text="@string/passwordText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 	/>
 
     <EditText 
         android:id="@+id/passwordEditText"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+    	android:layout_below="@id/emailAddressEditText"
+        android:layout_toRightOf="@id/passwordTextView"
+        android:layout_alignBaseline="@id/passwordTextView"
+        android:layout_alignLeft="@id/confirmPasswordEditText"
+        android:layout_alignParentRight="true"
+    	android:ems="10"
     	android:inputType="textPassword"
-    	android:minWidth="50sp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 	/>
     
     <TextView 
+        android:id="@+id/confirmPasswordTextView"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+    	android:layout_below="@id/passwordEditText"
+		android:layout_alignParentLeft="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
     	android:text="@string/confirmPasswordText"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 	/>
 
     <EditText 
-        android:id="@+id/confirmPasswordEditText"
+        android:id="@id/confirmPasswordEditText"
         android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
+    	android:layout_below="@id/passwordEditText"
+        android:layout_toRightOf="@id/confirmPasswordTextView"
+        android:layout_alignBaseline="@id/confirmPasswordTextView"
+        android:layout_alignParentRight="true"
+    	android:ems="10"
     	android:inputType="textPassword"
-    	android:minWidth="50sp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
 	/>
  
 	<Button
+		android:id="@+id/registerButton"
 		android:layout_height="wrap_content"
 		android:layout_width="wrap_content"
+    	android:layout_below="@id/confirmPasswordEditText"
+		android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
 		android:hint="@string/registerButton"
-		android:textSize="20sp"
-		android:id="@+id/registerButton"
+		style="?android:attr/buttonStyleSmall"
 	/>
 	
 
 	
-</LinearLayout>
+</RelativeLayout>
