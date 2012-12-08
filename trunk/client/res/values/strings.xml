@@ -38,6 +38,7 @@
     <string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
     <string name="get_meeting_url_path">/aabuddy/get_meetings/</string>
     <string name="create_user_url_path">/aabuddy/create_user</string>
+    <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
     <string name="sortBy">Sort By:</string>
@@ -116,10 +117,10 @@
         <item>description</item>
     </string-array>    
 	<string name="loginActivityTitle">AA Meeting Manager Login</string>
-	<string name="loginText">Login to add a meeting</string>
-	<string name="emailAddressText">Email Address</string>
-	<string name="passwordText">Password</string>
-	<string name="confirmPasswordText">Confirm Password</string>
+	<string name="loginText">Login to submit a meeting</string>
+	<string name="emailAddressText">Email Address:</string>
+	<string name="passwordText">Password:</string>
+	<string name="confirmPasswordText">Confirm Password:</string>
 	<string name="loginButton">Login</string>
 	
 	<string name="registrationActivityTitle">AA Meeting Manager Registration</string>
@@ -129,5 +130,14 @@
 	<string name="usernamePreferenceName">Username</string>
 	<string name="passwordPreferenceName">Password</string>
 
+	<string name="loginMenuText">Login</string>
+	<string name="logoutMenuText">Logout</string>
+	
+	<string name="validateCredentialsError">Could not validate username/password: %s</string>
+	<string name="registrationError">Registration Failed!  Please try again.</string>
+	<string name="registrationSuccess">Look for email to complete your registration.</string>
+	<string name="passwordsDoNotMatchError">Passwords do not match.</string>
+	<string name="registeringMsg">Registering</string>
+			
 </resources>
 
