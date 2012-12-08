@@ -13,6 +13,8 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -25,13 +27,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 public class RegisterFragment extends Fragment {
 	private static final String TAG = RegisterFragment.class.getSimpleName();
-
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,6 +60,10 @@ public class RegisterFragment extends Fragment {
 				final EditText confirmPasswordEditText = (EditText)view.findViewById(R.id.confirmPasswordEditText);
 				String confirmPassword = confirmPasswordEditText.getText().toString();
 				
+				//hide keyboard
+				FragmentActivity activity = getActivity();
+				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
 				
 				if (!password.equals(confirmPassword)) {
 					
@@ -65,13 +72,16 @@ public class RegisterFragment extends Fragment {
 					
 					setBorder(passwordEditText, confirmPasswordEditText);
 					
-					Toast.makeText(getActivity(), "Passwords do not match.", Toast.LENGTH_SHORT).show();
+					Toast.makeText(activity, activity.getString(R.string.passwordsDoNotMatchError), Toast.LENGTH_SHORT).show();
 					return;
 				}
 				
-				//TODO:  show progress indicator
+				//show progress indicator
+				ProgressDialog progressDialog = 
+					ProgressDialog.show(activity, activity.getString(R.string.registeringMsg), activity.getString(R.string.waitMsg));
+
 				//submit create account
-				new CreateUserTask(username, password).execute();
+				new CreateUserTask(username, password, progressDialog).execute();
 				
             }
 
@@ -92,11 +102,13 @@ public class RegisterFragment extends Fragment {
 	private class CreateUserTask extends AsyncTask<Void, Boolean, Boolean> {
 		private String username;
 		private String password;
+		private ProgressDialog progressDialog;
 		
-		public CreateUserTask(String username, String password) {
+		public CreateUserTask(String username, String password, ProgressDialog progressDialog) {
 			super();
 			this.username = username;
 			this.password = password;
+			this.progressDialog = progressDialog;
 		}
 		
 		
@@ -132,18 +144,22 @@ public class RegisterFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(Boolean result) {
-			// TODO Auto-generated method stub
 			super.onPostExecute(result);
 			
+			progressDialog.dismiss();
+			
+			FragmentActivity activity = getActivity();
 			if (!result) {
-				Toast.makeText(getActivity(), "Request failed!  Please try again.", Toast.LENGTH_LONG).show();
+				Toast.makeText(activity, activity.getString(R.string.registrationError), Toast.LENGTH_LONG).show();
 				return;
 			}
 			
-			Toast.makeText(getActivity(), "Look for email to complete your registration.", Toast.LENGTH_LONG).show();
+			Toast.makeText(activity, activity.getString(R.string.registrationSuccess), Toast.LENGTH_LONG).show();
+			
+			
 			
 			//Go back to main activity
-			startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+			startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
 									.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 
 		}
