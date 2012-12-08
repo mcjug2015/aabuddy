@@ -28,7 +28,7 @@ def localvm():
     env.use_ssh_keys = False
 
 def prod():
-    env.hosts = ['108.179.217.242'] # replace by the one appropriate for you
+    env.hosts = ['mcasg.org'] # replace by the one appropriate for you
     env.start_user = 'root' # the initial user pre-installed on image
     env.path = '/var/www/%(prj_name)s' % env
     env.virtualhost_path = env.path
