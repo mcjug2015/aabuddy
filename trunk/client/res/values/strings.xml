@@ -34,7 +34,7 @@
     <string name="meetingServerBaseUrlPreferenceName">meetingServerBaseUrl</string>
     <string name="meetingServerBaseUrlTitle">Meeting Server Base URL</string>
     <string name="meetingServerBaseUrlSummary">Protocol, host name and port of meeting server</string>
-    <string name="meetingServerBaseUrlDefaultValue">http://108.179.217.242</string>
+    <string name="meetingServerBaseUrlDefaultValue">http://mcasg.org</string>
     <string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
     <string name="get_meeting_url_path">/aabuddy/get_meetings/</string>
     <string name="create_user_url_path">/aabuddy/create_user</string>
