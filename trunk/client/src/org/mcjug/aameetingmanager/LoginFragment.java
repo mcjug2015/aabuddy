@@ -1,14 +1,14 @@
 package org.mcjug.aameetingmanager;
 
+import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -36,28 +36,12 @@ public class LoginFragment extends Fragment {
 				final EditText passwordEditText = (EditText)view.findViewById(R.id.passwordEditText);
 				String password = passwordEditText.getText().toString();
 
-				boolean bLoginSuccess = true;
+				//hide keyboard
+				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(emailAddressEditText.getWindowToken(), 0);
 
-				//TODO: Perform submit meeting with username/password
-				
-				if (bLoginSuccess) {
-					//Save username/pwd if login succeeded
-					SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-					Editor editor = prefs.edit();
-					
-					editor.putString(getString(R.string.usernamePreferenceName), username);
-					editor.putString(getString(R.string.passwordPreferenceName), password);
-					
-					editor.commit();
-
-					//TODO:  should go back to submit fragment and submit meeting
-					startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
-											.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-
-				} else {
-					Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
-				}
-				
+				//Validate login success
+				new ValidateCredentialsTask(username, password).execute();
             }
         });
 		
@@ -72,7 +56,43 @@ public class LoginFragment extends Fragment {
 		
 		return view;
 	}
-
 	
+	private class ValidateCredentialsTask extends AsyncTask<Void, String, String> {
+		
+		private String username;
+		private String password;
+		
+		public ValidateCredentialsTask(String username, String password) {
+			super();
+			this.username = username;
+			this.password = password;
+		}
+
+		@Override
+		protected String doInBackground(Void... arg0) {
+			Credentials credentials = new Credentials(username, password);
+			return credentials.validateCredentialsFromServer(getActivity());
+		}
+
+		
+		@Override
+		protected void onPostExecute(String errorMessage) {
+			if (errorMessage == null) {
+				//Save username/pwd if login succeeded
+				Credentials.saveToPreferences(getActivity(), username, password);
+
+				Toast.makeText(getActivity().getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+
+				//TODO: Perform submit meeting with username/password
+
+				//TODO:  should go back to submit fragment and submit meeting
+				startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+										.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+
+			} else {
+				Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
+			}
+		}
+	}
 
 }

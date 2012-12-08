@@ -26,6 +26,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,6 +37,9 @@ import android.widget.Toast;
 public class SubmitMeetingFragment extends Fragment {
 	private static final String TAG = SubmitMeetingFragment.class.getSimpleName();
 
+	private final static int MENU_ID_LOGOUT = Menu.FIRST + 1;
+	private final static int MENU_ID_LOGIN  = Menu.FIRST + 2;
+	
 	private EditText nameEditText;
 	private EditText descriptionEditText;
 	private EditText addressEditText;
@@ -148,12 +152,13 @@ public class SubmitMeetingFragment extends Fragment {
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				
-				SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+				//hide keyboard
+				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
 				
-				String username = prefs.getString(getString(R.string.usernamePreferenceName), "");
-				String password = prefs.getString(getString(R.string.passwordPreferenceName), "");
+				Credentials credentials = Credentials.readFromPreferences(getActivity());
 				
-				if (username.equals("") && password.equals("")) {
+				if (!credentials.isSet()) {
 					//if no username and password, go to login screen
 					
 					//TODO: may want to change to just swap out the fragment
@@ -170,7 +175,7 @@ public class SubmitMeetingFragment extends Fragment {
 				
 				try {
 					String submitMeetingParams = createSubmitMeetingJson();
-					new SubmitMeetingTask(getActivity(), submitMeetingParams, username, password).execute();
+					new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();
 				} catch (Exception ex) {
 		        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
@@ -301,6 +306,25 @@ public class SubmitMeetingFragment extends Fragment {
 		super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.activity_main, menu);
 	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+
+		Credentials credentials = Credentials.readFromPreferences(getActivity());
+
+		menu.removeItem(MENU_ID_LOGOUT);
+		menu.removeItem(MENU_ID_LOGIN);
+
+		if (!credentials.isSet()) {
+			int groupId = 0;
+			menu.add(groupId, MENU_ID_LOGIN, Menu.NONE, getString(R.string.loginMenuText));
+		} else {
+			int groupId = 0;
+			menu.add(groupId, MENU_ID_LOGOUT, Menu.NONE, getString(R.string.logoutMenuText));
+		}
+
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -313,9 +337,23 @@ public class SubmitMeetingFragment extends Fragment {
 	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
 	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 	            return true;
+	            
+	        case MENU_ID_LOGOUT:
+	        	removeLoginInfo();
+	        	return true;
+	        	
+	        case MENU_ID_LOGIN:
+	            startActivity(new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class)
+                		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+	        	return true;
+	        
         }
 
 		
 		return false;
-	}	
+	}
+	
+	public void removeLoginInfo() {
+		Credentials.removeFromPreferences(getActivity());
+	}
 }
