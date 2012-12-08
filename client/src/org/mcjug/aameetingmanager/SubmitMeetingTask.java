@@ -12,36 +12,36 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.util.Base64;
 import android.widget.Toast;
 
 public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
     private final String TAG = getClass().getSimpleName();
     private Context context;
     private String submitMeetingParams;
-    private String username;
-    private String password;
+	private Credentials credentials;
 	private SharedPreferences prefs;
 
-	public SubmitMeetingTask(Context context, String submitMeetingParams, String username, String password) {
+	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials) {
         this.context = context;
         this.submitMeetingParams = submitMeetingParams;
-        this.username = username;
-        this.password = password;
+        this.credentials = credentials;
 	    prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
 	@Override
 	protected String doInBackground(Void... arg0) {
+		String errorMessage = credentials.validateCredentialsFromServer(context);
+		
+		if (errorMessage != null) {
+			return String.format(context.getString(R.string.validateCredentialsError), errorMessage);
+		}
+
 		DefaultHttpClient client = new DefaultHttpClient(); 
 		try {
 			String baseUrl = getSaveMeetingBaseUrl();
 			HttpPost request = new HttpPost(baseUrl);
 			
-	        String base64EncodedCredentials = Base64.encodeToString(
-	                (username+":"+password).getBytes(), Base64.DEFAULT);
-	        base64EncodedCredentials = base64EncodedCredentials.replace("\n", "");
-	        request.addHeader("Authorization", "Basic " + base64EncodedCredentials);
+	        request.addHeader("Authorization", "Basic " + credentials.getBasicAuthorizationHeader());
 			
 			StringEntity se = new StringEntity(submitMeetingParams);  
 			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
