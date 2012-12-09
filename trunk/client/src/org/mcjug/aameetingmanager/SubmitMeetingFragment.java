@@ -20,6 +20,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -216,6 +217,21 @@ public class SubmitMeetingFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
+	public void setFocus() {
+		if (nameEditText != null) {
+			nameEditText.requestFocus();
+		}
+	}
+	
+	public void setKeyDown(int keyCode, KeyEvent event) {
+	    // this will happen on first key pressed on hard-keyboard only. Once nameEditText 
+	    // gets the focus again, it will automatically receive further key presses.
+	    if (nameEditText != null && !nameEditText.hasFocus()){ 
+	    	nameEditText.requestFocus();
+	        nameEditText.onKeyDown(keyCode, event);
+	    }
+	}
+	
 	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);

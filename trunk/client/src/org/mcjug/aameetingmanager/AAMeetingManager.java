@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
@@ -81,12 +83,39 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 		fragments.add(Fragment.instantiate(this, SubmitMeetingFragment.class.getName()));
 		fragments.add(Fragment.instantiate(this, FindMeetingFragment.class.getName()));
 		this.mPagerAdapter = new PagerAdapter(super.getSupportFragmentManager(), fragments);
-
+		
 		this.mViewPager = (ViewPager)super.findViewById(R.id.viewpager);
 		this.mViewPager.setAdapter(this.mPagerAdapter);
 		this.mViewPager.setOnPageChangeListener(this);
     }
+   
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		Fragment fragment = this.mPagerAdapter.getItem(this.mViewPager.getCurrentItem());
+		if (fragment instanceof SubmitMeetingFragment) {
+			SubmitMeetingFragment submitMeetingFragment = (SubmitMeetingFragment)fragment;
+			submitMeetingFragment.setFocus();			
+		} else {
+			FindMeetingFragment findMeetingFragment = (FindMeetingFragment)fragment;
+			findMeetingFragment.setFocus();			
+		}
+		super.onConfigurationChanged(newConfig);
+	}
 
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event){
+		Fragment fragment = this.mPagerAdapter.getItem(this.mViewPager.getCurrentItem());
+		if (fragment instanceof SubmitMeetingFragment) {
+			SubmitMeetingFragment submitMeetingFragment = (SubmitMeetingFragment)fragment;
+			submitMeetingFragment.setKeyDown(keyCode, event);			
+		} else {
+			FindMeetingFragment findMeetingFragment = (FindMeetingFragment)fragment;
+			findMeetingFragment.setKeyDown(keyCode, event);			
+		}
+		
+		return super.onKeyDown(keyCode, event);
+	}
+	
 	private void initializeTabHost(Bundle args) {
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
@@ -121,8 +150,9 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 
 	public void onTabChanged(String tabId) {
 		int pos = this.mTabHost.getCurrentTab();
-		if (this.mViewPager != null)
+		if (this.mViewPager != null) {
 			this.mViewPager.setCurrentItem(pos);
+		}	
 	}
 }
 

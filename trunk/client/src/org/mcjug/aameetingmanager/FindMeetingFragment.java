@@ -22,6 +22,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -172,6 +173,21 @@ public class FindMeetingFragment extends Fragment {
 		};
 		
 		super.onActivityCreated(savedInstanceState);
+	}
+	
+	public void setFocus() {
+		if (nameEditText != null) {
+			nameEditText.requestFocus();
+		}
+	}
+	
+	public void setKeyDown(int keyCode, KeyEvent event) {
+	    // this will happen on first key pressed on hard-keyboard only. Once nameEditText 
+	    // gets the focus again, it will automatically receive further key presses.
+	    if (nameEditText != null && !nameEditText.hasFocus()){ 
+	    	nameEditText.requestFocus();
+	        nameEditText.onKeyDown(keyCode, event);
+	    }
 	}
 	
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
