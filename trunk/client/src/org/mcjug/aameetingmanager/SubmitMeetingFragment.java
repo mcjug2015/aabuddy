@@ -26,8 +26,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -223,15 +223,12 @@ public class SubmitMeetingFragment extends Fragment {
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 			clearTimeFields(startTimeCalendar);			
 			
-			boolean isValid = DateTimeUtil.checkTimes(startTimeCalendar, endTimeCalendar);
-			if (!isValid) {
-				endTimeCalendar.setTime(startTimeCalendar.getTime());
-				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
-			}
-			
+			endTimeCalendar.setTime(startTimeCalendar.getTime());
+			endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+		    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+
 			isTimeValid = true;
-			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);			
+			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);	
 		}		
 	};
 	
