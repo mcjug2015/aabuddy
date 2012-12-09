@@ -89,33 +89,6 @@ public class AAMeetingManager extends FragmentActivity implements TabHost.OnTabC
 		this.mViewPager.setOnPageChangeListener(this);
     }
    
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		Fragment fragment = this.mPagerAdapter.getItem(this.mViewPager.getCurrentItem());
-		if (fragment instanceof SubmitMeetingFragment) {
-			SubmitMeetingFragment submitMeetingFragment = (SubmitMeetingFragment)fragment;
-			submitMeetingFragment.setFocus();			
-		} else {
-			FindMeetingFragment findMeetingFragment = (FindMeetingFragment)fragment;
-			findMeetingFragment.setFocus();			
-		}
-		super.onConfigurationChanged(newConfig);
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event){
-		Fragment fragment = this.mPagerAdapter.getItem(this.mViewPager.getCurrentItem());
-		if (fragment instanceof SubmitMeetingFragment) {
-			SubmitMeetingFragment submitMeetingFragment = (SubmitMeetingFragment)fragment;
-			submitMeetingFragment.setKeyDown(keyCode, event);			
-		} else {
-			FindMeetingFragment findMeetingFragment = (FindMeetingFragment)fragment;
-			findMeetingFragment.setKeyDown(keyCode, event);			
-		}
-		
-		return super.onKeyDown(keyCode, event);
-	}
-	
 	private void initializeTabHost(Bundle args) {
 		mTabHost = (TabHost)findViewById(android.R.id.tabhost);
         mTabHost.setup();
