@@ -11,5 +11,7 @@ urlpatterns = patterns('',
     url(r'^get_meetings', 'aabuddy.views.get_meetings_within_distance'),
     url(r'^save_meeting', 'aabuddy.views.save_meeting'),
     url(r'^create_user', 'aabuddy.views.create_user'),
-    url(r'^validate_user_creds', 'aabuddy.views.validate_user_creds')
+    url(r'^validate_user_creds', 'aabuddy.views.validate_user_creds'),
+    url(r'^change_password', 'aabuddy.views.change_password'),
+    url(r'^reset_password', 'aabuddy.views.reset_password')
 )

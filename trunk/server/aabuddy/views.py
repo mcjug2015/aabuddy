@@ -10,8 +10,28 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 import random
 import string
+from django import forms
+from django.shortcuts import render_to_response
+from django.core.context_processors import csrf
+from django.core.exceptions import ValidationError
 
 logger = logging.getLogger(__name__)
+
+
+class ResetPasswordForm(forms.Form):
+    username = forms.CharField(max_length=100, label='Username')
+    new_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='New Password')
+    confirm_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='Confirm Password')
+    user_confirmation = forms.CharField(widget=forms.HiddenInput(attrs={'value': 'moooo'}), required=False)
+    
+    def clean(self):
+        '''perform custom validation'''
+        cleaned_data = self.cleaned_data
+        new_password = cleaned_data.get("new_password")
+        confirm_password = cleaned_data.get("confirm_password")
+        if new_password != confirm_password:
+            raise ValidationError('The passwords you enterred do not match')
+        return cleaned_data
 
 
 class DayOfWeekGetParams():
@@ -174,7 +194,9 @@ def create_user(request):
         user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
         user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
         user_confirmation.save()
-        send_confirmation_email(user, user_confirmation, request.build_absolute_uri())
+        link_address = request.build_absolute_uri() + '/?confirmation=' + user_confirmation.confirmation_key
+        message_text = "Click the link below to complete the registration perocess\n%s" % link_address
+        send_email_to_user(user, "Thanks you for registering on AA Buddy", message_text)
         return HttpResponse(200)
     if request.method == 'GET':
         conf_key = request.GET.get('confirmation', None)
@@ -193,12 +215,38 @@ def create_user(request):
             return HttpResponse(content="No user confirmation specified!", status=400)
 
 
-def send_confirmation_email(user, user_confirmation, abs_uri):
-    link_address = abs_uri + '/?confirmation=' + user_confirmation.confirmation_key
-    message = "Click the link below to complete the registration perocess\n%s" % link_address
-    logger.debug("About to send conf email with message %s" % message)
-    send_mail(subject="Thanks you for registering on AA Buddy", 
-              message=message, 
+@csrf_exempt
+def change_password(request):
+    do_basic_auth(request)
+    if request.method == 'POST' and request.user.is_authenticated() and request.user.is_active:
+        new_password = request.POST.get("new_password")
+        user = request.user
+        user.set_password(new_password)
+        user.save()
+        return HttpResponse(200)
+    elif request.method == 'POST':
+        return HttpResponse("User not logged in or inactive", 401)
+    else:
+        return HttpResponse("You must use POST to change password", 400)
+    
+def reset_password(request):
+    if request.method == 'POST':
+        form = ResetPasswordForm(request.POST, request.FILES)
+        if form.is_valid():
+            logger.debug('User Confirmation is:' + form.cleaned_data['user_confirmation'])
+            return render_to_response('reset_password.html', {})
+    else:
+        form = ResetPasswordForm()
+        
+    context = {'form': form}
+    context.update(csrf(request))
+    return render_to_response('reset_password.html', context)
+
+
+def send_email_to_user(user, subject_text, message_text):
+    logger.debug("About to send conf email with message %s" % message_text)
+    send_mail(subject=subject_text, 
+              message=message_text, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
 
@@ -216,7 +264,7 @@ def save_meeting(request):
         logger.debug("meeting %s posted!" % meeting.name)
         return HttpResponse(200)
     elif request.method == 'POST':
-        return HttpResponse("User not logged in or inactive", 400)
+        return HttpResponse("User not logged in or inactive", 401)
     else:
         return HttpResponse("You must use POST to submit meetings", 400)
 
@@ -224,8 +272,13 @@ def save_meeting(request):
 @csrf_exempt
 def validate_user_creds(request):
     do_basic_auth(request)
+    logger.debug("username: %s; active: %s; is_authenticated: %s" % (request.user.username,
+                                                                     request.user.is_active,
+                                                                     request.user.is_authenticated()))
     if request.user.is_authenticated() and request.user.is_active:
         return HttpResponse(200)
+    else:
+        return HttpResponse(401)
 
 
 def do_basic_auth(request, *args, **kwargs):
@@ -234,10 +287,10 @@ def do_basic_auth(request, *args, **kwargs):
         logger.debug("request header for auth present.")
         authmeth, auth = request.META['HTTP_AUTHORIZATION'].split(' ', 1)
         if authmeth.lower() == 'basic':
-            logger.debug("authmeth is goof")
+            logger.debug("authmeth is good")
             auth = auth.strip().decode('base64')
             username, password = auth.split(':', 1)
-            logger.debug("about to try and authenticate " + username)
+            logger.debug("about to try and authenticate " + username + " " + password)
             user = authenticate(username=username, password=password)
             if user:
                 logger.debug("user %s authenticated!" % username)
