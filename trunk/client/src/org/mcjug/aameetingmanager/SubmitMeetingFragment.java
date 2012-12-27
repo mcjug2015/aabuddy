@@ -265,14 +265,10 @@ public class SubmitMeetingFragment extends Fragment {
 		JSONObject json = new JSONObject();
 		
 		String name = nameEditText.getText().toString().trim();
-		if (!name.equals("")) {
-			json.put("name", name);
-		}
+		json.put("name", name);
 
 		String description = descriptionEditText.getText().toString().trim();
-		if (!description.equals("")) {
-			json.put("description", description);
-		}
+		json.put("description", description);
 		
 		json.put("internal_type", getString(R.string.submitted));
 
