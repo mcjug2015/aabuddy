@@ -19,10 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 class ResetPasswordForm(forms.Form):
-    username = forms.CharField(max_length=100, label='Username')
-    new_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='New Password')
+    username = forms.CharField(max_length=100, label='Username', required=True)
+    new_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='New Password', required=True)
     confirm_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='Confirm Password')
-    user_confirmation = forms.CharField(widget=forms.HiddenInput(attrs={'value': 'moooo'}), required=False)
+    user_confirmation = forms.CharField(widget=forms.HiddenInput, required=True)
     
     def clean(self):
         '''perform custom validation'''
@@ -178,6 +178,20 @@ def get_meetings_within_distance(request):
     else:
         return HttpResponse("You must use GET to retrieve meetings", 400)
 
+@csrf_exempt
+def send_reset_conf(request):
+    if request.method == 'POST':
+        username = request.POST.get('username', None)
+        user = User.objects.get(username=username)
+        user_confirmation = UserConfirmation(user=user)
+        user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
+        user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
+        user_confirmation.save()
+        link_address = '?confirmation=' + user_confirmation.confirmation_key
+        link_address = request.build_absolute_uri('reset_password/') + link_address
+        message_text = "Click the link below to reset your aabuddy password\n%s" % link_address
+        send_email_to_user(user, "Your AA Buddy reset password confirmation", message_text)
+        return HttpResponse(200)
 
 @csrf_exempt
 def create_user(request):
@@ -234,9 +248,25 @@ def reset_password(request):
         form = ResetPasswordForm(request.POST, request.FILES)
         if form.is_valid():
             logger.debug('User Confirmation is:' + form.cleaned_data['user_confirmation'])
-            return render_to_response('reset_password.html', {})
+            user_conf_key = form.cleaned_data['user_confirmation']
+            user_confirmation = UserConfirmation.objects.get(confirmation_key=user_conf_key)
+            if user_confirmation.expiration_date > datetime.datetime.now():
+                user = user_confirmation.user
+                user.set_password(form.cleaned_data['new_password'])
+                user.save()
+                user_confirmation.expiration_date = datetime.datetime.now()
+                user_confirmation.save()
+                return render_to_response('reset_password.html', {})
+            else:
+                return HttpResponse("User confirmation is invalid, expired or does not exist", 401)
     else:
-        form = ResetPasswordForm()
+        user_conf_key = request.GET.get('confirmation', None)
+        user_conf = UserConfirmation.objects.filter(confirmation_key=user_conf_key)
+        if len(user_conf) == 1 and user_conf[0].expiration_date > datetime.datetime.now():
+            form = ResetPasswordForm()
+            form.fields['user_confirmation'].widget.attrs = form.fields['user_confirmation'].widget.build_attrs(extra_attrs={'value': user_conf[0].confirmation_key})
+        else:
+            return HttpResponse("User confirmation is invalid, expired or does not exist", 401)
         
     context = {'form': form}
     context.update(csrf(request))

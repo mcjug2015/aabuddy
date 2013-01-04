@@ -13,5 +13,6 @@ urlpatterns = patterns('',
     url(r'^create_user', 'aabuddy.views.create_user'),
     url(r'^validate_user_creds', 'aabuddy.views.validate_user_creds'),
     url(r'^change_password', 'aabuddy.views.change_password'),
-    url(r'^reset_password', 'aabuddy.views.reset_password')
+    url(r'^reset_password', 'aabuddy.views.reset_password'),
+    url(r'^send_reset_conf', 'aabuddy.views.send_reset_conf')
 )
