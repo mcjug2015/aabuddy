@@ -28,6 +28,10 @@
             </intent-filter>
         </activity>
         
+        <activity android:name=".FindMeetingFragmentActivity" android:label="@string/findMeeting" />
+        <activity android:name=".SubmitMeetingFragmentActivity" android:label="@string/submitMeeting" />
+        <activity android:name=".MeetingFragmentActivity" android:label="@string/title_activity_main" />
+        
         <activity android:name=".MeetingListFragmentActivity" android:label="@string/title_activity_main" />
         
         <activity android:name=".AdminPrefsActivity" android:label="@string/adminPrefActivityTitle"/>
