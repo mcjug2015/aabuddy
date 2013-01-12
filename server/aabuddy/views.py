@@ -107,6 +107,8 @@ def temp_meeting_to_json_obj(meeting):
     json_obj['lat'] = meeting.geo_location.y
     json_obj['long'] = meeting.geo_location.x
     json_obj['distance'] = meeting.distance.mi
+    json_obj['creator'] = meeting.creator.username
+    json_obj['created_date'] = meeting.created_date
     return json_obj
 
 
@@ -279,6 +281,20 @@ def send_email_to_user(user, subject_text, message_text):
               message=message_text, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
+def find_similar(request):
+    if request.method == 'POST':
+        json_obj = json.loads(request.raw_post_data)
+        meeting = temp_json_obj_to_meeting(json_obj)
+        similar_meetings = Meeting.objects.filter(day_of_week=meeting.day_of_week, 
+                                                  start_time__lte=meeting.start_time+datetime.timedelta(minutes=10),
+                                                  start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
+                                                  end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
+                                                  end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
+        retval_obj = {'meta': {'total_count': len(similar_meetings)}, 'objects': []}
+        for meeting in similar_meetings:
+            retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
+        return HttpResponse(json.dumps(retval_obj))
+
 
 @csrf_exempt
 def save_meeting(request):
@@ -290,9 +306,10 @@ def save_meeting(request):
         json_obj = json.loads(request.raw_post_data)
         logger.debug("About to try and save json: %s" % str(json_obj))
         meeting = temp_json_obj_to_meeting(json_obj)
+        meeting.creator = request.user
         meeting.save()
         logger.debug("meeting %s posted!" % meeting.name)
-        return HttpResponse(200)
+        return HttpResponse(content=meeting.pk, status=200)
     elif request.method == 'POST':
         return HttpResponse("User not logged in or inactive", 401)
     else:
