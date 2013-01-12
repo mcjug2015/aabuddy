@@ -108,7 +108,7 @@ def temp_meeting_to_json_obj(meeting):
     json_obj['long'] = meeting.geo_location.x
     json_obj['distance'] = meeting.distance.mi
     json_obj['creator'] = meeting.creator.username
-    json_obj['created_date'] = meeting.created_date
+    json_obj['created_date'] = meeting.created_date.isoformat()
     return json_obj
 
 
@@ -281,6 +281,7 @@ def send_email_to_user(user, subject_text, message_text):
               message=message_text, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
+@csrf_exempt
 def find_similar(request):
     if request.method == 'POST':
         json_obj = json.loads(request.raw_post_data)
@@ -290,6 +291,9 @@ def find_similar(request):
                                                   start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
                                                   end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
                                                   end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
+        similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=0.1)))
+        similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
+        similar_meetings = similar_meetings[0:3]
         retval_obj = {'meta': {'total_count': len(similar_meetings)}, 'objects': []}
         for meeting in similar_meetings:
             retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))

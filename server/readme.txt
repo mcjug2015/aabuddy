@@ -44,7 +44,7 @@ day_of_week goes from 1 to 7
 internal_type valid values can be found in aabuddy/models.py/Meeting/INTERNAL_TYPE_CHOICES. They are case insensitive
 when submitted to the url below, so Submitted and submitted are both valid. If success and status 200, the returned number is the meeting id.
 curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD http://108.179.217.242/aabuddy/save_meeting
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 7, "description": "Awesome meeting", "end_time": "6:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "7:45:00"}' --user victor.semenov@gmail.com:testpassword1 http://localhost:8888/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 http://mcasg.org/aabuddy/save_meeting
 
 For querying the day_of_week can be passed in with the following modifiers:
 __eq - day of week equals to
@@ -82,6 +82,12 @@ The returned json object looks like this:
 total_count is the number of meetings you would have gotten back if didn't pass in a limit and an offset
 current_count is the number of meetings currently in the "objects" list(with limit and offset applied if you passed them in) 
 
+
+Find meetings similar to the one you submit via post
+Rules - no authentication needed.
+Post the full meeting object.
+Currently similarity is determined via day_of_week, start_time and end_time +/- 10 minutes, and distance within 0.1 miles
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' http://mcasg.org/aabuddy/find_similar
 
 VM u/p:
 root/reverse
