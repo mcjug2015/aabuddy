@@ -4,6 +4,7 @@ import django.db.models as classic_models
 import datetime
 from django.contrib.gis.db.models.manager import GeoManager
 from django.contrib.auth.models import User
+from django.template.defaultfilters import default
 
 
 class Meeting(models.Model):
@@ -31,7 +32,14 @@ class Meeting(models.Model):
     description = models.CharField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=300)
     internal_type = models.CharField(max_length=10, default=SUBMITTED, choices=INTERNAL_TYPE_CHOICES)
+    creator = models.ForeignKey(User, related_name='meetings', null=True, default=User.objects.get(username='admin'))
+    created_date = models.DateTimeField(editable=False,null=False, blank=False, default=datetime.datetime(1982,12,22))
     geo_location = models.PointField()
+    
+    def save(self, **kwargs):
+        if not self.id:
+            self.created_date = datetime.datetime.now() # Edit created timestamp only if it's new entry
+        super(Meeting, self).save()
 
 
 class UserConfirmation(classic_models.Model):
