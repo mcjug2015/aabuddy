@@ -2,8 +2,8 @@
     <string name="app_name">AA Meeting Manager</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">AA Meeting Manager</string>
-    <string name="meeting_name">Name:</string>
-    <string name="meeting_description">Description:</string>
+    <string name="meeting_name">Meeting Name:</string>
+    <string name="meeting_description">Meeting Description:</string>
     <string name="start_time">Start time:</string>
     <string name="end_time">End time:</string>
     <string name="day_of_week">Day of week:</string>
@@ -21,8 +21,6 @@
     <string name="endTimeLabel">End:</string>
     <string name="dayLabel">Day:</string>
     <string name="day">Monday</string>
-    <string name="meetingNameLabel">Name:</string>
-    <string name="meetingName">AA Meeting</string>
     <string name="startAndEndTimesAreEqual">Please change start and end times so they are not equal.</string>
     <string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>
     <string name="meetingDuration">"Meeting time duration: %d minutes."</string>
@@ -52,6 +50,10 @@
     <string name="addressNotFound">Not able to get address from location. Please check for a network data connection.</string>
     <string name="getLocationMsg">Getting location</string>
     <string name="waitMsg">Please wait&#8230;</string>
+    
+    <string name="findMeeting">Find Meeting</string>
+    <string name="submitMeeting">Add Meeting</string>
+    
     
     <string-array name="daysOfWeek">
         <item>Sunday</item>
