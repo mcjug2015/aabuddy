@@ -28,6 +28,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -98,7 +100,22 @@ public class SubmitMeetingFragment extends Fragment {
 		}); 
 		
 		nameEditText = (EditText) view.findViewById(R.id.submitMeetingNameEditText);
+		nameEditText.addTextChangedListener(new TextWatcher() {			
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				checkMeetingFieldsValid();
+			}			
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void afterTextChanged(Editable s) {}
+		});
+		
 		descriptionEditText = (EditText) view.findViewById(R.id.submitMeetingDescriptionEditText);
+		descriptionEditText.addTextChangedListener(new TextWatcher() {			
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				checkMeetingFieldsValid();
+			}			
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void afterTextChanged(Editable s) {}
+		});
 		
 		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
 		addressEditText.addTextChangedListener(new TextWatcher() {			
@@ -108,12 +125,8 @@ public class SubmitMeetingFragment extends Fragment {
 				submitMeetingButton.setEnabled(false);
 			}
 			
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
-			
-			public void afterTextChanged(Editable s) {
-				
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+			public void afterTextChanged(Editable s) {}
 		});		
 		
 		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
@@ -175,7 +188,10 @@ public class SubmitMeetingFragment extends Fragment {
 				
 				try {
 					String submitMeetingParams = createSubmitMeetingJson();
-					new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();
+					new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();					
+					submitMeetingButton.setEnabled(false);
+					nameEditText.requestFocus();
+					
 				} catch (Exception ex) {
 		        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
@@ -183,11 +199,23 @@ public class SubmitMeetingFragment extends Fragment {
 			} 
 		}); 
 		
-		dayOfWeekSpinner = (Spinner) view.findViewById(R.id.submitMeetingDayOfWeekSpinner); 
+		dayOfWeekSpinner = (Spinner) view.findViewById(R.id.submitMeetingDayOfWeekSpinner);
+		dayOfWeekSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+				checkMeetingFieldsValid();
+			}
+			public void onNothingSelected(AdapterView<?> arg0) {}
+		});
 
 		return view;
 	}
 		
+	private boolean checkMeetingFieldsValid() {
+		boolean isValid = isLocationValid && isTimeValid;
+		submitMeetingButton.setEnabled(isValid);
+		return isValid;
+	}
+	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 
@@ -251,7 +279,7 @@ public class SubmitMeetingFragment extends Fragment {
 				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
 			}
 			
-			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);
+			checkMeetingFieldsValid();
 		}		
 	};
 	
@@ -323,13 +351,14 @@ public class SubmitMeetingFragment extends Fragment {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
 		
-        switch (item.getItemId()) {
-
-	        // Admin prefs
-	        case R.id.adminPrefs:
-	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
-	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-	            return true;
+		// Admin prefs
+	    if (R.id.adminPrefs == item.getItemId()) {
+	        startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
+	                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+	        return true;
+		}
+	    
+        switch (item.getItemId()) {	  
 	            
 	        case MENU_ID_LOGOUT:
 	        	removeLoginInfo();
