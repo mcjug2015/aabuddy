@@ -264,17 +264,11 @@ public class FindMeetingFragment extends Fragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		super.onOptionsItemSelected(item);
-		
-        switch (item.getItemId()) {
-
-	        // Admin prefs
-	        case R.id.adminPrefs:
+       if (item.getItemId() == R.id.adminPrefs) {
 	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
 	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 	            return true;
-        }
-
-		
+        }		
 		return false;
 	}
 }
