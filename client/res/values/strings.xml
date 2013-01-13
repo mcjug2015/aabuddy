@@ -53,7 +53,9 @@
     
     <string name="findMeeting">Find Meeting</string>
     <string name="submitMeeting">Add Meeting</string>
-    
+    <string name="settings">Settings</string>
+    <string name="login">Login In</string>
+    <string name="Help">Help</string>    
     
     <string-array name="daysOfWeek">
         <item>Sunday</item>
