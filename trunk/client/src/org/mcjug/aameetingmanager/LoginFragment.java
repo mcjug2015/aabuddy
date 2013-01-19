@@ -87,7 +87,7 @@ public class LoginFragment extends Fragment {
 
 				//TODO:  should go back to submit fragment and submit meeting
 				startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
-										.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+										.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 
 			} else {
 				Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();

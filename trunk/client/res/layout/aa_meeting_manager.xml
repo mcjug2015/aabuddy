@@ -85,15 +85,16 @@
             android:layout_marginRight="40dp" >
 
             <ImageView
-                android:id="@+id/loginInImageView"
+                android:id="@+id/loginImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/login" />
 
             <TextView
+                android:id="@+id/loginTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/loginInImageView"
+                android:layout_below="@id/loginImageView"
                 android:layout_centerHorizontal="true"
                 android:text="@string/login" />
         </RelativeLayout>
