@@ -9,7 +9,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
-import android.util.Base64;
+import org.mcjug.aameetingmanager.util.Base64;
 
 public class Credentials {
 	
