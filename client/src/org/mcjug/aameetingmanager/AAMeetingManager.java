@@ -2,13 +2,20 @@ package org.mcjug.aameetingmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-public class AAMeetingManager extends FragmentActivity {
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+
+public class AAMeetingManager extends SherlockFragmentActivity 
+	implements LogoutDialogFragment.LogoutDialogListener 
+{
 	private static final String TAG = AAMeetingManager.class.getSimpleName();
+	
+	private static final String LOGOUT_TAG = "logoutTag";
 
 	/**
 	 * (non-Javadoc)
@@ -37,6 +44,71 @@ public class AAMeetingManager extends FragmentActivity {
 
 			}
 		});
+		
+		ImageView settingsImageView = (ImageView)findViewById(R.id.settingsImageView);
+		settingsImageView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+		        startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class)
+                		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+			}
+		});
 
+		ImageView helpImageView = (ImageView)findViewById(R.id.helpImageView);
+		helpImageView.setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				//TODO:  Bob and Sheng-Feng to implement click on help image
+			}
+		});
+		
 	}
+
+	public void initLoginLogoutButton() {
+		ImageView loginInImageView = (ImageView)findViewById(R.id.loginImageView);
+		final TextView loginTextView = (TextView)findViewById(R.id.loginTextView);
+		OnClickListener loginImageViewClickListener = null;
+		
+		Credentials credentials = Credentials.readFromPreferences(getApplicationContext());
+	
+		//toggle login/logout functionality
+		if (!credentials.isSet()) {
+			//show login button
+			loginTextView.setText(getString(R.string.login));
+			loginImageViewClickListener = new OnClickListener() {
+				public void onClick(View v) {
+		            startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
+		            		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+				}
+			};
+			
+		} else {
+			//show logout button
+			loginTextView.setText(getString(R.string.logout));
+			
+			loginImageViewClickListener = new OnClickListener() {
+				public void onClick(View v) {
+					LogoutDialogFragment logoutDialogFragment = 
+						new LogoutDialogFragment();
+					
+					logoutDialogFragment.show(getSupportFragmentManager(), LOGOUT_TAG);
+				}
+			};
+		}
+		
+		loginInImageView.setOnClickListener(loginImageViewClickListener);
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		initLoginLogoutButton();
+	}
+
+	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
+		
+		Credentials.removeFromPreferences(getApplicationContext());
+		
+		initLoginLogoutButton();
+	}
+
 }

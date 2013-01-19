@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">AA Meeting Manager</string>
-    <string name="menu_settings">Settings</string>
     <string name="title_activity_main">AA Meeting Manager</string>
     <string name="meeting_name">Meeting Name:</string>
     <string name="meeting_description">Meeting Description:</string>
@@ -24,9 +23,7 @@
     <string name="startAndEndTimesAreEqual">Please change start and end times so they are not equal.</string>
     <string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>
     <string name="meetingDuration">"Meeting time duration: %d minutes."</string>
-    <string name="adminPrefActivityTitle">Admin Preferences</string>
-    <string name="adminPrefFragmentTitle">Admin Preferences</string>
-    <string name="adminPrefFragmentSummary">Set admin preferences</string>
+    <string name="adminPrefActivityTitle">Settings</string>
     <string name="serverPreferencesTitle">Server Preferences</string>
     <string name="serverPreferencesSummary">Configure the Meeting Server</string>
     <string name="meetingServerBaseUrlPreferenceName">meetingServerBaseUrl</string>
@@ -53,8 +50,11 @@
     
     <string name="findMeeting">Find Meeting</string>
     <string name="submitMeeting">Add Meeting</string>
+    <string name="meetingList">Meeting Search Results</string>
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
+    <string name="logout">Log Out</string>
+    <string name="logoutConfirmationMsg">Are you sure you want to log out?</string>
     <string name="Help">Help</string>    
     
     <string-array name="daysOfWeek">
@@ -120,14 +120,14 @@
         <item>name</item>
         <item>description</item>
     </string-array>    
-	<string name="loginActivityTitle">AA Meeting Manager Login</string>
+	<string name="loginActivityTitle">Login</string>
 	<string name="loginText">Login to submit a meeting</string>
 	<string name="emailAddressText">Email Address:</string>
 	<string name="passwordText">Password:</string>
 	<string name="confirmPasswordText">Confirm Password:</string>
 	<string name="loginButton">Login</string>
 	
-	<string name="registrationActivityTitle">AA Meeting Manager Registration</string>
+	<string name="registrationActivityTitle">Registration</string>
 	<string name="registrationText">Haven\'t registered?</string>
 	<string name="registerButton">Register Now</string>
 	
