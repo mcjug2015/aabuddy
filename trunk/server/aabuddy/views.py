@@ -176,9 +176,9 @@ def get_meetings_within_distance(request):
         for meeting in meetings:
             retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
         retval_obj['meta']['current_count'] = len(meetings)
-        return HttpResponse(json.dumps(retval_obj))
+        return HttpResponse(content=json.dumps(retval_obj))
     else:
-        return HttpResponse("You must use GET to retrieve meetings", 400)
+        return HttpResponse(content="You must use GET to retrieve meetings", status=400)
 
 @csrf_exempt
 def send_reset_conf(request):
@@ -193,7 +193,7 @@ def send_reset_conf(request):
         link_address = request.build_absolute_uri('reset_password/') + link_address
         message_text = "Click the link below to reset your aabuddy password\n%s" % link_address
         send_email_to_user(user, "Your AA Buddy reset password confirmation", message_text)
-        return HttpResponse(200)
+        return HttpResponse(status=200)
 
 @csrf_exempt
 def create_user(request):
@@ -213,7 +213,7 @@ def create_user(request):
         link_address = request.build_absolute_uri() + '/?confirmation=' + user_confirmation.confirmation_key
         message_text = "Click the link below to complete the registration perocess\n%s" % link_address
         send_email_to_user(user, "Thanks you for registering on AA Buddy", message_text)
-        return HttpResponse(200)
+        return HttpResponse(status=200)
     if request.method == 'GET':
         conf_key = request.GET.get('confirmation', None)
         if conf_key:
@@ -239,11 +239,11 @@ def change_password(request):
         user = request.user
         user.set_password(new_password)
         user.save()
-        return HttpResponse(200)
+        return HttpResponse(status=200)
     elif request.method == 'POST':
-        return HttpResponse("User not logged in or inactive", 401)
+        return HttpResponse(content="User not logged in or inactive", status=401)
     else:
-        return HttpResponse("You must use POST to change password", 400)
+        return HttpResponse(content="You must use POST to change password", status=400)
     
 def reset_password(request):
     if request.method == 'POST':
@@ -260,7 +260,7 @@ def reset_password(request):
                 user_confirmation.save()
                 return render_to_response('reset_password.html', {})
             else:
-                return HttpResponse("User confirmation is invalid, expired or does not exist", 401)
+                return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
     else:
         user_conf_key = request.GET.get('confirmation', None)
         user_conf = UserConfirmation.objects.filter(confirmation_key=user_conf_key)
@@ -268,7 +268,7 @@ def reset_password(request):
             form = ResetPasswordForm()
             form.fields['user_confirmation'].widget.attrs = form.fields['user_confirmation'].widget.build_attrs(extra_attrs={'value': user_conf[0].confirmation_key})
         else:
-            return HttpResponse("User confirmation is invalid, expired or does not exist", 401)
+            return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
         
     context = {'form': form}
     context.update(csrf(request))
@@ -297,7 +297,7 @@ def find_similar(request):
         retval_obj = {'meta': {'total_count': len(similar_meetings)}, 'objects': []}
         for meeting in similar_meetings:
             retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
-        return HttpResponse(json.dumps(retval_obj))
+        return HttpResponse(content=json.dumps(retval_obj))
 
 
 @csrf_exempt
@@ -315,9 +315,9 @@ def save_meeting(request):
         logger.debug("meeting %s posted!" % meeting.name)
         return HttpResponse(content=meeting.pk, status=200)
     elif request.method == 'POST':
-        return HttpResponse("User not logged in or inactive", 401)
+        return HttpResponse(content="User not logged in or inactive", status=401)
     else:
-        return HttpResponse("You must use POST to submit meetings", 400)
+        return HttpResponse(content="You must use POST to submit meetings", status=400)
 
 
 @csrf_exempt
@@ -327,9 +327,9 @@ def validate_user_creds(request):
                                                                      request.user.is_active,
                                                                      request.user.is_authenticated()))
     if request.user.is_authenticated() and request.user.is_active:
-        return HttpResponse(200)
+        return HttpResponse(status=200)
     else:
-        return HttpResponse(401)
+        return HttpResponse(status=401)
 
 
 def do_basic_auth(request, *args, **kwargs):

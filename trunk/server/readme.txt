@@ -20,6 +20,8 @@ $> fab localvm deploy_workingenv
 
 ** make sure that a username and password are valid and the user is active(allowed to submit meetings)
 curl -v --user USERNAME:PASSWORD http://localhost:8888/aabuddy/validate_user_creds
+curl -v --user USERNAME:PASSWORD https://mcasg.org/aabuddy/validate_user_creds --insecure
+
 
 ** test creating an inactive user with curl
 curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" http://localhost:8888/aabuddy/create_user
