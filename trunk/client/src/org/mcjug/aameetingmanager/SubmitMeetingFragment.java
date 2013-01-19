@@ -21,9 +21,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,9 +36,6 @@ import android.widget.Toast;
 public class SubmitMeetingFragment extends Fragment {
 	private static final String TAG = SubmitMeetingFragment.class.getSimpleName();
 
-	private final static int MENU_ID_LOGOUT = Menu.FIRST + 1;
-	private final static int MENU_ID_LOGIN  = Menu.FIRST + 2;
-	
 	private EditText nameEditText;
 	private EditText descriptionEditText;
 	private EditText addressEditText;
@@ -320,59 +314,6 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 		
 		return json.toString();
-	}
-	
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.activity_main, menu);
-	}
-	
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-
-		Credentials credentials = Credentials.readFromPreferences(getActivity());
-
-		menu.removeItem(MENU_ID_LOGOUT);
-		menu.removeItem(MENU_ID_LOGIN);
-
-		if (!credentials.isSet()) {
-			int groupId = 0;
-			menu.add(groupId, MENU_ID_LOGIN, Menu.NONE, getString(R.string.loginMenuText));
-		} else {
-			int groupId = 0;
-			menu.add(groupId, MENU_ID_LOGOUT, Menu.NONE, getString(R.string.logoutMenuText));
-		}
-
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-		
-		// Admin prefs
-	    if (R.id.adminPrefs == item.getItemId()) {
-	        startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
-	                .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-	        return true;
-		}
-	    
-        switch (item.getItemId()) {	  
-	            
-	        case MENU_ID_LOGOUT:
-	        	removeLoginInfo();
-	        	return true;
-	        	
-	        case MENU_ID_LOGIN:
-	            startActivity(new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class)
-                		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-	        	return true;
-	        
-        }
-
-		
-		return false;
 	}
 	
 	public void removeLoginInfo() {
