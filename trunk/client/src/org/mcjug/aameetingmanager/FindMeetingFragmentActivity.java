@@ -12,7 +12,6 @@ public class FindMeetingFragmentActivity extends SherlockFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_Light);
 		setContentView(R.layout.find_meeting_activity);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
