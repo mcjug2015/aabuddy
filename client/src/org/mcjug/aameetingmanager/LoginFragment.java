@@ -1,5 +1,6 @@
 package org.mcjug.aameetingmanager;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -81,13 +82,11 @@ public class LoginFragment extends Fragment {
 				//Save username/pwd if login succeeded
 				Credentials.saveToPreferences(getActivity(), username, password);
 
+				//TODO: Change to dialog?
 				Toast.makeText(getActivity().getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
 
-				//TODO: Perform submit meeting with username/password
-
-				//TODO:  should go back to submit fragment and submit meeting
-				startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
-										.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				getActivity().setResult(Activity.RESULT_OK);
+				getActivity().finish();
 
 			} else {
 				Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();

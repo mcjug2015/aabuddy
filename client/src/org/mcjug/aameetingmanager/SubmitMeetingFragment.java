@@ -7,6 +7,7 @@ import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -55,9 +56,50 @@ public class SubmitMeetingFragment extends Fragment {
 	private ProgressDialog progress;
 	private LocationResult locationResult;
 	
+	private static final int BEFORE_SUBMIT_LOGIN_ACTIVITY 	= 1;
+	private static final int AFTER_SUBMIT_LOGIN_ACTIVITY 	= 2;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
+		Credentials credentials = Credentials.readFromPreferences(getActivity());
+		
+		if (!credentials.isSet()) {
+			//if no username and password, go to login screen
+			
+			Intent loginIntent =  new Intent(getActivity(), LoginFragmentActivity.class);
+			loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+			startActivityForResult(loginIntent, BEFORE_SUBMIT_LOGIN_ACTIVITY);
+		}
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		switch(requestCode) {
+			case BEFORE_SUBMIT_LOGIN_ACTIVITY:
+				if (resultCode != Activity.RESULT_OK) {
+					getActivity().finish();
+					//go back to home
+					startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+											.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				}
+			break;
+			
+			case AFTER_SUBMIT_LOGIN_ACTIVITY:
+				if (resultCode != Activity.RESULT_OK) {
+					getActivity().finish();
+					//go back to home
+					startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+											.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+				} else {
+					Credentials credentials = Credentials.readFromPreferences(getActivity());
+					submitMeeting(credentials);
+				}
+			break;
+		}
 	}
 
 	@Override	
@@ -166,30 +208,15 @@ public class SubmitMeetingFragment extends Fragment {
 				
 				if (!credentials.isSet()) {
 					//if no username and password, go to login screen
-					
-					//TODO: may want to change to just swap out the fragment
-
-					Bundle args = new Bundle();
-					//TODO:  pass in meeting info
-					
 					Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
 					loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-					getActivity().startActivity(loginIntent);
+					getActivity().startActivityForResult(loginIntent, AFTER_SUBMIT_LOGIN_ACTIVITY);
 											
-					return;
+				} else {
+					submitMeeting(credentials);
 				}
-				
-				try {
-					String submitMeetingParams = createSubmitMeetingJson();
-					new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();					
-					submitMeetingButton.setEnabled(false);
-					nameEditText.requestFocus();
-					
-				} catch (Exception ex) {
-		        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
-					Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-				}
-			} 
+			}
+
 		}); 
 		
 		dayOfWeekSpinner = (Spinner) view.findViewById(R.id.submitMeetingDayOfWeekSpinner);
@@ -203,6 +230,19 @@ public class SubmitMeetingFragment extends Fragment {
 		return view;
 	}
 		
+	private void submitMeeting(Credentials credentials) {
+		try {
+			String submitMeetingParams = createSubmitMeetingJson();
+			new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();					
+			submitMeetingButton.setEnabled(false);
+			nameEditText.requestFocus();
+			
+		} catch (Exception ex) {
+        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
+			Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+		}
+	} 
+
 	private boolean checkMeetingFieldsValid() {
 		boolean isValid = isLocationValid && isTimeValid;
 		submitMeetingButton.setEnabled(isValid);
