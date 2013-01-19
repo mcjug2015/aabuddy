@@ -91,7 +91,7 @@
     	android:layout_below="@id/confirmPasswordEditText"
 		android:layout_centerHorizontal="true"
         android:layout_marginTop="30dp"
-		android:hint="@string/registerButton"
+		android:text="@string/registerButton"
 		style="?android:attr/buttonStyleSmall"
 	/>
 	
