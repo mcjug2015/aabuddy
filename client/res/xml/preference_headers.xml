@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
-  	<header android:fragment="org.mcjug.aameetingmanager.AdminPrefsFragment"
-          android:title="@string/adminPrefFragmentTitle"
-          android:summary="@string/adminPrefFragmentSummary" />
-
-</preference-headers>
