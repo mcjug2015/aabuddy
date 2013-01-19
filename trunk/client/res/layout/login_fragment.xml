@@ -78,7 +78,7 @@
 			android:layout_width="wrap_content"
 	    	android:layout_below="@id/passwordEditText"
 			android:layout_centerHorizontal="true"
-			android:hint="@string/loginButton"
+			android:text="@string/loginButton"
             android:layout_marginTop="40dp"
             android:minWidth="80dp"
 			style="?android:attr/buttonStyleSmall"
@@ -116,7 +116,7 @@
 	        android:layout_height="wrap_content"
 	        android:layout_marginLeft="10dp"
 	        android:layout_toRightOf="@+id/registrationTextView"
-	        android:hint="@string/registerButton" />
+	        android:text="@string/registerButton" />
 
 	</RelativeLayout>
     
