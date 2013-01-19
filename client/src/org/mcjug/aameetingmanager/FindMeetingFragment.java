@@ -254,21 +254,4 @@ public class FindMeetingFragment extends Fragment {
 
 		return paramStr;
 	}
-
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.activity_main, menu);
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		super.onOptionsItemSelected(item);
-       if (item.getItemId() == R.id.adminPrefs) {
-	            startActivity(new Intent(getActivity().getApplicationContext(), AdminPrefsActivity.class)
-	                    .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-	            return true;
-        }		
-		return false;
-	}
 }
