@@ -7,6 +7,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
+import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -36,7 +37,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 			return String.format(context.getString(R.string.validateCredentialsError), errorMessage);
 		}
 
-		DefaultHttpClient client = new DefaultHttpClient(); 
+		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
 			String baseUrl = getSaveMeetingBaseUrl();
 			HttpPost request = new HttpPost(baseUrl);
@@ -80,5 +81,4 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 			Toast.makeText(context, result, Toast.LENGTH_LONG).show();
 		}
 	}
-
 }

@@ -11,6 +11,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.content.Context;
 import android.content.Intent;
@@ -35,7 +36,7 @@ public class FindMeetingTask extends AsyncTask<Void, String, String> {
 	
 	@Override
 	protected String doInBackground(Void... arg0) {
-		HttpClient client = new DefaultHttpClient();
+		HttpClient client = HttpUtil.createHttpClient(); 
 		try {  
 			String baseUrl = getGetMeetingBaseUrl();
 			String url = baseUrl + "?" + meetingParams;

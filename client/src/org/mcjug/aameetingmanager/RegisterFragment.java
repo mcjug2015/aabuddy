@@ -11,6 +11,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
@@ -115,7 +116,7 @@ public class RegisterFragment extends Fragment {
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
 			String url = getCreateUserUrl();
-			HttpClient client = new DefaultHttpClient();
+			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
 				HttpPost httpPost = new HttpPost(url);
 				

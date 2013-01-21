@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import org.mcjug.aameetingmanager.util.Base64;
+import org.mcjug.aameetingmanager.util.HttpUtil;
 
 public class Credentials {
 	
@@ -75,7 +76,7 @@ public class Credentials {
 	}
 	
 	public String validateCredentialsFromServer(Context context) {
-		DefaultHttpClient client = new DefaultHttpClient(); 
+		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
 			String baseUrl = getValidateCredentialsBaseUrl(context);
 
