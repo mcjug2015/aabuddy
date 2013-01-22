@@ -9,7 +9,6 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
@@ -17,11 +16,9 @@ import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -115,7 +112,7 @@ public class RegisterFragment extends Fragment {
 		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
-			String url = getCreateUserUrl();
+			String url = HttpUtil.getRequestUrl(getActivity(), R.string.create_user_url_path);
 			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
 				HttpPost httpPost = new HttpPost(url);
@@ -157,8 +154,6 @@ public class RegisterFragment extends Fragment {
 			
 			Toast.makeText(activity, activity.getString(R.string.registrationSuccess), Toast.LENGTH_LONG).show();
 			
-			
-			
 			//Go back to main activity
 			startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
 									.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
@@ -166,19 +161,5 @@ public class RegisterFragment extends Fragment {
 		}
 		
 		
-	}
-	
-	private String getCreateUserUrl() {
-		StringBuilder baseUrl = new StringBuilder();
-
-		FragmentActivity activity = getActivity();
-		String defaultServerBase = activity.getString(R.string.meetingServerBaseUrlDefaultValue);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
-		String serverBaseUrl = prefs.getString(activity.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
-		
-		baseUrl.append(serverBaseUrl);
-		baseUrl.append(activity.getString(R.string.create_user_url_path));
-		
-		return baseUrl.toString();
 	}
 }
