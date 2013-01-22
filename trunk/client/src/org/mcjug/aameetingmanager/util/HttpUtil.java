@@ -44,4 +44,14 @@ public class HttpUtil {
 	   return new DefaultHttpClient(cm, httpParams);
         
 	}
+	
+	public static String getRequestUrl(Context context, int requestUrlResourceId) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		String defaultServerBase = context.getString(R.string.meetingServerBaseUrlDefaultValue);			
+		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
+		
+		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
+		baseUrl.append(context.getString(requestUrlResourceId));
+		return baseUrl.toString();
+	}
 }
