@@ -9,11 +9,23 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
+import org.mcjug.aameetingmanager.R;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 public class HttpUtil {
 
 	public static DefaultHttpClient createHttpClient() {
-		boolean bTrustAll = true;  //TODO:  Change to read from shared preferences
+		Context context = AAMeetingApplication.getInstance();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+		boolean defaultSslTrustAllFlag = Boolean.getBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));			
+		boolean bSslTrustAllFlag = 
+			prefs.getBoolean(context.getString(R.string.sslTrustAllFlagPreferenceName), 
+							 defaultSslTrustAllFlag);
 		
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		// http scheme
@@ -22,16 +34,10 @@ public class HttpUtil {
 		// https scheme
 		schemeRegistry.register(
 				new Scheme("https",
-						   (bTrustAll ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
+						   (bSslTrustAllFlag ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
 						   443));
 
 		HttpParams httpParams = new BasicHttpParams();
-//		params.setParameter(ConnManagerPNames.MAX_TOTAL_CONNECTIONS, 30);
-//		params.setParameter(ConnManagerPNames.MAX_CONNECTIONS_PER_ROUTE,
-//				new ConnPerRouteBean(30));
-//		params.setParameter(HttpProtocolParams.USE_EXPECT_CONTINUE, false);
-//		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-//		
 		ClientConnectionManager cm = new ThreadSafeClientConnManager(httpParams,
 				schemeRegistry);
 
