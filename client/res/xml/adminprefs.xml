@@ -6,10 +6,18 @@
 		android:summary="@string/serverPreferencesSummary"
 	>
 	
-	    	<EditTextPreference android:key="@string/meetingServerBaseUrlPreferenceName"
-			android:title="@string/meetingServerBaseUrlTitle" android:summary="@string/meetingServerBaseUrlSummary"
+	    <EditTextPreference 
+	        android:key="@string/meetingServerBaseUrlPreferenceName"
+			android:title="@string/meetingServerBaseUrlTitle" 
+			android:summary="@string/meetingServerBaseUrlSummary"
 			android:defaultValue="@string/meetingServerBaseUrlDefaultValue">
 		</EditTextPreference>
 	
+	    <CheckBoxPreference android:key="@string/sslTrustAllFlagPreferenceName"
+	        android:text="@string/sslTrustAllFlagTitle" 
+	        android:summaryOff="@string/sslTrustAllFlagSummaryOff"
+	        android:summaryOn="@string/sslTrustAllFlagSummaryOn"
+	    	android:defaultValue="@string/sslTrustAllFlagDefaultValue">
+	    </CheckBoxPreference>	    
 	</PreferenceCategory>
 </PreferenceScreen>
