@@ -10,9 +10,7 @@ import org.apache.http.protocol.HTTP;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
@@ -20,26 +18,23 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
     private Context context;
     private String submitMeetingParams;
 	private Credentials credentials;
-	private SharedPreferences prefs;
 
 	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials) {
         this.context = context;
         this.submitMeetingParams = submitMeetingParams;
         this.credentials = credentials;
-	    prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
 	@Override
 	protected String doInBackground(Void... arg0) {
 		String errorMessage = credentials.validateCredentialsFromServer(context);
-		
 		if (errorMessage != null) {
 			return String.format(context.getString(R.string.validateCredentialsError), errorMessage);
 		}
 
 		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
-			String baseUrl = getSaveMeetingBaseUrl();
+			String baseUrl = HttpUtil.getRequestUrl(context, R.string.save_meeting_url_path);
 			HttpPost request = new HttpPost(baseUrl);
 			
 	        request.addHeader("Authorization", "Basic " + credentials.getBasicAuthorizationHeader());
@@ -47,6 +42,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 			StringEntity se = new StringEntity(submitMeetingParams);  
 			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
 			request.setEntity(se);
+			
 			HttpResponse response = client.execute(request);
 	        int statusCode = response.getStatusLine().getStatusCode();
 	        if (statusCode != HttpStatus.SC_OK) {
@@ -57,19 +53,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 		} finally {
 			client.getConnectionManager().shutdown();  
 		}
-
 		return null;
-	}
-	
-	private String getSaveMeetingBaseUrl() {
-		String defaultServerBase = context.getString(R.string.meetingServerBaseUrlDefaultValue);			
-		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
-		
-		StringBuilder baseUrl = new StringBuilder();
-		baseUrl.append(serverBaseUrl);
-		baseUrl.append(context.getString(R.string.save_meeting_url_path));
-		
-		return baseUrl.toString();
 	}
 	
 	@Override
