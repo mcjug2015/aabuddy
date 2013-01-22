@@ -11,6 +11,7 @@
     <string name="current_location_button">Fill with current location</string>
     <string name="validate_address_button">Validate Address</string>
     <string name="submit_button">Submit</string>
+    <string name="cancel_submit_button">Cancel Submit</string>
     <string name="search_within">Within:</string>
     <string name="search_button">Search</string>
     <string name="submitted">Submitted</string>
@@ -38,6 +39,7 @@
         
     <string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
     <string name="get_meeting_url_path">/aabuddy/get_meetings/</string>
+    <string name="find_similar_meetings_url_path">/aabuddy/find_similar/</string>
     <string name="create_user_url_path">/aabuddy/create_user</string>
     <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
     <string name="all_days_of_week">All</string>
@@ -57,11 +59,13 @@
     <string name="findMeeting">Find Meeting</string>
     <string name="submitMeeting">Add Meeting</string>
     <string name="meetingList">Meeting Search Results</string>
+    <string name="similarMeetingsList">Similar Meetings List</string>
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
     <string name="logout">Log Out</string>
     <string name="logoutConfirmationMsg">Are you sure you want to log out?</string>
-    <string name="Help">Help</string>    
+    <string name="Help">Help</string>  
+    <string name="similarMeetingMsg">The above list contains meetings that have already been added and maybe a duplicate to the meeting you are adding. Please cancel below if the meeting you are adding already exists.</string>
     
     <string-array name="daysOfWeek">
         <item>Sunday</item>
