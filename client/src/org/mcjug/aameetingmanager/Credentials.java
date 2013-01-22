@@ -4,13 +4,13 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.mcjug.aameetingmanager.util.Base64;
+import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
-import org.mcjug.aameetingmanager.util.Base64;
-import org.mcjug.aameetingmanager.util.HttpUtil;
 
 public class Credentials {
 	
@@ -78,7 +78,7 @@ public class Credentials {
 	public String validateCredentialsFromServer(Context context) {
 		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
-			String baseUrl = getValidateCredentialsBaseUrl(context);
+			String baseUrl = HttpUtil.getRequestUrl(context, R.string.validate_user_url_path);
 
 			HttpPost request = new HttpPost(baseUrl);
 	        request.addHeader("Authorization", "Basic " + getBasicAuthorizationHeader());
@@ -95,19 +95,6 @@ public class Credentials {
 		}
 
 		return null;
-	}
-
-	private static String getValidateCredentialsBaseUrl(Context context) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		StringBuilder baseUrl = new StringBuilder();
-		
-		String defaultServerBase = context.getString(R.string.meetingServerBaseUrlDefaultValue);			
-		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
-		
-		baseUrl.append(serverBaseUrl);
-		baseUrl.append(context.getString(R.string.validate_user_url_path));
-		
-		return baseUrl.toString();
 	}
 
 	public String getBasicAuthorizationHeader() {
