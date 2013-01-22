@@ -2,21 +2,24 @@ package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mcjug.aameetingmanager.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,6 +33,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -52,9 +57,10 @@ public class SubmitMeetingFragment extends Fragment {
 	private boolean isLocationValid = false;
 	private boolean isTimeValid = true;
 	
-	private SharedPreferences prefs;
 	private ProgressDialog progress;
 	private LocationResult locationResult;
+	private Credentials submitCredentials;
+	private String submitMeetingParams;
 	
 	private static final int BEFORE_SUBMIT_LOGIN_ACTIVITY 	= 1;
 	private static final int AFTER_SUBMIT_LOGIN_ACTIVITY 	= 2;
@@ -232,8 +238,11 @@ public class SubmitMeetingFragment extends Fragment {
 		
 	private void submitMeeting(Credentials credentials) {
 		try {
-			String submitMeetingParams = createSubmitMeetingJson();
-			new SubmitMeetingTask(getActivity(), submitMeetingParams, credentials).execute();					
+			submitMeetingParams = createSubmitMeetingJson();
+			submitCredentials = credentials;
+			
+			new FindSimilarMeetingsTask(getActivity(), submitMeetingParams, findSimilarMeetingsListener).execute();					
+			
 			submitMeetingButton.setEnabled(false);
 			nameEditText.requestFocus();
 			
@@ -250,8 +259,6 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
-		prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
-
 		locationResult =  new LocationResult() {
 			@Override
 			public void setLocation(Location location) {
@@ -348,8 +355,8 @@ public class SubmitMeetingFragment extends Fragment {
 			json.put("lat", address.getLatitude());
 			json.put("long",  address.getLongitude());
 		} else {
-		    // Log.d(TAG, "Address is invalid: " + address);
-			// throw new Exception("Address is invalid: " + address);
+		     Log.d(TAG, "Address is invalid: " + address);
+			 throw new Exception("Address is invalid: " + address);
 		}
 		
 		return json.toString();
@@ -358,4 +365,54 @@ public class SubmitMeetingFragment extends Fragment {
 	public void removeLoginInfo() {
 		Credentials.removeFromPreferences(getActivity());
 	}
+	
+	private FindSimilarMeetingsListener findSimilarMeetingsListener = new FindSimilarMeetingsListener() {
+		@Override
+		public void findSimilarMeetingsResults(JSONObject similarMeetingsJson) {
+			final Context context = getActivity();
+			try {
+				boolean success = similarMeetingsJson.getBoolean("success");
+				if (!success) {
+					Toast.makeText(context, similarMeetingsJson.getString("errorMsg"), Toast.LENGTH_LONG).show();				
+					return;
+				}
+				
+				JSONArray meetingListJson = similarMeetingsJson.getJSONArray("meetings");
+				if (meetingListJson.length() > 0) {
+					LayoutInflater layoutInflater = LayoutInflater.from(context);
+					View view = layoutInflater.inflate(R.layout.similar_meetings_dialog, null);		    
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setTitle(context.getString(R.string.similarMeetingsList));
+					builder.setView(view);
+					
+					ListView listView = (ListView)view.findViewById(R.id.similarMeetingList);
+					SimpleAdapter adapter = MeetingListUtil.getListAdapter(context, meetingListJson.toString());
+					listView.setAdapter(adapter);
+					
+					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials).execute();
+							dialog.dismiss();
+						}
+					});
+
+					builder.setNegativeButton(getString(R.string.cancel_submit_button), new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+						}
+					});
+					
+					builder.create().show();
+				} else {
+					new SubmitMeetingTask(context, submitMeetingParams, submitCredentials).execute();					
+				}
+			} catch (Exception ex) {
+				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();				
+			}
+		}
+	};
+	
 }
