@@ -1,17 +1,14 @@
 package org.mcjug.aameetingmanager;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
-import org.json.JSONArray;
-import org.json.JSONObject;
+import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -32,21 +29,10 @@ import android.widget.Spinner;
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
 
-	private static final String NAME = "name";
-	private static final String DESCRIPTION = "description";
-	private static final String DAY_OF_WEEK = "day_of_week";
-	private static final String START_TIME = "start_time";
-	private static final String END_TIME = "end_time";
-	private static final String TIME_RANGE = "time_range";
-	private static final String ADDRESS = "address";
-	private static final String DISTANCE = "distance";
 	private static final String LATITUDE = "lat";
 	private static final String LONGITUDE = "long";
 	
-    private static final String[] FROM = new String[] {NAME,  DAY_OF_WEEK, TIME_RANGE, ADDRESS, DISTANCE, DESCRIPTION};
-    private static final int[] TO = new int[] {R.id.meetingName, R.id.meetingDay, R.id.meetingTime, R.id.meetingAddress, R.id.meetingDistance, R.id.meetingDescription};
-
-	private SharedPreferences prefs;
+ 	private SharedPreferences prefs;
     private String[] sortOrderValues;    
 	
 	@Override
@@ -103,8 +89,7 @@ public class MeetingListFragment extends ListFragment {
 			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();			
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();	
 			
-			List<HashMap<String, String>> list = getListItems(app.getMeetingListData());
-			SimpleAdapter adapter = new SimpleAdapter(activity, list, R.layout.meeting_list_row, FROM, TO);
+			SimpleAdapter adapter = MeetingListUtil.getListAdapter(getActivity(), app.getMeetingListData());
 			setListAdapter(adapter);
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
@@ -122,59 +107,13 @@ public class MeetingListFragment extends ListFragment {
 		super.onResume();
 	}
 
-	protected List<HashMap<String, String>> getListItems(String meetingsJson) throws Exception {
-		List<HashMap<String, String>> list = new ArrayList<HashMap<String, String>>();
-		if (meetingsJson != null) {
-			Activity activity = getActivity();
-			JSONArray meetingListJson = new JSONArray(meetingsJson);
-			JSONObject meetingJson;
-			for (int i = 0; i < meetingListJson.length(); i++) {
-				meetingJson = meetingListJson.getJSONObject(i);
-				
-				HashMap<String, String> map = new HashMap<String, String>();
-				
-				map.put(NAME, meetingJson.getString(NAME));
-				map.put(DESCRIPTION, meetingJson.getString(DESCRIPTION));
-				
-				String[] daysOfWeek = activity.getResources().getStringArray(R.array.daysOfWeek);
-				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
-				map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
-					
-				String startTime = meetingJson.getString(START_TIME).substring(0, 5);
-				String endTime = meetingJson.getString(END_TIME).substring(0, 5);
-				map.put(TIME_RANGE, startTime + " - " +  endTime);
-				
-				map.put(ADDRESS, meetingJson.getString(ADDRESS));
-				
-				double distance = Double.parseDouble(meetingJson.getString(DISTANCE));
-				map.put(DISTANCE, String.format("%.2f", distance));
-				
-				double latitude = meetingJson.getDouble(LATITUDE);
-				map.put(LATITUDE, String.format("%.3f", latitude));
-				
-				double longitude = meetingJson.getDouble(LONGITUDE);
-				map.put(LONGITUDE, String.format("%.3f", longitude));
-				
-				list.add(map);
-			}
-		}
-		return list;
-	}
-	   
 	private void displayMap(HashMap<String, String> map) {
         String latitude = map.get(LATITUDE);
         String longitude = map.get(LONGITUDE);
         if (latitude != null && latitude.length() != 0 && longitude != null && longitude.length() != 0) {
+        	
         	// Display a marker with the address at the latitude and longitude
         	String intentURI = "geo:" + latitude + ","+ longitude + "?z=17&q=" + latitude + "," + longitude;
-        	/*
-        	// Display a marker with the address from the server and other meeting information
-    		String intentURI = "geo:0,0?z=17&q=" + latitude + "," + longitude
-					+ "(" + map.get(ADDRESS) + " " + map.get(NAME) + " "
-					+ map.get(DAY_OF_WEEK) + " " + map.get(START_TIME) + " - "
-					+ map.get(END_TIME) + ")";
-    		*/
-        	
         	Uri geo = Uri.parse(intentURI);
             Intent geoMap = new Intent(Intent.ACTION_VIEW, geo);
             startActivity(geoMap);
