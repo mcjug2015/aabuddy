@@ -367,7 +367,6 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	private FindSimilarMeetingsListener findSimilarMeetingsListener = new FindSimilarMeetingsListener() {
-		@Override
 		public void findSimilarMeetingsResults(JSONObject similarMeetingsJson) {
 			final Context context = getActivity();
 			try {
@@ -391,7 +390,6 @@ public class SubmitMeetingFragment extends Fragment {
 					listView.setAdapter(adapter);
 					
 					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
-						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials).execute();
 							dialog.dismiss();
@@ -399,7 +397,6 @@ public class SubmitMeetingFragment extends Fragment {
 					});
 
 					builder.setNegativeButton(getString(R.string.cancel_submit_button), new DialogInterface.OnClickListener() {
-						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.cancel();
 						}
