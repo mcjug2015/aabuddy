@@ -214,7 +214,7 @@ public class FindMeetingFragment extends Fragment {
 		List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
 		for (String str: daysOfWeekSelections) {				
 			int idx = daysOfWeekAbbr.indexOf(str.trim());
-			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx)));
+			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
 
 		String addressName = addressEditText.getText().toString();
