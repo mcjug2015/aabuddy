@@ -39,6 +39,8 @@
         
         <activity android:name=".RegisterFragmentActivity" android:label="@string/registrationActivityTitle" />
         
+        <activity android:name=".HelpFragmentActivity" android:label="@string/helpActivityTitle" />
+        
     </application>
 
 </manifest>

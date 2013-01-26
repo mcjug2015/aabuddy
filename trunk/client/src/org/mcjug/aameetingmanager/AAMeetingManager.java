@@ -56,7 +56,8 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		ImageView helpImageView = (ImageView)findViewById(R.id.helpImageView);
 		helpImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				//TODO:  Bob and Sheng-Feng to implement click on help image
+				startActivity(new Intent(getApplicationContext(), HelpFragmentActivity.class)
+        		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
 		
