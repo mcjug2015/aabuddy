@@ -83,7 +83,7 @@ public class MeetingListUtil {
 				
 				String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeek);
 				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
-				map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek]);
+				map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek - 1]);
 					
 				String startTime = meetingJson.getString(START_TIME).substring(0, 5);
 				String endTime = meetingJson.getString(END_TIME).substring(0, 5);
