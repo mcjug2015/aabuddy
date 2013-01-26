@@ -1,6 +1,6 @@
 package org.mcjug.aameetingmanager;
 
-import org.mcjug.aameetingmanager.help.HelpListAdapter;
+import org.mcjug.aameetingmanager.HelpListAdapter;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
