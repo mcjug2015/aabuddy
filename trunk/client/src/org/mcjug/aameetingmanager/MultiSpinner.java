@@ -100,6 +100,16 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		setAdapter(adapter);
 	}
 
+	public int getNumSelected() {
+		int numSelected = 0;
+		for (int i = 0; i < selected.length; i++) {
+			if (selected[i]) {
+				numSelected++;
+			}	
+	    }
+		return numSelected;
+	}
+	
 	public interface MultiSpinnerListener {
 		public void onItemsSelected(boolean[] selected);
 	}
