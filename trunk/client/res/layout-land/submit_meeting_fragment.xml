@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/submitMeetingDayOfWeekTextView"
                 android:layout_alignLeft="@+id/submitMeetingEndTimeButton"
-                android:entries="@array/daysOfWeek" />
+                android:entries="@array/daysOfWeekLong" />
         </RelativeLayout>
 
         <RelativeLayout
