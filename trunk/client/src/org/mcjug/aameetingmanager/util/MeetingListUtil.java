@@ -80,8 +80,8 @@ public class MeetingListUtil {
 				
 				map.put(NAME, meetingJson.getString(NAME));
 				map.put(DESCRIPTION, meetingJson.getString(DESCRIPTION));
-				
-				String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeek);
+			
+				String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
 				int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
 				map.put(DAY_OF_WEEK, daysOfWeek[dayOfWeek - 1]);
 					
