@@ -12,7 +12,6 @@ public class HelpFragmentActivity extends SherlockFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		setTheme(com.actionbarsherlock.R.style.Theme_Sherlock_Light);
 		setContentView(R.layout.help_activity);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
