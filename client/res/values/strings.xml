@@ -131,7 +131,7 @@
         <item>description</item>
     </string-array>    
 	<string name="loginActivityTitle">Login</string>
-	<string name="loginText">Login to submit a meeting</string>
+	<string name="loginText">Login to Add a Meeting</string>
 	<string name="emailAddressText">Email Address:</string>
 	<string name="passwordText">Password:</string>
 	<string name="confirmPasswordText">Confirm Password:</string>
