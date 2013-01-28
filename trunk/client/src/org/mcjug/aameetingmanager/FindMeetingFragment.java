@@ -104,7 +104,7 @@ public class FindMeetingFragment extends Fragment {
 		});
 
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
-		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeek));
+		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
 
 		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
@@ -211,9 +211,17 @@ public class FindMeetingFragment extends Fragment {
 			daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
 	    } 
 		
-		List<String> daysOfWeekAbbr = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekAbbr));
+		List<String> daysOfWeek;
+		if (daysOfWeekSelections.length == 1) {
+			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
+		} else if (daysOfWeekSelections.length == 2 || daysOfWeekSelections.length == 3) {
+			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekMedium));
+		} else {
+			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekShort));
+		}	
+		
 		for (String str: daysOfWeekSelections) {				
-			int idx = daysOfWeekAbbr.indexOf(str.trim());
+			int idx = daysOfWeek.indexOf(str.trim());
 			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
 
