@@ -9,6 +9,7 @@ AABUDDY_API.register(MeetingResource())
 urlpatterns = patterns('',
     url(r'^api/', include(AABUDDY_API.urls)),
     url(r'^get_meetings', 'aabuddy.views.get_meetings_within_distance'),
+    url(r'^get_meeting_by_id', 'aabuddy.views.get_meeting_by_id'),
     url(r'^save_meeting', 'aabuddy.views.save_meeting'),
     url(r'^create_user', 'aabuddy.views.create_user'),
     url(r'^validate_user_creds', 'aabuddy.views.validate_user_creds'),

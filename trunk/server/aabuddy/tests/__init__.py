@@ -1,0 +1,1 @@
+'''aabuddy tests package'''

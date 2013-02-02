@@ -106,7 +106,10 @@ def temp_meeting_to_json_obj(meeting):
     json_obj['internal_type'] = meeting.internal_type
     json_obj['lat'] = meeting.geo_location.y
     json_obj['long'] = meeting.geo_location.x
-    json_obj['distance'] = meeting.distance.mi
+    try:
+        json_obj['distance'] = meeting.distance.mi
+    except:
+        json_obj['distance'] = 0
     json_obj['creator'] = meeting.creator.username
     json_obj['created_date'] = meeting.created_date.isoformat()
     return json_obj
@@ -153,6 +156,16 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
         raise ValueError("You must pass in both an offset and a limit, or neither of them.")
     
     return (pre_offset_count, meetings)
+
+
+def get_meeting_by_id(request):
+    if request.method == 'GET':
+        meeting_id = request.GET.get('meeting_id', None)
+        retval_obj = {'meta': {'total_count': 1, 'current_count': 1}, 'objects': []}
+        retval_obj['objects'].append(temp_meeting_to_json_obj(Meeting.objects.get(pk = meeting_id)))
+        return HttpResponse(content=json.dumps(retval_obj))
+    else:
+        return HttpResponse(content="You must use GET to retrieve meetings", status=400)
 
 
 def get_meetings_within_distance(request):
@@ -291,7 +304,7 @@ def find_similar(request):
                                                   start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
                                                   end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
                                                   end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
-        similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=0.1)))
+        similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=1)))
         similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
         similar_meetings = similar_meetings[0:3]
         retval_obj = {'meta': {'total_count': len(similar_meetings)}, 'objects': []}
