@@ -1,5 +1,10 @@
 package org.mcjug.aameetingmanager;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpPost;
@@ -45,7 +50,15 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 			
 			HttpResponse response = client.execute(request);
 	        int statusCode = response.getStatusLine().getStatusCode();
-	        if (statusCode != HttpStatus.SC_OK) {
+	        if (statusCode == HttpStatus.SC_OK) {
+	    		try {
+  	    			String paramStr = "meeting_id=" + getMeetingId(response);
+	    			FindMeetingTask findMeetingTask = new FindMeetingTask(context, paramStr, true);
+	    			findMeetingTask.execute();
+	    		} catch (Exception ex) {
+		        	return String.format(context.getString(R.string.submitMeetingError), ex);
+				}
+	        } else {	
 	        	return String.format(context.getString(R.string.submitMeetingError), response.getStatusLine().toString());
 	        }
 		} catch (Exception ex) {
@@ -56,13 +69,31 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 		return null;
 	}
 	
+	private String getMeetingId(HttpResponse response) throws Exception {
+		String id = null;
+		HttpEntity entity = response.getEntity();
+		if (entity != null) {
+			StringBuilder builder = new StringBuilder();
+			InputStream inputStream = entity.getContent();
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+				id = builder.toString();
+			} finally {
+				inputStream.close();
+			}
+		}		
+		return id;
+	}
+	
 	@Override
-	protected void onPostExecute(String result) {
-		super.onPostExecute(result);
-		if (result == null) {
-			Toast.makeText(context, context.getString(R.string.submitMeetingSuccess), Toast.LENGTH_LONG).show();
-		} else {	
-			Toast.makeText(context, result, Toast.LENGTH_LONG).show();
+	protected void onPostExecute(String errorMsg) {
+		super.onPostExecute(errorMsg);
+		if (errorMsg != null) {	
+			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
 		}
 	}
 }
