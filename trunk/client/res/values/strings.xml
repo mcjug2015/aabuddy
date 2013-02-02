@@ -38,8 +38,10 @@
     <string name="sslTrustAllFlagDefaultValue">true</string>
         
     <string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
-    <string name="get_meeting_url_path">/aabuddy/get_meetings/</string>
+    <string name="get_meetings_url_path">/aabuddy/get_meetings/</string>
+    <string name="get_meeting_by_id_url_path">/aabuddy/get_meeting_by_id/</string>
     <string name="find_similar_meetings_url_path">/aabuddy/find_similar/</string>
+    
     <string name="create_user_url_path">/aabuddy/create_user</string>
     <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
     <string name="all_days_of_week">All</string>
