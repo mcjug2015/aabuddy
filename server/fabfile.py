@@ -15,8 +15,13 @@ env.user = 'aabuddy'
 env.reject_unknown_hosts = False
 env.mysql_super_user = 'root'
 
-
 # environments
+def local_machine():
+    ''' use the mac '''
+    ''' start postgres '''
+    ''' sudo -u postgres /Library/PostgreSQL/9.1/bin/pg_ctl -D /Library/PostgreSQL/9.1/data -l /Users/vsemonov/Desktop/postgres.log  start '''
+
+
 def localvm():
     "Use a local vmware instance"
     env.hosts = ['127.0.0.1:2222'] # replace by the one appropriate for you
@@ -196,12 +201,10 @@ def setup():
             run('mkdir -m a+w logs; mkdir releases; mkdir shared; mkdir backup;', pty=True)
             run('cd releases; ln -s . current; ln -s . previous;', pty=True)
 
-
 def deploy_workingenv():
     env.release = time.strftime('%Y%m%d%H%M%S')
     upload_local_archive()
     _deploy_release()
-
 
 def _deploy_release():
     """
@@ -264,6 +267,13 @@ def symlink_current_release():
     with cd(env.path):
         run('rm releases/previous; mv releases/current releases/previous;', pty=True)
         run('ln -s %(release)s releases/current' % env, pty=True)
+
+def remote_test():
+    require('prj_name')
+    require('path')
+    with cd('%(path)s/releases/current/%(prj_name)s' % env):
+        run('mkdir -p reports')
+        run('%(path)s/local-python/bin/python manage.py test --settings=settings --verbosity=2 --with-xunit --xunit-file=reports/nosetests.xml --cover-package=aabuddy --cover-html --cover-erase --cover-html-dir=reports/coverage' % env)
 
 
 def migrate():
