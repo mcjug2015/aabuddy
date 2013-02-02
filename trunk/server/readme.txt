@@ -84,6 +84,10 @@ The returned json object looks like this:
 total_count is the number of meetings you would have gotten back if didn't pass in a limit and an offset
 current_count is the number of meetings currently in the "objects" list(with limit and offset applied if you passed them in) 
 
+Find meeting by db id:
+http://localhost:8888/aabuddy/get_meeting_by_id?meeting_id=1
+returns same json as above with a single meeting in the "objects"
+
 
 Find meetings similar to the one you submit via post
 Rules - no authentication needed.
