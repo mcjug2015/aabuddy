@@ -1,11 +1,13 @@
 package org.mcjug.aameetingmanager;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,11 +40,19 @@ public class LoginFragment extends Fragment {
 				String password = passwordEditText.getText().toString();
 
 				//hide keyboard
-				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				FragmentActivity activity = getActivity();
+				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(emailAddressEditText.getWindowToken(), 0);
 
+				//TODO:  Check for empty username/password
+				
+				//show progress indicator
+				ProgressDialog progressDialog = 
+					ProgressDialog.show(activity, activity.getString(R.string.loggingInProgressMsg), 
+							activity.getString(R.string.waitMsg));
+				
 				//Validate login success
-				new ValidateCredentialsTask(username, password).execute();
+				new ValidateCredentialsTask(username, password, progressDialog).execute();
             }
         });
 		
@@ -62,11 +72,13 @@ public class LoginFragment extends Fragment {
 		
 		private String username;
 		private String password;
+		private ProgressDialog progressDialog;
 		
-		public ValidateCredentialsTask(String username, String password) {
+		public ValidateCredentialsTask(String username, String password, ProgressDialog progressDialog) {
 			super();
 			this.username = username;
 			this.password = password;
+			this.progressDialog = progressDialog;
 		}
 
 		@Override
@@ -78,17 +90,19 @@ public class LoginFragment extends Fragment {
 		
 		@Override
 		protected void onPostExecute(String errorMessage) {
+			progressDialog.dismiss();
+			
 			if (errorMessage == null) {
 				//Save username/pwd if login succeeded
 				Credentials.saveToPreferences(getActivity(), username, password);
 
-				//TODO: Change to dialog?
 				Toast.makeText(getActivity().getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
 
 				getActivity().setResult(Activity.RESULT_OK);
 				getActivity().finish();
 
 			} else {
+				//TODO: Change to dialog that displays error message
 				Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
 			}
 		}
