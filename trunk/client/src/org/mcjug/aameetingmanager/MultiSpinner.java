@@ -52,12 +52,21 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		}
 		
 		String spinnerText;
-		if (someUnselected) {
+		if (someUnselected) {			
 			spinnerText = spinnerBuffer.toString();
-			if (spinnerText.length() > 2)
+			if (spinnerText.length() == 0) {
+				spinnerText = defaultText;
+			} else if (spinnerText.length() > 2) {
 				spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
+			}	
 		} else {
 			spinnerText = defaultText;
+		}
+		
+		if (spinnerText.equals(defaultText)) {
+			for (int i = 0; i < items.size(); i++) {
+				selected[i] = true;
+			}		
 		}
 		
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), 
