@@ -345,6 +345,16 @@ def validate_user_creds(request):
         return HttpResponse(status=401)
 
 
+@csrf_exempt
+def delete_my_meeting(request):
+    do_basic_auth(request)
+    meeting_id = request.GET.get('meeting_id')
+    meeting = Meeting.objects.get(pk = meeting_id)
+    if request.user.is_authenticated() and request.user.is_active and meeting.creator.username == request.user.username:
+        meeting.delete()
+        return HttpResponse(status=200)
+    
+
 def do_basic_auth(request, *args, **kwargs):
     from django.contrib.auth import authenticate, login
     if request.META.has_key('HTTP_AUTHORIZATION'):
