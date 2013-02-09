@@ -148,7 +148,8 @@
 	<string name="passwordText">Password:</string>
 	<string name="confirmPasswordText">Confirm Password:</string>
 	<string name="loginButton">Login</string>
-	
+	<string name="loggingInProgressMsg">Logging In</string>
+		
 	<string name="registrationActivityTitle">Registration</string>
 	<string name="registrationText">Haven\'t registered?</string>
 	<string name="registerButton">Register Now</string>
