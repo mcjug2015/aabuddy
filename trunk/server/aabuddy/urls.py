@@ -16,5 +16,6 @@ urlpatterns = patterns('',
     url(r'^change_password', 'aabuddy.views.change_password'),
     url(r'^reset_password', 'aabuddy.views.reset_password'),
     url(r'^send_reset_conf', 'aabuddy.views.send_reset_conf'),
-    url(r'^find_similar', 'aabuddy.views.find_similar')
+    url(r'^find_similar', 'aabuddy.views.find_similar'),
+    url(r'^delete_my_meeting', 'aabuddy.views.delete_my_meeting')
 )

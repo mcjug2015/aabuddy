@@ -22,6 +22,8 @@ $> fab localvm deploy_workingenv
 curl -v --user USERNAME:PASSWORD http://localhost:8888/aabuddy/validate_user_creds
 curl -v --user USERNAME:PASSWORD https://mcasg.org/aabuddy/validate_user_creds --insecure
 
+** delete a meeting created by a user you authenticate
+curl -v --user USERNAME:PASSWORD http://localhost:8888/aabuddy/delete_my_meeting?meeting_id=1
 
 ** test creating an inactive user with curl
 curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" http://localhost:8888/aabuddy/create_user
