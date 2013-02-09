@@ -233,6 +233,8 @@ public class SubmitMeetingFragment extends Fragment {
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		});
 
+		int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+		dayOfWeekSpinner.setSelection(dayOfWeek - 1);
 		return view;
 	}
 		
