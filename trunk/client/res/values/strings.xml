@@ -176,8 +176,8 @@
 	
 	<string name="validateCredentialsError">Could not validate username/password: %s</string>
 	<string name="registrationError">Registration Failed!  Please try again.  Error message:  %s</string>
-	<string name="registrationSuccessDialogTitle">Registration Succeed</string>
-	<string name="registrationSuccess">Look for email to complete your registration.</string>
+	<string name="registrationSuccessDialogTitle">Registration Success</string>
+	<string name="registrationSuccess">Please look for an email that will have instructions on how to complete your registration.</string>
 	<string name="passwordsDoNotMatchError">Passwords do not match.</string>
 	<string name="registeringMsg">Registering</string>
 	

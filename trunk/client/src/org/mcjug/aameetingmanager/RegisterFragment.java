@@ -80,7 +80,7 @@ public class RegisterFragment extends Fragment {
 					return;
 				}
 				
-				//TODO:  Password follows complexity rules
+				//TODO:  Check if password follows complexity rules
 				
 				if (!password.equals(confirmPassword)) {
 					
@@ -196,18 +196,27 @@ public class RegisterFragment extends Fragment {
 			
 			progressDialog.dismiss();
 			
-			FragmentActivity activity = getActivity();
+			final FragmentActivity activity = getActivity();
 			if (errorMessage != null) {
 				displayErrorMessageDialog(activity, R.string.registrationError, errorMessage);
 				return;
 			}
 			
-			displayAlertDialog(activity, R.string.registrationSuccessDialogTitle, activity.getString(R.string.registrationSuccess));
-			
-			//Go back to main activity
-			startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
-									.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+			builder.setTitle(R.string.registrationSuccessDialogTitle)
+				   .setMessage(R.string.registrationSuccess)
+				   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
 
+							//Go back to main activity
+							startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
+													.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+							activity.finish();
+						}
+					});
+			builder.show();		
 		}
 		
 		
