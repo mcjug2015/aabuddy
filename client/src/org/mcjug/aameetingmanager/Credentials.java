@@ -78,7 +78,7 @@ public class Credentials {
 	public String validateCredentialsFromServer(Context context) {
 		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
-			String baseUrl = HttpUtil.getRequestUrl(context, R.string.validate_user_url_path);
+			String baseUrl = HttpUtil.getSecureRequestUrl(context, R.string.validate_user_url_path);
 
 			HttpPost request = new HttpPost(baseUrl);
 	        request.addHeader("Authorization", "Basic " + getBasicAuthorizationHeader());

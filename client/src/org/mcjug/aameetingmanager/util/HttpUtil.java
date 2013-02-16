@@ -45,13 +45,24 @@ public class HttpUtil {
         
 	}
 	
-	public static String getRequestUrl(Context context, int requestUrlResourceId) {
+	public static String getSecureRequestUrl(Context context, int requestUrlResourceId) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		String defaultServerBase = context.getString(R.string.meetingServerBaseUrlDefaultValue);			
-		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerBaseUrlPreferenceName), defaultServerBase);
+		String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);			
+		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerSecureBaseUrlPreferenceName), defaultServerBase);
 		
 		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
 	}
+
+	public static String getUnsecureRequestUrl(Context context, int requestUrlResourceId) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);			
+		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerUnsecureBaseUrlPreferenceName), defaultServerBase);
+		
+		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
+		baseUrl.append(context.getString(requestUrlResourceId));
+		return baseUrl.toString();
+	}
+
 }
