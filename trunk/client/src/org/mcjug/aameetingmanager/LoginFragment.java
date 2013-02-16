@@ -1,8 +1,10 @@
 package org.mcjug.aameetingmanager;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -44,8 +46,18 @@ public class LoginFragment extends Fragment {
 				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(emailAddressEditText.getWindowToken(), 0);
 
-				//TODO:  Check for empty username/password
-				
+				if (username.equals("")) {
+					displayErrorMessageDialog(R.string.loginEmptyEmailAddress);
+					emailAddressEditText.requestFocus();
+					return;
+				}
+
+				if (password.equals("")) {
+					displayErrorMessageDialog(R.string.loginEmptyPassword);
+					passwordEditText.requestFocus();
+					return;
+				}
+
 				//show progress indicator
 				ProgressDialog progressDialog = 
 					ProgressDialog.show(activity, activity.getString(R.string.loggingInProgressMsg), 
@@ -66,6 +78,22 @@ public class LoginFragment extends Fragment {
 		
 		
 		return view;
+	}
+	
+	private void displayErrorMessageDialog(int errorMessageResId) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		
+		builder.setTitle(R.string.loginErrorDialogTitle)
+			   .setMessage(errorMessageResId)
+			   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		
+
+		builder.show();
 	}
 	
 	private class ValidateCredentialsTask extends AsyncTask<Void, String, String> {
@@ -96,16 +124,45 @@ public class LoginFragment extends Fragment {
 				//Save username/pwd if login succeeded
 				Credentials.saveToPreferences(getActivity(), username, password);
 
-				Toast.makeText(getActivity().getApplicationContext(), "Login Successful", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity().getApplicationContext(), R.string.loginSuccessMessage, Toast.LENGTH_SHORT).show();
 
 				getActivity().setResult(Activity.RESULT_OK);
 				getActivity().finish();
 
 			} else {
-				//TODO: Change to dialog that displays error message
-				Toast.makeText(getActivity().getApplicationContext(), "Login Failed", Toast.LENGTH_LONG).show();
+				displayLoginErrorMessage(errorMessage);
 			}
 		}
+		
+		private void displayLoginErrorMessage(String errorMessage) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			
+			String dialogMessage = getString(R.string.loginErrorMessage)
+				+ " " + errorMessage;
+			
+			builder.setTitle(R.string.loginErrorDialogTitle)
+				   .setMessage(dialogMessage)
+				   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					
+						public void onClick(DialogInterface dialog, int which) {
+							LoginFragment.this.clearLoginFields();
+							dialog.dismiss();
+						}
+					});
+
+			builder.show();
+		}
+	}
+	
+	private void clearLoginFields() {
+		View view = getView();
+		
+		EditText emailAddressEditText = (EditText)view.findViewById(R.id.loginEmailAddressEditText);
+		emailAddressEditText.setText("");
+		emailAddressEditText.requestFocus();
+
+		EditText passwordEditText = (EditText)view.findViewById(R.id.passwordEditText);
+		passwordEditText.setText("");
 	}
 
 }
