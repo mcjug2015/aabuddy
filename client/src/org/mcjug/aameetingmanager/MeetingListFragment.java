@@ -9,11 +9,13 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,7 +68,15 @@ public class MeetingListFragment extends ListFragment {
 							values.set(values.size() - 1, new BasicNameValuePair("order_by", sortOrderValues[itemPosition]));
 
 							String paramStr = URLEncodedUtils.format(values, "utf-8");
-							FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr);
+							
+							FragmentActivity activity = getActivity();
+
+							//show progress indicator
+							ProgressDialog progressDialog = 
+								ProgressDialog.show(activity, activity.getString(R.string.sortMeetingProgressMsg), 
+										activity.getString(R.string.waitMsg));
+			    			
+							FindMeetingTask findMeetingTask = new FindMeetingTask(activity, paramStr, progressDialog);
 							findMeetingTask.execute();
 						} catch (Exception ex) {
 							Log.d(TAG, "Error getting meetings: " + ex);

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -21,15 +22,17 @@ public class FindMeetingTask extends AsyncTask<Void, String, String> {
     private String meetingParams;
 	private SharedPreferences prefs;
 	private boolean searchById = false;
+	private ProgressDialog progressDialog;
 
-	public FindMeetingTask(Context context, String meetingParams) {
-		this(context, meetingParams, false);
+	public FindMeetingTask(Context context, String meetingParams, ProgressDialog progressDialog) {
+		this(context, meetingParams, false, progressDialog);
 	}
 	
-	public FindMeetingTask(Context context, String meetingParams, boolean searchById) {
+	public FindMeetingTask(Context context, String meetingParams, boolean searchById, ProgressDialog progressDialog) {
         this.context = context;
         this.meetingParams = meetingParams;
 	    this.searchById = searchById;
+	    this.progressDialog = progressDialog;
 	    prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 
@@ -69,6 +72,9 @@ public class FindMeetingTask extends AsyncTask<Void, String, String> {
 	@Override
 	protected void onPostExecute(String errorMsg) {
 		super.onPostExecute(errorMsg);
+		
+		progressDialog.dismiss();
+		
 		if (errorMsg != null) {
 			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();		
 		}
