@@ -38,7 +38,7 @@ public class FindMeetingTask extends AsyncTask<Void, String, String> {
 		HttpClient client = HttpUtil.createHttpClient(); 
 		try {  
 			int meetingUrlResourceId = (searchById) ? R.string.get_meeting_by_id_url_path : R.string.get_meetings_url_path;
-			String url = HttpUtil.getRequestUrl(context, meetingUrlResourceId) + "?" + meetingParams;
+			String url = HttpUtil.getUnsecureRequestUrl(context, meetingUrlResourceId) + "?" + meetingParams;
 		       
 			Editor editor = prefs.edit();
 			editor.putString(context.getString(R.string.meetingUrl), url);

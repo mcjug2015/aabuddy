@@ -63,6 +63,10 @@ public class RegisterFragment extends Fragment {
 				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
 				
+				//TODO:  Validate username/password input:
+				//1)  Username is not empty
+				//2)  Password is not empty and follows complexity rules
+				
 				if (!password.equals(confirmPassword)) {
 					
 					passwordEditText.setText(null);
@@ -70,6 +74,7 @@ public class RegisterFragment extends Fragment {
 					
 					setBorder(passwordEditText, confirmPasswordEditText);
 					
+					//TODO:  Change to dialog or inline error?
 					Toast.makeText(activity, activity.getString(R.string.passwordsDoNotMatchError), Toast.LENGTH_SHORT).show();
 					return;
 				}
@@ -112,7 +117,7 @@ public class RegisterFragment extends Fragment {
 		
 		@Override
 		protected Boolean doInBackground(Void... arg0) {
-			String url = HttpUtil.getRequestUrl(getActivity(), R.string.create_user_url_path);
+			String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.create_user_url_path);
 			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
 				HttpPost httpPost = new HttpPost(url);
@@ -148,10 +153,12 @@ public class RegisterFragment extends Fragment {
 			
 			FragmentActivity activity = getActivity();
 			if (!result) {
+				//TODO:  change to dialog or inline error
 				Toast.makeText(activity, activity.getString(R.string.registrationError), Toast.LENGTH_LONG).show();
 				return;
 			}
 			
+			//TODO:  change to dialog?
 			Toast.makeText(activity, activity.getString(R.string.registrationSuccess), Toast.LENGTH_LONG).show();
 			
 			//Go back to main activity

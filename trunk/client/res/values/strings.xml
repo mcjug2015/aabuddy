@@ -27,10 +27,14 @@
     <string name="adminPrefActivityTitle">Settings</string>
     <string name="serverPreferencesTitle">Server Preferences</string>
     <string name="serverPreferencesSummary">Configure the Meeting Server</string>
-    <string name="meetingServerBaseUrlPreferenceName">meetingServerBaseUrl</string>
-    <string name="meetingServerBaseUrlTitle">Meeting Server Base URL</string>
-    <string name="meetingServerBaseUrlSummary">Protocol, host name and port of meeting server</string>
-    <string name="meetingServerBaseUrlDefaultValue">http://mcasg.org</string>
+    <string name="meetingServerSecureBaseUrlPreferenceName">meetingServerSecureBaseUrl</string>
+    <string name="meetingServerSecureBaseUrlTitle">Meeting Server Secure Base URL</string>
+    <string name="meetingServerSecureBaseUrlSummary">Secure protocol, host name and port of meeting server</string>
+    <string name="meetingServerSecureBaseUrlDefaultValue">https://mcasg.org</string>
+    <string name="meetingServerUnsecureBaseUrlPreferenceName">meetingServerBaseUrl</string>
+    <string name="meetingServerUnsecureBaseUrlTitle">Meeting Server Unsecure Base URL</string>
+    <string name="meetingServerUnsecureBaseUrlSummary">Unsecure protocol, host name and port of meeting server</string>
+    <string name="meetingServerUnsecureBaseUrlDefaultValue">http://mcasg.org</string>
     <string name="sslTrustAllFlagPreferenceName">sslTrustAllFlag</string>
     <string name="sslTrustAllFlagTitle">Trust All Certificates?</string>
     <string name="sslTrustAllFlagSummaryOff">Self signed certificates will NOT be trusted.</string>
@@ -64,9 +68,14 @@
     <string name="similarMeetingsList">Similar Meetings List</string>
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
+    <string name="loginErrorDialogTitle">Login Failed!</string>
+    <string name="loginEmptyEmailAddress">Please enter in an email address.</string>
+    <string name="loginEmptyPassword">Please enter in a password.</string>
+    <string name="loginErrorMessage">Login incorrect.  Please try again.</string>
+    <string name="loginSuccessMessage">Login Successful</string>
     <string name="logout">Log Out</string>
     <string name="logoutConfirmationMsg">Are you sure you want to log out?</string>
-    <string name="Help">Help</string>  
+    <string name="Help">Help</string>
     <string name="similarMeetingMsg">The above list contains meetings that have already been added and maybe a duplicate to the meeting you are adding. Please cancel below if the meeting you are adding already exists.</string>
     <string name="nameRequiredMsg">Please enter a meeting name.</string>
     

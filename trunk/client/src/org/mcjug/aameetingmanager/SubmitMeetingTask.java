@@ -39,7 +39,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 
 		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
-			String baseUrl = HttpUtil.getRequestUrl(context, R.string.save_meeting_url_path);
+			String baseUrl = HttpUtil.getSecureRequestUrl(context, R.string.save_meeting_url_path);
 			HttpPost request = new HttpPost(baseUrl);
 			
 	        request.addHeader("Authorization", "Basic " + credentials.getBasicAuthorizationHeader());

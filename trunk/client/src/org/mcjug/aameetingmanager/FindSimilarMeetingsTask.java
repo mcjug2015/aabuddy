@@ -34,7 +34,7 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, JSONObject>
 		HttpClient client = HttpUtil.createHttpClient(); 
 		JSONObject jsonResponse = new JSONObject();
 		try {
-			String baseUrl = HttpUtil.getRequestUrl(context, R.string.find_similar_meetings_url_path);
+			String baseUrl = HttpUtil.getUnsecureRequestUrl(context, R.string.find_similar_meetings_url_path);
 			HttpPost request = new HttpPost(baseUrl);
 
 			StringEntity se = new StringEntity(submitMeetingParams);

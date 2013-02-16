@@ -7,12 +7,19 @@
 	>
 	
 	    <EditTextPreference 
-	        android:key="@string/meetingServerBaseUrlPreferenceName"
-			android:title="@string/meetingServerBaseUrlTitle" 
-			android:summary="@string/meetingServerBaseUrlSummary"
-			android:defaultValue="@string/meetingServerBaseUrlDefaultValue">
+	        android:key="@string/meetingServerSecureBaseUrlPreferenceName"
+			android:title="@string/meetingServerSecureBaseUrlTitle" 
+			android:summary="@string/meetingServerSecureBaseUrlSummary"
+			android:defaultValue="@string/meetingServerSecureBaseUrlDefaultValue">
 		</EditTextPreference>
-	
+
+	    <EditTextPreference 
+	        android:key="@string/meetingServerUnsecureBaseUrlPreferenceName"
+			android:title="@string/meetingServerUnsecureBaseUrlTitle" 
+			android:summary="@string/meetingServerUnsecureBaseUrlSummary"
+			android:defaultValue="@string/meetingServerUnsecureBaseUrlDefaultValue">
+		</EditTextPreference>
+	    	
 	    <CheckBoxPreference android:key="@string/sslTrustAllFlagPreferenceName"
 	        android:text="@string/sslTrustAllFlagTitle" 
 	        android:summaryOff="@string/sslTrustAllFlagSummaryOff"
