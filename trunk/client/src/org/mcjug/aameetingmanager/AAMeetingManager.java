@@ -73,6 +73,7 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		//toggle login/logout functionality
 		if (!credentials.isSet()) {
 			//show login button
+			loginInImageView.setImageResource(R.drawable.login);
 			loginTextView.setText(getString(R.string.login));
 			loginImageViewClickListener = new OnClickListener() {
 				public void onClick(View v) {
@@ -83,6 +84,7 @@ public class AAMeetingManager extends SherlockFragmentActivity
 			
 		} else {
 			//show logout button
+			loginInImageView.setImageResource(R.drawable.logout);
 			loginTextView.setText(getString(R.string.logout));
 			
 			loginImageViewClickListener = new OnClickListener() {
