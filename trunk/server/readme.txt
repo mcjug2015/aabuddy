@@ -28,14 +28,15 @@ curl -v --user USERNAME:PASSWORD https://localhost:8888/aabuddy/delete_my_meetin
 ** test creating an inactive user with curl
 curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" https://localhost:8888/aabuddy/create_user
 
-** test requesting a password reset for email for a user with curl
-curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" https://localhost:8888/aabuddy/send_reset_conf
-
 
 
 ** change user password, you must pass in valid existing username/password and use a POST. After that you can
 ** use validate_user_creds to verify that the change went through.
 curl -v --user victor.semenov@gmail.com:testpassword1 -H "Content-Type: application/json" -X POST -d "new_password=mooo" https://localhost:8888/aabuddy/change_password
+
+** test requesting a password reset for email for a user with curl
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" https://localhost:8888/aabuddy/send_reset_conf
+
 
 ** test uploading a meeting with curl:
 day_of_week goes from 1 to 7
