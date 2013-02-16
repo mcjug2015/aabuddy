@@ -13,8 +13,10 @@ import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -63,19 +65,33 @@ public class RegisterFragment extends Fragment {
 				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
 				imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
 				
-				//TODO:  Validate username/password input:
-				//1)  Username is not empty
-				//2)  Password is not empty and follows complexity rules
+				//Validate username/password input:
+				if (username.equals("")) {
+					displayErrorMessageDialog(activity, R.string.emptyEmailAddress);
+					emailAddressEditText.requestFocus();
+					return;
+				}
+				
+				//TODO:  Validate if username is email address?
+
+				if (password.equals("")) {
+					displayErrorMessageDialog(activity, R.string.emptyPassword);
+					passwordEditText.requestFocus();
+					return;
+				}
+				
+				//TODO:  Password follows complexity rules
 				
 				if (!password.equals(confirmPassword)) {
 					
 					passwordEditText.setText(null);
+					passwordEditText.requestFocus();
+
 					confirmPasswordEditText.setText(null);
 					
 					setBorder(passwordEditText, confirmPasswordEditText);
-					
-					//TODO:  Change to dialog or inline error?
-					Toast.makeText(activity, activity.getString(R.string.passwordsDoNotMatchError), Toast.LENGTH_SHORT).show();
+
+					displayErrorMessageDialog(activity, R.string.passwordsDoNotMatchError);
 					return;
 				}
 				
@@ -92,6 +108,7 @@ public class RegisterFragment extends Fragment {
 			public void setBorder(final EditText passwordEditText,
 					final EditText confirmPasswordEditText) {
 	        	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+	        		//TODO:  Change the error border so it looks better
 					passwordEditText.setBackground(getResources().getDrawable(R.drawable.error_border));
 					confirmPasswordEditText.setBackground(getResources().getDrawable(R.drawable.error_border));
 	        	}
@@ -101,8 +118,33 @@ public class RegisterFragment extends Fragment {
 		return view;
 	}
 	
+	private void displayErrorMessageDialog(Context context, int errorMessageResId) {
+		displayErrorMessageDialog(context, errorMessageResId, null);
+	}
+	
+	private void displayErrorMessageDialog(Context context, int errorMessageResId, String errorInstanceMessage) {
+		String dialogMessage = String.format(getString(errorMessageResId), errorInstanceMessage).toString();
+		
+		displayAlertDialog(context, R.string.registerErrorDialogTitle, dialogMessage);
+	}
+	
+	private void displayAlertDialog(Context context, int titleResId, String dialogMessage) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		
+		builder.setTitle(titleResId)
+			   .setMessage(dialogMessage)
+			   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+		
 
-	private class CreateUserTask extends AsyncTask<Void, Boolean, Boolean> {
+		builder.show();		
+	}
+
+	private class CreateUserTask extends AsyncTask<Void, String, String> {
 		private String username;
 		private String password;
 		private ProgressDialog progressDialog;
@@ -116,7 +158,9 @@ public class RegisterFragment extends Fragment {
 		
 		
 		@Override
-		protected Boolean doInBackground(Void... arg0) {
+		protected String doInBackground(Void... arg0) {
+			String errorMessage = null;
+			
 			String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.create_user_url_path);
 			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
@@ -129,37 +173,36 @@ public class RegisterFragment extends Fragment {
 				
 				HttpResponse httpResponse = client.execute(httpPost);
 				int statusCode = httpResponse.getStatusLine().getStatusCode();
-				if (statusCode == HttpStatus.SC_OK) {
-					return true;
+				if (statusCode != HttpStatus.SC_OK) {
+					errorMessage = httpResponse.getStatusLine().toString();
+					Log.d(TAG, "Response code for create user=" + statusCode + "; status line: " + errorMessage);
 				}
 			
-				Log.d(TAG, "Response code for create user=" + statusCode);
 			} catch (Exception e) {
 				Log.d(TAG, "Exception creating user", e);
+				errorMessage = "Unexpected error";
 			} finally {
 				client.getConnectionManager().shutdown();  
 			}
 	
 			
-			return false;
+			return errorMessage;
 		}
 
 
 		@Override
-		protected void onPostExecute(Boolean result) {
-			super.onPostExecute(result);
+		protected void onPostExecute(String errorMessage) {
+			super.onPostExecute(errorMessage);
 			
 			progressDialog.dismiss();
 			
 			FragmentActivity activity = getActivity();
-			if (!result) {
-				//TODO:  change to dialog or inline error
-				Toast.makeText(activity, activity.getString(R.string.registrationError), Toast.LENGTH_LONG).show();
+			if (errorMessage != null) {
+				displayErrorMessageDialog(activity, R.string.registrationError, errorMessage);
 				return;
 			}
 			
-			//TODO:  change to dialog?
-			Toast.makeText(activity, activity.getString(R.string.registrationSuccess), Toast.LENGTH_LONG).show();
+			displayAlertDialog(activity, R.string.registrationSuccessDialogTitle, activity.getString(R.string.registrationSuccess));
 			
 			//Go back to main activity
 			startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)

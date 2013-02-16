@@ -47,13 +47,13 @@ public class LoginFragment extends Fragment {
 				imm.hideSoftInputFromWindow(emailAddressEditText.getWindowToken(), 0);
 
 				if (username.equals("")) {
-					displayErrorMessageDialog(R.string.loginEmptyEmailAddress);
+					displayErrorMessageDialog(R.string.emptyEmailAddress);
 					emailAddressEditText.requestFocus();
 					return;
 				}
 
 				if (password.equals("")) {
-					displayErrorMessageDialog(R.string.loginEmptyPassword);
+					displayErrorMessageDialog(R.string.emptyPassword);
 					passwordEditText.requestFocus();
 					return;
 				}
