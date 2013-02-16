@@ -19,23 +19,23 @@ $> fab localvm deploy_workingenv
 
 
 ** make sure that a username and password are valid and the user is active(allowed to submit meetings)
-curl -v --user USERNAME:PASSWORD http://localhost:8888/aabuddy/validate_user_creds
+curl -v --user USERNAME:PASSWORD https://localhost:8888/aabuddy/validate_user_creds
 curl -v --user USERNAME:PASSWORD https://mcasg.org/aabuddy/validate_user_creds --insecure
 
 ** delete a meeting created by a user you authenticate
-curl -v --user USERNAME:PASSWORD http://localhost:8888/aabuddy/delete_my_meeting?meeting_id=1
+curl -v --user USERNAME:PASSWORD https://localhost:8888/aabuddy/delete_my_meeting?meeting_id=1 --insecure
 
 ** test creating an inactive user with curl
-curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" http://localhost:8888/aabuddy/create_user
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" https://localhost:8888/aabuddy/create_user
 
 ** test requesting a password reset for email for a user with curl
-curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" http://localhost:8888/aabuddy/send_reset_conf
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" https://localhost:8888/aabuddy/send_reset_conf
 
 
 
 ** change user password, you must pass in valid existing username/password and use a POST. After that you can
 ** use validate_user_creds to verify that the change went through.
-curl -v --user victor.semenov@gmail.com:testpassword1 -H "Content-Type: application/json" -X POST -d "new_password=mooo" http://localhost:8888/aabuddy/change_password
+curl -v --user victor.semenov@gmail.com:testpassword1 -H "Content-Type: application/json" -X POST -d "new_password=mooo" https://localhost:8888/aabuddy/change_password
 
 ** test uploading a meeting with curl:
 day_of_week goes from 1 to 7
@@ -47,8 +47,8 @@ day_of_week goes from 1 to 7
 
 internal_type valid values can be found in aabuddy/models.py/Meeting/INTERNAL_TYPE_CHOICES. They are case insensitive
 when submitted to the url below, so Submitted and submitted are both valid. If success and status 200, the returned number is the meeting id.
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD http://108.179.217.242/aabuddy/save_meeting
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 http://mcasg.org/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD https://108.179.217.242/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 https://mcasg.org/aabuddy/save_meeting
 
 For querying the day_of_week can be passed in with the following modifiers:
 __eq - day of week equals to
