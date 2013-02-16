@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 
@@ -22,11 +23,14 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, JSONObject>
 	private Context context;
 	private String submitMeetingParams;
 	private FindSimilarMeetingsListener listener;
+	private ProgressDialog progressDialog;
 
-	public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener) {
+	public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener,
+			ProgressDialog progressDialog) {
 		this.context = context;
 		this.submitMeetingParams = submitMeetingParams;
 		this.listener = listener;
+		this.progressDialog = progressDialog;
 	}
 
 	@Override
@@ -71,12 +75,13 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, JSONObject>
 	
 	@Override
 	protected void onPostExecute(JSONObject results) {
+		
 		if (listener != null) {
-			listener.findSimilarMeetingsResults(results);
+			listener.findSimilarMeetingsResults(results, progressDialog);
 		}
 	}
 
 	public interface FindSimilarMeetingsListener {
-		public void findSimilarMeetingsResults(JSONObject results);
+		public void findSimilarMeetingsResults(JSONObject results, ProgressDialog progressDialog);
 	}
 }
