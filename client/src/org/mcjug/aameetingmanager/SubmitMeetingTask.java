@@ -14,6 +14,7 @@ import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -23,11 +24,13 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
     private Context context;
     private String submitMeetingParams;
 	private Credentials credentials;
+	private ProgressDialog progressDialog;
 
-	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials) {
+	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials, ProgressDialog progressDialog) {
         this.context = context;
         this.submitMeetingParams = submitMeetingParams;
         this.credentials = credentials;
+        this.progressDialog = progressDialog;
 	}
 
 	@Override
@@ -52,8 +55,8 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 	        int statusCode = response.getStatusLine().getStatusCode();
 	        if (statusCode == HttpStatus.SC_OK) {
 	    		try {
-  	    			String paramStr = "meeting_id=" + getMeetingId(response);
-	    			FindMeetingTask findMeetingTask = new FindMeetingTask(context, paramStr, true);
+	    			String paramStr = "meeting_id=" + getMeetingId(response);
+	    			FindMeetingTask findMeetingTask = new FindMeetingTask(context, paramStr, true, progressDialog);
 	    			findMeetingTask.execute();
 	    		} catch (Exception ex) {
 		        	return String.format(context.getString(R.string.submitMeetingError), ex);
@@ -92,6 +95,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 	@Override
 	protected void onPostExecute(String errorMsg) {
 		super.onPostExecute(errorMsg);
+		
 		if (errorMsg != null) {	
 			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
 		}

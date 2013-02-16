@@ -21,6 +21,7 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -243,18 +244,23 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 		
 	private void submitMeeting(Credentials credentials) {
+		FragmentActivity activity = getActivity();
 		try {
 			submitMeetingParams = createSubmitMeetingJson();
 			submitCredentials = credentials;
 			
-			new FindSimilarMeetingsTask(getActivity(), submitMeetingParams, findSimilarMeetingsListener).execute();					
+			//show progress indicator
+			ProgressDialog progressDialog = 
+				ProgressDialog.show(activity, activity.getString(R.string.submitMeetingProgressMsg), 
+						activity.getString(R.string.waitMsg));
+			new FindSimilarMeetingsTask(activity, submitMeetingParams, findSimilarMeetingsListener, progressDialog).execute();					
 			
 			submitMeetingButton.setEnabled(false);
 			nameEditText.requestFocus();
 			
 		} catch (Exception ex) {
-        	String msg = String.format(getActivity().getString(R.string.submitMeetingError), ex);
-			Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+        	String msg = String.format(activity.getString(R.string.submitMeetingError), ex);
+			Toast.makeText(activity, msg, Toast.LENGTH_LONG).show();
 		}
 	} 
 
@@ -373,11 +379,12 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	private FindSimilarMeetingsListener findSimilarMeetingsListener = new FindSimilarMeetingsListener() {
-		public void findSimilarMeetingsResults(JSONObject similarMeetingsJson) {
+		public void findSimilarMeetingsResults(JSONObject similarMeetingsJson, final ProgressDialog progressDialog) {
 			final Context context = getActivity();
 			try {
 				boolean success = similarMeetingsJson.getBoolean("success");
 				if (!success) {
+					progressDialog.dismiss();
 					Toast.makeText(context, similarMeetingsJson.getString("errorMsg"), Toast.LENGTH_LONG).show();				
 					return;
 				}
@@ -397,8 +404,12 @@ public class SubmitMeetingFragment extends Fragment {
 					
 					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials).execute();
 							dialog.dismiss();
+
+							//show progress indicator
+							progressDialog.show();
+
+							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, progressDialog).execute();
 						}
 					});
 
@@ -407,10 +418,13 @@ public class SubmitMeetingFragment extends Fragment {
 							dialog.cancel();
 						}
 					});
-					
+
+					//close progress dialog before showing similar meetings dialog
+					progressDialog.dismiss();
+
 					builder.create().show();
 				} else {
-					new SubmitMeetingTask(context, submitMeetingParams, submitCredentials).execute();					
+					new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, progressDialog).execute();					
 				}
 			} catch (Exception ex) {
 				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();				
