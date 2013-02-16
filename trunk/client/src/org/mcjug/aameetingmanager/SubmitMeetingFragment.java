@@ -206,20 +206,24 @@ public class SubmitMeetingFragment extends Fragment {
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				
-				//hide keyboard
-				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
-				
-				Credentials credentials = Credentials.readFromPreferences(getActivity());
-				
-				if (!credentials.isSet()) {
-					//if no username and password, go to login screen
-					Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
-					loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-					getActivity().startActivityForResult(loginIntent, AFTER_SUBMIT_LOGIN_ACTIVITY);
-											
+				if (nameEditText.getText().toString().trim().length() > 0) {
+					//hide keyboard
+					InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+					imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
+					
+					Credentials credentials = Credentials.readFromPreferences(getActivity());
+					
+					if (!credentials.isSet()) {
+						//if no username and password, go to login screen
+						Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
+						loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+						getActivity().startActivityForResult(loginIntent, AFTER_SUBMIT_LOGIN_ACTIVITY);
+												
+					} else {
+						submitMeeting(credentials);
+					}
 				} else {
-					submitMeeting(credentials);
+					Toast.makeText(getActivity(), R.string.nameRequiredMsg, Toast.LENGTH_LONG).show();
 				}
 			}
 
