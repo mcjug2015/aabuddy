@@ -20,6 +20,7 @@ import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -128,7 +129,14 @@ public class FindMeetingFragment extends Fragment {
 		findMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
 				try {
-					FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), getFindMeetingParams());
+					FragmentActivity activity = getActivity();
+
+					//show progress indicator
+					ProgressDialog progressDialog = 
+						ProgressDialog.show(activity, activity.getString(R.string.findMeetingProgressMsg), 
+								activity.getString(R.string.waitMsg));
+	    			
+					FindMeetingTask findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), progressDialog);
 					findMeetingTask.execute();
 				} catch (Exception ex) {
 				    Log.d(TAG, "Error getting meetings: " + ex);
