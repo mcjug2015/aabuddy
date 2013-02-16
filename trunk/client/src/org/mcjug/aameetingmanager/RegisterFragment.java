@@ -30,7 +30,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 public class RegisterFragment extends Fragment {
 	private static final String TAG = RegisterFragment.class.getSimpleName();
