@@ -54,8 +54,9 @@
     <string name="sortingDefault">distance</string>
     <string name="meetingUrl">MEETING_URL</string>
     
-    <string name="submitMeetingError">Error submitting meeting: %s</string>
-    <string name="submitMeetingSuccess">Meeting has been submitted.</string>
+    <string name="submitMeetingProgressMsg">Adding Meeting</string>
+    <string name="submitMeetingError">Error adding meeting: %s</string>
+    <string name="submitMeetingSuccess">Meeting has been added.</string>
   
     <string name="locationNotFound">Not able to get current location. Please check if GPS is turned or you have a network data connection.</string>
     <string name="addressNotFound">Not able to get address from location. Please check for a network data connection.</string>
@@ -63,8 +64,10 @@
     <string name="waitMsg">Please wait&#8230;</string>
     
     <string name="findMeeting">Find Meeting</string>
+  	<string name="findMeetingProgressMsg">Finding Meetings</string>
     <string name="submitMeeting">Add Meeting</string>
     <string name="meetingList">Meeting Search Results</string>
+  	<string name="sortMeetingProgressMsg">Sorting Meetings</string>
     <string name="similarMeetingsList">Similar Meetings List</string>
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
