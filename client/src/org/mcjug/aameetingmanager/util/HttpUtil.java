@@ -1,5 +1,11 @@
 package org.mcjug.aameetingmanager.util;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
 import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.conn.scheme.PlainSocketFactory;
 import org.apache.http.conn.scheme.Scheme;
@@ -64,5 +70,23 @@ public class HttpUtil {
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
 	}
-
+	
+	public static String getContent(HttpResponse httpResponse) throws Exception {
+		StringBuilder responseStr = new StringBuilder();
+		HttpEntity entity = httpResponse.getEntity();
+		if (entity != null) {
+			InputStream inputStream = entity.getContent();
+			try {
+				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+				String line = null;
+				while ((line = reader.readLine()) != null) {
+					responseStr.append(line);
+				}
+			} finally {
+				inputStream.close();
+			}
+		}
+		
+		return responseStr.toString();	
+	}
 }
