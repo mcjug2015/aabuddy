@@ -81,6 +81,9 @@
     <string name="Help">Help</string>
     <string name="similarMeetingMsg">The above list contains meetings that have already been added and maybe a duplicate to the meeting you are adding. Please cancel below if the meeting you are adding already exists.</string>
     <string name="nameRequiredMsg">Please enter a meeting name.</string>
+    <string name="meetingAdded">Meeting Added</string>    
+    <string name="addAnotherMeetingButton">Add Another Meeting</string>
+    <string name="goToMainScreenButton">Go To Main Screen</string>
     
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
@@ -154,7 +157,8 @@
         <item>address</item>
         <item>name</item>
         <item>description</item>
-    </string-array>    
+    </string-array>
+       
 	<string name="loginActivityTitle">Login</string>
 	<string name="loginText">Login to Add a Meeting</string>
 	<string name="emailAddressText">Email Address:</string>
