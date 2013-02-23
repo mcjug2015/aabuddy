@@ -1,5 +1,7 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -8,35 +10,42 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
-public class FindSimilarMeetingsTask extends AsyncTask<Void, String, JSONObject> {
+public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meeting>> {
 	private final String TAG = getClass().getSimpleName();
 	private Context context;
 	private String submitMeetingParams;
 	private FindSimilarMeetingsListener listener;
 	private ProgressDialog progressDialog;
+	
+	private String errorMsg =  null;
+    private boolean isSuccess = true;
 
-	public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener,
-			ProgressDialog progressDialog) {
+	public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener) {
 		this.context = context;
 		this.submitMeetingParams = submitMeetingParams;
 		this.listener = listener;
-		this.progressDialog = progressDialog;
+        progressDialog = new ProgressDialog(context);        
+	}
+	
+	@Override
+	protected void onPreExecute() {
+		progressDialog.setTitle(context.getString(R.string.submitMeetingProgressMsg));
+		progressDialog.setMessage(context.getString(R.string.waitMsg));
+		progressDialog.show();
 	}
 
 	@Override
-	protected JSONObject doInBackground(Void... arg0) {
+	protected List<Meeting> doInBackground(Void... arg0) {
 		HttpClient client = HttpUtil.createHttpClient(); 
-		JSONObject jsonResponse = new JSONObject();
+		List<Meeting> meetings = null;
 		try {
 			String baseUrl = HttpUtil.getUnsecureRequestUrl(context, R.string.find_similar_meetings_url_path);
 			HttpPost request = new HttpPost(baseUrl);
@@ -48,40 +57,37 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, JSONObject>
 			HttpResponse response = client.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-			    JSONArray jsonMeetings = MeetingListUtil.getMeetingList(response);
-				jsonResponse.put("success", true);
-				jsonResponse.put("meetings", jsonMeetings);
+				meetings = MeetingListUtil.getMeetingList(context, response);
 			} else {
-				jsonResponse = getErrorResponse(statusLine.toString());
+				isSuccess = false;
+		    	errorMsg = statusLine.toString();
 			}
 		} catch (Exception ex) {
-			jsonResponse = getErrorResponse(ex.toString());
+			isSuccess = false;
+	    	errorMsg = ex.toString();
 		} finally {
 			client.getConnectionManager().shutdown();
 		}
 		
-		return jsonResponse;
+		return meetings;
 	}
 
-	private JSONObject getErrorResponse(String errorMsg) {
-		JSONObject jsonResponse = new JSONObject();
-		try {
-			jsonResponse.put("success", false);
-			jsonResponse.put("errorMsg", String.format(context.getString(R.string.submitMeetingError), errorMsg));
-		} catch (JSONException e) {
-		}
-		return jsonResponse;
-	}
-	
 	@Override
-	protected void onPostExecute(JSONObject results) {
+	protected void onPostExecute(List<Meeting> meetings) {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
+		}		
 		
-		if (listener != null) {
-			listener.findSimilarMeetingsResults(results, progressDialog);
+		if (isSuccess) {
+			if (listener != null) {
+				listener.findSimilarMeetingsResults(meetings);
+			}
+		} else {	
+			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();		
 		}
 	}
 
 	public interface FindSimilarMeetingsListener {
-		public void findSimilarMeetingsResults(JSONObject results, ProgressDialog progressDialog);
+		public void findSimilarMeetingsResults(List<Meeting> meetings);
 	}
 }
