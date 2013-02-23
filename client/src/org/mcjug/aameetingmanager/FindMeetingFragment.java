@@ -130,13 +130,7 @@ public class FindMeetingFragment extends Fragment {
 			public void onClick(View v) {
 				try {
 					FragmentActivity activity = getActivity();
-
-					//show progress indicator
-					ProgressDialog progressDialog = 
-						ProgressDialog.show(activity, activity.getString(R.string.findMeetingProgressMsg), 
-								activity.getString(R.string.waitMsg));
-	    			
-					FindMeetingTask findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), progressDialog);
+					FindMeetingTask findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams());
 					findMeetingTask.execute();
 				} catch (Exception ex) {
 				    Log.d(TAG, "Error getting meetings: " + ex);
@@ -259,6 +253,9 @@ public class FindMeetingFragment extends Fragment {
 		}
 		
 		params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
+
+		// params.add(new BasicNameValuePair("offset", "0"));
+		// params.add(new BasicNameValuePair("limit", "20"));
 
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
 	    Log.d(TAG, "Find meeting request params: " + paramStr);
