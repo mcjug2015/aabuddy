@@ -1,14 +1,15 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.SubmitMeetingTask.SubmitMeetingListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
-import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -35,7 +36,6 @@ import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -249,11 +249,7 @@ public class SubmitMeetingFragment extends Fragment {
 			submitMeetingParams = createSubmitMeetingJson();
 			submitCredentials = credentials;
 			
-			//show progress indicator
-			ProgressDialog progressDialog = 
-				ProgressDialog.show(activity, activity.getString(R.string.submitMeetingProgressMsg), 
-						activity.getString(R.string.waitMsg));
-			new FindSimilarMeetingsTask(activity, submitMeetingParams, findSimilarMeetingsListener, progressDialog).execute();					
+			new FindSimilarMeetingsTask(activity, submitMeetingParams, findSimilarMeetingsListener).execute();					
 			
 			submitMeetingButton.setEnabled(false);
 			nameEditText.requestFocus();
@@ -379,18 +375,10 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	private FindSimilarMeetingsListener findSimilarMeetingsListener = new FindSimilarMeetingsListener() {
-		public void findSimilarMeetingsResults(JSONObject similarMeetingsJson, final ProgressDialog progressDialog) {
+		public void findSimilarMeetingsResults(List<Meeting> similarMeetings) {
 			final Context context = getActivity();
 			try {
-				boolean success = similarMeetingsJson.getBoolean("success");
-				if (!success) {
-					progressDialog.dismiss();
-					Toast.makeText(context, similarMeetingsJson.getString("errorMsg"), Toast.LENGTH_LONG).show();				
-					return;
-				}
-				
-				JSONArray meetingListJson = similarMeetingsJson.getJSONArray("meetings");
-				if (meetingListJson.length() > 0) {
+				if (similarMeetings.size() > 0) {
 					LayoutInflater layoutInflater = LayoutInflater.from(context);
 					View view = layoutInflater.inflate(R.layout.similar_meetings_dialog, null);		    
 					
@@ -399,17 +387,13 @@ public class SubmitMeetingFragment extends Fragment {
 					builder.setView(view);
 					
 					ListView listView = (ListView)view.findViewById(R.id.similarMeetingList);
-					SimpleAdapter adapter = MeetingListUtil.getListAdapter(context, meetingListJson.toString());
+					MeetingAdapter adapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, similarMeetings);
 					listView.setAdapter(adapter);
 					
 					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.dismiss();
-
-							//show progress indicator
-							progressDialog.show();
-
-							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, progressDialog).execute();
+							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, submitMeetingListener).execute();
 						}
 					});
 
@@ -419,17 +403,59 @@ public class SubmitMeetingFragment extends Fragment {
 						}
 					});
 
-					//close progress dialog before showing similar meetings dialog
-					progressDialog.dismiss();
-
 					builder.create().show();
 				} else {
-					new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, progressDialog).execute();					
+					new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, submitMeetingListener).execute();					
 				}
 			} catch (Exception ex) {
 				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();				
 			}
 		}
 	};
+	
+	private SubmitMeetingListener submitMeetingListener = new SubmitMeetingListener() {
+		public void submitMeetingResults(Meeting meeting) {
+			final Context context = getActivity();
+			try {
+				if (meeting != null) {
+					LayoutInflater layoutInflater = LayoutInflater.from(context);
+					View view = layoutInflater.inflate(R.layout.submit_meeting_dialog, null);		    
+					
+					AlertDialog.Builder builder = new AlertDialog.Builder(context);
+					builder.setTitle(context.getString(R.string.meetingAdded));
+					builder.setView(view);
+					
+					List<Meeting> meetings = new ArrayList<Meeting>();
+					meetings.add(meeting);
+					
+					MeetingAdapter adapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, meetings);
+					ListView listView = (ListView)view.findViewById(R.id.submitMeetingList);
+					listView.setAdapter(adapter);
+					
+					builder.setPositiveButton(getString(R.string.addAnotherMeetingButton), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.dismiss();
+							nameEditText.setText("");
+							descriptionEditText.setText("");
+						}
+					});
+
+					builder.setNegativeButton(getString(R.string.goToMainScreenButton), new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog, int which) {
+							dialog.cancel();
+							
+							Intent intent = new Intent(getActivity(), AAMeetingManager.class);
+							intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+							startActivity(intent);
+						}
+					});
+
+					builder.create().show();
+				}
+			} catch (Exception ex) {
+				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();				
+			}
+		}
+	};	
 	
 }
