@@ -1,15 +1,12 @@
 package org.mcjug.aameetingmanager;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -25,17 +22,15 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
 
-	private static final String LATITUDE = "lat";
-	private static final String LONGITUDE = "long";
-	
  	private SharedPreferences prefs;
-    private String[] sortOrderValues;    
+    private String[] sortOrderValues; 
+    private MeetingAdapter listAdapter;
+    // private InfiniteScrollListener infiniteScrollListener;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,7 +41,14 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-
+		
+		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();	
+		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, app.getMeetings());
+	    getListView().setAdapter(listAdapter);
+		
+		// infiniteScrollListener = new InfiniteScrollListener(getActivity());
+		// getListView().setOnScrollListener(infiniteScrollListener);
+	 
  		try {
  	        MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
  	        prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -70,13 +72,9 @@ public class MeetingListFragment extends ListFragment {
 							String paramStr = URLEncodedUtils.format(values, "utf-8");
 							
 							FragmentActivity activity = getActivity();
-
-							//show progress indicator
-							ProgressDialog progressDialog = 
-								ProgressDialog.show(activity, activity.getString(R.string.sortMeetingProgressMsg), 
-										activity.getString(R.string.waitMsg));
+			    			String waitMsg = activity.getString(R.string.sortMeetingProgressMsg);
 			    			
-							FindMeetingTask findMeetingTask = new FindMeetingTask(activity, paramStr, progressDialog);
+							FindMeetingTask findMeetingTask = new FindMeetingTask(activity, paramStr, waitMsg, false);
 							findMeetingTask.execute();
 						} catch (Exception ex) {
 							Log.d(TAG, "Error getting meetings: " + ex);
@@ -98,18 +96,18 @@ public class MeetingListFragment extends ListFragment {
         try {
 			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();			
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();	
+			listAdapter.setMeetings(app.getMeetings());
 			
-			SimpleAdapter adapter = MeetingListUtil.getListAdapter(getActivity(), app.getMeetingListData());
-			setListAdapter(adapter);
+			// infiniteScrollListener.setLoading(false);
+			
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
         
-        ListView meetingListView = getListView();
+        ListView meetingListView = getListView();        
         meetingListView.setOnItemLongClickListener(new OnItemLongClickListener() {
             public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
-            	HashMap<String, String> map = (HashMap<String, String>) listView.getItemAtPosition(position);
-                displayMap(map);
+                displayMap((Meeting) listView.getItemAtPosition(position));
                 return false;
             }
         });
@@ -117,9 +115,9 @@ public class MeetingListFragment extends ListFragment {
 		super.onResume();
 	}
 
-	private void displayMap(HashMap<String, String> map) {
-        String latitude = map.get(LATITUDE);
-        String longitude = map.get(LONGITUDE);
+	private void displayMap(Meeting meeting) {
+        String latitude = meeting.getLatitude();
+        String longitude = meeting.getLongitude();
         if (latitude != null && latitude.length() != 0 && longitude != null && longitude.length() != 0) {
         	
         	// Display a marker with the address at the latitude and longitude
