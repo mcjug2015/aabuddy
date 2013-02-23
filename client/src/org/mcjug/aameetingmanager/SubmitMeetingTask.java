@@ -1,45 +1,57 @@
 package org.mcjug.aameetingmanager;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
 import org.mcjug.aameetingmanager.util.HttpUtil;
+import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
-public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
+public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
     private final String TAG = getClass().getSimpleName();
     private Context context;
     private String submitMeetingParams;
 	private Credentials credentials;
 	private ProgressDialog progressDialog;
+	private SubmitMeetingListener listener;
+	
+	private String errorMsg =  null;
+    private boolean isSuccess = true;
 
-	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials, ProgressDialog progressDialog) {
+	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials, SubmitMeetingListener listener) {
         this.context = context;
         this.submitMeetingParams = submitMeetingParams;
         this.credentials = credentials;
-        this.progressDialog = progressDialog;
+		this.listener = listener;
+        progressDialog = new ProgressDialog(context);       
+ 	}
+
+	@Override
+	protected void onPreExecute() {
+		progressDialog.setTitle(context.getString(R.string.submitMeetingProgressMsg));
+		progressDialog.setMessage(context.getString(R.string.waitMsg));
+		progressDialog.show();
 	}
 
 	@Override
-	protected String doInBackground(Void... arg0) {
+	protected Meeting doInBackground(Void... arg0) {
 		String errorMessage = credentials.validateCredentialsFromServer(context);
 		if (errorMessage != null) {
-			return String.format(context.getString(R.string.validateCredentialsError), errorMessage);
+			isSuccess = false;
+	    	errorMsg = String.format(context.getString(R.string.validateCredentialsError), errorMessage);
+			return null;
 		}
 
+		Meeting meeting = null;
 		DefaultHttpClient client = HttpUtil.createHttpClient(); 
 		try {
 			String baseUrl = HttpUtil.getSecureRequestUrl(context, R.string.save_meeting_url_path);
@@ -52,52 +64,39 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, String> {
 			request.setEntity(se);
 			
 			HttpResponse response = client.execute(request);
-	        int statusCode = response.getStatusLine().getStatusCode();
-	        if (statusCode == HttpStatus.SC_OK) {
-	    		try {
-	    			String paramStr = "meeting_id=" + getMeetingId(response);
-	    			FindMeetingTask findMeetingTask = new FindMeetingTask(context, paramStr, true, progressDialog);
-	    			findMeetingTask.execute();
-	    		} catch (Exception ex) {
-		        	return String.format(context.getString(R.string.submitMeetingError), ex);
-				}
-	        } else {	
-	        	return String.format(context.getString(R.string.submitMeetingError), response.getStatusLine().toString());
-	        }
+			StatusLine statusLine = response.getStatusLine();
+			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+			    meeting = MeetingListUtil.getMeetingList(context, response).get(0);
+			} else {
+				isSuccess = false;
+		    	errorMsg = statusLine.toString();
+			}
 		} catch (Exception ex) {
-        	return String.format(context.getString(R.string.submitMeetingError), ex);
+			isSuccess = false;
+	    	errorMsg = ex.toString();
 		} finally {
 			client.getConnectionManager().shutdown();  
 		}
-		return null;
-	}
-	
-	private String getMeetingId(HttpResponse response) throws Exception {
-		String id = null;
-		HttpEntity entity = response.getEntity();
-		if (entity != null) {
-			StringBuilder builder = new StringBuilder();
-			InputStream inputStream = entity.getContent();
-			try {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					builder.append(line);
-				}
-				id = builder.toString();
-			} finally {
-				inputStream.close();
-			}
-		}		
-		return id;
+		
+		return meeting;
 	}
 	
 	@Override
-	protected void onPostExecute(String errorMsg) {
-		super.onPostExecute(errorMsg);
-		
-		if (errorMsg != null) {	
-			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
+	protected void onPostExecute(Meeting meeting) {
+		if (progressDialog.isShowing()) {
+			progressDialog.dismiss();
 		}
+
+		if (isSuccess) {
+			if (listener != null) {
+				listener.submitMeetingResults(meeting);
+			}
+		} else {
+			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();		
+		}
+	}
+	
+	public interface SubmitMeetingListener {
+		public void submitMeetingResults(Meeting meeting);
 	}
 }
