@@ -26,10 +26,8 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 	private SharedPreferences prefs;
 	private ProgressDialog progressDialog;
 	private boolean appendResults = false;
-	
 	private String errorMsg =  null;
-    private boolean isSuccess = true;
-
+ 
 	public FindMeetingTask(Context context, String meetingParams) {
 		this(context, meetingParams, context.getString(R.string.waitMsg), false);
 	}
@@ -73,12 +71,10 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 			    meetings = MeetingListUtil.getMeetingList(context, response);
 			} else {
-				isSuccess = false;
 		    	errorMsg = statusLine.toString();
 			}
 
 		} catch (Exception e) {  
-			isSuccess = false;
 	    	errorMsg = "Error in find meeting: " + e;
 		} finally {
 			client.getConnectionManager().shutdown();  
@@ -93,7 +89,7 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 			progressDialog.dismiss();
 		}		
 		
-		if (isSuccess) {
+		if (errorMsg == null) {
 		    AAMeetingApplication app = (AAMeetingApplication) context.getApplicationContext();
 		    if (appendResults) {
 		    	app.addMeetings(meetings);
