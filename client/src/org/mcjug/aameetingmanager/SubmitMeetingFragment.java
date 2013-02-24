@@ -58,7 +58,8 @@ public class SubmitMeetingFragment extends Fragment {
 	private boolean isLocationValid = false;
 	private boolean isTimeValid = true;
 	
-	private ProgressDialog progress;
+	private ProgressDialog locationProgress;
+	private ProgressDialog submitProgressDialog;
 	private LocationResult locationResult;
 	private Credentials submitCredentials;
 	private String submitMeetingParams;
@@ -84,7 +85,7 @@ public class SubmitMeetingFragment extends Fragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-
+		
 		switch(requestCode) {
 			case BEFORE_SUBMIT_LOGIN_ACTIVITY:
 				if (resultCode != Activity.RESULT_OK) {
@@ -176,7 +177,7 @@ public class SubmitMeetingFragment extends Fragment {
 			public void onClick(View v) {
 				try {
 					Context context = getActivity();
-					progress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+					locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
 					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
 					locationTask.requestLocation();
 					
@@ -249,6 +250,9 @@ public class SubmitMeetingFragment extends Fragment {
 			submitMeetingParams = createSubmitMeetingJson();
 			submitCredentials = credentials;
 			
+			submitProgressDialog = ProgressDialog.show(activity, activity.getString(R.string.submitMeetingProgressMsg), 
+						activity.getString(R.string.waitMsg));
+
 			new FindSimilarMeetingsTask(activity, submitMeetingParams, findSimilarMeetingsListener).execute();					
 			
 			submitMeetingButton.setEnabled(false);
@@ -270,7 +274,7 @@ public class SubmitMeetingFragment extends Fragment {
 		locationResult =  new LocationResult() {
 			@Override
 			public void setLocation(Location location) {
-				progress.cancel();
+				locationProgress.cancel();
 				
 				if (location == null) {
 					location = LocationUtil.getLastKnownLocation(getActivity());
@@ -375,10 +379,18 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	private FindSimilarMeetingsListener findSimilarMeetingsListener = new FindSimilarMeetingsListener() {
-		public void findSimilarMeetingsResults(List<Meeting> similarMeetings) {
+		public void findSimilarMeetingsResults(List<Meeting> similarMeetings, String errorMsg) {
 			final Context context = getActivity();
+			if (errorMsg != null) {
+				submitProgressDialog.cancel();
+				Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
+				return;
+			}
+			
 			try {
 				if (similarMeetings.size() > 0) {
+					submitProgressDialog.cancel();
+
 					LayoutInflater layoutInflater = LayoutInflater.from(context);
 					View view = layoutInflater.inflate(R.layout.similar_meetings_dialog, null);		    
 					
@@ -392,7 +404,9 @@ public class SubmitMeetingFragment extends Fragment {
 					
 					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							dialog.dismiss();
+							submitProgressDialog = ProgressDialog.show(context, context.getString(R.string.submitMeetingProgressMsg), 
+									context.getString(R.string.waitMsg));
+							
 							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, submitMeetingListener).execute();
 						}
 					});
@@ -414,8 +428,15 @@ public class SubmitMeetingFragment extends Fragment {
 	};
 	
 	private SubmitMeetingListener submitMeetingListener = new SubmitMeetingListener() {
-		public void submitMeetingResults(Meeting meeting) {
+		public void submitMeetingResults(Meeting meeting, String errorMsg) {
+			submitProgressDialog.cancel();
+			
 			final Context context = getActivity();
+			if (errorMsg != null) {
+				Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();
+				return;
+			}
+			
 			try {
 				if (meeting != null) {
 					LayoutInflater layoutInflater = LayoutInflater.from(context);

@@ -21,32 +21,20 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
     private Context context;
     private String submitMeetingParams;
 	private Credentials credentials;
-	private ProgressDialog progressDialog;
-	private SubmitMeetingListener listener;
-	
+	private SubmitMeetingListener listener;	
 	private String errorMsg =  null;
-    private boolean isSuccess = true;
 
 	public SubmitMeetingTask(Context context, String submitMeetingParams, Credentials credentials, SubmitMeetingListener listener) {
         this.context = context;
         this.submitMeetingParams = submitMeetingParams;
         this.credentials = credentials;
 		this.listener = listener;
-        progressDialog = new ProgressDialog(context);       
  	}
-
-	@Override
-	protected void onPreExecute() {
-		progressDialog.setTitle(context.getString(R.string.submitMeetingProgressMsg));
-		progressDialog.setMessage(context.getString(R.string.waitMsg));
-		progressDialog.show();
-	}
 
 	@Override
 	protected Meeting doInBackground(Void... arg0) {
 		String errorMessage = credentials.validateCredentialsFromServer(context);
 		if (errorMessage != null) {
-			isSuccess = false;
 	    	errorMsg = String.format(context.getString(R.string.validateCredentialsError), errorMessage);
 			return null;
 		}
@@ -68,11 +56,9 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
 			    meeting = MeetingListUtil.getMeetingList(context, response).get(0);
 			} else {
-				isSuccess = false;
 		    	errorMsg = statusLine.toString();
 			}
 		} catch (Exception ex) {
-			isSuccess = false;
 	    	errorMsg = ex.toString();
 		} finally {
 			client.getConnectionManager().shutdown();  
@@ -83,20 +69,10 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
 	
 	@Override
 	protected void onPostExecute(Meeting meeting) {
-		if (progressDialog.isShowing()) {
-			progressDialog.dismiss();
-		}
-
-		if (isSuccess) {
-			if (listener != null) {
-				listener.submitMeetingResults(meeting);
-			}
-		} else {
-			Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();		
-		}
+		listener.submitMeetingResults(meeting, errorMsg);
 	}
 	
 	public interface SubmitMeetingListener {
-		public void submitMeetingResults(Meeting meeting);
+		public void submitMeetingResults(Meeting meeting, String errorMsg);
 	}
 }
