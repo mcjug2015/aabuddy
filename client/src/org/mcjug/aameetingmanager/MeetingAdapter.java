@@ -1,6 +1,5 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -15,8 +14,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 
 	public MeetingAdapter(Context context, int textViewResourceId, List<Meeting> meetings) {
 		super (context, textViewResourceId, meetings);
-		this.meetings = new ArrayList<Meeting>();
-		this.meetings.addAll(meetings);
+		this.meetings = meetings;
 	}
 
 	public void setMeetings(List<Meeting> meetings) {
