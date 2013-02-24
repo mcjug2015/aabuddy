@@ -1,6 +1,7 @@
 package org.mcjug.aameetingmanager;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -42,8 +43,11 @@ public class MeetingListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 		
-		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();	
-		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, app.getMeetings());
+		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();
+		List<Meeting> meetings = new ArrayList<Meeting>();
+		meetings.addAll(app.getMeetings());
+		
+		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, meetings);
 	    getListView().setAdapter(listAdapter);
 		
 		// infiniteScrollListener = new InfiniteScrollListener(getActivity());
