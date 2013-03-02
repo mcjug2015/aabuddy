@@ -98,6 +98,13 @@ Post the full meeting object.
 Currently similarity is determined via day_of_week, start_time and end_time +/- 10 minutes, and distance within 0.1 miles
 curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' http://mcasg.org/aabuddy/find_similar
 
+
+Post a meeting_not_there object:
+curl -v -H "Content-Type: application/json" -X POST -d 'meeting_id=8&unique_phone_id=TROLLOLOLOLOLO' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
+also works without a user and password
+curl -v -H "Content-Type: application/json" -X POST -d 'meeting_id=8&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/aabuddy/post_meeting_not_there
+
+
 VM u/p:
 root/reverse
 
