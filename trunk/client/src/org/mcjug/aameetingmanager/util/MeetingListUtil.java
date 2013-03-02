@@ -10,6 +10,8 @@ import org.mcjug.aameetingmanager.Meeting;
 import org.mcjug.aameetingmanager.R;
 
 import android.content.Context;
+import android.os.Build;
+import android.provider.Settings.Secure;
 import android.util.Log;
 
 public class MeetingListUtil {
@@ -64,5 +66,31 @@ public class MeetingListUtil {
 		}
 		
 		return meetings;
-	}	
+	}
+	
+	public static String getUniqueDeviceId(Context context) {
+		StringBuilder id = new StringBuilder();
+		
+		// 64-bit number as a hex string (15 characters)
+		String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID); 
+		if (androidId != null) {
+			id.append(androidId);
+		}
+		
+		// 15 digits
+		String deviceId = "35" + // we make this look like a valid IMEI
+				Build.BOARD.length() %10 + Build.BRAND.length() %10 +
+				Build.CPU_ABI.length() %10 + Build.DEVICE.length() %10 +
+				Build.DISPLAY.length() %10 + Build.HOST.length() %10 +
+				Build.ID.length() %10 + Build.MANUFACTURER.length() %10 +
+				Build.MODEL.length() %10 + Build.PRODUCT.length() %10 +
+				Build.TAGS.length() %10 + Build.TYPE.length() %10 +
+				Build.USER.length() %10 ;
+		
+		id.append(deviceId);
+		
+	    Log.d(TAG, "getUniqueDeviceId: " + id);
+
+		return id.toString();
+	}
 }
