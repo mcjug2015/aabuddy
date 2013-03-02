@@ -86,6 +86,8 @@
     <string name="meetingAdded">Meeting Added</string>    
     <string name="addAnotherMeetingButton">Add Another Meeting</string>
     <string name="goToMainScreenButton">Go To Main Screen</string>
+        
+    <item name="paginationSize" type="integer">20</item>
     
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
