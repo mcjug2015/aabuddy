@@ -45,9 +45,10 @@
     <string name="get_meetings_url_path">/aabuddy/get_meetings/</string>
     <string name="get_meeting_by_id_url_path">/aabuddy/get_meeting_by_id/</string>
     <string name="find_similar_meetings_url_path">/aabuddy/find_similar/</string>
-    
     <string name="create_user_url_path">/aabuddy/create_user</string>
     <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
+ 	<string name="reset_password_url_path">/aabuddy/send_reset_conf</string>
+ 	   
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
     <string name="sortBy">Sort By:</string>
@@ -72,6 +73,7 @@
     <string name="settings">Settings</string>
     <string name="login">Log In</string>
     <string name="loginErrorDialogTitle">Login Failed!</string>
+    <string name="invalidEmailAddress">Please enter a correctly formatted email address.</string>
     <string name="emptyEmailAddress">Please enter in an email address.</string>
     <string name="emptyPassword">Please enter in a password.</string>
     <string name="loginErrorMessage">Login incorrect.  Please try again.</string>
@@ -184,6 +186,16 @@
 	<string name="registrationSuccess">Please look for an email that will have instructions on how to complete your registration.</string>
 	<string name="passwordsDoNotMatchError">Passwords do not match.</string>
 	<string name="registeringMsg">Registering</string>
+	
+	<string name="resetPasswordActivityTitle">Reset Password</string>
+	<string name="resetPasswordText">Need to reset Password?</string>
+	<string name="resetPasswordButton">Reset Password</string>
+	<string name="resetPasswordErrorDialogTitle">Reset Password Error</string>
+	<string name="resetPasswordError">Reset Password Failed!  Please try again.  Error message:  %s</string>
+	<string name="resetPasswordSuccessDialogTitle">Reset Password Success</string>
+	<string name="resetPasswordSuccess">Please look for an email that will have instructions on how to finish resetting your password.</string>
+	<string name="resetPasswordMsg">Resetting Password</string>
+			
 	
 	<string name="helpActivityTitle">Help</string>
 	
