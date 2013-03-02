@@ -30,13 +30,11 @@ public class LocationFinder {
 	
 	private Context context;
 	private Handler handler;
-	private SharedPreferences prefs;
 	
 	public LocationFinder(Context context, LocationResult locationResult) {
 		this.locationResult = locationResult;
 		this.context = context;
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE); 
-		prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 	}
 	
 	public void requestLocation() {	
