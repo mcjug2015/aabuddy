@@ -71,7 +71,7 @@ public class MeetingListUtil {
 	public static String getUniqueDeviceId(Context context) {
 		StringBuilder id = new StringBuilder();
 		
-		// 64-bit number as a hex string (15 characters)
+		// 64-bit number as a hex string
 		String androidId = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID); 
 		if (androidId != null) {
 			id.append(androidId);
