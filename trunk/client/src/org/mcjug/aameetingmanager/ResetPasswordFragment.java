@@ -13,14 +13,12 @@ import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.ValidationUtil;
 
-import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -32,8 +30,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
-public class RegisterFragment extends Fragment {
-	private static final String TAG = RegisterFragment.class.getSimpleName();
+public class ResetPasswordFragment extends Fragment {
+	private static final String TAG = ResetPasswordFragment.class.getSimpleName();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -43,34 +41,31 @@ public class RegisterFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-	
+
 		// Inflate the layout for this fragment		
-		final View view = inflater.inflate(R.layout.register_fragment, container, false);		
-		final Button button = (Button)view.findViewById(R.id.registerButton);
+		final View view = inflater.inflate(R.layout.reset_password_fragment, container, false);		
+
+		final FragmentActivity activity = getActivity();
+		final EditText emailAddressEditText = (EditText)view.findViewById(R.id.emailAddressEditText);
+
+		//pre-populate email address if set in preferences
+		Credentials credentials = Credentials.readFromPreferences(activity);
+
+		String username = credentials.getUsername();
+		if (username != null) {
+			emailAddressEditText.setText(username);
+		}
+		
+		final Button button = (Button)view.findViewById(R.id.resetPasswordButton);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				
 				
-				final EditText emailAddressEditText = (EditText)view.findViewById(R.id.emailAddressEditText);
 				String username = emailAddressEditText.getText().toString();
 
-				final EditText passwordEditText = (EditText)view.findViewById(R.id.passwordEditText);
-				String password = passwordEditText.getText().toString();
-				
-				final EditText confirmPasswordEditText = (EditText)view.findViewById(R.id.confirmPasswordEditText);
-				String confirmPassword = confirmPasswordEditText.getText().toString();
-				
 				//hide keyboard
-				FragmentActivity activity = getActivity();
 				InputMethodManager imm = (InputMethodManager)activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
-				
-				//Validate username/password input:
-				if (username.equals("")) {
-					displayErrorMessageDialog(activity, R.string.emptyEmailAddress);
-					emailAddressEditText.requestFocus();
-					return;
-				}
+				imm.hideSoftInputFromWindow(emailAddressEditText.getWindowToken(), 0);
 				
 				if (!ValidationUtil.isEmailValid(username)) {
 					displayErrorMessageDialog(activity, R.string.invalidEmailAddress);
@@ -78,45 +73,15 @@ public class RegisterFragment extends Fragment {
 					return;
 				}
 
-				if (password.equals("")) {
-					displayErrorMessageDialog(activity, R.string.emptyPassword);
-					passwordEditText.requestFocus();
-					return;
-				}
-				
-				//TODO:  Check if password follows complexity rules
-				
-				if (!password.equals(confirmPassword)) {
-					
-					passwordEditText.setText(null);
-					passwordEditText.requestFocus();
-
-					confirmPasswordEditText.setText(null);
-					
-					setBorder(passwordEditText, confirmPasswordEditText);
-
-					displayErrorMessageDialog(activity, R.string.passwordsDoNotMatchError);
-					return;
-				}
-				
 				//show progress indicator
 				ProgressDialog progressDialog = 
-					ProgressDialog.show(activity, activity.getString(R.string.registeringMsg), activity.getString(R.string.waitMsg));
+					ProgressDialog.show(activity, activity.getString(R.string.resetPasswordMsg), activity.getString(R.string.waitMsg));
 
 				//submit create account
-				new CreateUserTask(username, password, progressDialog).execute();
+				new ResetPasswordTask(username, progressDialog).execute();
 				
             }
 
-			@TargetApi(16)
-			public void setBorder(final EditText passwordEditText,
-					final EditText confirmPasswordEditText) {
-	        	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-	        		//TODO:  Change the error border so it looks better
-					passwordEditText.setBackground(getResources().getDrawable(R.drawable.error_border));
-					confirmPasswordEditText.setBackground(getResources().getDrawable(R.drawable.error_border));
-	        	}
-	        }
         });
 		
 		return view;
@@ -148,15 +113,13 @@ public class RegisterFragment extends Fragment {
 		builder.show();		
 	}
 
-	private class CreateUserTask extends AsyncTask<Void, String, String> {
+	private class ResetPasswordTask extends AsyncTask<Void, String, String> {
 		private String username;
-		private String password;
 		private ProgressDialog progressDialog;
 		
-		public CreateUserTask(String username, String password, ProgressDialog progressDialog) {
+		public ResetPasswordTask(String username, ProgressDialog progressDialog) {
 			super();
 			this.username = username;
-			this.password = password;
 			this.progressDialog = progressDialog;
 		}
 		
@@ -165,14 +128,13 @@ public class RegisterFragment extends Fragment {
 		protected String doInBackground(Void... arg0) {
 			String errorMessage = null;
 			
-			String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.create_user_url_path);
+			String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.reset_password_url_path);
 			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
 				HttpPost httpPost = new HttpPost(url);
 				
-				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);  
+				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);  
 				nameValuePairs.add(new BasicNameValuePair("username", username));  
-				nameValuePairs.add(new BasicNameValuePair("password", password));  
 				httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));  
 				
 				HttpResponse httpResponse = client.execute(httpPost);
@@ -183,7 +145,7 @@ public class RegisterFragment extends Fragment {
 				}
 			
 			} catch (Exception e) {
-				Log.d(TAG, "Exception creating user", e);
+				Log.d(TAG, "Exception resetting password", e);
 				errorMessage = "Unexpected error";
 			} finally {
 				client.getConnectionManager().shutdown();  
@@ -202,13 +164,15 @@ public class RegisterFragment extends Fragment {
 			
 			final FragmentActivity activity = getActivity();
 			if (errorMessage != null) {
-				displayErrorMessageDialog(activity, R.string.registrationError, errorMessage);
+				displayErrorMessageDialog(activity, R.string.resetPasswordError, errorMessage);
 				return;
 			}
 			
+			Credentials.removeFromPreferences(activity);
+			
 			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-			builder.setTitle(R.string.registrationSuccessDialogTitle)
-				   .setMessage(R.string.registrationSuccess)
+			builder.setTitle(R.string.resetPasswordSuccessDialogTitle)
+				   .setMessage(R.string.resetPasswordSuccess)
 				   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 						
 						public void onClick(DialogInterface dialog, int which) {

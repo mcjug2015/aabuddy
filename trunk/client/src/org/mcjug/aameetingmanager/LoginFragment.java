@@ -76,6 +76,14 @@ public class LoginFragment extends Fragment {
             }
         });
 		
+		final Button resetPasswordButton = (Button)view.findViewById(R.id.resetPasswordButton);
+		resetPasswordButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity().getApplicationContext(), ResetPasswordFragmentActivity.class)
+										.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            }
+        });
+		
 		
 		return view;
 	}

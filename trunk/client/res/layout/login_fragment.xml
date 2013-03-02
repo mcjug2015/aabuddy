@@ -119,10 +119,36 @@
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:layout_marginLeft="10dp"
-		        android:layout_toRightOf="@+id/registrationTextView"
+		        android:layout_toRightOf="@id/registrationTextView"
 		        android:text="@string/registerButton" />
 	
 		</RelativeLayout>
 	    
+	    <RelativeLayout
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_marginTop="15dp"
+	    	android:paddingLeft="10dp"
+	    	android:paddingRight="10dp"
+	    >
+	    
+		    <TextView
+		        android:id="@+id/resetPasswordTextView"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:text="@string/resetPasswordText"
+		        android:layout_alignBaseline="@+id/resetPasswordButton"
+		    />
+	
+		    <Button
+		        android:id="@id/resetPasswordButton"
+		        style="?android:attr/buttonStyleSmall"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_marginLeft="10dp"
+		        android:layout_toRightOf="@id/resetPasswordTextView"
+		        android:text="@string/resetPasswordButton" />
+	
+		</RelativeLayout>
 	</LinearLayout>
 </ScrollView>
