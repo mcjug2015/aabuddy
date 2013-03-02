@@ -8,23 +8,21 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Meeting.creator'
-        db.add_column('aabuddy_meeting', 'creator',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='meetings', to=orm['auth.User'], null=True),
-                      keep_default=False)
-
-        # Adding field 'Meeting.created_date'
-        db.add_column('aabuddy_meeting', 'created_date',
-                      self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1982, 12, 22, 0, 0)),
-                      keep_default=False)
+        # Adding model 'MeetingNotThere'
+        db.create_table('aabuddy_meetingnotthere', (
+            ('id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('meeting', self.gf('django.db.models.fields.related.ForeignKey')(related_name='not_theres', to=orm['aabuddy.Meeting'])),
+            ('user', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='not_theres', null=True, on_delete=models.SET_NULL, to=orm['auth.User'])),
+            ('request_host', self.gf('django.db.models.fields.CharField')(max_length=200, null=True, blank=True)),
+            ('user_agent', self.gf('django.db.models.fields.CharField')(max_length=400, null=True, blank=True)),
+            ('unique_phone_id', self.gf('django.db.models.fields.CharField')(max_length=400, null=True, blank=True)),
+        ))
+        db.send_create_signal('aabuddy', ['MeetingNotThere'])
 
 
     def backwards(self, orm):
-        # Deleting field 'Meeting.creator'
-        db.delete_column('aabuddy_meeting', 'creator_id')
-
-        # Deleting field 'Meeting.created_date'
-        db.delete_column('aabuddy_meeting', 'created_date')
+        # Deleting model 'MeetingNotThere'
+        db.delete_table('aabuddy_meetingnotthere')
 
 
     models = {
@@ -42,10 +40,19 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'start_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(11, 30)'})
         },
+        'aabuddy.meetingnotthere': {
+            'Meta': {'object_name': 'MeetingNotThere'},
+            'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'meeting': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'not_theres'", 'to': "orm['aabuddy.Meeting']"}),
+            'request_host': ('django.db.models.fields.CharField', [], {'max_length': '200', 'null': 'True', 'blank': 'True'}),
+            'unique_phone_id': ('django.db.models.fields.CharField', [], {'max_length': '400', 'null': 'True', 'blank': 'True'}),
+            'user': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'not_theres'", 'null': 'True', 'on_delete': 'models.SET_NULL', 'to': "orm['auth.User']"}),
+            'user_agent': ('django.db.models.fields.CharField', [], {'max_length': '400', 'null': 'True', 'blank': 'True'})
+        },
         'aabuddy.userconfirmation': {
             'Meta': {'object_name': 'UserConfirmation'},
             'confirmation_key': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 12, 0, 0)'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 2, 0, 0)'}),
             'expiration_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'confirmations'", 'to': "orm['auth.User']"})

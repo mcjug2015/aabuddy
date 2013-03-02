@@ -1,6 +1,6 @@
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
-from aabuddy.models import Meeting, UserConfirmation
+from aabuddy.models import Meeting, UserConfirmation, MeetingNotThere
 import json
 from django.http import HttpResponse
 import logging
@@ -110,6 +110,10 @@ def temp_meeting_to_json_obj(meeting):
         json_obj['distance'] = meeting.distance.mi
     except:
         json_obj['distance'] = 0
+    try:
+        json_obj['id'] = meeting.pk
+    except:
+        json_obj['id'] = -1
     json_obj['creator'] = meeting.creator.username
     json_obj['created_date'] = meeting.created_date.isoformat()
     return json_obj
@@ -149,7 +153,7 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
         meetings = meetings.order_by(order_by_column)
 
     pre_offset_count = meetings.count()
-
+    logger.debug('Preoffset count is: %s' % pre_offset_count)
     if offset is not None and limit is not None:
         meetings = meetings[offset:limit]
     elif offset is not None or limit is not None:
@@ -161,8 +165,7 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
 def get_meeting_by_id(request):
     if request.method == 'GET':
         meeting_id = request.GET.get('meeting_id', None)
-        retval_obj = {'meta': {'total_count': 1, 'current_count': 1}, 'objects': []}
-        retval_obj['objects'].append(temp_meeting_to_json_obj(Meeting.objects.get(pk = meeting_id)))
+        retval_obj = get_json_obj_for_meetings([Meeting.objects.get(pk = meeting_id)], 1, 1)
         return HttpResponse(content=json.dumps(retval_obj))
     else:
         return HttpResponse(content="You must use GET to retrieve meetings", status=400)
@@ -185,10 +188,8 @@ def get_meetings_within_distance(request):
         (count, meetings) = get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                                           day_of_week_params, day_of_week_in_params,
                                           time_params, limit, offset, order_by)
-        retval_obj = {'meta': {'total_count': count}, 'objects': []}
-        for meeting in meetings:
-            retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
-        retval_obj['meta']['current_count'] = len(meetings)
+        logger.debug("Number of meetings in qs is: %s" % len(meetings))
+        retval_obj = get_json_obj_for_meetings(meetings, total_count=count)
         return HttpResponse(content=json.dumps(retval_obj))
     else:
         return HttpResponse(content="You must use GET to retrieve meetings", status=400)
@@ -294,6 +295,17 @@ def send_email_to_user(user, subject_text, message_text):
               message=message_text, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
+def get_json_obj_for_meetings(meetings, total_count=None, current_count=None):
+    if total_count is None:
+        total_count = len(meetings)
+    if current_count is None:
+        current_count = len(meetings)
+    retval_obj = {'meta': {'total_count': total_count, 'current_count': current_count}, 'objects': []}
+    for meeting in meetings:
+            retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
+    return retval_obj
+
+
 @csrf_exempt
 def find_similar(request):
     if request.method == 'POST':
@@ -306,10 +318,8 @@ def find_similar(request):
                                                   end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
         similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=1)))
         similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
-        similar_meetings = similar_meetings[0:3]
-        retval_obj = {'meta': {'total_count': len(similar_meetings)}, 'objects': []}
-        for meeting in similar_meetings:
-            retval_obj['objects'].append(temp_meeting_to_json_obj(meeting))
+        similar_meetings = similar_meetings[0:20]
+        retval_obj = get_json_obj_for_meetings(similar_meetings)
         return HttpResponse(content=json.dumps(retval_obj))
 
 
@@ -326,12 +336,33 @@ def save_meeting(request):
         meeting.creator = request.user
         meeting.save()
         logger.debug("meeting %s posted!" % meeting.name)
-        return HttpResponse(content=meeting.pk, status=200)
+        retval_obj = get_json_obj_for_meetings([Meeting.objects.get(pk = meeting.pk)], 1, 1)
+        return HttpResponse(content=json.dumps(retval_obj), status=200)
     elif request.method == 'POST':
         return HttpResponse(content="User not logged in or inactive", status=401)
     else:
         return HttpResponse(content="You must use POST to submit meetings", status=400)
 
+
+@csrf_exempt
+def post_meeting_not_there(request):
+    ''' save a meeting not there object '''
+    do_basic_auth(request)
+    logger.debug("request user is: " + request.user.username)
+    if request.method == 'POST':
+        notThere = MeetingNotThere()
+        if 'REMOTE_ADDR' in request.META:
+            notThere.request_host = request.META['REMOTE_ADDR']
+        if 'HTTP_USER_AGENT' in request.META:
+            notThere.user_agent = request.META['HTTP_USER_AGENT']
+        if request.user.is_authenticated() and request.user.is_active:
+            notThere.user = request.user
+        notThere.meeting = Meeting.objects.get(pk = request.POST.get('meeting_id', None))
+        notThere.unique_phone_id = request.POST.get('unique_phone_id', None)
+        notThere.save()
+        return HttpResponse(content=json.dumps({'not_there_id': notThere.pk}), status=200)
+    else:
+        return HttpResponse(content="You must use POST to submit not_theres", status=400)
 
 @csrf_exempt
 def validate_user_creds(request):
@@ -364,7 +395,7 @@ def do_basic_auth(request, *args, **kwargs):
             logger.debug("authmeth is good")
             auth = auth.strip().decode('base64')
             username, password = auth.split(':', 1)
-            logger.debug("about to try and authenticate " + username + " " + password)
+            logger.debug("about to try and authenticate " + username)
             user = authenticate(username=username, password=password)
             if user:
                 logger.debug("user %s authenticated!" % username)

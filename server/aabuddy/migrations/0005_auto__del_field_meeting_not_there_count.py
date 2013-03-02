@@ -8,23 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'Meeting.creator'
-        db.add_column('aabuddy_meeting', 'creator',
-                      self.gf('django.db.models.fields.related.ForeignKey')(related_name='meetings', to=orm['auth.User'], null=True),
-                      keep_default=False)
-
-        # Adding field 'Meeting.created_date'
-        db.add_column('aabuddy_meeting', 'created_date',
-                      self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(1982, 12, 22, 0, 0)),
-                      keep_default=False)
+        # Deleting field 'Meeting.not_there_count'
+        db.delete_column('aabuddy_meeting', 'not_there_count')
 
 
     def backwards(self, orm):
-        # Deleting field 'Meeting.creator'
-        db.delete_column('aabuddy_meeting', 'creator_id')
-
-        # Deleting field 'Meeting.created_date'
-        db.delete_column('aabuddy_meeting', 'created_date')
+        # Adding field 'Meeting.not_there_count'
+        db.add_column('aabuddy_meeting', 'not_there_count',
+                      self.gf('django.db.models.fields.IntegerField')(default=0),
+                      keep_default=False)
 
 
     models = {
@@ -45,7 +37,7 @@ class Migration(SchemaMigration):
         'aabuddy.userconfirmation': {
             'Meta': {'object_name': 'UserConfirmation'},
             'confirmation_key': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 12, 0, 0)'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 3, 2, 0, 0)'}),
             'expiration_date': ('django.db.models.fields.DateTimeField', [], {}),
             'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'confirmations'", 'to': "orm['auth.User']"})
