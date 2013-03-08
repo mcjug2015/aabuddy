@@ -5,13 +5,11 @@ import java.util.Date;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class LocationFinder {
