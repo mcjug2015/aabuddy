@@ -1,12 +1,9 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.app.Application;
 
 public class AAMeetingApplication extends Application {
-	private List<Meeting> meetings;	
+	private MeetingListResults meetingListResults;	
     
 	//instance 
     private static AAMeetingApplication instance = null;
@@ -22,19 +19,12 @@ public class AAMeetingApplication extends Application {
         instance = this;
 	}
 
-	public List<Meeting> getMeetings() {
-		return meetings; 
+	public MeetingListResults getMeetingListResults() {
+		return meetingListResults; 
 	}
 
-	public void addMeetings(List<Meeting> meetings) {
-		if (this.meetings == null) {
-			this.meetings = new ArrayList<Meeting>();
-		}	
-		this.meetings.addAll(meetings);
-	}
-
-	public void setMeetings(List<Meeting> meetings) {
-		this.meetings = meetings;
+	public void setMeetingListResults(MeetingListResults meetingListResults) {
+		this.meetingListResults = meetingListResults;
 	}
 	
     /**
