@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.Meeting;
+import org.mcjug.aameetingmanager.MeetingListResults;
 import org.mcjug.aameetingmanager.R;
 
 import android.content.Context;
@@ -27,15 +28,19 @@ public class MeetingListUtil {
 	private static final String LATITUDE = "lat";
 	private static final String LONGITUDE = "long";
 	
-	public static List<Meeting> getMeetingList(Context context, HttpResponse httpResponse) throws Exception {
+	public static MeetingListResults getMeetingList(Context context, HttpResponse httpResponse) throws Exception {
 		String jsonStr = HttpUtil.getContent(httpResponse);		
 	    Log.d(TAG, "Meeting list: " + jsonStr);
 	    
+	    MeetingListResults meetingListResults = new MeetingListResults();
 		List<Meeting> meetings = new ArrayList<Meeting>();
 	    if (jsonStr != null) {
 		    JSONObject jsonObj = new JSONObject(jsonStr);
-		    JSONArray meetingsJson = jsonObj.getJSONArray("objects");
 		    
+		    JSONObject metaJson = jsonObj.getJSONObject("meta");
+		    meetingListResults.setTotalMeetingCount(metaJson.getInt("total_count"));
+		    
+		    JSONArray meetingsJson = jsonObj.getJSONArray("objects");
 		    if (meetingsJson != null) {
 				JSONObject meetingJson;
 				Meeting meeting;
@@ -62,10 +67,12 @@ public class MeetingListUtil {
 					
 					meetings.add(meeting);
 				}
+				
+				meetingListResults.setMeetings(meetings);
 		    }	
 		}
 		
-		return meetings;
+		return meetingListResults;
 	}
 	
 	public static String getUniqueDeviceId(Context context) {
