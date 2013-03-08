@@ -44,7 +44,7 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meetin
 			HttpResponse response = client.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-				meetings = MeetingListUtil.getMeetingList(context, response);
+				meetings = MeetingListUtil.getMeetingList(context, response).getMeetings();
 			} else {
 		    	errorMsg = statusLine.toString();
 			}
