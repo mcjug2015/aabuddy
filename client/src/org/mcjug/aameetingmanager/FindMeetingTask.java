@@ -1,7 +1,5 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.List;
-
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -19,7 +17,7 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
+public class FindMeetingTask extends AsyncTask<Void, String, MeetingListResults> {
     private final String TAG = getClass().getSimpleName();
     private Context context;
     private String meetingParams;
@@ -29,34 +27,38 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 	private String errorMsg =  null;
  
 	public FindMeetingTask(Context context, String meetingParams) {
-		this(context, meetingParams, context.getString(R.string.waitMsg), false);
+		this(context, meetingParams, false);
 	}
 
 	public FindMeetingTask(Context context, String meetingParams, boolean appendResults) {
-		this(context, meetingParams, context.getString(R.string.waitMsg), appendResults);
+		this(context, meetingParams, false, null);
 	}
-
-	public FindMeetingTask(Context context, String meetingParams, String waitMsg, boolean appendResults) {
+	
+	public FindMeetingTask(Context context, String meetingParams, boolean appendResults, String progressMsg) {
 		this.context = context;
 		this.meetingParams = meetingParams;
 		this.appendResults = appendResults;
-
-	    progressDialog = new ProgressDialog(context);        
-		progressDialog.setTitle(context.getString(R.string.findMeetingProgressMsg));
-		progressDialog.setMessage(waitMsg);
 		
+		if (progressMsg != null) {
+			progressDialog = new ProgressDialog(context);        
+			progressDialog.setTitle(progressMsg);
+			progressDialog.setMessage(context.getString(R.string.waitMsg));
+		}
+
 		prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());	
 	}
 
 	@Override
 	protected void onPreExecute() {
-		progressDialog.show();
+		if (progressDialog != null) {
+			progressDialog.show();
+		}
 	}
 
 	@Override
-	protected List<Meeting> doInBackground(Void... arg0) {
+	protected MeetingListResults doInBackground(Void... arg0) {
 		HttpClient client = HttpUtil.createHttpClient(); 
-		List<Meeting> meetings = null;
+		MeetingListResults meetingListResults = null;
 		try {  
 			int meetingUrlResourceId = R.string.get_meetings_url_path;
 			String url = HttpUtil.getUnsecureRequestUrl(context, meetingUrlResourceId) + "?" + meetingParams;
@@ -69,7 +71,7 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 			HttpResponse response = client.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-			    meetings = MeetingListUtil.getMeetingList(context, response);
+				meetingListResults = MeetingListUtil.getMeetingList(context, response);
 			} else {
 		    	errorMsg = statusLine.toString();
 			}
@@ -80,21 +82,22 @@ public class FindMeetingTask extends AsyncTask<Void, String, List<Meeting>> {
 			client.getConnectionManager().shutdown();  
 		}
 		
-		return meetings;
+		return meetingListResults;
 	}
 	
 	@Override
-	protected void onPostExecute(List<Meeting> meetings) {
-		if (progressDialog.isShowing()) {
-			progressDialog.dismiss();
+	protected void onPostExecute(MeetingListResults meetingListResults) {
+		if (progressDialog != null && progressDialog.isShowing()) {
+			progressDialog.cancel();
 		}		
 		
 		if (errorMsg == null) {
 		    AAMeetingApplication app = (AAMeetingApplication) context.getApplicationContext();
 		    if (appendResults) {
-		    	app.addMeetings(meetings);
-		    } else {
-		    	app.setMeetings(meetings);
+		    	MeetingListResults existingResults = app.getMeetingListResults();
+		    	existingResults.getMeetings().addAll(meetingListResults.getMeetings());
+		    } else {	
+		    	app.setMeetingListResults(meetingListResults);
 		    }
 		    
 		    Intent intent = new Intent(context, MeetingListFragmentActivity.class);
