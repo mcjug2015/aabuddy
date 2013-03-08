@@ -8,12 +8,13 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
@@ -31,11 +33,21 @@ public class MeetingListFragment extends ListFragment {
  	private SharedPreferences prefs;
     private String[] sortOrderValues; 
     private MeetingAdapter listAdapter;
-    // private InfiniteScrollListener infiniteScrollListener;
+    private InfiniteScrollListener infiniteScrollListener;
+    private View footerView;
+    private TextView meetingListNumItemsLabel;
+    private int offset = 0;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.meeting_list_fragment, container, false);
+		
+		meetingListNumItemsLabel = (TextView)view.findViewById(R.id.meetingListNumItemsLabel);
+	    
+	    if (null != savedInstanceState) {
+	    	offset = savedInstanceState.getInt("offset");
+	    }
+	    
 		return view;
 	}
 
@@ -45,13 +57,17 @@ public class MeetingListFragment extends ListFragment {
 		
 		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();
 		List<Meeting> meetings = new ArrayList<Meeting>();
-		meetings.addAll(app.getMeetings());
+		meetings.addAll(app.getMeetingListResults().getMeetings());
 		
+		footerView = getActivity().getLayoutInflater().inflate(R.layout.meeting_list_footer, null);
+		getListView().addFooterView(footerView);	
+
 		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, meetings);
 	    getListView().setAdapter(listAdapter);
-		
-		// infiniteScrollListener = new InfiniteScrollListener(getActivity());
-		// getListView().setOnScrollListener(infiniteScrollListener);
+	    
+		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView);
+		infiniteScrollListener.setOffset(offset);
+		getListView().setOnScrollListener(infiniteScrollListener);
 	 
  		try {
  	        MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
@@ -68,18 +84,29 @@ public class MeetingListFragment extends ListFragment {
 					} else {	
 						try {
 							String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
-							List<NameValuePair> values = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
+							List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
+							NameValuePair param;
+							for (int i = 0; i < meetingParams.size(); i++) {
+								param = meetingParams.get(i);
+				            	if (param.getName().equals("order_by")) {
+				            		meetingParams.set(i, new BasicNameValuePair(param.getName(),  sortOrderValues[parent.getSelectedItemPosition()]));
+				            	
+				            	} else if (param.getName().equals("offset")) {
+				            		meetingParams.set(i, new BasicNameValuePair(param.getName(), "0"));
+				            	
+				            	} else if (param.getName().equals("limit")) {
+								    int paginationSize = view.getContext().getResources().getInteger(R.integer.paginationSize);
+				            		meetingParams.set(i, new BasicNameValuePair(param.getName(), String.valueOf(paginationSize)));
+				            	}
+				            }
 
-							int itemPosition = parent.getSelectedItemPosition();
-							values.set(values.size() - 1, new BasicNameValuePair("order_by", sortOrderValues[itemPosition]));
-
-							String paramStr = URLEncodedUtils.format(values, "utf-8");
+							getListView().setSelection(0);
+							infiniteScrollListener.reset();
 							
-							FragmentActivity activity = getActivity();
-			    			String waitMsg = activity.getString(R.string.sortMeetingProgressMsg);
-			    			
-							FindMeetingTask findMeetingTask = new FindMeetingTask(activity, paramStr, waitMsg, false);
+							String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
+							FindMeetingTask findMeetingTask = new FindMeetingTask(view.getContext(), paramStr, false, getActivity().getString(R.string.sortMeetingProgressMsg));
 							findMeetingTask.execute();
+							
 						} catch (Exception ex) {
 							Log.d(TAG, "Error getting meetings: " + ex);
 						}
@@ -100,9 +127,15 @@ public class MeetingListFragment extends ListFragment {
         try {
 			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();			
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();	
-			listAdapter.setMeetings(app.getMeetings());
+			MeetingListResults meetingListResults = app.getMeetingListResults();
+			listAdapter.setMeetings(meetingListResults.getMeetings());
 			
-			// infiniteScrollListener.setLoading(false);
+			String numItemsLabel = String.format(getActivity().getString(R.string.meetingListNumItems),
+					listAdapter.getCount(), meetingListResults.getTotalMeetingCount());
+			meetingListNumItemsLabel.setText(numItemsLabel);
+			
+			infiniteScrollListener.setLoading(false);
+			getListView().removeFooterView(footerView);
 			
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
@@ -119,6 +152,18 @@ public class MeetingListFragment extends ListFragment {
 		super.onResume();
 	}
 
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt("offset", infiniteScrollListener.getOffset());
+	}  
+	
+	@Override
+	public void setRetainInstance(boolean retain) {
+		// TODO Auto-generated method stub
+		super.setRetainInstance(true);
+	}
+
 	private void displayMap(Meeting meeting) {
         String latitude = meeting.getLatitude();
         String longitude = meeting.getLongitude();
@@ -131,5 +176,4 @@ public class MeetingListFragment extends ListFragment {
             startActivity(geoMap);
         }
 	}
-    
 }
