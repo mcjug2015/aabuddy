@@ -11,10 +11,8 @@ import org.apache.http.protocol.HTTP;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
     private final String TAG = getClass().getSimpleName();
@@ -54,7 +52,7 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
 			HttpResponse response = client.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-			    meeting = MeetingListUtil.getMeetingList(context, response).get(0);
+			    meeting = MeetingListUtil.getMeetingList(context, response).getMeetings().get(0);
 			} else {
 		    	errorMsg = statusLine.toString();
 			}
