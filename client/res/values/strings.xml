@@ -86,8 +86,10 @@
     <string name="meetingAdded">Meeting Added</string>    
     <string name="addAnotherMeetingButton">Add Another Meeting</string>
     <string name="goToMainScreenButton">Go To Main Screen</string>
-        
-    <item name="paginationSize" type="integer">20</item>
+   	<string name="loadingMoreMeetingsProgressMsg">Loading More Meetings</string>
+    <string name="meetingListNumItems">"Showing %1$d of %2$d"</string>
+ 
+    <item name="paginationSize" type="integer">50</item>    
     
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
