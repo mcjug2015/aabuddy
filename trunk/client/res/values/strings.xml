@@ -45,6 +45,7 @@
     <string name="get_meetings_url_path">/aabuddy/get_meetings/</string>
     <string name="get_meeting_by_id_url_path">/aabuddy/get_meeting_by_id/</string>
     <string name="find_similar_meetings_url_path">/aabuddy/find_similar/</string>
+    <string name="post_meeting_not_there_url_path">/aabuddy/post_meeting_not_there</string>
     <string name="create_user_url_path">/aabuddy/create_user</string>
     <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
  	<string name="reset_password_url_path">/aabuddy/send_reset_conf</string>
@@ -54,6 +55,15 @@
     <string name="sortBy">Sort By:</string>
     <string name="sortingDefault">distance</string>
     <string name="meetingUrl">MEETING_URL</string>
+    
+    <string name="meetingNotThereButton">Not There</string>
+    <string name="postMeetingNotThereProgressMsg">Marking Meeting Not There</string>
+    <string name="postMeetingNotThereConfirmDialogTitle">Mark Meeting Not There</string>
+    <string name="postMeetingNotThereConfirmDialogMsg">Are you sure you want to mark this meeting as not there?</string>
+    <string name="postMeetingNotThereErrorDialogTitle">Failed to Mark Meeting As Not There</string>
+    <string name="postMeetingNotThereErrorMessage">Error in marking meeting as not there.</string>
+    <string name="postMeetingNotThereSuccessDialogTitle">Success</string>
+    <string name="postMeetingNotThereSuccessMessage">Meeting was successful marked as not there.</string>
     
     <string name="submitMeetingProgressMsg">Adding Meeting</string>
     <string name="submitMeetingError">Error adding meeting: %s</string>

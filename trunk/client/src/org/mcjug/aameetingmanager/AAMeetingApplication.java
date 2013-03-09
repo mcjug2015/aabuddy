@@ -1,9 +1,13 @@
 package org.mcjug.aameetingmanager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.app.Application;
 
 public class AAMeetingApplication extends Application {
-	private MeetingListResults meetingListResults;	
+	private MeetingListResults meetingListResults;
+	private List<Integer> meetingNotThereList = null;
     
 	//instance 
     private static AAMeetingApplication instance = null;
@@ -37,4 +41,15 @@ public class AAMeetingApplication extends Application {
         return instance;
     }
     
+    public void addToMeetingNotThereList(int meetingId) {
+    	if (meetingNotThereList == null) {
+    		meetingNotThereList = new ArrayList<Integer>();
+    	}
+    	
+    	meetingNotThereList.add(meetingId);
+    }
+    
+    public List<Integer> getMeetingNotThereList() {
+    	return meetingNotThereList;
+    }
 }
