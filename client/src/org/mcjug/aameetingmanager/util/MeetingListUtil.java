@@ -18,6 +18,7 @@ import android.util.Log;
 public class MeetingListUtil {
     private static final String TAG = MeetingListUtil.class.getSimpleName();
 	
+    private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
 	private static final String DAY_OF_WEEK = "day_of_week";
@@ -48,6 +49,7 @@ public class MeetingListUtil {
 					meetingJson = meetingsJson.getJSONObject(i);
 					
 					meeting = new Meeting();
+					meeting.setId(meetingJson.getInt(ID));
 					meeting.setName(meetingJson.getString(NAME));
 					meeting.setDescription(meetingJson.getString(DESCRIPTION));
 				

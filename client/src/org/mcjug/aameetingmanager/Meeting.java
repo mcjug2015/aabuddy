@@ -1,6 +1,7 @@
 package org.mcjug.aameetingmanager;
 
 public class Meeting {
+	private int id;
 	private String name;
 	private String description;
 	private String dayOfWeek;
@@ -10,6 +11,14 @@ public class Meeting {
 	private String latitude;
 	private String longitude;
 	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
