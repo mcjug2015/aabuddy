@@ -46,7 +46,6 @@ public class SubmitMeetingFragment extends Fragment {
 	private EditText nameEditText;
 	private EditText descriptionEditText;
 	private EditText addressEditText;
-	private Button currentLocationButton;
 	private Button validateAddressButton;
 	private Button submitMeetingButton;
 	private Button startTimeButton;
@@ -171,25 +170,7 @@ public class SubmitMeetingFragment extends Fragment {
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 			public void afterTextChanged(Editable s) {}
 		});		
-		
-		currentLocationButton = (Button) view.findViewById(R.id.submitMeetingCurrentLocationButton); 
-	    currentLocationButton.setOnClickListener(new OnClickListener() { 
-			public void onClick(View v) {
-				try {
-					Context context = getActivity();
-					locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
-					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
-					locationTask.requestLocation();
-					
-					isLocationValid = false;
-					validateAddressButton.setEnabled(true);	
-					submitMeetingButton.setEnabled(false);
-				} catch (Exception ex) {
-				    Log.d(TAG, "Error getting location: " + ex);
-				}
-			} 
-		});
-	    
+
 		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
 		validateAddressButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
