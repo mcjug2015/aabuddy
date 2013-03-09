@@ -27,15 +27,12 @@
         </activity>
         <activity
             android:name=".FindMeetingFragmentActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/findMeeting" />
         <activity
             android:name=".SubmitMeetingFragmentActivity"            
-           	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/submitMeeting" />
         <activity
             android:name=".MeetingListFragmentActivity"
-           	android:configChanges="keyboardHidden|orientation|screenSize"
              android:label="@string/meetingList" />
         <activity
             android:name=".AdminPrefsActivity"
