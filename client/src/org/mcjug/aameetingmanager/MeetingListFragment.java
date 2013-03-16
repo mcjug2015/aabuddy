@@ -8,10 +8,8 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -23,7 +21,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -135,20 +132,20 @@ public class MeetingListFragment extends ListFragment {
 			meetingListNumItemsLabel.setText(numItemsLabel);
 			
 			infiniteScrollListener.setLoading(false);
+			
 			getListView().removeFooterView(footerView);
+			getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+				public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
+					displayMap((Meeting) listView.getItemAtPosition(position));
+					return false;
+				}
+			});
 			
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
         
-        ListView meetingListView = getListView();        
-        meetingListView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
-                displayMap((Meeting) listView.getItemAtPosition(position));
-                return false;
-            }
-        });
-
+ 
 		super.onResume();
 	}
 
@@ -158,12 +155,6 @@ public class MeetingListFragment extends ListFragment {
 		outState.putInt("offset", infiniteScrollListener.getOffset());
 	}  
 	
-	@Override
-	public void setRetainInstance(boolean retain) {
-		// TODO Auto-generated method stub
-		super.setRetainInstance(true);
-	}
-
 	private void displayMap(Meeting meeting) {
         String latitude = meeting.getLatitude();
         String longitude = meeting.getLongitude();
