@@ -50,6 +50,9 @@
             android:name=".ResetPasswordFragmentActivity"
             android:label="@string/resetPasswordActivityTitle" />
         <activity
+            android:name=".ChangePasswordFragmentActivity"
+            android:label="@string/changePasswordActivityTitle" />
+        <activity
             android:name=".HelpFragmentActivity"
             android:label="@string/helpActivityTitle" />
     </application>
