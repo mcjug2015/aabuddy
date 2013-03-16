@@ -18,10 +18,10 @@ public class AdminPrefsActivity extends SherlockPreferenceActivity {
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
-		ListView listView = getListView();
+		View footerView = getLayoutInflater().inflate(R.layout.admin_prefs_footer, null);
+		getListView().addFooterView(footerView);
 		
-		Button resetPasswordButton = new Button(this);
-		resetPasswordButton.setText(R.string.resetPasswordButton);
+		Button resetPasswordButton = (Button) footerView.findViewById(R.id.resetPasswordButton);
 		resetPasswordButton.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				Intent intent = new Intent(AdminPrefsActivity.this, ResetPasswordFragmentActivity.class);
@@ -31,9 +31,23 @@ public class AdminPrefsActivity extends SherlockPreferenceActivity {
 				
 				startActivity(intent);
             }
-        });		
-        listView.addFooterView(resetPasswordButton);
+        });
 		
+		Button changePasswordButton = (Button) footerView.findViewById(R.id.changePasswordButton);
+		Credentials credentials = Credentials.readFromPreferences(this);
+		if (credentials.isSet()) {
+			changePasswordButton.setEnabled(true);
+			changePasswordButton.setOnClickListener(new View.OnClickListener() {
+				public void onClick(View v) {
+					
+					Intent intent = new Intent(AdminPrefsActivity.this, ChangePasswordFragmentActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+					startActivity(intent);
+	            }
+	        });			
+		} else {
+			changePasswordButton.setEnabled(false);
+		}	
 	}
 	
 	@Override
