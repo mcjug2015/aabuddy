@@ -14,6 +14,7 @@ import org.mcjug.aameetingmanager.util.HttpUtil;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -64,6 +65,7 @@ public class ChangePasswordFragment extends Fragment {
 				String confirmPassword = confirmPasswordEditText.getText().toString();
 				if (!newPassword.equals(confirmPassword)) {
 					confirmPasswordEditText.setError(context.getString(R.string.passwordsDoNotMatchError));
+					confirmPasswordEditText.requestFocus();
 					return;
 				}
 	
@@ -79,6 +81,7 @@ public class ChangePasswordFragment extends Fragment {
 	}
 	
 	private class ChangePasswordTask extends AsyncTask<Void, String, String> {
+		private Credentials credentials;
 		private String newPassword;
 		private ProgressDialog progressDialog;
 		
@@ -96,7 +99,7 @@ public class ChangePasswordFragment extends Fragment {
 				String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.change_password_url_path);
 				HttpPost httpPost = new HttpPost(url);
 				
-				Credentials credentials = Credentials.readFromPreferences(getActivity());
+				credentials = Credentials.readFromPreferences(getActivity());
 				httpPost.addHeader("Authorization", "Basic " + credentials.getBasicAuthorizationHeader());
 				
 				List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();  
@@ -125,7 +128,23 @@ public class ChangePasswordFragment extends Fragment {
 			progressDialog.dismiss();
 			
 			if (errorMsg == null) {
+				Credentials.saveToPreferences(getActivity(), credentials.getUsername(), newPassword);
 				Toast.makeText(getActivity(), getActivity().getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
+			
+				// Wait for toast to go away
+				Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(4000);
+						} catch (InterruptedException e) {
+						}
+						startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+						getActivity().finish();
+					}
+				});					   
+				thread.start();
+			
 			} else {	
 				Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();	
 			}
