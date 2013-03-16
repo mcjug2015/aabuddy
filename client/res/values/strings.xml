@@ -215,7 +215,8 @@
 	<string name="changePasswordActivityTitle">Change Password</string>
 	<string name="changePasswordButton">Change Password</string>
 	<string name="changePasswordProgressMsg">Changing Password</string>
-			
+	<string name="passwordChangedMsg">Password has been changed</string>
+				
 	<string name="helpActivityTitle">Help</string>
 	
 	<string-array name="questions">
