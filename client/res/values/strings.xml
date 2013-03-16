@@ -49,7 +49,8 @@
     <string name="create_user_url_path">/aabuddy/create_user</string>
     <string name="validate_user_url_path">/aabuddy/validate_user_creds</string>
  	<string name="reset_password_url_path">/aabuddy/send_reset_conf</string>
- 	   
+ 	<string name="change_password_url_path">/aabuddy/change_password</string>
+ 		   
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
     <string name="sortBy">Sort By:</string>
@@ -84,8 +85,8 @@
     <string name="login">Log In</string>
     <string name="loginErrorDialogTitle">Login Failed!</string>
     <string name="invalidEmailAddress">Please enter a correctly formatted email address.</string>
-    <string name="emptyEmailAddress">Please enter in an email address.</string>
-    <string name="emptyPassword">Please enter in a password.</string>
+    <string name="emptyEmailAddress">Please enter an email address.</string>
+    <string name="emptyPassword">Please enter a password.</string>
     <string name="loginErrorMessage">Login incorrect.  Please try again.</string>
     <string name="loginSuccessMessage">Login Successful</string>
     <string name="logout">Log Out</string>
@@ -209,8 +210,12 @@
 	<string name="resetPasswordSuccessDialogTitle">Reset Password Success</string>
 	<string name="resetPasswordSuccess">Please look for an email that will have instructions on how to finish resetting your password.</string>
 	<string name="resetPasswordMsg">Resetting Password</string>
-			
 	
+	<string name="newPasswordText">New Password:</string>
+	<string name="changePasswordActivityTitle">Change Password</string>
+	<string name="changePasswordButton">Change Password</string>
+	<string name="changePasswordProgressMsg">Changing Password</string>
+			
 	<string name="helpActivityTitle">Help</string>
 	
 	<string-array name="questions">
