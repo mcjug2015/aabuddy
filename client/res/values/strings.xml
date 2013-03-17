@@ -212,10 +212,13 @@
 	<string name="resetPasswordMsg">Resetting Password</string>
 	
 	<string name="newPasswordText">New Password:</string>
-	<string name="changePasswordActivityTitle">Change Password</string>
-	<string name="changePasswordButton">Change Password</string>
+	<string name="changePasswordPreferenceTitle">Change Password</string>
+	<string name="changePasswordPreferenceKey">changePassword</string>
 	<string name="changePasswordProgressMsg">Changing Password</string>
 	<string name="passwordChangedMsg">Password has been changed</string>
+	<string name="changePasswordActivityTitle">Change Password</string>
+	<string name="changePasswordButton">Change Password</string>
+	
 				
 	<string name="helpActivityTitle">Help</string>
 	
