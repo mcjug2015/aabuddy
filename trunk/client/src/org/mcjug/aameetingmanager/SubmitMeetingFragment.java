@@ -116,6 +116,8 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		startTimeCalendar = Calendar.getInstance();
 		clearTimeFields(startTimeCalendar);
+		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
+		startTimeCalendar.set(Calendar.MINUTE, minutes);
 		
 		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
@@ -130,6 +132,7 @@ public class SubmitMeetingFragment extends Fragment {
 		endTimeCalendar = Calendar.getInstance();
 		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
 		clearTimeFields(endTimeCalendar);
+		endTimeCalendar.set(Calendar.MINUTE, minutes);
 		
 		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
