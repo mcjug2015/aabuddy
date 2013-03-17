@@ -45,7 +45,7 @@ public class ChangePasswordFragment extends Fragment {
 		final Button button = (Button)view.findViewById(R.id.changePasswordButton);
 		button.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				Context context = view.getContext();
+				Context context = getActivity().getApplicationContext();
 				
 				final EditText newPasswordEditText = (EditText)view.findViewById(R.id.newPasswordEditText);
 				
@@ -69,10 +69,7 @@ public class ChangePasswordFragment extends Fragment {
 					return;
 				}
 	
-				ProgressDialog progressDialog = 
-					ProgressDialog.show(context, context.getString(R.string.changePasswordProgressMsg), context.getString(R.string.waitMsg));
-				
-				new ChangePasswordTask(newPassword, progressDialog).execute();
+				new ChangePasswordTask(newPassword).execute();
             }
 
         });
@@ -84,12 +81,19 @@ public class ChangePasswordFragment extends Fragment {
 		private Credentials credentials;
 		private String newPassword;
 		private ProgressDialog progressDialog;
+		private Context context;
 		
-		public ChangePasswordTask(String newPassword, ProgressDialog progressDialog) {
+		public ChangePasswordTask(String newPassword) {
+			this.context = getActivity().getApplicationContext();
 			this.newPassword = newPassword;
-			this.progressDialog = progressDialog;
 		}		
 		
+		@Override
+		protected void onPreExecute() {
+			progressDialog = 
+					ProgressDialog.show(getActivity(), context.getString(R.string.changePasswordProgressMsg), context.getString(R.string.waitMsg));
+		}
+
 		@Override
 		protected String doInBackground(Void... arg0) {
 			String errorMessage = null;
@@ -125,11 +129,14 @@ public class ChangePasswordFragment extends Fragment {
 
 		@Override
 		protected void onPostExecute(String errorMsg) {
-			progressDialog.dismiss();
+			try {
+				progressDialog.dismiss();
+			} catch (Exception e) {
+			}
 			
 			if (errorMsg == null) {
-				Credentials.saveToPreferences(getActivity(), credentials.getUsername(), newPassword);
-				Toast.makeText(getActivity(), getActivity().getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
+				Credentials.saveToPreferences(context, credentials.getUsername(), newPassword);
+				Toast.makeText(context, context.getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
 			
 				// Wait for toast to go away
 				Thread thread = new Thread(new Runnable() {
@@ -137,16 +144,17 @@ public class ChangePasswordFragment extends Fragment {
 					public void run() {
 						try {
 							Thread.sleep(4000);
-						} catch (InterruptedException e) {
+							getActivity().startActivity(new Intent(context, AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+							getActivity().finish();
+						} catch (Exception e) {
 						}
-						startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-						getActivity().finish();
 					}
-				});					   
+				});	
+				
 				thread.start();
 			
 			} else {	
-				Toast.makeText(getActivity(), errorMsg, Toast.LENGTH_LONG).show();	
+				Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();	
 			}
 		}
 	}
