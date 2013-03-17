@@ -12,14 +12,5 @@
         android:layout_marginTop="6dp"
         android:ems="10"
         android:text="@string/resetPasswordButton" />
-
-    <Button
-        android:id="@+id/changePasswordButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:ems="10"
-        android:text="@string/changePasswordButton" />
-
+    
 </LinearLayout>
