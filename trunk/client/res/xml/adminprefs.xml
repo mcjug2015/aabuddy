@@ -25,17 +25,20 @@
             android:summaryOn="@string/sslTrustAllFlagSummaryOn"
             android:title="@string/sslTrustAllFlagTitle" >
         </CheckBoxPreference>
+    </PreferenceCategory>
 
+    <!-- Password Preferences -->
+    <PreferenceCategory
+        android:title="@string/passwordPreferencesTitle" >
         <Preference
-            android:summary=""
             android:key="@+string/changePasswordPreferenceKey"
+            android:summary=""
             android:title="@string/changePasswordPreferenceTitle" >
             <intent
                 android:action="android.intent.action.VIEW"
                 android:targetClass="org.mcjug.aameetingmanager.ChangePasswordFragmentActivity"
                 android:targetPackage="org.mcjug.aameetingmanager" />
         </Preference>
-        
     </PreferenceCategory>
 
 </PreferenceScreen>
