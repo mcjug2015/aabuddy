@@ -219,7 +219,7 @@
 	<string name="changePasswordActivityTitle">Change Password</string>
 	<string name="changePasswordButton">Change Password</string>
 	
-				
+	<string name="passwordPreferencesTitle">Password Preferences</string>
 	<string name="helpActivityTitle">Help</string>
 	
 	<string-array name="questions">
