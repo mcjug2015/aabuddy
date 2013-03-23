@@ -223,40 +223,4 @@
 	<string name="passwordPreferencesTitle">Password Preferences</string>
 	<string name="helpActivityTitle">Help</string>
 	
-	<string-array name="questions">
-        <item>Find Meeting - Meeting Name</item>
-        <item>Find Meeting - Start Time</item>
-        <item>Find Meeting - End Time</item>
-        <item>Find Meeting - Days of Week</item>
-        <item>Find Meeting - Address</item>
-        <item>Find Meeting - Within</item>
-        <item>Find Meeting - Search button</item>
-        <item>Add Meeting - Meeting Name</item>
-        <item>Add Meeting - Start Time</item>
-        <item>Add Meeting - End Time</item>
-        <item>Add Meeting - Days of Week</item>
-        <item>Add Meeting - Address</item>
-        <item>Add Meeting - Meeting Description</item>
-        <item>Add Meeting - Validate Address button</item>
-        <item>Add Meeting - Submit button</item>
-    </string-array>
-    
-	<string-array name="answers">
-        <item>Enter the name of the meeting you want to find.</item>
-        <item>Select the Time the meeting starts.</item>
-        <item>Select Time the meeting ends.</item>
-        <item>Select (Check) the Day(s) of the Week the meeting is to held.  The default setting is all seven days of the week.</item>
-        <item>Select the "Fill with current location" link to use the current location you are at or manually enter the meeting\'s address.</item>
-        <item>Define the range of your search from your current location. For example, if you select 10 miles, than the Search will find all meetings in a 10 mile range.</item>
-        <item>Select the Search command button to invoke your search.</item>
-        <item>Enter the name of the meeting you what to add.</item>
-        <item>Select the Time the meeting will start.</item>
-        <item>Select the Time the meeting will end.</item>
-        <item>Select (Check) the Day(s)s of Week the meeting is to be  held.</item>
-        <item>Select the "Fill with current location" link to use the current location you are at or you can manually enter the meeting\'s address.</item>
-        <item>Add a narrative about the meeting.</item>
-        <item>This command button validates the address you manually entered.</item>
-        <item>The command bottom adds the newly created Meeting to the database.</item>
-    </string-array>
-			
 </resources>
