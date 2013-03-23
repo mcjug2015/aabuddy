@@ -8,6 +8,10 @@ import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -16,11 +20,18 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -34,6 +45,12 @@ public class MeetingListFragment extends ListFragment {
     private View footerView;
     private TextView meetingListNumItemsLabel;
     private int offset = 0;
+    
+    private LinearLayout sliderMenu;
+    private ImageView mapIcon;
+    private Button meetingNotThereButton;
+    private Animation animUp;
+    private Animation animDown;
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +62,23 @@ public class MeetingListFragment extends ListFragment {
 	    	offset = savedInstanceState.getInt("offset");
 	    }
 	    
+	    sliderMenu = (LinearLayout)view.findViewById(R.id.sliderMenu);
+	    sliderMenu.setVisibility(View.GONE);
+	    
+		mapIcon = (ImageView)view.findViewById(R.id.mapImageView);
+		meetingNotThereButton = (Button)view.findViewById(R.id.meetingNotThereButton);
+
+		animUp = AnimationUtils.loadAnimation(getActivity(), R.animator.slidermenu_animate_up);
+	    animDown = AnimationUtils.loadAnimation(getActivity(), R.animator.slidermenu_animate_down);
+	    
+	    view.setOnTouchListener(new View.OnTouchListener() {
+			
+			public boolean onTouch(View v, MotionEvent event) {
+
+				return false;
+			}
+		});
+
 		return view;
 	}
 
@@ -62,10 +96,13 @@ public class MeetingListFragment extends ListFragment {
 		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, meetings);
 	    getListView().setAdapter(listAdapter);
 	    
-		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView);
+		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView, sliderMenu,
+				animDown);
 		infiniteScrollListener.setOffset(offset);
 		getListView().setOnScrollListener(infiniteScrollListener);
 	 
+		
+		
  		try {
  	        MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
  	        prefs = PreferenceManager.getDefaultSharedPreferences(activity.getApplicationContext());
@@ -118,6 +155,18 @@ public class MeetingListFragment extends ListFragment {
  			Log.d(TAG, "Error setting meeting list");
  		}
 	}
+	
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+
+		sliderMenu.setVisibility(View.GONE);
+		sliderMenu.setAnimation(animDown);
+
+		super.onListItemClick(l, v, position, id);
+	}
+	
+	
 
 	@Override
 	public void onResume() {
@@ -136,8 +185,8 @@ public class MeetingListFragment extends ListFragment {
 			getListView().removeFooterView(footerView);
 			getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
 				public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
-					displayMap((Meeting) listView.getItemAtPosition(position));
-					return false;
+					displaySliderMenu((Meeting) listView.getItemAtPosition(position));
+					return true;
 				}
 			});
 			
@@ -155,6 +204,61 @@ public class MeetingListFragment extends ListFragment {
 		outState.putInt("offset", infiniteScrollListener.getOffset());
 	}  
 	
+	
+	private void displaySliderMenu(final Meeting meeting) {
+		sliderMenu.setVisibility(View.VISIBLE);
+		sliderMenu.setAnimation(animUp);
+		
+		mapIcon.setOnClickListener(new View.OnClickListener() {
+			
+			public void onClick(View v) {
+				displayMap(meeting);
+			}
+		});
+		 
+		final Context context = getActivity();
+
+		meetingNotThereButton.setEnabled(!isMeetingInNotThereList(meeting.getId()));
+		meetingNotThereButton.setOnClickListener(new View.OnClickListener() {
+			public void onClick(View v) {
+				
+				AlertDialog.Builder builder = new AlertDialog.Builder(context);
+				
+				builder.setTitle(R.string.postMeetingNotThereConfirmDialogTitle)
+					   .setMessage(R.string.postMeetingNotThereConfirmDialogMsg)
+					   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+						
+							public void onClick(DialogInterface dialog, int which) {
+								//disable button
+								meetingNotThereButton.setEnabled(false);
+								
+								//show progress indicator
+								ProgressDialog progressDialog = 
+									ProgressDialog.show(context, context.getString(R.string.postMeetingNotThereProgressMsg), 
+											context.getString(R.string.waitMsg));
+
+								//post meeting not there
+								new PostMeetingNotThereTask(context, meeting.getId(), progressDialog).execute();
+								
+								dialog.dismiss();
+							}
+						})
+						.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+						
+							public void onClick(DialogInterface dialog, int which) {
+								dialog.dismiss();
+							}
+						});
+				
+
+				builder.show();
+				
+            }
+		});
+		
+
+	}
+	
 	private void displayMap(Meeting meeting) {
         String latitude = meeting.getLatitude();
         String longitude = meeting.getLongitude();
@@ -167,4 +271,18 @@ public class MeetingListFragment extends ListFragment {
             startActivity(geoMap);
         }
 	}
+	
+	private boolean isMeetingInNotThereList(int meetingId) {
+		List<Integer> notThereList = AAMeetingApplication.getInstance().getMeetingNotThereList();
+		
+		if (notThereList != null) {
+			for(Integer notThereMeetingId : notThereList) {
+				if (notThereMeetingId == meetingId) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}	
 }

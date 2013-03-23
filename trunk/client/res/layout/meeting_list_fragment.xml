@@ -43,6 +43,39 @@
         android:layout_weight="1"
         android:background="#eeeeee"
         android:divider="#c7d6d6"
-        android:dividerHeight="2dp" />
-
+        android:dividerHeight="2dp"
+        android:choiceMode="singleChoice"
+        android:listSelector="#10b0e4" />
+   
+  	<LinearLayout
+	    android:id="@+id/sliderMenu"
+	    android:layout_width="match_parent"
+	    android:layout_height="60dp"
+	    android:background="#ffcccccc"
+	    android:content="@+id/content"
+	    android:gravity="center_vertical|center_horizontal"
+	    android:orientation="horizontal" >
+     
+        <ImageView
+            android:id="@+id/mapImageView"
+            android:contentDescription="@string/mapImageViewDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+		    android:layout_marginLeft="10dp"
+		    android:layout_marginRight="10dp"
+            android:src="@android:drawable/ic_dialog_map" />
+      
+		<Button
+	        android:id="@+id/meetingNotThereButton"
+	        style="?android:attr/buttonStyleSmall"
+	        android:background="@android:color/white"
+	        android:layout_width="80dp"
+	        android:layout_height="30dp"
+		    android:layout_marginLeft="10dp"
+		    android:layout_marginRight="10dp"
+	        android:text="@string/meetingNotThereButton" 
+	        android:textSize="12sp"/>
+     
+     
+   </LinearLayout>
 </LinearLayout>

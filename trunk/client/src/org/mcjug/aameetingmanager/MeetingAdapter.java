@@ -60,63 +60,10 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 			holder.time.setText(meeting.getTimeRange());
 			holder.name.setText(meeting.getName());	
 			
-			final Button meetingNotThereButton = (Button)view.findViewById(R.id.meetingNotThereButton);
-			meetingNotThereButton.setEnabled(!isMeetingInNotThereList(meeting.getId()));
-			meetingNotThereButton.setOnClickListener(new View.OnClickListener() {
-				public void onClick(View v) {
-					
-					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					
-					builder.setTitle(R.string.postMeetingNotThereConfirmDialogTitle)
-						   .setMessage(R.string.postMeetingNotThereConfirmDialogMsg)
-						   .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-							
-								public void onClick(DialogInterface dialog, int which) {
-									//disable button
-									meetingNotThereButton.setEnabled(false);
-									
-									//show progress indicator
-									ProgressDialog progressDialog = 
-										ProgressDialog.show(context, context.getString(R.string.postMeetingNotThereProgressMsg), 
-												context.getString(R.string.waitMsg));
-
-									//post meeting not there
-									new PostMeetingNotThereTask(context, meeting.getId(), progressDialog).execute();
-									
-									dialog.dismiss();
-								}
-							})
-							.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-							
-								public void onClick(DialogInterface dialog, int which) {
-									dialog.dismiss();
-								}
-							});
-					
-
-					builder.show();
-					
-	            }
-			});
 		}
-
 		return view;
 	}   
 	
-	private boolean isMeetingInNotThereList(int meetingId) {
-		List<Integer> notThereList = AAMeetingApplication.getInstance().getMeetingNotThereList();
-		
-		if (notThereList != null) {
-			for(Integer notThereMeetingId : notThereList) {
-				if (notThereMeetingId == meetingId) {
-					return true;
-				}
-			}
-		}
-		
-		return false;
-	}
-
 	private class ViewHolder {
 		TextView address;
 		TextView day;

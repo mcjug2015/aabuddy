@@ -60,14 +60,6 @@
         android:textColor="#797979"
         android:textSize="14dp" />
 
-	<Button
-        android:id="@+id/meetingNotThereButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@id/meetingDay"
-        android:layout_toLeftOf="@id/meetingDistance"
-        android:text="@string/meetingNotThereButton" 
-        android:textSize="10dp"/>
+
     
 </RelativeLayout>
