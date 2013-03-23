@@ -211,12 +211,15 @@
 	<string name="resetPasswordSuccessDialogTitle">Reset Password Success</string>
 	<string name="resetPasswordSuccess">Please look for an email that will have instructions on how to finish resetting your password.</string>
 	<string name="resetPasswordMsg">Resetting Password</string>
-	
+	<string name="resetPasswordPreferenceTitle">Reset Password</string>
+	<string name="resetPasswordPreferenceKey">resetPassword</string>
+			
 	<string name="newPasswordText">New Password:</string>
+	<string name="passwordChangedMsg">Password has been changed</string>
 	<string name="changePasswordPreferenceTitle">Change Password</string>
 	<string name="changePasswordPreferenceKey">changePassword</string>
+	<string name="changePasswordPreferenceSummary">Must be logged in to be able to change your password.</string>
 	<string name="changePasswordProgressMsg">Changing Password</string>
-	<string name="passwordChangedMsg">Password has been changed</string>
 	<string name="changePasswordActivityTitle">Change Password</string>
 	<string name="changePasswordButton">Change Password</string>
 	
