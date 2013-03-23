@@ -99,7 +99,8 @@
     <string name="goToMainScreenButton">Go To Main Screen</string>
    	<string name="loadingMoreMeetingsProgressMsg">Loading More Meetings</string>
     <string name="meetingListNumItems">"Showing %1$d of %2$d"</string>
- 
+ 	<string name="mapImageViewDescription">Go to Map</string>
+    
     <item name="paginationSize" type="integer">50</item>    
     
     <string-array name="daysOfWeekLong">

@@ -12,8 +12,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 public class InfiniteScrollListener implements OnScrollListener {
@@ -27,13 +29,19 @@ public class InfiniteScrollListener implements OnScrollListener {
     private int paginationSize;
     private ListView listView;
     private View footerView;
+    private LinearLayout sliderMenu;
+    private Animation animDown;
+
 	
-	public InfiniteScrollListener(Context context, ListView listView, View footerView) {
+	public InfiniteScrollListener(Context context, ListView listView, View footerView, 
+			LinearLayout sliderMenu, Animation animDown) {
 		this.context = context;
         prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());        
         paginationSize = context.getResources().getInteger(R.integer.paginationSize);
         this.listView = listView;
         this.footerView = footerView;
+        this.sliderMenu = sliderMenu;
+        this.animDown = animDown;
  	}
 
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
@@ -90,6 +98,10 @@ public class InfiniteScrollListener implements OnScrollListener {
 	}
 	
 	public void onScrollStateChanged(AbsListView view, int scrollState) {
+		if (scrollState != SCROLL_STATE_IDLE) {
+			sliderMenu.setVisibility(View.GONE);
+			sliderMenu.setAnimation(animDown);
+		}
 	}
 
 }
