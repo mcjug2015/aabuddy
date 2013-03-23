@@ -64,7 +64,7 @@
     <string name="postMeetingNotThereErrorDialogTitle">Failed to Mark Meeting As Not There</string>
     <string name="postMeetingNotThereErrorMessage">Error in marking meeting as not there.</string>
     <string name="postMeetingNotThereSuccessDialogTitle">Success</string>
-    <string name="postMeetingNotThereSuccessMessage">Meeting was successful marked as not there.</string>
+    <string name="postMeetingNotThereSuccessMessage">Meeting was successfully marked as not there.</string>
     
     <string name="submitMeetingProgressMsg">Adding Meeting</string>
     <string name="submitMeetingError">Error adding meeting: %s</string>
