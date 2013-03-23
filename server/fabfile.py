@@ -15,13 +15,6 @@ env.user = 'aabuddy'
 env.reject_unknown_hosts = False
 env.mysql_super_user = 'root'
 
-# environments
-def local_machine():
-    ''' use the mac '''
-    ''' start postgres '''
-    ''' sudo -u postgres /Library/PostgreSQL/9.1/bin/pg_ctl -D /Library/PostgreSQL/9.1/data -l /Users/vsemonov/Desktop/postgres.log  start '''
-
-
 def localvm():
     "Use a local vmware instance"
     env.hosts = ['127.0.0.1:2222'] # replace by the one appropriate for you

@@ -51,7 +51,7 @@ class MeetingNotThere(classic_models.Model):
     request_host = classic_models.CharField(max_length=200, null=True, blank=True)
     user_agent = classic_models.CharField(max_length=400, null=True, blank=True)
     unique_phone_id = classic_models.CharField(max_length=400, null=True, blank=True)
-    created_date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
+    created_date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return ("Not There id: %s, host: %s" % (self.pk, self.request_host))
 
