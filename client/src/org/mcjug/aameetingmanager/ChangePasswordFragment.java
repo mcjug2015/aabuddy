@@ -12,6 +12,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 public class ChangePasswordFragment extends Fragment {
 	private static final String TAG = ChangePasswordFragment.class.getSimpleName();
+	private Activity activity;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,21 +79,26 @@ public class ChangePasswordFragment extends Fragment {
 		return view;
 	}
 	
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		activity = getActivity();
+	}
+
 	private class ChangePasswordTask extends AsyncTask<Void, String, String> {
 		private Credentials credentials;
 		private String newPassword;
 		private ProgressDialog progressDialog;
-		private Context context;
 		
 		public ChangePasswordTask(String newPassword) {
-			this.context = getActivity().getApplicationContext();
 			this.newPassword = newPassword;
 		}		
 		
 		@Override
 		protected void onPreExecute() {
+			Activity activity = getActivity();
 			progressDialog = 
-					ProgressDialog.show(getActivity(), context.getString(R.string.changePasswordProgressMsg), context.getString(R.string.waitMsg));
+					ProgressDialog.show(activity, activity.getString(R.string.changePasswordProgressMsg), activity.getString(R.string.waitMsg));
 		}
 
 		@Override
@@ -100,7 +107,7 @@ public class ChangePasswordFragment extends Fragment {
 			
 			HttpClient client = HttpUtil.createHttpClient(); 
 			try {  
-				String url = HttpUtil.getSecureRequestUrl(getActivity(), R.string.change_password_url_path);
+				String url = HttpUtil.getSecureRequestUrl(activity, R.string.change_password_url_path);
 				HttpPost httpPost = new HttpPost(url);
 				
 				credentials = Credentials.readFromPreferences(getActivity());
@@ -135,8 +142,8 @@ public class ChangePasswordFragment extends Fragment {
 			}
 			
 			if (errorMsg == null) {
-				Credentials.saveToPreferences(context, credentials.getUsername(), newPassword);
-				Toast.makeText(context, context.getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
+				Credentials.saveToPreferences(activity, credentials.getUsername(), newPassword);
+				Toast.makeText(activity, activity.getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
 			
 				// Wait for toast to go away
 				Thread thread = new Thread(new Runnable() {
@@ -144,8 +151,7 @@ public class ChangePasswordFragment extends Fragment {
 					public void run() {
 						try {
 							Thread.sleep(4000);
-							getActivity().startActivity(new Intent(context, AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-							getActivity().finish();
+							activity.startActivity(new Intent(activity, AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 						} catch (Exception e) {
 						}
 					}
@@ -154,7 +160,7 @@ public class ChangePasswordFragment extends Fragment {
 				thread.start();
 			
 			} else {	
-				Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();	
+				Toast.makeText(activity, errorMsg, Toast.LENGTH_LONG).show();	
 			}
 		}
 	}
