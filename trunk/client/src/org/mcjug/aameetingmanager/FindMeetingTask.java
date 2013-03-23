@@ -87,8 +87,11 @@ public class FindMeetingTask extends AsyncTask<Void, String, MeetingListResults>
 	
 	@Override
 	protected void onPostExecute(MeetingListResults meetingListResults) {
-		if (progressDialog != null && progressDialog.isShowing()) {
-			progressDialog.cancel();
+		try {
+			if (progressDialog != null) {
+				progressDialog.cancel();
+			}
+		} catch (Exception e) {
 		}		
 		
 		if (errorMsg == null) {
