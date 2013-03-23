@@ -28,15 +28,22 @@
     </PreferenceCategory>
 
     <!-- Password Preferences -->
-    <PreferenceCategory
-        android:title="@string/passwordPreferencesTitle" >
+    <PreferenceCategory android:title="@string/passwordPreferencesTitle" >
         <Preference
             android:key="@+string/changePasswordPreferenceKey"
-            android:summary=""
+            android:summary="@string/changePasswordPreferenceSummary"
             android:title="@string/changePasswordPreferenceTitle" >
             <intent
                 android:action="android.intent.action.VIEW"
                 android:targetClass="org.mcjug.aameetingmanager.ChangePasswordFragmentActivity"
+                android:targetPackage="org.mcjug.aameetingmanager" />
+        </Preference>
+        <Preference
+            android:key="@+string/resetPasswordPreferenceKey"
+            android:title="@string/resetPasswordPreferenceTitle" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="org.mcjug.aameetingmanager.ResetPasswordFragmentActivity"
                 android:targetPackage="org.mcjug.aameetingmanager" />
         </Preference>
     </PreferenceCategory>
