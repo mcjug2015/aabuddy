@@ -42,15 +42,19 @@
             android:label="@string/adminPrefActivityTitle" />
         <activity
             android:name=".LoginFragmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/loginActivityTitle" />
         <activity
             android:name=".RegisterFragmentActivity"
+           	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/registrationActivityTitle" />
         <activity
             android:name=".ResetPasswordFragmentActivity"
+           	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/resetPasswordActivityTitle" />
         <activity
             android:name=".ChangePasswordFragmentActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/changePasswordActivityTitle" />
         <activity
             android:name=".HelpFragmentActivity"
