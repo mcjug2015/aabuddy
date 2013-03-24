@@ -143,14 +143,14 @@ public class ChangePasswordFragment extends Fragment {
 			
 			if (errorMsg == null) {
 				Credentials.saveToPreferences(activity, credentials.getUsername(), newPassword);
-				Toast.makeText(activity, activity.getString(R.string.passwordChangedMsg), Toast.LENGTH_LONG).show();	
+				Toast.makeText(activity, activity.getString(R.string.passwordChangedMsg), Toast.LENGTH_SHORT).show();	
 			
 				// Wait for toast to go away
 				Thread thread = new Thread(new Runnable() {
 					@Override
 					public void run() {
 						try {
-							Thread.sleep(4000);
+							Thread.sleep(2000);
 							activity.startActivity(new Intent(activity, AAMeetingManager.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
 						} catch (Exception e) {
 						}
