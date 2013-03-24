@@ -177,7 +177,7 @@
         <item>description</item>
     </string-array>
        
-	<string name="loginActivityTitle">Login</string>
+	<string name="loginActivityTitle">Login to Add a Meeting</string>
 	<string name="loginText">Login to Add a Meeting</string>
 	<string name="emailAddressText">Email Address:</string>
 	<string name="passwordText">Password:</string>
