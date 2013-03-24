@@ -134,8 +134,20 @@ public class LoginFragment extends Fragment {
 
 				Toast.makeText(getActivity().getApplicationContext(), R.string.loginSuccessMessage, Toast.LENGTH_SHORT).show();
 
-				getActivity().setResult(Activity.RESULT_OK);
-				getActivity().finish();
+				// Wait for toast to go away
+				Thread thread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						try {
+							Thread.sleep(2000);
+							getActivity().setResult(Activity.RESULT_OK);
+							getActivity().finish();
+						} catch (Exception e) {
+						}
+					}
+				});	
+				
+				thread.start();
 
 			} else {
 				displayLoginErrorMessage(errorMessage);
