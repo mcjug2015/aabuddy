@@ -1,154 +1,129 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" 
-    android:layout_height="match_parent">
-	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:orientation="vertical" >
-	
-	    <RelativeLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	    	android:paddingLeft="10dp"
-	    	android:paddingRight="10dp"
-	    >
-		    <TextView 
-	            android:id="@+id/loginTextView"
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-	            android:layout_alignParentLeft="true"
-		    	android:text="@string/loginText"
-	            android:textAppearance="?android:attr/textAppearanceMedium"
-	        />
-		    
-		    <TextView 
-		        android:id="@+id/emailAddressTextView"
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:layout_below="@id/loginTextView"
-	            android:layout_alignParentLeft="true"
-	            android:layout_marginTop="20dp"
-	            android:layout_marginBottom="20dp"
-		    	android:text="@string/emailAddressText"
-	            android:textAppearance="?android:attr/textAppearanceSmall"
-			/>
-		
-	 	    <EditText 
-		        android:id="@+id/loginEmailAddressEditText"
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:layout_below="@id/loginTextView"
-	            android:layout_toRightOf="@id/emailAddressTextView"
-	            android:layout_alignBaseline="@id/emailAddressTextView"
-	            android:layout_alignParentRight="true"
-		        android:ems="10"
-		    	android:inputType="textEmailAddress"
-		        android:textAppearance="?android:attr/textAppearanceSmall"
-		    >
-	           	<requestFocus />
-	        </EditText>
-		 
-		    <TextView 
-		        android:id="@+id/passwordTextView"
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:layout_below="@id/loginEmailAddressEditText"
-	            android:layout_alignParentLeft="true"
-	            android:layout_marginTop="30dp"
-	            android:layout_marginBottom="30dp"
-		    	android:text="@string/passwordText"
-	            android:textAppearance="?android:attr/textAppearanceSmall" 
-			/>
-		
-		    <EditText 
-		        android:id="@+id/passwordEditText"
-		        android:layout_width="wrap_content"
-		    	android:layout_height="wrap_content"
-		    	android:layout_below="@id/loginEmailAddressEditText"
-	            android:layout_toRightOf="@id/passwordTextView"
-	            android:layout_alignBaseline="@id/passwordTextView"
-	            android:layout_alignLeft="@id/loginEmailAddressEditText"
-	            android:layout_alignParentRight="true"
-	 	    	android:inputType="textPassword"
-	            android:textAppearance="?android:attr/textAppearanceSmall" 
-			/> 
-		 
-		    <!-- Login Button -->
-	 		<Button
-				android:id="@+id/loginButton"
-				android:layout_height="wrap_content"
-				android:layout_width="wrap_content"
-		    	android:layout_below="@id/passwordEditText"
-				android:layout_centerHorizontal="true"
-				android:text="@string/loginButton"
-	            android:layout_marginTop="40dp"
-	            android:minWidth="80dp"
-				style="?android:attr/buttonStyleSmall"
-			/>
-		    
-		
-		</RelativeLayout>
-		
-	    <View
-	    	android:layout_width="fill_parent"
-			android:layout_height="1dp"
-	        android:layout_marginTop="15dp"
-			android:background="@android:color/darker_gray" />
-	    
-	    <RelativeLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="15dp"
-	    	android:paddingLeft="10dp"
-	    	android:paddingRight="10dp"
-	    >
-	    
-		    <TextView
-		        android:id="@+id/registrationTextView"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/registrationText"
-		        android:layout_alignBaseline="@+id/registerButton"
-		    />
-	
-		    <Button
-		        android:id="@id/registerButton"
-		        style="?android:attr/buttonStyleSmall"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="10dp"
-		        android:layout_toRightOf="@id/registrationTextView"
-		        android:text="@string/registerButton" />
-	
-		</RelativeLayout>
-	    
-	    <RelativeLayout
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:layout_marginTop="15dp"
-	    	android:paddingLeft="10dp"
-	    	android:paddingRight="10dp"
-	    >
-	    
-		    <TextView
-		        android:id="@+id/resetPasswordTextView"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/resetPasswordText"
-		        android:layout_alignBaseline="@+id/resetPasswordButton"
-		    />
-	
-		    <Button
-		        android:id="@id/resetPasswordButton"
-		        style="?android:attr/buttonStyleSmall"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="10dp"
-		        android:layout_toRightOf="@id/resetPasswordTextView"
-		        android:text="@string/resetPasswordButton" />
-	
-		</RelativeLayout>
-	</LinearLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:id="@+id/emailAddressTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="18dp"
+                android:layout_marginTop="20dp"
+                android:text="@string/emailAddressText"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/loginEmailAddressEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/emailAddressTextView"
+                android:layout_alignParentRight="true"
+                android:layout_toRightOf="@id/emailAddressTextView"
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                android:textAppearance="?android:attr/textAppearanceSmall" >
+
+                <requestFocus />
+            </EditText>
+
+            <TextView
+                android:id="@+id/passwordTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@id/loginEmailAddressEditText"
+                android:layout_marginBottom="28dp"
+                android:layout_marginTop="28dp"
+                android:text="@string/passwordText"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <EditText
+                android:id="@+id/passwordEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@id/passwordTextView"
+                android:layout_alignLeft="@id/loginEmailAddressEditText"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/loginEmailAddressEditText"
+                android:layout_toRightOf="@id/passwordTextView"
+                android:inputType="textPassword"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <!-- Login Button -->
+
+            <Button
+                android:id="@+id/loginButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/passwordEditText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="34dp"
+                android:minWidth="80dp"
+                android:text="@string/loginButton" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="18dp"
+            android:layout_marginTop="18dp"
+            android:background="@android:color/darker_gray" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp" >
+
+            <TextView
+                android:id="@+id/registrationTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/registerButton"
+                android:text="@string/registrationText" />
+
+            <Button
+                android:id="@+id/registerButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/resetPasswordButton"
+                android:layout_alignRight="@+id/resetPasswordButton"
+                android:text="@string/registerButton" />
+
+            <TextView
+                android:id="@+id/resetPasswordTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/registrationTextView"
+                android:layout_alignBaseline="@+id/resetPasswordButton"
+                android:layout_below="@id/registerButton"
+                android:text="@string/resetPasswordText"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+
+            <Button
+                android:id="@+id/resetPasswordButton"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/registerButton"
+                android:layout_toRightOf="@id/resetPasswordTextView"
+                android:text="@string/resetPasswordButton" />
+        </RelativeLayout>
+    </LinearLayout>
+
 </ScrollView>
