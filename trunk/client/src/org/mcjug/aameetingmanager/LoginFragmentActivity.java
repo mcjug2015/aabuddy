@@ -2,6 +2,7 @@ package org.mcjug.aameetingmanager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.WindowManager;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
@@ -14,7 +15,9 @@ public class LoginFragmentActivity extends SherlockFragmentActivity {
  
 		setContentView(R.layout.login);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
+		
+		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);     
+	}
     
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
