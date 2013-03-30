@@ -26,7 +26,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -159,10 +158,13 @@ public class MeetingListFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d(TAG, "on list item click");
 
 		sliderMenu.setVisibility(View.GONE);
 		sliderMenu.setAnimation(animDown);
-
+		
+		displaySliderMenu((Meeting) l.getItemAtPosition(position));
+		
 		super.onListItemClick(l, v, position, id);
 	}
 	
@@ -183,12 +185,6 @@ public class MeetingListFragment extends ListFragment {
 			infiniteScrollListener.setLoading(false);
 			
 			getListView().removeFooterView(footerView);
-			getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
-				public boolean onItemLongClick(AdapterView<?> listView, View view, int position, long id) {
-					displaySliderMenu((Meeting) listView.getItemAtPosition(position));
-					return true;
-				}
-			});
 			
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");

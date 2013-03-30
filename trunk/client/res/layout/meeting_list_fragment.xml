@@ -45,8 +45,9 @@
         android:divider="#c7d6d6"
         android:dividerHeight="2dp"
         android:choiceMode="singleChoice"
-        android:listSelector="#10b0e4" />
-   
+        android:listSelector="@color/list_pressed"
+	/>
+    
   	<LinearLayout
 	    android:id="@+id/sliderMenu"
 	    android:layout_width="match_parent"
