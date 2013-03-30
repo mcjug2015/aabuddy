@@ -38,7 +38,7 @@ public class MeetingScraper extends JFrame {
 		
 
 	public MeetingScraper() {
-		super("WAIA Meeting Parser");
+		super("HTML Meeting Scraper");
 		initGui();
 	}
 	
