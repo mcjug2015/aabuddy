@@ -18,6 +18,8 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
@@ -231,6 +233,12 @@ public class SubmitMeetingFragment extends Fragment {
 	private void submitMeeting(Credentials credentials) {
 		FragmentActivity activity = getActivity();
 		try {
+			if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+			    activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			} else {
+				activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+			}
+			
 			submitMeetingParams = createSubmitMeetingJson();
 			submitCredentials = credentials;
 			
@@ -265,11 +273,11 @@ public class SubmitMeetingFragment extends Fragment {
 				}
 
 				if (location == null) {
-					Toast.makeText(getActivity(), getActivity().getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
 				} else {
 					String address = LocationUtil.getAddress(location, getActivity());
 					if (address.trim().equals("")) {
-						Toast.makeText(getActivity(), getActivity().getString(R.string.addressNotFound), Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), getString(R.string.addressNotFound), Toast.LENGTH_LONG).show();
 					} else {
 						addressEditText.setText(address);
 					}
@@ -379,7 +387,7 @@ public class SubmitMeetingFragment extends Fragment {
 					View view = layoutInflater.inflate(R.layout.similar_meetings_dialog, null);		    
 					
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					builder.setTitle(context.getString(R.string.similarMeetingsList));
+					builder.setTitle(getString(R.string.similarMeetingsList));
 					builder.setView(view);
 					
 					ListView listView = (ListView)view.findViewById(R.id.similarMeetingList);
@@ -388,9 +396,7 @@ public class SubmitMeetingFragment extends Fragment {
 					
 					builder.setPositiveButton(getString(R.string.submit_button), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
-							submitProgressDialog = ProgressDialog.show(context, context.getString(R.string.submitMeetingProgressMsg), 
-									context.getString(R.string.waitMsg));
-							
+							submitProgressDialog = ProgressDialog.show(context, getString(R.string.submitMeetingProgressMsg), getString(R.string.waitMsg));
 							new SubmitMeetingTask(context, submitMeetingParams, submitCredentials, submitMeetingListener).execute();
 						}
 					});
@@ -398,6 +404,7 @@ public class SubmitMeetingFragment extends Fragment {
 					builder.setNegativeButton(getString(R.string.cancel_submit_button), new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int which) {
 							dialog.cancel();
+							getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 						}
 					});
 
@@ -427,7 +434,7 @@ public class SubmitMeetingFragment extends Fragment {
 					View view = layoutInflater.inflate(R.layout.submit_meeting_dialog, null);		    
 					
 					AlertDialog.Builder builder = new AlertDialog.Builder(context);
-					builder.setTitle(context.getString(R.string.meetingAdded));
+					builder.setTitle(getString(R.string.meetingAdded));
 					builder.setView(view);
 					
 					List<Meeting> meetings = new ArrayList<Meeting>();
@@ -442,6 +449,7 @@ public class SubmitMeetingFragment extends Fragment {
 							dialog.dismiss();
 							nameEditText.setText("");
 							descriptionEditText.setText("");
+							getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 						}
 					});
 
@@ -456,10 +464,14 @@ public class SubmitMeetingFragment extends Fragment {
 					});
 
 					builder.create().show();
+				} else {
+					getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
 				}
+				
 			} catch (Exception ex) {
-				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();				
-			}
+				getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+				Toast.makeText(context, ex.toString(), Toast.LENGTH_LONG).show();
+			}			
 		}
 	};	
 	
