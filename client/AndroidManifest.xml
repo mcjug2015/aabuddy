@@ -33,7 +33,8 @@
             android:label="@string/submitMeeting" />
         <activity
             android:name=".MeetingListFragmentActivity"
-             android:label="@string/meetingList" />
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:label="@string/meetingList" />
         <activity
             android:name=".AdminPrefsActivity"
             android:label="@string/adminPrefActivityTitle" />
