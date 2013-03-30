@@ -165,10 +165,12 @@ public class MeetingScraper extends JFrame {
 					List<Meeting> allMeetingsList = new ArrayList<Meeting>();
 					if ((files != null) && (files.length > 0)) {
 						for (int i = 0; i < files.length; i++) {
-							publish("Parsing file #" + (i+1) + ": " + files[i].getName() + "...");
-							List<Meeting> meetingList = SearchResultsScraper.scrapeFile(files[i]);
-							publish("     " + meetingList.size() + " meetings parsed");
-							allMeetingsList.addAll(meetingList);
+							if (!files[i].isDirectory()) {
+								publish("Parsing file #" + (i+1) + ": " + files[i].getName() + "...");
+								List<Meeting> meetingList = SearchResultsScraper.scrapeFile(files[i]);
+								publish("     " + meetingList.size() + " meetings parsed");
+								allMeetingsList.addAll(meetingList);
+							}
 						}
 						exportMeetingList(allMeetingsList);
 						successful = true;
