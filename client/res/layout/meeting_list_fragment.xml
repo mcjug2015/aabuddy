@@ -52,7 +52,7 @@
 	    android:id="@+id/sliderMenu"
 	    android:layout_width="match_parent"
 	    android:layout_height="60dp"
-	    android:background="#ffcccccc"
+	    android:background="#FF555555"
 	    android:content="@+id/content"
 	    android:gravity="center_vertical|center_horizontal"
 	    android:orientation="horizontal" >
@@ -68,8 +68,7 @@
       
 		<Button
 	        android:id="@+id/meetingNotThereButton"
-	        style="?android:attr/buttonStyleSmall"
-	        android:background="@android:color/white"
+	        style="@style/buttonStyle"
 	        android:layout_width="80dp"
 	        android:layout_height="30dp"
 		    android:layout_marginLeft="10dp"
