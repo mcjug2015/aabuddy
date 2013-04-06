@@ -48,7 +48,7 @@ class DayOfWeekGetParams():
     
     def apply_filters(self, queryset):
         if 'day_of_week__eq' in self.vals:
-            queryset = queryset.filter(day_of_week__eq=self.vals['day_of_week__eq'])
+            queryset = queryset.filter(day_of_week=self.vals['day_of_week__eq'])
         if 'day_of_week__gt' in self.vals:
             queryset = queryset.filter(day_of_week__gt=self.vals['day_of_week__gt'])
         if 'day_of_week__gte' in self.vals:
@@ -110,10 +110,7 @@ def temp_meeting_to_json_obj(meeting):
         json_obj['distance'] = meeting.distance.mi
     except:
         json_obj['distance'] = 0
-    try:
-        json_obj['id'] = meeting.pk
-    except:
-        json_obj['id'] = -1
+    json_obj['id'] = meeting.pk
     json_obj['creator'] = meeting.creator.username
     json_obj['created_date'] = meeting.created_date.isoformat()
     return json_obj

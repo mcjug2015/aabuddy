@@ -1,0 +1,18 @@
+[
+    {
+        "pk": 1,
+        "model": "aabuddy.meeting",
+        "fields": {
+            "day_of_week": 1,
+            "start_time": "12:00:00",
+            "end_time": "13:00:00",
+            "name": "test_meeting1",
+            "description": "test_description1",
+            "address": "test_address1",
+            "internal_type": "submitted",
+            "creator": 1,
+            "created_date": "2012-09-29 12:00:00",
+            "geo_location": "POINT(-77.4108 39.4142)"
+        }
+    }
+]
