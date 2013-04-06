@@ -50,12 +50,12 @@ def dev_setup():
 
 def _pep8():
     '''Run the pep8 tool to check code style'''
-    local('pep8 -r --ignore=E501,W293 --exclude=migrations,tests.py aabuddy > reports/pep8-aabuddy.out')
+    local('pep8 -r --ignore=E501,W293 --exclude=migrations,tests aabuddy > reports/pep8-aabuddy.out')
 
 
 def _pylint():
     '''Run the pep8 tool to check more code style and some basic flow checks'''
-    local('pylint --rcfile=.pylintrc --ignore=migrations,tests.py aabuddy > reports/pylint-aabuddy.out')
+    local('pylint --rcfile=.pylintrc --ignore=migrations,tests aabuddy > reports/pylint-aabuddy.out')
 
 
 def check():
