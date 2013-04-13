@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<title>Google Maps JavaScript API v3 Example: Geocoding Simple</title>
+		<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.11&sensor=false"></script>
+		<script>
+			var geocoder;
+			var map;
+			function initialize() {
+				geocoder = new google.maps.Geocoder();
+				var latlng = new google.maps.LatLng(39.0839973, -77.15275780000002);
+				var mapOptions = {
+					zoom: 8,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
+				map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+			}
+			
+			// Global Variables
+			var arrayOfLines;
+			var addresses = [];
+			var nextAddress = 0;
+			var delay = 200;
+			var inc = 2000;
+			var overLimit = false;
+			// END Global Variables
+			function codeAddress(search, line, next) {
+				var size = addresses.length;
+				geocoder.geocode( {'address':search}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						map.setCenter(results[0].geometry.location);
+						var marker = new google.maps.Marker({
+							map: map,
+							position: results[0].geometry.location
+						});
+      			
+      			document.getElementById("progress").innerHTML = "Process " + nextAddress + " of " + size;
+						document.getElementById("output").innerHTML += 
+							line + "|" + results[0].geometry.location.lat() + "|" + results[0].geometry.location.lng() + "\n";
+						if (overLimit == true) {
+							document.getElementById("errorStatus").innerHTML += 
+								nextAddress + " -- " + search + "| (new delay = " + delay + "ms)" + "\n";
+							overLimit = false;
+							//delay = 2000;
+						}
+					}
+					else {
+          	// === if we were sending the requests to fast, try this one again and increase the delay
+          	if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+          	  nextAddress--;
+          	  delay = delay + inc;
+          	  overLimit = true;
+          	}
+          	else {
+          		document.getElementById("progress").innerHTML = "Process " + nextAddress + " of " + size;
+							document.getElementById("output").innerHTML += line + "|" + 0 + "|" + 0 + "\n";
+          	  document.getElementById("errorStatus").innerHTML += nextAddress + " -- " + search + "|" + status + " (delay = " + delay + "ms)\n";
+          	  if (overLimit == true) {
+          	  	document.getElementById("errorStatus").innerHTML += 
+									nextAddress + " -- " + search + "| (new delay = " + delay + "ms)" + "\n";
+								overLimit = false;
+								//delay = 2000;
+							}
+          	}   
+          }
+          next();
+				});
+			}
+    	
+			function loadFile()
+			{
+			  // Obtain the first file of the FileList object
+			  var file = document.getElementById('file').files[0];
+			  if(file && window.File && window.FileReader && window.FileList && window.Blob)
+				{
+			    getAsText(file);
+			  }
+			  else
+		  	{
+		  		document.getElementById('input').innerHTML =
+		  			"Error: seems File API is not supported on your browser";
+		  	}
+			}
+
+			function getAsText(readFile)
+			{
+				var reader;
+				try
+				{
+			    reader = new FileReader();
+				}catch(e)
+				{
+					document.getElementById('input').innerHTML =
+						"Error: seems File API is not supported on your browser";
+				  return;
+			  }
+
+			  // Read file into memory as UTF-8
+			  reader.readAsText(readFile, "UTF-8");
+
+			  // Handle success, and errors
+			  reader.onload = loaded;
+			  reader.onerror = errorHandler;
+			}
+
+			function loaded(evt)
+			{
+			  // Obtain the read file data
+			  document.getElementById('input').innerHTML =  evt.target.result;
+			}
+
+			function errorHandler(evt)
+			{
+			  if(evt.target.error.code == evt.target.error.NOT_READABLE_ERR)
+				{
+			    // The file could not be read
+					document.getElementById('input').innerHTML = "Error reading file..."
+			  }
+			}
+				
+			function startRead()
+			{
+				var content = document.getElementById('input').innerHTML;
+				// arrayOfLines is a global variable
+				arrayOfLines = content.split(/\r?\n/);
+				
+				var size =  arrayOfLines.length;
+				var	i = 0;
+				var line;
+				for (i = 0; i < arrayOfLines.length; i++) {
+					line = arrayOfLines[i];
+					if (line.length != 0) {
+						// addresses is a global variable
+						addresses.push(line.substr(line.lastIndexOf('|') + 1));
+					}
+				}
+				
+				theNext();
+			}
+			
+			function theNext() {
+        if (nextAddress < addresses.length) {
+          setTimeout('codeAddress("' + addresses[nextAddress] + '", "' + arrayOfLines[nextAddress] + '", theNext)', delay);
+          nextAddress++;
+        }
+      }
+	</script>
+	<style type="text/css">
+		h3 { margin:0px; }
+	</style>
+</head>
+<body onload="initialize()">
+	<h3>Step 1: Load a csv file consisting of all meeting</h3>
+	<span style="margin: 10px">Click <b>Browse</b> to select a file:</span> <input id="file" type="file" onchange="loadFile()"><br/>
+	File contents:<br/>
+	<textarea id="input" readonly="true" cols="120" rows="6"></textarea><br/>
+	
+	<h3>Step 2: Geocoding (Covert address to latitude and longitude)</h3>
+	<span style="margin: 10px"></span> <input id="read" type="button" value="Geocode" onclick="startRead()">
+	<b style="margin: 10px">Progress:</b> <span id="progress"></span><br/>
+	Error Status:<br/>
+	<textarea id="errorStatus" readonly="true" cols="120" rows="4"></textarea><br/> 
+	
+	<h3>Step 3: Copy the content in the box below and save it to a file</h3> 
+	<textarea id="output" readonly="true" cols="120" rows="6"></textarea><br/>
+		
+	<div id="map-canvas" style="height:400px; top: 5px;"></div> <br/>
+</body>
+</html>
