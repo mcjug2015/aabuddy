@@ -24,8 +24,8 @@
 			var arrayOfLines;
 			var addresses = [];
 			var nextAddress = 0;
-			var delay = 200;
-			var inc = 2000;
+			var delay = 1000;
+			var inc = 1000;
 			var overLimit = false;
 			// END Global Variables
 			function codeAddress(search, line, next) {
@@ -58,7 +58,7 @@
           	else {
           		document.getElementById("progress").innerHTML = "Process " + nextAddress + " of " + size;
 							document.getElementById("output").innerHTML += line + "|" + 0 + "|" + 0 + "\n";
-          	  document.getElementById("errorStatus").innerHTML += nextAddress + " -- " + search + "|" + status + " (delay = " + delay + "ms)\n";
+          	  document.getElementById("errorStatus").innerHTML += nextAddress + " -- " + search + "|" + status + "\n";
           	  if (overLimit == true) {
           	  	document.getElementById("errorStatus").innerHTML += 
 									nextAddress + " -- " + search + "| (new delay = " + delay + "ms)" + "\n";
