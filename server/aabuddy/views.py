@@ -212,7 +212,7 @@ def create_user(request):
     if request.method == 'POST':
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
-        logger.debug("About to register %s:%s" % (username, password))
+        logger.debug("About to register %s" % (username))
         user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
                     is_superuser=False, is_staff=False)
         user.set_password(password)
@@ -308,16 +308,21 @@ def find_similar(request):
     if request.method == 'POST':
         json_obj = json.loads(request.raw_post_data)
         meeting = temp_json_obj_to_meeting(json_obj)
-        similar_meetings = Meeting.objects.filter(day_of_week=meeting.day_of_week, 
+        similar_meetings = find_similar_to_meeting(meeting)
+        retval_obj = get_json_obj_for_meetings(similar_meetings)
+        return HttpResponse(content=json.dumps(retval_obj))
+
+
+def find_similar_to_meeting(meeting):
+    similar_meetings = Meeting.objects.filter(day_of_week=meeting.day_of_week, 
                                                   start_time__lte=meeting.start_time+datetime.timedelta(minutes=10),
                                                   start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
                                                   end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
                                                   end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
-        similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=1)))
-        similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
-        similar_meetings = similar_meetings[0:20]
-        retval_obj = get_json_obj_for_meetings(similar_meetings)
-        return HttpResponse(content=json.dumps(retval_obj))
+    similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=1)))
+    similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
+    similar_meetings = similar_meetings[0:20]
+    return similar_meetings
 
 
 @csrf_exempt
