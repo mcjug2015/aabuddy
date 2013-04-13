@@ -6,6 +6,11 @@ from django.contrib.gis.db.models.manager import GeoManager
 from django.contrib.auth.models import User
 
 
+class PsvFileUpload(models.Model):
+    ''' a blank csv file upload model object'''
+    pass
+
+
 class Meeting(models.Model):
     ''' meeting models class '''
 
