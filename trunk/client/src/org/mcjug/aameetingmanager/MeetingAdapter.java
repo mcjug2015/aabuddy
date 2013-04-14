@@ -69,7 +69,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 		if (Build.VERSION.SDK_INT < 11) {
 			RelativeLayout activeItem = (RelativeLayout) view;
 			if (position == selectedItem) {
-				activeItem.setBackgroundColor(Color.BLUE);
+				activeItem.setBackgroundColor(Color.argb(0x80, 0x10, 0xb0, 0xe4));
 	
 	            // set focus on list item
 	            int top = (activeItem == null) ? 0 : activeItem.getTop();
