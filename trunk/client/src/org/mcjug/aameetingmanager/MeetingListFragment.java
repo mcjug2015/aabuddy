@@ -126,9 +126,10 @@ public class MeetingListFragment extends ListFragment {
 					}
 				}
 
+				listActionModeCallback.stopAction();
 				getListView().setSelection(0);			
 				infiniteScrollListener.reset();
-
+				
 				String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
 				FindMeetingTask findMeetingTask = new FindMeetingTask(view.getContext(), paramStr, false, getActivity().getString(R.string.sortMeetingProgressMsg));
 				findMeetingTask.execute();
