@@ -2,20 +2,21 @@ package org.mcjug.aameetingmanager;
 
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	private List<Meeting> meetings;
-
+    private int selectedItem = -1;
+    
 	public MeetingAdapter(Context context, int textViewResourceId, List<Meeting> meetings) {
 		super (context, textViewResourceId, meetings);
 		this.meetings = meetings;
@@ -27,13 +28,17 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 		notifyDataSetChanged();
 	}
 
+	public void setSelectedItem(int selectedItem) {
+		this.selectedItem = selectedItem;
+	}
+	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent){
+	public View getView(int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
 
 		View view = convertView;
 		ViewHolder holder;
-		if (view == null){
+		if (view == null) {
 
 			LayoutInflater inflater = LayoutInflater.from(context);
 			view = inflater.inflate(R.layout.meeting_list_row, null);
@@ -58,9 +63,22 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 			holder.description.setText(meeting.getDescription());
 			holder.distance.setText(meeting.getDistance());
 			holder.time.setText(meeting.getTimeRange());
-			holder.name.setText(meeting.getName());	
-			
+			holder.name.setText(meeting.getName());
 		}
+		
+		if (Build.VERSION.SDK_INT < 11) {
+			RelativeLayout activeItem = (RelativeLayout) view;
+			if (position == selectedItem) {
+				activeItem.setBackgroundColor(Color.BLUE);
+	
+	            // set focus on list item
+	            int top = (activeItem == null) ? 0 : activeItem.getTop();
+	            ListView listView = (ListView) parent;
+	            listView.setSelectionFromTop(position, top);
+	        } else {
+	        	activeItem.setBackgroundColor(Color.TRANSPARENT);
+	        }
+		}		
 		return view;
 	}   
 	
