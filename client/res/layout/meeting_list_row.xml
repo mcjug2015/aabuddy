@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?activatedBackgroundIndicator"
     android:padding="10dp" >
 
     <TextView
@@ -11,7 +12,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:textColor="#565656"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/meetingDay"
@@ -20,7 +21,7 @@
         android:layout_below="@id/meetingName"
         android:layout_marginLeft="10dp"
         android:textColor="#565656"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/meetingTime"
@@ -30,7 +31,7 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@+id/meetingDay"
         android:textColor="#565656"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/meetingDistance"
@@ -40,7 +41,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="4dp"
         android:textColor="#10b0e4"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/meetingAddress"
@@ -49,7 +50,7 @@
         android:layout_below="@id/meetingDay"
         android:layout_marginLeft="10dp"
         android:textColor="#797979"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/meetingDescription"
@@ -58,8 +59,6 @@
         android:layout_below="@id/meetingAddress"
         android:layout_marginLeft="10dp"
         android:textColor="#797979"
-        android:textSize="14dp" />
+        android:textSize="14sp" />
 
-
-    
 </RelativeLayout>
