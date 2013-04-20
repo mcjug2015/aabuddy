@@ -21,6 +21,7 @@ public class MeetingListUtil {
     private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
+	private static final String CREATOR = "creator";
 	private static final String DAY_OF_WEEK = "day_of_week";
 	private static final String START_TIME = "start_time";
 	private static final String END_TIME = "end_time";
@@ -52,6 +53,7 @@ public class MeetingListUtil {
 					meeting.setId(meetingJson.getInt(ID));
 					meeting.setName(meetingJson.getString(NAME));
 					meeting.setDescription(meetingJson.getString(DESCRIPTION));
+					meeting.setCreator(meetingJson.getString(CREATOR));
 				
 					String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
 					int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
