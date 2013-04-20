@@ -28,11 +28,11 @@ public class HttpUtil {
 		Context context = AAMeetingApplication.getInstance();
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-		boolean defaultSslTrustAllFlag = Boolean.getBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));			
-		boolean bSslTrustAllFlag = 
-			prefs.getBoolean(context.getString(R.string.sslTrustAllFlagPreferenceName), 
+		boolean defaultSslTrustAllFlag = Boolean.parseBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));
+		boolean bSslTrustAllFlag =
+			prefs.getBoolean(context.getString(R.string.sslTrustAllFlagPreferenceName),
 							 defaultSslTrustAllFlag);
-		
+
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		// http scheme
 		schemeRegistry.register(new Scheme("http", PlainSocketFactory
@@ -48,14 +48,14 @@ public class HttpUtil {
 				schemeRegistry);
 
 	   return new DefaultHttpClient(cm, httpParams);
-        
+
 	}
-	
+
 	public static String getSecureRequestUrl(Context context, int requestUrlResourceId) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);			
+		String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);
 		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerSecureBaseUrlPreferenceName), defaultServerBase);
-		
+
 		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
@@ -63,14 +63,14 @@ public class HttpUtil {
 
 	public static String getUnsecureRequestUrl(Context context, int requestUrlResourceId) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);			
+		String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);
 		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerUnsecureBaseUrlPreferenceName), defaultServerBase);
-		
+
 		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
 	}
-	
+
 	public static String getContent(HttpResponse httpResponse) throws Exception {
 		StringBuilder responseStr = new StringBuilder();
 		HttpEntity entity = httpResponse.getEntity();
@@ -86,7 +86,7 @@ public class HttpUtil {
 				inputStream.close();
 			}
 		}
-		
-		return responseStr.toString();	
+
+		return responseStr.toString();
 	}
 }
