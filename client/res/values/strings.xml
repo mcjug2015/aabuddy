@@ -102,6 +102,7 @@
     <string name="meetingListNumItems">"Showing %1$d of %2$d"</string>
  	<string name="mapImageViewDescription">Go to Map</string>
  	<string name="deleteProgressMsg">Deleting Meeting</string> 
+ 	<string name="deleteMustBeCreatorMsg">You must be the creator of the meeting in order to delete it.</string> 
     
     <string name="mapMenuItem">Map</string>
     <string name="deleteMenuItem">Delete</string>
