@@ -115,7 +115,7 @@ public class MeetingListFragment extends ListFragment {
 			if (initialSelection) {	
 				initialSelection = false;
 			} else {	
-				refreshList(getString(R.string.sortMeetingProgressMsg));
+				sortList();
 			}
 		}
 
@@ -136,7 +136,7 @@ public class MeetingListFragment extends ListFragment {
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
 	}
 
-	private void refreshList(String refreshMsg) {		
+	private void sortList() {		
 		String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
 		List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
 		NameValuePair param;
@@ -159,7 +159,7 @@ public class MeetingListFragment extends ListFragment {
 		infiniteScrollListener.reset();
 		
 		String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
-		FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, refreshMsg);
+		FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, getString(R.string.sortMeetingProgressMsg));
 		findMeetingTask.execute();
 	}
 	
@@ -194,9 +194,11 @@ public class MeetingListFragment extends ListFragment {
 			switch (item.getItemId()) {
 			case R.id.deleteMeeting:
 				if (selectedMeeting.getCreator().equals(userName)) {
-					new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();					
+					new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();	
+					mode.finish();
+				} else {
+					Toast.makeText(getActivity(), getString(R.string.deleteMustBeCreatorMsg), Toast.LENGTH_LONG).show();		
 				}
-				mode.finish(); 
 				return true;			
 			
 			case R.id.map:
@@ -243,7 +245,7 @@ public class MeetingListFragment extends ListFragment {
 			MeetingListResults meetingListResults = app.getMeetingListResults();
 			listAdapter.setMeetings(meetingListResults.getMeetings());
 
-			String numItemsLabel = String.format(getActivity().getString(R.string.meetingListNumItems),
+			String numItemsLabel = String.format(getString(R.string.meetingListNumItems), 
 					listAdapter.getCount(), meetingListResults.getTotalMeetingCount());
 			meetingListNumItemsLabel.setText(numItemsLabel);
 
@@ -317,7 +319,14 @@ public class MeetingListFragment extends ListFragment {
 	private DeleteMeetingListener deleteMeetingListener = new DeleteMeetingListener() {
 		@Override
 		public void deleteMeetingResults(Meeting meeting) {
-			refreshList(null);
+			listAdapter.remove(meeting);
+			
+			String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
+			List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");		
+			String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
+			FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, null);
+			findMeetingTask.execute();
 		}
 	};
+	
 }
