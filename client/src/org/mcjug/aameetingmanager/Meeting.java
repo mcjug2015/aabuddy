@@ -2,9 +2,11 @@ package org.mcjug.aameetingmanager;
 
 public class Meeting {
 	private int id;
+	
 	private String name;
 	private String description;
 	private String dayOfWeek;
+	private String creator;
 	private String timeRange;
 	private String address;
 	private String distance;
@@ -17,15 +19,15 @@ public class Meeting {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
+	}	
+	
 	public String getName() {
 		return name;
 	}
 	
 	public void setName(String name) {
 		this.name = name;
-	}
+	}	
 	
 	public String getDescription() {
 		return description;
@@ -35,6 +37,14 @@ public class Meeting {
 		this.description = description;
 	}
 	
+	public String getCreator() {
+		return creator;
+	}
+
+	public void setCreator(String creator) {
+		this.creator = creator;
+	}
+
 	public String getDayOfWeek() {
 		return dayOfWeek;
 	}
