@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.DeleteMeetingTask.DeleteMeetingListener;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -46,11 +47,13 @@ public class MeetingListFragment extends ListFragment {
 	private View footerView;
 	private TextView meetingListNumItemsLabel;
 	private int offset = 0;
-
+	private Spinner sortOrderSpinner;
+	
 	private Meeting selectedMeeting;
 	private MenuItem meetingNotThereMenuItem;
 	private ActionMode actionMode;
 	private ListActionModeCallback listActionModeCallback;
+	private String userName;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -92,47 +95,27 @@ public class MeetingListFragment extends ListFragment {
 		listView.setItemsCanFocus(false);
 		getListView().setSelector(android.R.color.transparent);
 
+		Credentials credentials = Credentials.readFromPreferences(activity);
+		userName = credentials.getUsername();
+
 		try {
 			prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 			sortOrderValues = getResources().getStringArray(R.array.sortOrderValues);
-			Spinner sortOrder = (Spinner)getView().findViewById(R.id.meetingListSortOrder);
-			sortOrder.setOnItemSelectedListener(sortOrderItemselectListener);
+			sortOrderSpinner = (Spinner)getView().findViewById(R.id.meetingListSortOrder);
+			sortOrderSpinner.setOnItemSelectedListener(sortOrderItemSelectListener);
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
 	}
 	
-	private OnItemSelectedListener sortOrderItemselectListener = new OnItemSelectedListener() {
+	private OnItemSelectedListener sortOrderItemSelectListener = new OnItemSelectedListener() {
 		private boolean initialSelection = true;
 
 		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			if (initialSelection) {	
 				initialSelection = false;
 			} else {	
-				String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
-				List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
-				NameValuePair param;
-				for (int i = 0; i < meetingParams.size(); i++) {
-					param = meetingParams.get(i);
-					if (param.getName().equals("order_by")) {
-						meetingParams.set(i, new BasicNameValuePair(param.getName(),  sortOrderValues[parent.getSelectedItemPosition()]));
-
-					} else if (param.getName().equals("offset")) {
-						meetingParams.set(i, new BasicNameValuePair(param.getName(), "0"));
-
-					} else if (param.getName().equals("limit")) {
-						int paginationSize = view.getContext().getResources().getInteger(R.integer.paginationSize);
-						meetingParams.set(i, new BasicNameValuePair(param.getName(), String.valueOf(paginationSize)));
-					}
-				}
-
-				listActionModeCallback.stopAction();
-				getListView().setSelection(0);			
-				infiniteScrollListener.reset();
-				
-				String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
-				FindMeetingTask findMeetingTask = new FindMeetingTask(view.getContext(), paramStr, false, getActivity().getString(R.string.sortMeetingProgressMsg));
-				findMeetingTask.execute();
+				refreshList(getString(R.string.sortMeetingProgressMsg));
 			}
 		}
 
@@ -153,6 +136,33 @@ public class MeetingListFragment extends ListFragment {
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
 	}
 
+	private void refreshList(String refreshMsg) {		
+		String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
+		List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
+		NameValuePair param;
+		for (int i = 0; i < meetingParams.size(); i++) {
+			param = meetingParams.get(i);
+			if (param.getName().equals("order_by")) {
+				meetingParams.set(i, new BasicNameValuePair(param.getName(),  sortOrderValues[sortOrderSpinner.getSelectedItemPosition()]));
+
+			} else if (param.getName().equals("offset")) {
+				meetingParams.set(i, new BasicNameValuePair(param.getName(), "0"));
+
+			} else if (param.getName().equals("limit")) {
+				int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
+				meetingParams.set(i, new BasicNameValuePair(param.getName(), String.valueOf(paginationSize)));
+			}
+		}
+
+		listActionModeCallback.stopAction();
+		getListView().setSelection(0);			
+		infiniteScrollListener.reset();
+		
+		String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
+		FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, refreshMsg);
+		findMeetingTask.execute();
+	}
+	
 	public class ListActionModeCallback implements ActionMode.Callback {
 	
 		// Called when the action mode is created; startActionMode() was called
@@ -160,9 +170,14 @@ public class MeetingListFragment extends ListFragment {
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Create the menu from the xml file
 			SherlockFragmentActivity activity = (SherlockFragmentActivity)getActivity();
-			activity.getSupportMenuInflater().inflate(R.menu.meeting_list_contextual_menu, menu);
-
-			meetingNotThereMenuItem = menu.getItem(2);
+			if (userName.trim().equals("")) {
+				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
+				meetingNotThereMenuItem = menu.getItem(1);
+			} else {
+				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu, menu);
+				meetingNotThereMenuItem = menu.getItem(2);
+			}
+			
 			return true;
 		}
 
@@ -178,7 +193,9 @@ public class MeetingListFragment extends ListFragment {
 		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.deleteMeeting:
-				Toast.makeText(getActivity(), "Selected menu", Toast.LENGTH_LONG).show();
+				if (selectedMeeting.getCreator().equals(userName)) {
+					new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();					
+				}
 				mode.finish(); 
 				return true;			
 			
@@ -295,5 +312,12 @@ public class MeetingListFragment extends ListFragment {
 			}
 		}
 		return false;
-	}	
+	}
+	
+	private DeleteMeetingListener deleteMeetingListener = new DeleteMeetingListener() {
+		@Override
+		public void deleteMeetingResults(Meeting meeting) {
+			refreshList(null);
+		}
+	};
 }
