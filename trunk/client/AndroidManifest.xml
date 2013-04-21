@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FindMeetingFragmentActivity"
+            android:name=".meeting.FindMeetingFragmentActivity"
             android:label="@string/findMeeting" />
         <activity
-            android:name=".SubmitMeetingFragmentActivity"            
+            android:name=".meeting.SubmitMeetingFragmentActivity"            
             android:label="@string/submitMeeting" />
         <activity
-            android:name=".MeetingListFragmentActivity"
+            android:name=".meeting.MeetingListFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/meetingList" />
         <activity
@@ -42,19 +42,19 @@
             android:name=".AdminPrefsWithFragmentActivity"
             android:label="@string/adminPrefActivityTitle" />
         <activity
-            android:name=".LoginFragmentActivity"
+            android:name=".authentication.LoginFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/loginActivityTitle" />
         <activity
-            android:name=".RegisterFragmentActivity"
+            android:name=".authentication.RegisterFragmentActivity"
            	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/registrationActivityTitle" />
         <activity
-            android:name=".ResetPasswordFragmentActivity"
+            android:name=".authentication.ResetPasswordFragmentActivity"
            	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/resetPasswordActivityTitle" />
         <activity
-            android:name=".ChangePasswordFragmentActivity"
+            android:name=".authentication.ChangePasswordFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/changePasswordActivityTitle" />
         <activity
