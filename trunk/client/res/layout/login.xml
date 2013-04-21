@@ -6,7 +6,7 @@
     
 	<fragment
         android:id="@+id/loginFragment"
-        android:name="org.mcjug.aameetingmanager.LoginFragment"
+        android:name="org.mcjug.aameetingmanager.authentication.LoginFragment"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 </LinearLayout>
