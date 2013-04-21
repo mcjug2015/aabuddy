@@ -6,9 +6,9 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mcjug.aameetingmanager.Meeting;
-import org.mcjug.aameetingmanager.MeetingListResults;
 import org.mcjug.aameetingmanager.R;
+import org.mcjug.aameetingmanager.meeting.Meeting;
+import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 
 import android.content.Context;
 import android.os.Build;
