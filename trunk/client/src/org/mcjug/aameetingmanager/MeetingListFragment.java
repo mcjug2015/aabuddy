@@ -49,6 +49,7 @@ public class MeetingListFragment extends ListFragment {
 	private int offset = 0;
 	private Spinner sortOrderSpinner;
 	
+	private ProgressDialog deleteProgressDialog; 
 	private Meeting selectedMeeting;
 	private MenuItem meetingNotThereMenuItem;
 	private ActionMode actionMode;
@@ -194,11 +195,11 @@ public class MeetingListFragment extends ListFragment {
 			switch (item.getItemId()) {
 			case R.id.deleteMeeting:
 				if (selectedMeeting.getCreator().equals(userName)) {
-					new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();	
-					mode.finish();
+					getDeleteMeetingDialog().show();
 				} else {
-					Toast.makeText(getActivity(), getString(R.string.deleteMustBeCreatorMsg), Toast.LENGTH_LONG).show();		
+					Toast.makeText(getActivity(), getString(R.string.deleteMeetingMustBeCreatorMsg), Toast.LENGTH_LONG).show();		
 				}
+				mode.finish();
 				return true;			
 			
 			case R.id.map:
@@ -251,6 +252,12 @@ public class MeetingListFragment extends ListFragment {
 
 			infiniteScrollListener.setLoading(false);
 			getListView().removeFooterView(footerView);
+			
+			if (deleteProgressDialog != null) {
+				deleteProgressDialog.dismiss();
+				deleteProgressDialog = null;
+			}
+
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
 		}
@@ -286,9 +293,8 @@ public class MeetingListFragment extends ListFragment {
 		
 		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				//meetingNotThereButton.setEnabled(!isMeetingInNotThereList(meeting.getId()));
 				meetingNotThereMenuItem.setEnabled(false);
-				ProgressDialog progressDialog = ProgressDialog.show(context, context.getString(R.string.postMeetingNotThereProgressMsg), 
+				ProgressDialog progressDialog = ProgressDialog.show(context, getString(R.string.postMeetingNotThereProgressMsg), 
 						context.getString(R.string.waitMsg));
 				new PostMeetingNotThereTask(context, selectedMeeting.getId(), progressDialog).execute();
 				dialog.dismiss();
@@ -325,8 +331,35 @@ public class MeetingListFragment extends ListFragment {
 			List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");		
 			String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
 			FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, null);
-			findMeetingTask.execute();
+			findMeetingTask.execute();			
 		}
 	};
 	
+	private AlertDialog.Builder getDeleteMeetingDialog() {
+		final Context context = getActivity();
+		AlertDialog.Builder builder = new AlertDialog.Builder(context);
+		
+		String deleteMeetingMsg = String.format(getString(R.string.deleteMeetingConfirmMsg), selectedMeeting.getName());
+		builder.setTitle(R.string.deleteMeetingConfirmTitle)
+		.setMessage(deleteMeetingMsg)
+		
+		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				deleteProgressDialog = ProgressDialog.show(context, 
+						getString(R.string.deleteMeetingProgressMsg), 
+						getString(R.string.waitMsg));
+				
+				new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();	
+				dialog.dismiss();
+			}
+		})
+		
+		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				dialog.dismiss();
+			}
+		});	
+		
+		return builder;
+	}
 }
