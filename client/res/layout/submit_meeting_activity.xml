@@ -8,7 +8,7 @@
             android:id="@+id/submitMeetingFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            class="org.mcjug.aameetingmanager.SubmitMeetingFragment" >
+            class="org.mcjug.aameetingmanager.meeting.SubmitMeetingFragment" >
         </fragment>
         
 </LinearLayout>
