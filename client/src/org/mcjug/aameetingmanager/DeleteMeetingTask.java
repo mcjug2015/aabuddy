@@ -23,15 +23,6 @@ public class DeleteMeetingTask extends AsyncTask<Void, Void, String> {
 		this.context = context;
 		this.meeting = meeting;
 		this.listener = listener;
-		
-		progressDialog = new ProgressDialog(context);        
-		progressDialog.setTitle(context.getString(R.string.deleteProgressMsg));
-		progressDialog.setMessage(context.getString(R.string.waitMsg));
-	}
-
-	@Override
-	protected void onPreExecute() {
-		progressDialog.show();
 	}
 
 	@Override
@@ -65,12 +56,10 @@ public class DeleteMeetingTask extends AsyncTask<Void, Void, String> {
 	@Override
 	protected void onPostExecute(String errorMsg) {
 		try {
-			progressDialog.cancel();
-			
-			if (errorMsg == null) {
-				listener.deleteMeetingResults(meeting);
-			} else {	
+			if (errorMsg != null) {
 				Toast.makeText(context, errorMsg, Toast.LENGTH_LONG).show();		
+			} else if (listener != null) {	
+				listener.deleteMeetingResults(meeting);
 			}
 		} catch (Exception e) {
 		}
