@@ -1,5 +1,8 @@
 package org.mcjug.aameetingmanager;
 
+import org.mcjug.aameetingmanager.authentication.Credentials;
+import org.mcjug.aameetingmanager.authentication.ResetPasswordFragmentActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
