@@ -35,7 +35,7 @@
             android:title="@string/changePasswordPreferenceTitle" >
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="org.mcjug.aameetingmanager.ChangePasswordFragmentActivity"
+                android:targetClass="org.mcjug.aameetingmanager.authentication.ChangePasswordFragmentActivity"
                 android:targetPackage="org.mcjug.aameetingmanager" />
         </Preference>
         <Preference
@@ -43,7 +43,7 @@
             android:title="@string/resetPasswordPreferenceTitle" >
             <intent
                 android:action="android.intent.action.VIEW"
-                android:targetClass="org.mcjug.aameetingmanager.ResetPasswordFragmentActivity"
+                android:targetClass="org.mcjug.aameetingmanager.authentication.ResetPasswordFragmentActivity"
                 android:targetPackage="org.mcjug.aameetingmanager" />
         </Preference>
     </PreferenceCategory>
