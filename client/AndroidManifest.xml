@@ -58,7 +58,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/changePasswordActivityTitle" />
         <activity
-            android:name=".HelpFragmentActivity"
+            android:name=".help.HelpFragmentActivity"
             android:label="@string/helpActivityTitle" />
     </application>
 
