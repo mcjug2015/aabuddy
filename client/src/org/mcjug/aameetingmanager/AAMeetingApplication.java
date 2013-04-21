@@ -3,6 +3,8 @@ package org.mcjug.aameetingmanager;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.mcjug.aameetingmanager.meeting.MeetingListResults;
+
 import android.app.Application;
 
 public class AAMeetingApplication extends Application {
