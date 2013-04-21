@@ -3,6 +3,7 @@ package org.mcjug.aameetingmanager;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
+import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 
