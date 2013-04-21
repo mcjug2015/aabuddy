@@ -101,9 +101,11 @@
    	<string name="loadingMoreMeetingsProgressMsg">Loading More Meetings</string>
     <string name="meetingListNumItems">"Showing %1$d of %2$d"</string>
  	<string name="mapImageViewDescription">Go to Map</string>
- 	<string name="deleteProgressMsg">Deleting Meeting</string> 
- 	<string name="deleteMustBeCreatorMsg">You must be the creator of the meeting in order to delete it.</string> 
-    
+ 	<string name="deleteMeetingProgressMsg">Deleting Meeting</string> 
+ 	<string name="deleteMeetingMustBeCreatorMsg">You must be the creator of the meeting in order to delete it.</string> 
+ 	<string name="deleteMeetingConfirmTitle">Delete Meeting</string> 
+ 	<string name="deleteMeetingConfirmMsg">Are you sure you want to delete meeting %s ?</string> 
+ 		
     <string name="mapMenuItem">Map</string>
     <string name="deleteMenuItem">Delete</string>
     
