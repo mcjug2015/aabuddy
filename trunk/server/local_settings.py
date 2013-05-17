@@ -16,3 +16,8 @@ EMAIL_HOST_PASSWORD = 'OOOOOO'
 EMAIL_HOST_USER = 'really_fake_email'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
+
+LOGTAIL_FILES = {
+                 'apache': '/var/www/www.foo.com.log',
+                 'django': '/var/log/www.foo.com/project.log',
+}
