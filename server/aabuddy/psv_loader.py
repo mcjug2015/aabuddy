@@ -28,17 +28,20 @@ class PsvLoader():
     def load_psv(self, assigner, psv_in, skip_header=False):
         ''' load a whole csv '''
         self.load_errors = []
+        row_number = 1
         reader = UnicodeReader(psv_in, delimiter=self.delimiter, quotechar=self.quote_char,
                                dialect=csv.excel, encoding="utf-8")
         if skip_header:
             reader.next()
+            row_number += 1
         
         for row in reader:
-            self.load_row(assigner, row)
+            self.load_row(assigner, row, row_number)
+            row_number += 1
         
         return self.load_errors
     
-    def load_row(self, assigner, row):
+    def load_row(self, assigner, row, row_number):
         ''' load a list of values. row[0] = assignee, row[1] = reason, row[2] = num_points '''
         try:
             meeting = Meeting()
@@ -52,17 +55,17 @@ class PsvLoader():
             meeting.creator = assigner
             similar_meetings = find_similar_to_meeting(meeting)
             if similar_meetings:
-                self.load_errors.append('%s seems to be a duplicate of %s and %s other meetings. It will not be loaded' %
-                                      (str(meeting), str(similar_meetings[0]), str(len(similar_meetings) - 1)))
+                self.load_errors.append('#%s %s seems to be a duplicate of %s and %s other meetings. It will not be loaded' %
+                                      (str(row_number), str(meeting), str(similar_meetings[0]), str(len(similar_meetings) - 1)))
             else:
                 meeting.save()
         except ValidationError as error:
-            logger.exception("Could not load %s due to validation error: %s" % (str(row), error.messages[0]))
-            self.load_errors.append("Could not load %s due to validation error: %s" % (str(row), error.messages[0]))
+            logger.exception("#%s Could not load %s due to validation error: %s" % (str(row_number), str(row), error.messages[0]))
+            self.load_errors.append("#%s Could not load %s due to validation error: %s" % (str(row_number), str(row), error.messages[0]))
         except:
-            logger.exception("Could not load %s due to unexpected error: %s" % (str(row),
+            logger.exception("#%s Could not load %s due to unexpected error: %s" % (str(row_number), str(row),
                                                                                     str(sys.exc_info()[0])))
-            self.load_errors.append("Could not load %s due to unexpected error: %s" % (str(row),
+            self.load_errors.append("#%s Could not load %s due to unexpected error: %s" % (str(row_number), str(row),
                                                                                     str(sys.exc_info()[0])))
 
 

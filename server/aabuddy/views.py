@@ -319,7 +319,7 @@ def find_similar_to_meeting(meeting):
                                                   start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
                                                   end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
                                                   end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
-    similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=1)))
+    similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=0.1)))
     similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
     similar_meetings = similar_meetings[0:20]
     return similar_meetings
@@ -382,6 +382,7 @@ def validate_user_creds(request):
 def delete_my_meeting(request):
     do_basic_auth(request)
     meeting_id = request.GET.get('meeting_id')
+    logger.debug("gonna try and delete meeting %s for username %s" % (meeting_id, request.user.username))
     meeting = Meeting.objects.get(pk = meeting_id)
     if request.user.is_authenticated() and request.user.is_active and meeting.creator.username == request.user.username:
         meeting.delete()

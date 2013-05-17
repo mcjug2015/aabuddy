@@ -60,6 +60,21 @@ class MeetingNotThere(classic_models.Model):
     def __str__(self):
         return ("Not There id: %s, host: %s" % (self.pk, self.request_host))
 
+class NotThereView(classic_models.Model):
+    meeting = classic_models.ForeignKey(Meeting, null=False, blank=False)
+    not_there_count = classic_models.IntegerField()
+    meeting_name = classic_models.CharField(max_length=100)
+    latest_not_there = classic_models.DateTimeField()
+    
+    def __str__(self):
+        return ("NTV row meeting_name: %s, count: %s" % (self.meeting_name, self.not_there_count))
+
+class ActiveNotTheresView(classic_models.Model):
+    user = models.ForeignKey(User, null=True, blank=True)
+    unique_phone_id = classic_models.CharField(max_length=400, null=True, blank=True)
+    total = classic_models.IntegerField()
+    distinct = classic_models.IntegerField()
+    created_date = classic_models.DateTimeField()
 
 class UserConfirmation(models.Model):
     user = models.ForeignKey(User, related_name='confirmations', null=False, blank=False, on_delete=models.CASCADE)
