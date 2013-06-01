@@ -23,7 +23,7 @@ public class MeetingListFragmentActivity extends SherlockFragmentActivity {
 			case android.R.id.home:
 				// app icon in action bar clicked; go back to login page
 				Intent intent = new Intent(this, FindMeetingFragmentActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);				
 				startActivity(intent);
 				break;
 		}
