@@ -26,7 +26,7 @@ public class FindMeetingFragmentActivity extends SherlockFragmentActivity {
 		case android.R.id.home:
 			// app icon in action bar clicked; go home
 			Intent intent = new Intent(this, AAMeetingManager.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
 			startActivity(intent);
 			break;
 		}
