@@ -10,15 +10,9 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
-import org.mcjug.aameetingmanager.MultiSpinner;
-import org.mcjug.aameetingmanager.R;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.aameetingmanager.R.array;
-import org.mcjug.aameetingmanager.R.id;
-import org.mcjug.aameetingmanager.R.integer;
-import org.mcjug.aameetingmanager.R.layout;
-import org.mcjug.aameetingmanager.R.string;
+import org.mcjug.aameetingmanager.R;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 
@@ -47,7 +41,7 @@ public class FindMeetingFragment extends Fragment {
 
 	private EditText nameEditText;
 	private EditText addressEditText;
-	private Button currentLocationButton;
+	private Button refreshLocationButton;
 	private Button startTimeButton;
 	private Button startTimeClearButton;
 	private Button endTimeButton;
@@ -57,11 +51,11 @@ public class FindMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
 	private Spinner distanceSpinner;
-	
-	private ProgressDialog progress;
+
+	private ProgressDialog locationProgress;
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,12 +73,12 @@ public class FindMeetingFragment extends Fragment {
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		startTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				TimePickerDialog d = new TimePickerDialog(getActivity(), startTimeDialogListener, 
-						startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
-				d.show();			
+				TimePickerDialog dialog = new TimePickerDialog(getActivity(), startTimeDialogListener, startTimeCalendar
+						.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
+				dialog.show();
 			}
 		});
-		
+
 		startTimeClearButton = (Button) view.findViewById(R.id.findMeetingStartTimeClearButton);
 		startTimeClearButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -97,17 +91,17 @@ public class FindMeetingFragment extends Fragment {
 		endTimeCalendar = Calendar.getInstance();
 		endTimeCalendar.set(Calendar.MINUTE, minutes);
 		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-		
+
 		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		endTimeButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				TimePickerDialog d = new TimePickerDialog(getActivity(), endTimeDialogListener, 
-						endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
-				d.show();			
+				TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener, endTimeCalendar
+						.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
+				dialog.show();
 			}
 		});
-		
+
 		endTimeClearButton = (Button) view.findViewById(R.id.findMeetingEndTimeClearButton);
 		endTimeClearButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -122,69 +116,90 @@ public class FindMeetingFragment extends Fragment {
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
 
 		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
-	    addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
-	    currentLocationButton = (Button) view.findViewById(R.id.findMeetingCurrentLocationButton); 
-	    currentLocationButton.setOnClickListener(new OnClickListener() { 
+		addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
+
+		refreshLocationButton = (Button) view.findViewById(R.id.findMeetingRefreshLocationButton);
+		refreshLocationButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
 					Context context = getActivity();
-					progress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+					locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
+							context.getString(R.string.waitMsg));
 					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
 					locationTask.requestLocation();
 				} catch (Exception ex) {
-				    Log.d(TAG, "Error current location " + ex);
+					Log.d(TAG, "Error current location " + ex);
 				}
-			} 
-		}); 
+			}
+		});
 
-	    findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton); 
-		findMeetingButton.setOnClickListener(new OnClickListener() { 
+		findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton);
+		findMeetingButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				try {
 					FragmentActivity activity = getActivity();
-					
-					findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), false, activity.getString(R.string.findMeetingProgressMsg));
-					findMeetingTask.execute();
+					String addressName = addressEditText.getText().toString();
+					Address address = LocationUtil.getAddressFromLocationName(addressName, activity);
+					if (address == null) {
+						Toast.makeText(getActivity(), "Please enter a valid address", Toast.LENGTH_LONG).show();
+					} else {
+						findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), false, 
+								activity.getString(R.string.findMeetingProgressMsg));
+						findMeetingTask.execute();
+					}
 				} catch (Exception ex) {
-				    Log.d(TAG, "Error getting meetings: " + ex);
+					Log.d(TAG, "Error getting meetings: " + ex);
 				}
-			} 
-		}); 
-		
-	    distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner); 
+			}
+		});
+
+		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
 		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
-	    distanceSpinner.setSelection(distanceValues.indexOf("20"));
-	    
+		distanceSpinner.setSelection(distanceValues.indexOf("10"));
+
 		return view;
 	}
-	
+
 	public void onActivityCreated(Bundle savedInstanceState) {
-		locationResult =  new LocationResult() {
+		Context context = getActivity();
+		Location location = LocationUtil.getLastKnownLocation(context);
+		String address = LocationUtil.getFullAddress(location, context);
+		if (address == null || address.equals("")) {
+			addressEditText.setText("Please type in address or refresh");
+		} else {
+			addressEditText.setText(address);
+		}
+
+		locationResult = new LocationResult() {
 			@Override
 			public void setLocation(Location location) {
-				progress.cancel();
-				
+				locationProgress.cancel();
+
 				if (location == null) {
 					location = LocationUtil.getLastKnownLocation(getActivity());
 				}
 
 				if (location == null) {
-					Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(),
+							"Not able to get current location. Please check if GPS is turned or you have a network data connection.",
+							Toast.LENGTH_LONG).show();
 				} else {
-					String address = LocationUtil.getAddress(location, getActivity());
-					if (address.trim().equals("")) {
-						Toast.makeText(getActivity(), "Not able to get address from location. Please check for a network data connection", Toast.LENGTH_LONG).show();
+					String addressStr = LocationUtil.getFullAddress(location, getActivity());
+					if (addressStr.trim().equals("")) {
+						Toast.makeText(getActivity(),
+								"Not able to get address from location. Please check for a network data connection",
+								Toast.LENGTH_LONG).show();
 					} else {
-						addressEditText.setText(address);
+						addressEditText.setText(addressStr);
 					}
 				}
 			}
 		};
-		
+
 		super.onActivityCreated(savedInstanceState);
 	}
-	
+
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -200,33 +215,41 @@ public class FindMeetingFragment extends Fragment {
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		}
 	};
-		
+
 	private final MultiSpinnerListener daysOfWeekSpinnerListener = new MultiSpinnerListener() {
 		public void onItemsSelected(boolean[] selected) {
 		}
 	};
-	
+
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-	        
+
+		String addressName = addressEditText.getText().toString();
+		Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
+		params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
+		params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
+
+		String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
+		params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
+
 		String name = nameEditText.getText().toString().trim();
 		if (!name.equals("")) {
 			params.add(new BasicNameValuePair("name", name));
 		}
-		
+
 		if (!startTimeButton.getText().equals(EMPTY_TIME)) {
 			params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
 		}
-		
-		if (!endTimeButton.getText().equals(EMPTY_TIME )) {
+
+		if (!endTimeButton.getText().equals(EMPTY_TIME)) {
 			params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
 		}
-		
-		String[] daysOfWeekSelections = ((String)daysOfWeekSpinner.getSelectedItem()).split(",");
+
+		String[] daysOfWeekSelections = ((String) daysOfWeekSpinner.getSelectedItem()).split(",");
 		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all_days_of_week))) {
 			daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
-	    } 
-		
+		}
+
 		List<String> daysOfWeek;
 		if (daysOfWeekSelections.length == 1) {
 			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
@@ -234,46 +257,21 @@ public class FindMeetingFragment extends Fragment {
 			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekMedium));
 		} else {
 			daysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekShort));
-		}	
-		
-		for (String str: daysOfWeekSelections) {				
-			int idx = daysOfWeek.indexOf(str.trim());
-			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
 
-		String addressName = addressEditText.getText().toString();
-		if (addressName.trim().equals("")) {
-			Location location = LocationUtil.getLastKnownLocation(getActivity());
-			if (location == null) {
-				Toast.makeText(getActivity(), "Please enter an address", Toast.LENGTH_LONG).show();
-			} else {
-				params.add(new BasicNameValuePair("lat", String.valueOf(location.getLatitude())));
-				params.add(new BasicNameValuePair("long", String.valueOf(location.getLongitude())));
-			}
-			
-		} else {	
-			Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
-			if (address != null) {
-				params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
-				params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
-				
-				String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
-				params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
-
-			} else {
-			    Log.d(TAG, "Address is invalid: " + address);
-				throw new Exception("Address is invalid: " + address);
-			}
+		for (String str : daysOfWeekSelections) {
+			int idx = daysOfWeek.indexOf(str.trim());
+			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
 		
 		params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
 
-	    int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
+		int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
 		params.add(new BasicNameValuePair("offset", "0"));
 		params.add(new BasicNameValuePair("limit", String.valueOf(paginationSize)));
 
 		String paramStr = URLEncodedUtils.format(params, "utf-8");
-	    Log.d(TAG, "Find meeting request params: " + paramStr);
+		Log.d(TAG, "Find meeting request params: " + paramStr);
 
 		return paramStr;
 	}
