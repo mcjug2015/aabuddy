@@ -2,7 +2,6 @@ package org.mcjug.aameetingmanager.meeting;
 
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.layout;
 
 import android.content.Intent;
 import android.os.Bundle;
