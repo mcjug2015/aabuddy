@@ -1,9 +1,5 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.Date;
-
-import org.mcjug.aameetingmanager.util.LocationUtil;
-
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -15,10 +11,9 @@ import android.util.Log;
 public class LocationFinder {
     private static final String TAG = LocationFinder.class.getSimpleName();
 
-	private static final int LOCATION_TIMEOUT = 1000 * 30;
+	private static final int LOCATION_TIMEOUT = 1000 * 45;
 	private static final int MIN_UPDATE_TIME = 1000 * 5;
 	private static final float MIN_UPDATE_DISTANCE = 50f;
-	private static final int LOCATION_TIME_LIMIT_THRESHOLD = 1000 * 60 * 10;
 
 	private LocationManager locationManager;
 	private LocationListener locationListener;
@@ -36,34 +31,21 @@ public class LocationFinder {
 	}
 	
 	public void requestLocation() {	
-		boolean findLocation = true;
-		
-		Location location = LocationUtil.getLastKnownLocation(context);
-		if (location != null && locationResult != null) {
-			long timeDiff = Math.abs(new Date().getTime() - location.getTime());
-			if (timeDiff < LOCATION_TIME_LIMIT_THRESHOLD) {
-				findLocation = false;
-				locationResult.setLocation(location);
-			}
+		handler = new Handler();
+		locationTimeoutTask = new LocationTimeoutTask();		 
+		handler.postDelayed(locationTimeoutTask, LOCATION_TIMEOUT);
+
+		locationListener = new LocationUpdater();
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
 		}
- 
-		if (findLocation) {
-			handler = new Handler();
-			locationTimeoutTask = new LocationTimeoutTask();		 
-			handler.postDelayed(locationTimeoutTask, LOCATION_TIMEOUT);
-	
-			locationListener = new LocationUpdater();
-			if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-				requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
-			}
-			
-			if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-				requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
-			}
-			
-			if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
-				requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
-			}
+
+		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
+		}
+
+		if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
+			requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
 		}
 	}	
 	
@@ -108,7 +90,9 @@ public class LocationFinder {
 		public void run() {
 			try {				
 				locationManager.removeUpdates(locationListener);
-				locationResult.setLocation(networkOrPassiveLocation);
+				if (locationResult != null) {
+					locationResult.setLocation(networkOrPassiveLocation);
+				}
 			} catch (Throwable e) {
 			}
 		}
