@@ -7,11 +7,8 @@ import java.util.List;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.aameetingmanager.LocationFinder;
-import org.mcjug.aameetingmanager.R;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
-import org.mcjug.aameetingmanager.R.id;
-import org.mcjug.aameetingmanager.R.layout;
-import org.mcjug.aameetingmanager.R.string;
+import org.mcjug.aameetingmanager.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
@@ -56,7 +53,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private EditText nameEditText;
 	private EditText descriptionEditText;
 	private EditText addressEditText;
-	private Button validateAddressButton;
+	private Button refreshLocationButton;
 	private Button submitMeetingButton;
 	private Button startTimeButton;
 	private Button endTimeButton;
@@ -64,7 +61,6 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
   
-	private boolean isLocationValid = false;
 	private boolean isTimeValid = true;
 	
 	private ProgressDialog locationProgress;
@@ -83,7 +79,7 @@ public class SubmitMeetingFragment extends Fragment {
 		Credentials credentials = Credentials.readFromPreferences(getActivity());
 		
 		if (!credentials.isSet()) {
-			//if no username and password, go to login screen
+			//if no user name and password, go to login screen
 			
 			Intent loginIntent =  new Intent(getActivity(), LoginFragmentActivity.class);
 			loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
@@ -173,53 +169,54 @@ public class SubmitMeetingFragment extends Fragment {
 		});
 		
 		addressEditText = (EditText) view.findViewById(R.id.submitMeetingAddressEditText);
-		addressEditText.addTextChangedListener(new TextWatcher() {			
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				isLocationValid = false;
-				validateAddressButton.setEnabled(true);	
-				submitMeetingButton.setEnabled(false);
-			}
-			
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-			public void afterTextChanged(Editable s) {}
-		});		
-
-		validateAddressButton = (Button) view.findViewById(R.id.submitMeetingValidateAddressButton); 
-		validateAddressButton.setOnClickListener(new OnClickListener() { 
+		
+		refreshLocationButton = (Button) view.findViewById(R.id.submitMeetingRefreshLocationButton);
+		refreshLocationButton.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				isLocationValid = LocationUtil.validateAddress(addressEditText.getText().toString(), v.getContext());
-				if (!isLocationValid) {
-					Toast.makeText(v.getContext(), "Invalid address", Toast.LENGTH_LONG).show();
+				try {
+					Context context = getActivity();
+					locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
+							context.getString(R.string.waitMsg));
+					LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
+					locationTask.requestLocation();
+				} catch (Exception ex) {
+					Log.d(TAG, "Error current location " + ex);
 				}
-				
-				validateAddressButton.setEnabled(!isLocationValid);				
-				submitMeetingButton.setEnabled(isLocationValid && isTimeValid);
-			} 
-		}); 
+			}
+		});
 		
 		submitMeetingButton = (Button) view.findViewById(R.id.submitMeetingButton); 
 		submitMeetingButton.setEnabled(false);
 		submitMeetingButton.setOnClickListener(new OnClickListener() { 
 			public void onClick(View v) {
-				
-				if (nameEditText.getText().toString().trim().length() > 0) {
-					//hide keyboard
-					InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-					imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
-					
-					Credentials credentials = Credentials.readFromPreferences(getActivity());
-					
-					if (!credentials.isSet()) {
-						//if no username and password, go to login screen
-						Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
-						loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-						getActivity().startActivityForResult(loginIntent, AFTER_SUBMIT_LOGIN_ACTIVITY);
-												
-					} else {
-						submitMeeting(credentials);
+				if (nameEditText.getText().toString().trim().length() == 0) {
+					Toast.makeText(getActivity(), R.string.nameRequiredMsg, Toast.LENGTH_LONG).show();					
+					return;
+				}
+
+				try {
+					String addressName = addressEditText.getText().toString().trim();
+					Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
+					if (address == null) {
+						Toast.makeText(getActivity(), "Please enter a valid address", Toast.LENGTH_LONG).show();
+						return;
 					}
+				} catch (Exception ex) {
+				}
+
+		        // hide keyboard
+				InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+				imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
+
+				Credentials credentials = Credentials.readFromPreferences(getActivity());
+				if (!credentials.isSet()) {
+					//if no user name and password, go to login screen
+					Intent loginIntent =  new Intent(getActivity().getApplicationContext(), LoginFragmentActivity.class);
+					loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+					getActivity().startActivityForResult(loginIntent, AFTER_SUBMIT_LOGIN_ACTIVITY);
+
 				} else {
-					Toast.makeText(getActivity(), R.string.nameRequiredMsg, Toast.LENGTH_LONG).show();
+					submitMeeting(credentials);
 				}
 			}
 
@@ -265,12 +262,20 @@ public class SubmitMeetingFragment extends Fragment {
 	} 
 
 	private boolean checkMeetingFieldsValid() {
-		boolean isValid = isLocationValid && isTimeValid;
-		submitMeetingButton.setEnabled(isValid);
-		return isValid;
+		submitMeetingButton.setEnabled(isTimeValid);
+		return isTimeValid;
 	}
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
+		Context context = getActivity();
+		Location location = LocationUtil.getLastKnownLocation(context);
+		String address = LocationUtil.getFullAddress(location, context);
+		if (address == null || address.equals("")) {
+			addressEditText.setText("Please type in address or refresh");
+		} else {
+			addressEditText.setText(address);
+		}
+		
 		locationResult =  new LocationResult() {
 			@Override
 			public void setLocation(Location location) {
@@ -283,7 +288,7 @@ public class SubmitMeetingFragment extends Fragment {
 				if (location == null) {
 					Toast.makeText(getActivity(), getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
 				} else {
-					String address = LocationUtil.getAddress(location, getActivity());
+					String address = LocationUtil.getFullAddress(location, getActivity());
 					if (address.trim().equals("")) {
 						Toast.makeText(getActivity(), getString(R.string.addressNotFound), Toast.LENGTH_LONG).show();
 					} else {
@@ -308,7 +313,7 @@ public class SubmitMeetingFragment extends Fragment {
 		    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 
 			isTimeValid = true;
-			submitMeetingButton.setEnabled(isLocationValid && isTimeValid);	
+			submitMeetingButton.setEnabled(isTimeValid);	
 		}		
 	};
 	
