@@ -6,7 +6,6 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.string;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 
@@ -20,7 +19,6 @@ public class DeleteMeetingTask extends AsyncTask<Void, Void, String> {
     private Context context;
     private Meeting meeting;
     private DeleteMeetingListener listener;
-	private ProgressDialog progressDialog;
  
 	public DeleteMeetingTask(Context context, Meeting meeting, DeleteMeetingListener listener) {
 		this.context = context;
