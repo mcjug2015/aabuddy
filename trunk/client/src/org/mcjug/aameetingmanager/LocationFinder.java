@@ -11,7 +11,7 @@ import android.util.Log;
 public class LocationFinder {
     private static final String TAG = LocationFinder.class.getSimpleName();
 
-	private static final int LOCATION_TIMEOUT = 1000 * 45;
+	private static final int LOCATION_TIMEOUT = 1000 * 30;
 	private static final int MIN_UPDATE_TIME = 1000 * 5;
 	private static final float MIN_UPDATE_DISTANCE = 50f;
 
