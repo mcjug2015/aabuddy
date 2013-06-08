@@ -29,7 +29,8 @@ public class LocationUtil {
     		}
       		
       		if (gpsLocation != null && networkLocation != null) {
-      			if (gpsLocation.getTime() > networkLocation.getTime()) {
+      			long timeDiff = Math.abs(gpsLocation.getTime() - networkLocation.getTime());
+      			if (timeDiff < 60000 * 10) {
       				location = gpsLocation;
       			} else {
       				location = networkLocation;
@@ -46,7 +47,7 @@ public class LocationUtil {
         return location;
 	}
 	
-	public static String getAddress(Location location, Context context) {
+	public static String getFullAddress(Location location, Context context) {
 		String addressStr = "";
 		if (location != null) {
 			try {
@@ -67,6 +68,23 @@ public class LocationUtil {
 				addressStr = sb.toString();
 			} catch (Exception e) {
 			    Log.d(TAG, "Error getting address");
+			}
+		}
+		return addressStr;
+	}
+	
+	public static String getShortAddress(Location location, Context context) {
+		String addressStr = "";
+		if (location != null) {
+			try {
+				Geocoder gc = new Geocoder(context, Locale.getDefault());
+				List<Address> addresses = gc.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+				if (addresses.size() > 0) {
+					Address address = addresses.get(0);
+					addressStr = address.getLocality() + "," + address.getAdminArea() + " " + address.getPostalCode();
+				}
+			} catch (Exception e) {
+				Log.d(TAG, "Error getting address");
 			}
 		}
 		return addressStr;
