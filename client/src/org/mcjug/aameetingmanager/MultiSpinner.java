@@ -102,11 +102,12 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 	 *
 	 * @param items - the items to put in.
 	 * @param selectedItemText - the text of the selected item.
+	 * @param allSelectedText - the text to show when all items are selected
 	 * @param listener - the listener.
 	 */
-	public void setItems(List<String> items, String selectedItemText, MultiSpinnerListener listener) {
+	public void setItems(List<String> items, String selectedItemText, String allSelectedText, MultiSpinnerListener listener) {
 		this.items = items;
-		this.defaultText = selectedItemText;
+		this.defaultText = allSelectedText;
 		this.listener = listener;
 
 		// all selected by default
