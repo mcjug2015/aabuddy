@@ -8,7 +8,7 @@
     <string name="day_of_week">Day of week:</string>
     <string name="days_of_week">Days of week:</string>
     <string name="meeting_address">Address:</string>
-    <string name="current_location_button">Fill with current location</string>
+    <string name="refresh_location_button">Refresh address</string>
     <string name="validate_address_button">Validate Address</string>
     <string name="submit_button">Submit</string>
     <string name="cancel_submit_button">Cancel Submit</string>
