@@ -31,14 +31,16 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		super(context, attributeSet, mode);
 	}
 
-	public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+	@Override
+    public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 		if (isChecked)
 			selected[which] = true;
 		else
 			selected[which] = false;
 	}
 
-	public void onCancel(DialogInterface dialog) {
+	@Override
+    public void onCancel(DialogInterface dialog) {
 		// refresh text on spinner
 		StringBuffer spinnerBuffer = new StringBuffer();
 		boolean someUnselected = false;
@@ -50,26 +52,26 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 				someUnselected = true;
 			}
 		}
-		
+
 		String spinnerText;
-		if (someUnselected) {			
+		if (someUnselected) {
 			spinnerText = spinnerBuffer.toString();
 			if (spinnerText.length() == 0) {
 				spinnerText = defaultText;
 			} else if (spinnerText.length() > 2) {
 				spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
-			}	
+			}
 		} else {
 			spinnerText = defaultText;
 		}
-		
+
 		if (spinnerText.equals(defaultText)) {
 			for (int i = 0; i < items.size(); i++) {
 				selected[i] = true;
-			}		
+			}
 		}
-		
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), 
+
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
 				android.R.layout.simple_spinner_item, new String[] { spinnerText });
 		setAdapter(adapter);
 		listener.onItemsSelected(selected);
@@ -78,13 +80,14 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 	protected void setItemSpinnerText(StringBuffer spinnerBuffer, int itemIdx) {
 		spinnerBuffer.append(items.get(itemIdx));
 	}
-	
+
 	@Override
 	public boolean performClick() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 		builder.setMultiChoiceItems(items.toArray(new CharSequence[items.size()]), selected, this);
 		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
+			@Override
+            public void onClick(DialogInterface dialog, int which) {
 				dialog.cancel();
 			}
 		});
@@ -93,19 +96,31 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		return true;
 	}
 
-	public void setItems(List<String> items, String allText, MultiSpinnerListener listener) {
+	/**
+	 * If you pass in a selected item text thats in the items list, it will get selected.
+	 * Otherwise all items will be selected and the selectedItemText will be displayed for the spinner.
+	 *
+	 * @param items - the items to put in.
+	 * @param selectedItemText - the text of the selected item.
+	 * @param listener - the listener.
+	 */
+	public void setItems(List<String> items, String selectedItemText, MultiSpinnerListener listener) {
 		this.items = items;
-		this.defaultText = allText;
+		this.defaultText = selectedItemText;
 		this.listener = listener;
 
 		// all selected by default
-		selected = new boolean[items.size()];
-		for (int i = 0; i < selected.length; i++)
-			selected[i] = true;
+        selected = new boolean[items.size()];
+		if (items.contains(selectedItemText)) {
+		    selected[items.indexOf(selectedItemText)] = true;
+		} else {
+	        for (int i = 0; i < selected.length; i++)
+	            selected[i] = true;
+		}
 
 		// all text on the spinner
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), 
-				android.R.layout.simple_spinner_item, new String[] { allText });
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+				android.R.layout.simple_spinner_item, new String[] { selectedItemText });
 		setAdapter(adapter);
 	}
 
@@ -114,11 +129,11 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		for (int i = 0; i < selected.length; i++) {
 			if (selected[i]) {
 				numSelected++;
-			}	
+			}
 	    }
 		return numSelected;
 	}
-	
+
 	public interface MultiSpinnerListener {
 		public void onItemsSelected(boolean[] selected);
 	}

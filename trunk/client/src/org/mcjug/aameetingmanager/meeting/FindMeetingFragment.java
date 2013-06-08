@@ -61,7 +61,8 @@ public class FindMeetingFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 
@@ -72,7 +73,8 @@ public class FindMeetingFragment extends Fragment {
 		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
 		startTimeButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				TimePickerDialog dialog = new TimePickerDialog(getActivity(), startTimeDialogListener, startTimeCalendar
 						.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
 				dialog.show();
@@ -81,7 +83,8 @@ public class FindMeetingFragment extends Fragment {
 
 		startTimeClearButton = (Button) view.findViewById(R.id.findMeetingStartTimeClearButton);
 		startTimeClearButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				int width = startTimeButton.getWidth();
 				startTimeButton.setText(EMPTY_TIME);
 				startTimeButton.setWidth(width);
@@ -95,7 +98,8 @@ public class FindMeetingFragment extends Fragment {
 		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
 		endTimeButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener, endTimeCalendar
 						.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
 				dialog.show();
@@ -104,7 +108,8 @@ public class FindMeetingFragment extends Fragment {
 
 		endTimeClearButton = (Button) view.findViewById(R.id.findMeetingEndTimeClearButton);
 		endTimeClearButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				int width = endTimeButton.getWidth();
 				endTimeButton.setText(EMPTY_TIME);
 				endTimeButton.setWidth(width);
@@ -113,7 +118,9 @@ public class FindMeetingFragment extends Fragment {
 
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
-		daysOfWeekSpinner.setItems(daysOfWeekListItems, getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
+		Calendar calendar = Calendar.getInstance();
+		int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+		daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(day), daysOfWeekSpinnerListener);
 
 		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
 
@@ -121,7 +128,8 @@ public class FindMeetingFragment extends Fragment {
 
 		refreshLocationButton = (Button) view.findViewById(R.id.findMeetingRefreshLocationButton);
 		refreshLocationButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				try {
 					Context context = getActivity();
 					locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
@@ -136,7 +144,8 @@ public class FindMeetingFragment extends Fragment {
 
 		findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton);
 		findMeetingButton.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
+			@Override
+            public void onClick(View v) {
 				try {
 					FragmentActivity activity = getActivity();
 					String addressName = addressEditText.getText().toString();
@@ -144,7 +153,7 @@ public class FindMeetingFragment extends Fragment {
 					if (address == null) {
 						Toast.makeText(getActivity(), "Please enter a valid address", Toast.LENGTH_LONG).show();
 					} else {
-						findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), false, 
+						findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), false,
 								activity.getString(R.string.findMeetingProgressMsg));
 						findMeetingTask.execute();
 					}
@@ -161,7 +170,8 @@ public class FindMeetingFragment extends Fragment {
 		return view;
 	}
 
-	public void onActivityCreated(Bundle savedInstanceState) {
+	@Override
+    public void onActivityCreated(Bundle savedInstanceState) {
 		Context context = getActivity();
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
@@ -201,7 +211,8 @@ public class FindMeetingFragment extends Fragment {
 	}
 
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		@Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
 			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
@@ -209,7 +220,8 @@ public class FindMeetingFragment extends Fragment {
 	};
 
 	private final TimePickerDialog.OnTimeSetListener endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		@Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
 			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
@@ -217,7 +229,8 @@ public class FindMeetingFragment extends Fragment {
 	};
 
 	private final MultiSpinnerListener daysOfWeekSpinnerListener = new MultiSpinnerListener() {
-		public void onItemsSelected(boolean[] selected) {
+		@Override
+        public void onItemsSelected(boolean[] selected) {
 		}
 	};
 
@@ -263,7 +276,7 @@ public class FindMeetingFragment extends Fragment {
 			int idx = daysOfWeek.indexOf(str.trim());
 			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
-		
+
 		params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
 
 		int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
