@@ -3,31 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-	<TextView
-		android:id="@+id/findMeetingNameTextView"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignBaseline="@+id/findMeetingNameEditText"
-		android:layout_alignParentLeft="true"
-		android:layout_marginLeft="10dp"
-		android:text="@string/meeting_name"
-		android:textAppearance="?android:attr/textAppearanceSmall">
-			<requestFocus />
-	</TextView>
-       
+    <TextView
+        android:id="@+id/findMeetingNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/findMeetingNameEditText"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:text="@string/meeting_name"
+        android:textAppearance="?android:attr/textAppearanceSmall" >
+
+        <requestFocus />
+    </TextView>
+
     <EditText
         android:id="@+id/findMeetingNameEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentRight="true"
-		android:layout_alignLeft="@+id/findMeetingStartTimeButton"
-		android:layout_marginRight="10dp"
+        android:layout_alignLeft="@+id/findMeetingStartTimeButton"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:ems="10"
         android:inputType="text"
-        android:textAppearance="?android:attr/textAppearanceSmall"/>
-        
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
     <Button
         android:id="@+id/findMeetingStartTimeButton"
         style="?android:attr/buttonStyleSmall"
@@ -37,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:drawableRight="@drawable/clock" />
-    
+
     <Button
         android:id="@+id/findMeetingStartTimeClearButton"
         style="?android:attr/buttonStyleSmall"
@@ -57,7 +58,7 @@
         android:layout_alignLeft="@+id/findMeetingNameTextView"
         android:text="@string/start_time"
         android:textAppearance="?android:attr/textAppearanceSmall" />
-    
+
     <Button
         android:id="@+id/findMeetingEndTimeButton"
         style="?android:attr/buttonStyleSmall"
@@ -107,20 +108,20 @@
         android:entries="@array/daysOfWeekLong" />
 
     <Button
-        android:id="@+id/findMeetingCurrentLocationButton"
+        android:id="@+id/findMeetingRefreshLocationButton"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
         android:layout_below="@+id/findMeetingDayOfWeekTextView"
-        android:layout_marginTop="15dp"
-        android:text="@string/current_location_button" />
+        android:layout_marginTop="18dp"
+        android:text="@string/refresh_location_button" />
 
     <TextView
         android:id="@+id/findMeetingAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/findMeetingCurrentLocationButton"
+        android:layout_alignBaseline="@+id/findMeetingRefreshLocationButton"
         android:layout_alignLeft="@+id/findMeetingEndTimeTextView"
         android:text="@string/meeting_address"
         android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -131,11 +132,11 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/findMeetingAddressTextView"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/findMeetingCurrentLocationButton"
+        android:layout_below="@+id/findMeetingRefreshLocationButton"
         android:layout_marginRight="10dp"
         android:layout_marginTop="5dp"
-        android:ems="10"
-        android:inputType="textPostalAddress" >
+        android:inputType="textPostalAddress"
+        android:textSize="15sp" >
     </EditText>
 
     <TextView
@@ -144,7 +145,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/findMeetingAddressEditText"
         android:layout_below="@+id/findMeetingAddressEditText"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="18dp"
         android:text="@string/search_within"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -153,7 +154,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
-        android:layout_alignLeft="@+id/findMeetingCurrentLocationButton"
+        android:layout_alignLeft="@+id/findMeetingRefreshLocationButton"
         android:entries="@array/searchDistances" />
 
     <Button
@@ -162,7 +163,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/findMeetingSearchWithinTextView"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="20dp"
         android:text="@string/search_button" />
 
 </RelativeLayout>
