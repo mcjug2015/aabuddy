@@ -7,7 +7,7 @@ public class DaysOfWeekMultiSpinner extends MultiSpinner {
 	public DaysOfWeekMultiSpinner(Context context) {
 		super(context);
 	}
-	
+
 	public DaysOfWeekMultiSpinner(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
 	}
@@ -16,16 +16,17 @@ public class DaysOfWeekMultiSpinner extends MultiSpinner {
 		super(context, attributeSet, mode);
 	}
 
-	protected void setItemSpinnerText(StringBuffer spinnerBuffer, int itemIdx) {	
+	@Override
+    protected void setItemSpinnerText(StringBuffer spinnerBuffer, int itemIdx) {
 		String[] daysOfWeek;
 		int listSize = getNumSelected();
 		if (listSize == 1) {
 			daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekLong);
 		} else if (listSize == 2 || listSize == 3) {
 			daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekMedium);
-		} else {
-			daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekShort);
-		}		
+		}else {
+            daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekShort);
+        }
 		spinnerBuffer.append(daysOfWeek[itemIdx]);
 	}
 }

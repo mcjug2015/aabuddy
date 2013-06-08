@@ -120,7 +120,8 @@ public class FindMeetingFragment extends Fragment {
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-		daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(day), daysOfWeekSpinnerListener);
+		daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(day),
+		        getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
 
 		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
 
