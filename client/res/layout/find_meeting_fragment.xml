@@ -107,22 +107,13 @@
         android:layout_alignLeft="@+id/findMeetingEndTimeButton"
         android:entries="@array/daysOfWeekLong" />
 
-    <Button
-        android:id="@+id/findMeetingRefreshLocationButton"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
-        android:layout_below="@+id/findMeetingDayOfWeekTextView"
-        android:layout_marginTop="18dp"
-        android:text="@string/refresh_location_button" />
-
     <TextView
         android:id="@+id/findMeetingAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/findMeetingRefreshLocationButton"
-        android:layout_alignLeft="@+id/findMeetingEndTimeTextView"
+        android:layout_alignLeft="@+id/findMeetingDayOfWeekTextView"
+        android:layout_below="@+id/findMeetingDayOfWeekTextView"
+        android:layout_marginTop="15dp"
         android:text="@string/meeting_address"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
@@ -130,20 +121,30 @@
         android:id="@+id/findMeetingAddressEditText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingAddressTextView"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/findMeetingRefreshLocationButton"
-        android:layout_marginRight="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/findMeetingAddressTextView"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="5dp"
         android:inputType="textPostalAddress"
         android:textSize="15sp" >
     </EditText>
 
+    <Button
+        android:id="@+id/findMeetingRefreshLocationButton"
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/findMeetingAddressTextView"
+        android:layout_marginTop="5dp"
+        android:layout_toRightOf="@+id/findMeetingAddressEditText"
+        android:background="@null"
+        android:drawableLeft="@drawable/refresh" />
+
     <TextView
         android:id="@+id/findMeetingSearchWithinTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingAddressEditText"
+        android:layout_alignLeft="@+id/findMeetingAddressTextView"
         android:layout_below="@+id/findMeetingAddressEditText"
         android:layout_marginTop="18dp"
         android:text="@string/search_within"
@@ -154,7 +155,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
-        android:layout_alignLeft="@+id/findMeetingRefreshLocationButton"
+        android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
         android:entries="@array/searchDistances" />
 
     <Button
