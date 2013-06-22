@@ -30,7 +30,7 @@
                     android:layout_marginLeft="10dp"
                     android:text="@string/meeting_name"
                     android:textAppearance="?android:attr/textAppearanceSmall" >
-               </TextView>
+                </TextView>
 
                 <EditText
                     android:id="@+id/findMeetingNameEditText"
@@ -146,22 +146,22 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/findMeetingAddressTextView"
                     android:layout_below="@+id/findMeetingAddressTextView"
+                    android:layout_toLeftOf="@+id/findMeetingRefreshLocationButton"
                     android:inputType="textPostalAddress"
                     android:textSize="14sp" >
-                    
+
                     <requestFocus />
- 
-              </EditText>
+                </EditText>
 
                 <Button
                     android:id="@+id/findMeetingRefreshLocationButton"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/findMeetingAddressTextView"
                     android:layout_alignBaseline="@+id/findMeetingAddressEditText"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/findMeetingAddressTextView"
                     android:layout_marginTop="30dp"
-                    android:layout_toRightOf="@+id/findMeetingAddressEditText"
                     android:background="@null"
                     android:drawableLeft="@drawable/refresh" />
 
@@ -170,8 +170,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/findMeetingAddressEditText"
-                    android:layout_marginTop="15dp"
                     android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
                     android:text="@string/search_within"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
