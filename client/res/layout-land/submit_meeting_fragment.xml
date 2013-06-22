@@ -121,29 +121,28 @@
                     android:text="@string/meeting_address"
                     android:textAppearance="?android:attr/textAppearanceSmall" />
 
-                <Button
-                    android:id="@+id/submitMeetingRefreshLocationButton"
-                    style="?android:attr/buttonStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/submitMeetingAddressTextView"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_toRightOf="@+id/submitMeetingAddressTextView"
-                    android:text="@string/refresh_location_button" />
-
                 <EditText
                     android:id="@+id/submitMeetingAddressEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@+id/submitMeetingAddressTextView"
+                    android:layout_below="@+id/submitMeetingAddressTextView"
+                    android:layout_marginTop="15dp"
+                    android:layout_toLeftOf="@+id/submitMeetingRefreshLocationButton"
+                    android:inputType="textPostalAddress"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <Button
+                    android:id="@+id/submitMeetingRefreshLocationButton"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/submitMeetingAddressEditText"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/submitMeetingAddressTextView"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="15dp"
-                    android:ems="10"
-                    android:inputType="textPostalAddress" />
+                    android:background="@null"
+                    android:drawableLeft="@drawable/refresh" />
 
                 <TextView
                     android:id="@+id/submitMeetingDescriptionTextView"
