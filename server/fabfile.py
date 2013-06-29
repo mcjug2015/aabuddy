@@ -68,7 +68,7 @@ def check():
 def test():
     '''Run the test suite and bail out if it fails'''
     dev_setup()
-    local("python manage.py test --verbosity=2 --with-xunit --with-xcoverage --xunit-file=reports/nosetests.xml --xcoverage-file=reports/coverage.xml --cover-package=aabuddy --cover-html --cover-erase --cover-html-dir=reports/coverage")
+    local("python manage.py test --verbosity=2 --xunit-file=reports/nosetests.xml")
 
 
 def clean():
@@ -178,6 +178,19 @@ def setup():
     
     #psycopg2 make sure pg_config is on the path.
     #run('cd ~/; source .profile; cd %(path)s; source local-python/bin/activate; easy_install psycopg2' % env, pty=True)
+    
+    
+    '''
+    Turn database into postgis2.0 database
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/postgis.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/postgis_comments.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/spatial_ref_sys.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/rtpostgis.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/raster_comments.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/topology.sql
+    psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/topology_comments.sql
+    
+    '''
     
     # disable default site
     with settings(warn_only=True):

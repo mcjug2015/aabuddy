@@ -61,7 +61,7 @@ class DayOfWeekGetParams():
     
 class TimeParams():
     possible_vars = ['start_time', 'end_time']
-    possible_appendixes = ['gt', 'gte', 'lt', 'lte']
+    possible_appendixes = ['gte', 'lte']
     
     def __init__(self, param_dict):
         self.vals = {}
@@ -74,23 +74,20 @@ class TimeParams():
         logger.debug('TimeParams vals are: %s' % str(self.vals))
     
     def apply_filters(self, queryset):
-        if 'start_time__gt' in self.vals:
-            queryset = queryset.filter(start_time__gt=self.vals['start_time__gt'])
+        start_time = None
+        end_time = None
         if 'start_time__gte' in self.vals:
-            queryset = queryset.filter(start_time__gte=self.vals['start_time__gte'])
-        if 'start_time__lt' in self.vals:
-            queryset = queryset.filter(start_time__lt=self.vals['start_time__lt'])
-        if 'start_time__lte' in self.vals:
-            queryset = queryset.filter(start_time__lte=self.vals['start_time__lte'])
+            start_time = self.vals['start_time__gte']
+            queryset = queryset.filter(start_time__gte=start_time)
         
-        if 'end_time__gt' in self.vals:
-            queryset = queryset.filter(end_time__gt=self.vals['end_time__gt'])
-        if 'end_time__gte' in self.vals:
-            queryset = queryset.filter(end_time__gte=self.vals['end_time__gte'])
-        if 'end_time__lt' in self.vals:
-            queryset = queryset.filter(end_time__lt=self.vals['end_time__lt'])
         if 'end_time__lte' in self.vals:
-            queryset = queryset.filter(end_time__lte=self.vals['end_time__lte'])
+            end_time = self.vals['end_time__lte']
+            queryset = queryset.filter(end_time__lte=end_time)
+        
+        if start_time and end_time:
+            if end_time > start_time:
+                queryset = queryset.filter(start_time__lte=end_time, end_time__gte=start_time)
+            
         return queryset
 
 
