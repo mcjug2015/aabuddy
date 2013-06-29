@@ -42,3 +42,19 @@ LOGGING = {
         },
     }
 }
+
+EMAIL_SUBJECT_PREFIX = '[AA Buddy] '
+SERVER_EMAIL = 'codecleric@gmail.com'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = '3rsheam5'
+EMAIL_HOST_USER = 'codecleric@gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+LOGTAIL_FILES = {
+                 'django': '/var/www/aabuddy/logs/aabuddy.log',
+                 'apache_access': '/var/www/aabuddy/logs/access.log',
+                 'apache_error': '/var/www/aabuddy/logs/error.log'
+}
+
+POSTGIS_VERSION=(2,0,1)

@@ -5,7 +5,7 @@ DATABASES = {
         'USER': 'postgres', # Not used with sqlite3.
         'PASSWORD': '', # Not used with sqlite3.
         'HOST': 'localhost', # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '2345', # Set to empty string for default. Not used with sqlite3.
+        'PORT': '5432', # Set to empty string for default. Not used with sqlite3.
         }
 }
 
@@ -21,3 +21,5 @@ LOGTAIL_FILES = {
                  'apache': '/var/www/www.foo.com.log',
                  'django': '/var/log/www.foo.com/project.log',
 }
+
+POSTGIS_VERSION=(2,0,1)
