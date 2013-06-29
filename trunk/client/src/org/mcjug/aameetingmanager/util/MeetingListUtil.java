@@ -66,8 +66,8 @@ public class MeetingListUtil {
 					meeting.setAddress(meetingJson.getString(ADDRESS));
 					meeting.setDistance(String.format("%.2f", Double.parseDouble(meetingJson.getString(DISTANCE))));
 					
-					meeting.setLatitude(String.format("%.2f", meetingJson.getDouble(LATITUDE)));
-					meeting.setLongitude(String.format("%.2f", meetingJson.getDouble(LONGITUDE)));
+					meeting.setLatitude(meetingJson.getDouble(LATITUDE));
+					meeting.setLongitude(meetingJson.getDouble(LONGITUDE));					
 					
 					meetings.add(meeting);
 				}

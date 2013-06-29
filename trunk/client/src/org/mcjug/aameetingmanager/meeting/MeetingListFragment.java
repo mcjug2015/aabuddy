@@ -9,13 +9,6 @@ import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.array;
-import org.mcjug.aameetingmanager.R.drawable;
-import org.mcjug.aameetingmanager.R.id;
-import org.mcjug.aameetingmanager.R.integer;
-import org.mcjug.aameetingmanager.R.layout;
-import org.mcjug.aameetingmanager.R.menu;
-import org.mcjug.aameetingmanager.R.string;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.meeting.DeleteMeetingTask.DeleteMeetingListener;
 
@@ -282,9 +275,9 @@ public class MeetingListFragment extends ListFragment {
 	}
 
 	private void displayMap(Meeting meeting) {
-		String latitude = meeting.getLatitude();
-		String longitude = meeting.getLongitude();
-		if (latitude != null && latitude.length() != 0 && longitude != null && longitude.length() != 0) {
+		Double latitude = meeting.getLatitude();
+		Double longitude = meeting.getLongitude();
+		if (latitude != null && longitude != null) {
 
 			// Display a marker with the address at the latitude and longitude
 			String intentURI = "geo:" + latitude + ","+ longitude + "?z=17&q=" + latitude + "," + longitude;
