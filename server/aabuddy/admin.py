@@ -9,7 +9,20 @@ from django.db import transaction
 from aabuddy.psv_loader import PsvLoader
 from django.utils.safestring import mark_safe
 from django.core import urlresolvers
+from django.http.response import HttpResponse
 
+
+def get_meetings_psv(modeladmin, request, queryset):
+    meetings = Meeting.objects.all()
+    response = HttpResponse(get_meetings_stream(meetings), mimetype='application/force-download')
+    response['Content-Disposition'] = 'attachment; filename=meetings.psv'
+    return response
+get_meetings_psv.short_description = "Get all meetings as a .psv file"
+
+def get_meetings_stream(meetings):
+    yield "Name|Description|Day_of_week(1sunday-7saturday)|Start time(military time)|End time(military time)|Address|Latitude|Longitude\n"
+    for meeting in meetings:
+        yield meeting.get_psv_row() + "\n"
 
 def add_meeting_link_field(target_model = None, field = '', app='', action='change', field_name='link',
                    link_text=unicode):
@@ -75,6 +88,7 @@ class MeetingAdmin(admin.GeoModelAdmin):
     list_display = ('name', 'description', 'address', 'day_of_week', 'start_time', 'end_time', 'internal_type', 'creator', 'created_date', 'geo_location')
     list_filter = ('name', 'description', 'address', 'day_of_week', 'start_time', 'end_time', 'internal_type', 'creator', 'created_date',)
     inlines = [MeetingNotThereInline,]
+    actions = [get_meetings_psv]
 
 
 class UserConfirmationAdmin(admin.GeoModelAdmin):

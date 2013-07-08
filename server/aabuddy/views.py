@@ -126,7 +126,6 @@ def temp_json_obj_to_meeting(json_obj):
     meeting.internal_type = Meeting.SUBMITTED
     meeting.geo_location = fromstr('POINT(%s %s)' % (json_obj['long'], json_obj['lat']), srid=4326)
     return meeting
-    
 
 def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                            day_of_week_params, day_of_week_in_params,
@@ -356,8 +355,13 @@ def post_meeting_not_there(request):
             notThere.user_agent = request.META['HTTP_USER_AGENT']
         if request.user.is_authenticated() and request.user.is_active:
             notThere.user = request.user
+        logger.debug("OOOOO %s" % str(request.POST.items))
         notThere.meeting = Meeting.objects.get(pk = request.POST.get('meeting_id', None))
         notThere.unique_phone_id = request.POST.get('unique_phone_id', None)
+        note = request.POST.get('note', None)
+        if note:
+            notThere.note = note
+        
         notThere.save()
         return HttpResponse(content=json.dumps({'not_there_id': notThere.pk}), status=200)
     else:
