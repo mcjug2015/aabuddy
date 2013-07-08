@@ -100,10 +100,12 @@ curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockvi
 
 
 Post a meeting_not_there object:
-curl -v -H "Content-Type: application/json" -X POST -d 'meeting_id=8&unique_phone_id=TROLLOLOLOLOLO' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
 also works without a user and password
-curl -v -H "Content-Type: application/json" -X POST -d 'meeting_id=8&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/aabuddy/post_meeting_not_there
-
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/aabuddy/post_meeting_not_there
+** NEW **
+You can optionally add notes to meeting_not_there:
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=NO_MEETING_WAS_HELD' http://localhost:8888/aabuddy/post_meeting_not_there
 
 VM u/p:
 root/reverse

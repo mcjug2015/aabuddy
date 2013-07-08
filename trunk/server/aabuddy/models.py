@@ -44,6 +44,17 @@ class Meeting(models.Model):
     def __str__(self):
         return ("Meeting id: %s, Creator: %s" % (self.pk, self.creator.username))
 
+    def get_psv_row(self):
+        retval = str(self.name) + "|"
+        retval += str(self.description) + "|"
+        retval += str(self.day_of_week) + "|"
+        retval += self.start_time.strftime("%H:%M:%S") + "|"
+        retval += self.end_time.strftime("%H:%M:%S") + "|"
+        retval += str(self.address) + "|"
+        retval += str(self.geo_location.y) + "|"
+        retval += str(self.geo_location.x)
+        return retval
+
     def save(self, **kwargs):
         if not self.id:
             self.created_date = datetime.datetime.now() # Edit created timestamp only if it's new entry
@@ -53,6 +64,7 @@ class Meeting(models.Model):
 class MeetingNotThere(classic_models.Model):
     meeting = classic_models.ForeignKey(Meeting, related_name='not_theres', null=False, blank=False, on_delete=classic_models.CASCADE)
     user = models.ForeignKey(User, related_name='not_theres', null=True, blank=True, on_delete=classic_models.SET_NULL)
+    note = classic_models.CharField(max_length=200, null=True, blank=True)
     request_host = classic_models.CharField(max_length=200, null=True, blank=True)
     user_agent = classic_models.CharField(max_length=400, null=True, blank=True)
     unique_phone_id = classic_models.CharField(max_length=400, null=True, blank=True)

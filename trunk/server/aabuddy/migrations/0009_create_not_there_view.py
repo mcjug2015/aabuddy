@@ -15,6 +15,7 @@ class Migration(DataMigration):
             group by meeting.id;
         '''
         db.execute(query)
+        db.send_create_signal(u'aabuddy', ['NotThereView'])
 
     def backwards(self, orm):
         db.execute("DROP VIEW aabuddy_notthereview;")
