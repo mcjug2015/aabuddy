@@ -39,6 +39,9 @@ class TestMeeting(TestCase):
         
     def test_meeting_str(self):
         self.assertEqual(Meeting.objects.get(name='test_meeting1').__str__(), "Meeting id: 1, Creator: test_user")
+        
+    def test_meeting_str_no_pk_no_creator(self):
+        self.assertEqual(self.__get_test_meeting().__str__(), "Meeting id: None, ")
 
 
 class TestMeetingNotThere(TestCase):
@@ -49,6 +52,10 @@ class TestMeetingNotThere(TestCase):
         mnt.pk = 1
         mnt.request_host = 'mooo'
         self.assertEqual(mnt.__str__(), "Not There id: 1, host: mooo")
+    
+    def test_str_no_pk_no_host(self):
+        mnt = MeetingNotThere()
+        self.assertEqual(mnt.__str__(), "Not There id: None, host: None")
 
 
 class TestNotThereView(TestCase):

@@ -60,17 +60,14 @@ class DayOfWeekGetParams():
         return queryset
     
 class TimeParams():
-    possible_vars = ['start_time', 'end_time']
-    possible_appendixes = ['gte', 'lte']
+    possible_vars = ['start_time__gte', 'end_time__lte']
     
     def __init__(self, param_dict):
         self.vals = {}
         for var in self.possible_vars:
-            for appendix in self.possible_appendixes:
-                var_name = '%s__%s' % (var, appendix)
-                param_value = param_dict.get(var_name, None)
-                if param_value:
-                    self.vals[var_name] = datetime.datetime.strptime(param_value, '%H%M%S')
+            param_value = param_dict.get(var, None)
+            if param_value:
+                self.vals[var] = datetime.datetime.strptime(param_value, '%H%M%S')
         logger.debug('TimeParams vals are: %s' % str(self.vals))
     
     def apply_filters(self, queryset):
@@ -84,9 +81,8 @@ class TimeParams():
             end_time = self.vals['end_time__lte']
             queryset = queryset.filter(end_time__lte=end_time)
         
-        if start_time and end_time:
-            if end_time > start_time:
-                queryset = queryset.filter(start_time__lte=end_time, end_time__gte=start_time)
+        if start_time and end_time and end_time > start_time:
+            queryset = queryset.filter(start_time__lte=end_time, end_time__gte=start_time)
             
         return queryset
 
@@ -258,14 +254,17 @@ def reset_password(request):
         if form.is_valid():
             logger.debug('User Confirmation is:' + form.cleaned_data['user_confirmation'])
             user_conf_key = form.cleaned_data['user_confirmation']
-            user_confirmation = UserConfirmation.objects.get(confirmation_key=user_conf_key)
-            if user_confirmation.expiration_date > datetime.datetime.now():
-                user = user_confirmation.user
-                user.set_password(form.cleaned_data['new_password'])
-                user.save()
-                user_confirmation.expiration_date = datetime.datetime.now()
-                user_confirmation.save()
-                return render_to_response('reset_password.html', {})
+            if UserConfirmation.objects.filter(confirmation_key=user_conf_key).count() == 1:
+                user_confirmation = UserConfirmation.objects.get(confirmation_key=user_conf_key)
+                if user_confirmation.expiration_date > datetime.datetime.now():
+                    user = user_confirmation.user
+                    user.set_password(form.cleaned_data['new_password'])
+                    user.save()
+                    user_confirmation.expiration_date = datetime.datetime.now()
+                    user_confirmation.save()
+                    return render_to_response('reset_password.html', {})
+                else:
+                    return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
             else:
                 return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
     else:
@@ -276,7 +275,7 @@ def reset_password(request):
             form.fields['user_confirmation'].widget.attrs = form.fields['user_confirmation'].widget.build_attrs(extra_attrs={'value': user_conf[0].confirmation_key})
         else:
             return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
-        
+    
     context = {'form': form}
     context.update(csrf(request))
     return render_to_response('reset_password.html', context)
