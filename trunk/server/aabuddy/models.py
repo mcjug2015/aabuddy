@@ -42,7 +42,12 @@ class Meeting(models.Model):
     geo_location = models.PointField()
     
     def __str__(self):
-        return ("Meeting id: %s, Creator: %s" % (self.pk, self.creator.username))
+        meeting_str = 'Meeting id: %s, ' % str(self.pk)
+
+        if self.creator:
+            meeting_str += "Creator: %s" % str(self.creator.username)
+            
+        return meeting_str
 
     def get_psv_row(self):
         retval = str(self.name) + "|"
@@ -70,7 +75,7 @@ class MeetingNotThere(classic_models.Model):
     unique_phone_id = classic_models.CharField(max_length=400, null=True, blank=True)
     created_date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return ("Not There id: %s, host: %s" % (self.pk, self.request_host))
+        return ("Not There id: %s, host: %s" % (str(self.pk), str(self.request_host)))
 
 class NotThereView(classic_models.Model):
     meeting = classic_models.ForeignKey(Meeting, null=False, blank=False)
@@ -79,7 +84,7 @@ class NotThereView(classic_models.Model):
     latest_not_there = classic_models.DateTimeField()
     
     def __str__(self):
-        return ("NTV row meeting_name: %s, count: %s" % (self.meeting_name, self.not_there_count))
+        return ("NTV row meeting_name: %s, count: %s" % (str(self.meeting_name), str(self.not_there_count)))
 
 class ActiveNotTheresView(classic_models.Model):
     user = models.ForeignKey(User, null=True, blank=True)
