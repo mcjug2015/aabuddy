@@ -154,8 +154,11 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
 def get_meeting_by_id(request):
     if request.method == 'GET':
         meeting_id = request.GET.get('meeting_id', None)
-        retval_obj = get_json_obj_for_meetings([Meeting.objects.get(pk = meeting_id)], 1, 1)
-        return HttpResponse(content=json.dumps(retval_obj))
+        if Meeting.objects.filter(pk = meeting_id).count() == 1:
+            retval_obj = get_json_obj_for_meetings([Meeting.objects.get(pk = meeting_id)], 1, 1)
+            return HttpResponse(content=json.dumps(retval_obj))
+        else:
+            return HttpResponse(content=json.dumps({}))
     else:
         return HttpResponse(content="You must use GET to retrieve meetings", status=400)
 
@@ -187,16 +190,21 @@ def get_meetings_within_distance(request):
 def send_reset_conf(request):
     if request.method == 'POST':
         username = request.POST.get('username', None)
-        user = User.objects.get(username=username)
-        user_confirmation = UserConfirmation(user=user)
-        user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
-        user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
-        user_confirmation.save()
-        link_address = '?confirmation=' + user_confirmation.confirmation_key
-        link_address = request.build_absolute_uri('reset_password/') + link_address
-        message_text = "Click the link below to reset your aabuddy password\n%s" % link_address
-        send_email_to_user(user, "Your AA Buddy reset password confirmation", message_text)
-        return HttpResponse(status=200)
+        if username and User.objects.filter(username=username).count() == 1:
+            user = User.objects.get(username=username)
+            user_confirmation = UserConfirmation(user=user)
+            user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
+            user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
+            user_confirmation.save()
+            link_address = '?confirmation=' + user_confirmation.confirmation_key
+            link_address = request.build_absolute_uri('reset_password/') + link_address
+            message_text = "Click the link below to reset your aabuddy password\n%s" % link_address
+            send_email_to_user(user, "Your AA Buddy reset password confirmation", message_text)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(content="You must specify a valid username to send a password reset confirmation", status=401)
+    else:
+        return HttpResponse(content="You must use POST to send a reset confimation.", status=400)
 
 @csrf_exempt
 def create_user(request):
@@ -204,22 +212,25 @@ def create_user(request):
     if request.method == 'POST':
         username = request.POST.get('username', None)
         password = request.POST.get('password', None)
-        logger.debug("About to register %s" % (username))
-        user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
-                    is_superuser=False, is_staff=False)
-        user.set_password(password)
-        user.save()
-        user_confirmation = UserConfirmation(user=user)
-        user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
-        user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
-        user_confirmation.save()
-        link_address = request.build_absolute_uri() + '/?confirmation=' + user_confirmation.confirmation_key
-        message_text = "Click the link below to complete the registration perocess\n%s" % link_address
-        send_email_to_user(user, "Thanks you for registering on AA Buddy", message_text)
-        return HttpResponse(status=200)
+        if username and password and User.objects.filter(username=username).count() == 0:
+            logger.debug("About to register %s" % (username))
+            user = User(username=username, email=username, first_name='NOT_SET', last_name='NOT_SET', is_active=False,
+                        is_superuser=False, is_staff=False)
+            user.set_password(password)
+            user.save()
+            user_confirmation = UserConfirmation(user=user)
+            user_confirmation.expiration_date = datetime.datetime.now() + datetime.timedelta(days=3)
+            user_confirmation.confirmation_key = ''.join([random.choice(string.digits + string.letters) for i in range(0, 63)])
+            user_confirmation.save()
+            link_address = request.build_absolute_uri() + '/?confirmation=' + user_confirmation.confirmation_key
+            message_text = "Click the link below to complete the registration perocess\n%s" % link_address
+            send_email_to_user(user, "Thanks you for registering on AA Buddy", message_text)
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(content="You must pass in an untaken username and a non-empty password.", status=401)
     if request.method == 'GET':
         conf_key = request.GET.get('confirmation', None)
-        if conf_key:
+        if conf_key and UserConfirmation.objects.filter(confirmation_key=conf_key).count() == 1:
             user_confirmation = UserConfirmation.objects.get(confirmation_key=conf_key)
             if user_confirmation.expiration_date > datetime.datetime.now():
                 user = user_confirmation.user
@@ -231,18 +242,21 @@ def create_user(request):
             else:
                 return HttpResponse(content="User Confirmation out of date!", status=400)
         else:
-            return HttpResponse(content="No user confirmation specified!", status=400)
+            return HttpResponse(content="User confirmation unspecified or invalid!", status=400)
 
 
 @csrf_exempt
 def change_password(request):
     do_basic_auth(request)
     if request.method == 'POST' and request.user.is_authenticated() and request.user.is_active:
-        new_password = request.POST.get("new_password")
-        user = request.user
-        user.set_password(new_password)
-        user.save()
-        return HttpResponse(status=200)
+        new_password = request.POST.get("new_password", None)
+        if new_password:
+            user = request.user
+            user.set_password(new_password)
+            user.save()
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(content="You must specify a non-empty new password.", status=401)
     elif request.method == 'POST':
         return HttpResponse(content="User not logged in or inactive", status=401)
     else:
