@@ -1,0 +1,174 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<title>Google Maps JavaScript API v3 Example: Geocoding Simple</title>
+		<link href="http://code.google.com/apis/maps/documentation/javascript/examples/default.css" rel="stylesheet">
+		<script src="https://maps.googleapis.com/maps/api/js?v=3.11&sensor=false"></script>
+		<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+		<script>
+			var geocoder;
+			var map;
+			function initialize() {
+				geocoder = new google.maps.Geocoder();
+				var latlng = new google.maps.LatLng(39.0839973, -77.15275780000002);
+				var mapOptions = {
+					zoom: 8,
+					center: latlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
+				map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+			}
+			
+			function theNext() {
+				if (nextAddress < addresses.length) {
+					setTimeout('codeAddress("' + addresses[nextAddress] + '", theNext)', delay);
+					nextAddress++;
+				}
+			}
+			
+			// Global Variables
+			var addresses = [];
+			var nextAddress = 0;
+			var delay = 200;
+			var inc = 1000;
+			var is_Previous_Request_OVER_QUERY_LIMIT = false;
+			// END Global Variables
+			function codeAddress(search, next) {
+				var size = addresses.length;
+				geocoder.geocode( {'address':search}, function(results, status) {
+					if (status == google.maps.GeocoderStatus.OK) {
+						map.setCenter(results[0].geometry.location);
+						var marker = new google.maps.Marker({
+							map: map,
+							position: results[0].geometry.location
+						});
+
+						document.getElementById("progress").innerHTML = "Process " + nextAddress + " of " + size;
+						document.getElementById("output").innerHTML += 
+							search + "|" + results[0].geometry.location.lat() + "|" + results[0].geometry.location.lng() + "\n";
+						if (is_Previous_Request_OVER_QUERY_LIMIT == true) {
+							is_Previous_Request_OVER_QUERY_LIMIT = false;
+							//delay = 2000;
+						}
+
+						if (nextAddress == size) {
+							//saveResult();
+							save3in1();
+						}
+					}
+					else {
+						// i.e., if we were sending requests too fast, increase the delay and request this address again
+						if (status == google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
+							delay = delay + inc;
+							nextAddress--;
+							document.getElementById("debugStatus").innerHTML += 
+								nextAddress + " -- " + search + " (new delay = " + delay + "ms)" + "\n";
+							
+							is_Previous_Request_OVER_QUERY_LIMIT = true;
+						}
+						else {
+							document.getElementById("progress").innerHTML = "Process " + nextAddress + " of " + size;
+							document.getElementById("failStatus").innerHTML += search + "\n";
+							document.getElementById("debugStatus").innerHTML += nextAddress + " -- " + search + " (status = " + status +")\n";
+							if (is_Previous_Request_OVER_QUERY_LIMIT == true) {
+								is_Previous_Request_OVER_QUERY_LIMIT = false;
+								//delay = 2000;
+							}
+
+							if (nextAddress == size) {
+								//saveResult();
+								save3in1();
+							}
+						}   
+					}
+					
+					next();
+				});
+			}
+
+			function readJSON() {
+				$.getJSON('Addresses_json.txt',function(data){
+					for (var i=0, len=data.length; i < len; i++) {
+						if (data[i].length != 0) {
+							// addresses is a global variable
+							addresses.push(data[i]);
+						}
+					}
+				});
+				
+				setTimeout(theNext, 1000);
+			}
+
+			function showInfo() {
+				if (window.webkitURL == null) {
+					document.getElementById("warning").innerHTML = "<h1>Error: seems your browser is not Chrome.</h1></br>";
+				} else {
+					document.getElementById("delay").innerHTML = delay + " ms with increment " + inc + " ms";
+					document.getElementById("debugStatus").innerHTML = "initial delay " + delay + " ms with increment " + inc + " ms\n";
+				}			
+			}
+			
+			function save3in1() {	
+				var textToWrite = document.getElementById("output").innerHTML;
+				
+				var	otherResult = document.getElementById("failStatus").innerHTML;
+				if (otherResult.length != 0) {
+					textToWrite += "Addresses_fail.txt\n" + otherResult;
+				}
+				otherResult = document.getElementById("debugStatus").innerHTML;
+				if (otherResult.length != 0) {
+					textToWrite += "Addresses_debug.txt\n" + otherResult;
+				}
+				
+				var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});;
+				var downloadLink = document.createElement("a");
+				downloadLink.download = "Addresses_output.txt";
+				// Chrome allows the link to be clicked programmatically.
+				downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+				downloadLink.click();
+			}
+
+			function saveTextAsFile(resultId, fileNameToSaveAs) {
+				var textToWrite = document.getElementById(resultId).innerHTML;
+				if (textToWrite.length == 0) {
+					return;
+				}
+				
+				var textFileAsBlob = new Blob([textToWrite], {type:'text/plain'});;
+				var downloadLink = document.createElement("a");
+				downloadLink.download = fileNameToSaveAs;
+				// Chrome allows the link to be clicked programmatically.
+				downloadLink.href = window.webkitURL.createObjectURL(textFileAsBlob);
+				downloadLink.click();
+			}
+
+			function saveResult() {
+				saveTextAsFile("output", "Addresses_output.txt");
+				saveTextAsFile("failStatus", "Addresses_fail.txt");
+				saveTextAsFile("debugStatus", "Addresses_debug.txt");
+			}
+		</script>
+		<style type="text/css">
+			h1 { color:red;}
+			h3 { margin:0px; }
+		</style>
+</head>
+<body onload="initialize(); showInfo(); readJSON();">
+	<span id="warning"></span>
+	<h3>Convert address to latitude and longitude</h3>
+	<b style="margin: 10px">Progress:</b> <span id="progress"></span>  <b style="margin: 10px">Request Delay:</b> <span id="delay"></span> <br/>
+	
+	<b style="margin: 10px">OUTPUT:</b> <br/>
+	<textarea id="output" readonly="true" cols="120" rows="6"></textarea><br/>
+
+	<b style="margin: 10px">Fail Status:</b> <br/>
+	<textarea id="failStatus" readonly="true" cols="120" rows="6"></textarea><br/> 
+	
+	<b style="margin: 10px">Debug Status:</b> <br/>
+	<textarea id="debugStatus" readonly="true" cols="120" rows="6"></textarea><br/>
+		
+	<div id="map-canvas" style="height:400px; top: 5px;"></div> <br/>
+</body>
+</html>
