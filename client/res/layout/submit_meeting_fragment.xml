@@ -110,7 +110,8 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/submitMeetingRefreshLocationButton"
             android:inputType="textPostalAddress"
-            android:textAppearance="?android:attr/textAppearanceSmall" >
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:selectAllOnFocus="true" >
         </EditText>
 
         <Button

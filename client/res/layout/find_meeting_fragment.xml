@@ -127,7 +127,8 @@
         android:layout_marginTop="5dp"
         android:layout_toLeftOf="@+id/findMeetingRefreshLocationButton"
         android:inputType="textPostalAddress"
-        android:textSize="15sp" >
+        android:textSize="15sp"
+        android:selectAllOnFocus="true" >
     </EditText>
 
     <Button
