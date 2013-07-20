@@ -1,32 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- Server Preferences -->
-    <PreferenceCategory
-        android:summary="@string/serverPreferencesSummary"
-        android:title="@string/serverPreferencesTitle" >
-        <EditTextPreference
-            android:defaultValue="@string/meetingServerSecureBaseUrlDefaultValue"
-            android:key="@string/meetingServerSecureBaseUrlPreferenceName"
-            android:summary="@string/meetingServerSecureBaseUrlSummary"
-            android:title="@string/meetingServerSecureBaseUrlTitle" >
-        </EditTextPreference>
-        <EditTextPreference
-            android:defaultValue="@string/meetingServerUnsecureBaseUrlDefaultValue"
-            android:key="@string/meetingServerUnsecureBaseUrlPreferenceName"
-            android:summary="@string/meetingServerUnsecureBaseUrlSummary"
-            android:title="@string/meetingServerUnsecureBaseUrlTitle" >
-        </EditTextPreference>
-
-        <CheckBoxPreference
-            android:defaultValue="@string/sslTrustAllFlagDefaultValue"
-            android:key="@string/sslTrustAllFlagPreferenceName"
-            android:summaryOff="@string/sslTrustAllFlagSummaryOff"
-            android:summaryOn="@string/sslTrustAllFlagSummaryOn"
-            android:title="@string/sslTrustAllFlagTitle" >
-        </CheckBoxPreference>
-    </PreferenceCategory>
-
     <!-- Password Preferences -->
     <PreferenceCategory android:title="@string/passwordPreferencesTitle" >
         <Preference

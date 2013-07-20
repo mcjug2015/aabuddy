@@ -29,9 +29,6 @@ public class HttpUtil {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 		boolean defaultSslTrustAllFlag = Boolean.parseBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));
-		boolean bSslTrustAllFlag =
-			prefs.getBoolean(context.getString(R.string.sslTrustAllFlagPreferenceName),
-							 defaultSslTrustAllFlag);
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
 		// http scheme
@@ -40,7 +37,7 @@ public class HttpUtil {
 		// https scheme
 		schemeRegistry.register(
 				new Scheme("https",
-						   (bSslTrustAllFlag ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
+						   (defaultSslTrustAllFlag ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
 						   443));
 
 		HttpParams httpParams = new BasicHttpParams();
@@ -54,9 +51,8 @@ public class HttpUtil {
 	public static String getSecureRequestUrl(Context context, int requestUrlResourceId) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 		String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);
-		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerSecureBaseUrlPreferenceName), defaultServerBase);
 
-		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
+		StringBuilder baseUrl = new StringBuilder(defaultServerBase);
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
 	}
@@ -64,9 +60,8 @@ public class HttpUtil {
 	public static String getUnsecureRequestUrl(Context context, int requestUrlResourceId) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 		String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);
-		String serverBaseUrl = prefs.getString(context.getString(R.string.meetingServerUnsecureBaseUrlPreferenceName), defaultServerBase);
 
-		StringBuilder baseUrl = new StringBuilder(serverBaseUrl);
+		StringBuilder baseUrl = new StringBuilder(defaultServerBase);
 		baseUrl.append(context.getString(requestUrlResourceId));
 		return baseUrl.toString();
 	}

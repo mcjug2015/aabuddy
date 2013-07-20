@@ -26,20 +26,13 @@
     <string name="meetingDuration">"Meeting time duration: %d minutes."</string>
     <string name="adminPrefActivityTitle">Settings</string>
     <string name="serverPreferencesTitle">Server Preferences</string>
-    <string name="serverPreferencesSummary">Configure the Meeting Server</string>
-    <string name="meetingServerSecureBaseUrlPreferenceName">meetingServerSecureBaseUrl</string>
-    <string name="meetingServerSecureBaseUrlTitle">Meeting Server Secure Base URL</string>
-    <string name="meetingServerSecureBaseUrlSummary">Secure protocol, host name and port of meeting server</string>
     <string name="meetingServerSecureBaseUrlDefaultValue">https://mcasg.org</string>
-    <string name="meetingServerUnsecureBaseUrlPreferenceName">meetingServerBaseUrl</string>
-    <string name="meetingServerUnsecureBaseUrlTitle">Meeting Server Unsecure Base URL</string>
-    <string name="meetingServerUnsecureBaseUrlSummary">Unsecure protocol, host name and port of meeting server</string>
     <string name="meetingServerUnsecureBaseUrlDefaultValue">http://mcasg.org</string>
     <string name="sslTrustAllFlagPreferenceName">sslTrustAllFlag</string>
     <string name="sslTrustAllFlagTitle">Trust All Certificates?</string>
     <string name="sslTrustAllFlagSummaryOff">Self signed certificates will NOT be trusted.</string>
     <string name="sslTrustAllFlagSummaryOn">All certificates will be trusted.</string>
-    <string name="sslTrustAllFlagDefaultValue">true</string>
+    <string name="sslTrustAllFlagDefaultValue">false</string>
         
     <string name="save_meeting_url_path">/aabuddy/save_meeting/</string>
     <string name="get_meetings_url_path">/aabuddy/get_meetings/</string>
