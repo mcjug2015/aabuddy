@@ -47,7 +47,7 @@ class PsvLoader():
             meeting = Meeting()
             meeting.name = row[0]
             meeting.description = row[1]
-            meeting.day_of_week = row[2]
+            meeting.day_of_week = int(row[2])
             meeting.start_time = datetime.datetime.strptime(row[3], '%H:%M:%S')
             meeting.end_time = datetime.datetime.strptime(row[4], '%H:%M:%S')
             meeting.address = row[5]
