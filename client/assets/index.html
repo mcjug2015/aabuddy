@@ -1,6 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-	<head>
+		<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>AA Buddy Help</title>
 		<script language="javascript" type="text/javascript">
@@ -18,205 +18,162 @@
 			}
 		</script>
 		<style type="text/css">
-			ul, h3, h4 { margin:0px; }
-			
-			p.subtitle {
-			 padding-top: 1px;
-			 border: 3px coral solid; }
+ul, h3, h4 {
+	margin:0px;
+}
+p.subtitle {
+	padding-top: 1px;
+	border: 3px coral solid;
+}
+.more {
+	display: none;
+	border-top: 1px solid #666;
+	border-bottom: 1px solid #666;
+}
+.more_l2 {
+	display: none;
+	padding-bottom: 1px;
+	background-color: #DFF;
+	
+}
+a.showLink, a.hideLink {
+	text-decoration: none;
+	color: #36f;
+	padding-left: 8px;
+}
 
-			.more {
-				display: none;
-				border-top: 1px solid #666;
-				border-bottom: 1px solid #666; }
-			.more_l2 {
-				display: none;
-				padding-bottom: 1px;
-				background-color: #DFF}
-			a.showLink, a.hideLink {
-				text-decoration: none;
-				color: #36f;
-				padding-left: 8px; }
-		</style>
-	</head>
-	<body>
-		<div>
-			<h3>AA Buddy Overview</h3>
-			This app will help you to post meetings and to find meetings you want to attend to.
-			<br/>
-			<br/>The primary features are
-			<ul>
-				<li><b>Add Meeting:</b> Create a meeting. You have to log in after you install a new version in your device.</li>
-				<li>
-					<b>Find Meeting:</b>
-					<ul>
-						<li><b>Find Meetings</b> you are interested in.</li>
-						<li><b>Show The Map</b> for a meeting using a long click.</li>
-						<li><b>Mark Meeting Not There</b> when a meeting is NOT held on time.</li>
-					</ul>
-				</li>
-			</ul>
-			In the Main screen, there are three other features: <b>Settings</b>, <b>Log In</b> / <b>Log Out</b>, and <b>Help</b>.
-			<br/>
-			<br/>
 
-			<h4>Feature Details</h4>
-			<ul>
-				<li>
-					<b>Add Meeting</b>
-					<a href="#" id="add_meeting_show" class="showLink" onclick="showHide('add_meeting');return false;">See more</a>
-					<div id="add_meeting" class="more">
-						<b>Prerequisites:</b> To add meeting is prohibited until you register with an email account and log in to.
-						<br/>
-						<br/>
-						<b>Steps to create a meeting:</b>
-						<ol>
-							<li>Click the <b>Add Meeting</b> icon on the Main Screen.</li>
-							<li>(Optional) If the <b>Login</b> screen shows up (see a tip below), enter credential information.</li>
-							<li>Enter <b>Meeting Name</b>, <b>Start time</b>, <b>End time</b>, <b>Day of week</b>, <b>Address</b>, and <b>Meeting Description</b> (an optional field). Also see a tip for <b>End time</b> below.</li>
-							<li>Click the <b>Validate Address</b> button to check the address.</li>
-							<li>Click the <b>Submit</b> button if all inputs are valid.</li>
-						</ol>
-						<br/>
-						<b>Tips:</b>
-						<ul>
-							<li>The <b>Login</b> screen will show up at step 2 if you have not logged in using the existing version of AA Buddy.</li>
-							<li>Set the <b>Start time</b> FIRST and let the <b>End time</b> is set at one hour after the <b>Start time</b>.</li>
-						</ul>
-						<p>
-							<a href="#" class="hideLink" onclick="showHide('add_meeting');return false;">Hide <b>Add Meeting</b> content.</a>
-						</p>
-					</div>
-				</li>
 
-				<li>
-					<b>Find Meeting</b>
-					<a href="#" id="find_meeting_show" class="showLink" onclick="showHide('find_meeting');return false;">See more</a>
-					<div id="find_meeting" class="more">
-						<b>Steps to find meetings</b>
-						<ol>
-							<li>Click the <b>Find Meeting</b> on the Main Screen.</li>
-							<li>Create a query by entering <b>Meeting Name</b>, <b>Start time</b>, <b>End time</b>, <b>Days of week</b>, <b>Address</b>, and <b>Within</b>. Also see tips for <b>Start time</b> and <b>End time</b> below</li>
-							<li>Click the <b>Search</b> button to get the list of Meeting Search Results.</li>
-						</ol>
-						<br/>
-						<b>Map of a meeting location</b>
-						<ul>
-							<li>Long-click on an item in the list of Meeting Search Results to display a map.</li>
-						</ul>
-						<br/>
-						<b>Mark Meeting Not There</b>
-						<ul>
-							<li>When you go to a meeting location, the meeting is not there. Please find the meeting and click the <b>Not There</b> button to notice other persons.</li>
-						</ul>
-						<br/>
-						<b>Tips</b>
-						<ul>
-							<li><b>Start time</b> and <b>End time</b>: click the <b>X</b> icon to erase time and then find all meetings in a specific day</li>
-						</ul>
-						<p>
-							<a href="#" class="hideLink" onclick="showHide('find_meeting');return false;">Hide <b>Find Meeting</b> content.</a>
-						</p>
-					</div>
-				</li>
-      	
-				<li>
-					<b>Settings</b>
-					<a href="#" id="settings_show" class="showLink" onclick="showHide('settings');return false;">See more</a>
-					<div id="settings" class="more">
-						There are three settings: <b>Meeting Server Secure Base URL</b>, <b>Meeting Server Unsecure Base URL</b>, and <b>All certificates will be trusted</b>. They will be used for future versions. Please do not make changes in the current version.
-						<br/>You may <b>Reset Password</b> from this screen.
-						<br/>
-						<p>
-							<a href="#" class="hideLink" onclick="showHide('settings');return false;">Hide <b>Settings</b> content.</a>
-						</p>
-					</div>
-				</li>
-				
-				<li>
-					<b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b>
-					<a href="#" id="login_show" class="showLink" onclick="showHide('login');return false;">See more</a>
-					<div id="login" class="more">
-						Click the <b>Log In</b> icon to find three features, <b>Login to Add a Meeting</b>, <b>Register</b>, and <b>Reset Password</b> in the <b>Log In</b> screen. However, the <b>Log In</b> icon will be replaced by the <b>Log Out</b> icon after you log in at the first time. See those features in details below.
-						<br/>
-
-						<br />
-						<b>Login to Add a Meeting</b>
-						<a href="#" id="login_to_show" class="showLink" onclick="showHide('login_to');return false;">More</a>
-						<div id="login_to" class="more_l2">
-							You need to log in to the same device only one time with the existing version of AA Buddy.
-							There are two ways to log in to
-							<ol>
-								<li>Click the <b>Add Meeting</b> icon on the Main screen. The <b>Add Meeting</b> screen will show up after login.</li>
-								<li>Click the <b>Log In</b> icon on the Main screen. The Main screen will show up after login.</li>
-							</ol>
-							The <b>Log In</b> icon in the Main screen is replaced by the <b>Log Out</b> icon after login.<br/>
-							<p>
-								<a href="#" class="hideLink" onclick="showHide('login_to');return false;">Hide <b>Login to Add a Meeting</b> content.</a>
-							</p>
-						</div>
-
-						<br />
-						<b>Log Out</b>
-						<a href="#" id="logout_show" class="showLink" onclick="showHide('logout');return false;">More</a>
-						<div id="logout" class="more_l2">
-							When the <b>Log Out</b> icon is shown in the Main screen, it means that your credential information has stored in your cell phone when you logged in to the server. You do not need to re-log in again.
-							You want to click the <b>Log Out</b> icon if you want
-							<ul>
-								<li>To <b>Register</b> with another account.</li>
-								<li>To <b>Add Meeting</b> with another account.</li>
-								<li>To <b>Reset Password</b>.</li>
-							</ul>
-							<p>
-								<a href="#" class="hideLink" onclick="showHide('logout');return false;">Hide <b>Log Out</b> content.</a>
-							</p>
-						</diV>
-
-						<br />
-						<b>Register</b> 
-						<a href="#" id="register_show" class="showLink" onclick="showHide('register');return false;">More</a>
-						<div id="register" class="more_l2">
-							Before you want to <b>Add Meeting</b>, you have to register.
-							<b>Steps to register:</b>
-							<ol>
-								<li>Click the <b>Log In</b> icon on the Main screen.</li>
-								<li>Click the <b>Register Now</b> button to register.</li>
-								<li>Enter all fields and click the <b>Register Now</b> button. Then, click <b>OK</b>.</li>
-								<li>AA Buddy will send a confirmation email to you and you have to click the link in the email to complete the registration.</li>
-							</ol>
-							<p>
-								<a href="#" class="hideLink" onclick="showHide('register');return false;">Hide <b>Register</b> content.</a>
-							</p>
-						</diV>
-
-						<br />
-						<b>Reset Password</b> 
-						<a href="#" id="reset_show" class="showLink" onclick="showHide('reset');return false;">More</a>
-						<div id="reset" class="more_l2">
-							You have to <b>Log Out</b> on the Main screen if you have logged in to the server.
-							<b>Steps to reset password:</b>
-							<ol>
-								<li>Click the <b>Log In</b> icon on the Main screen.</li>
-								<li>Click the <b>Reset Password</b> button in the <b>Login</b> screen.</li>
-								<li>AA Buddy will send a confirmation email to you and you have to click the link in the email.</li>
-								<li>After you click the link, a reset password form will be displayed in a browser.</li>
-								<li>Enter <b>Username</b> (i.e., your email address), <b>New Password</b>, and <b>Confirm Password</b> and then click the <b>Submit</b> button.</li>
-							</ol>
-							<p>
-								<a href="#" class="hideLink" onclick="showHide('reset');return false;">Hide <b>Reset Password</b> content.</a>
-							</p>
-						</diV>
-
-						<p>
-							<a href="#" class="hideLink" onclick="showHide('login');return false;">Hide <b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b> content.</a>
-						</p>
-					</div>
-				</li>
-
-				<li>
-				<b>Help:</b> Click the <b>Help</b> icon on Main Screen to view help.</li>
-			</ul>
-
-		</div>
-
-	</body>
+</style>
+</head>
+    <body>
+        <div>
+          <h3>AA Buddy Overview</h3>
+          This app will help you to find meetings, add new meetings and correct information for existing meetings. <br/>
+          <br/>
+          The main features are:
+          <ul>
+           
+            <li> <b>Find Meeting:</b>
+              <ul>
+                <li><b>Select Meetings</b> that interest you</li>
+                <li><b>Map and Directions</b> get map and directions to an individual selected meeting</li>
+                <li><b>Mark Meeting Not There </b>when meeting is not there or to correct  meeting location or time.</li>
+              </ul>
+            </li>
+             <li><b>Add Meeting:</b> Create a record for a new meeting. You must be logged in to access this feature.
+          </ul><br/>
+          The addtition features are: <b>Settings</b>, and <b>Log In</b> / <b>Log Out</b> <br/>
+          <br/>
+          <h4>Feature Details</h4>
+          <ul>
+            <li> <a href="#" id="add_meeting_show" class="showLink" onclick="showHide('add_meeting');return false;"><b>Add Meeting</b> </a>
+              <div id="add_meeting" class="more"> <b>Prerequisites:</b> To add meeting you must  first register with an email account and subsequently log in. <br/>
+                <br/>
+                <b>Steps to create a meeting:</b>
+                <ol>
+                  <li>Click the <b>Add Meeting</b> icon on the Main Screen.</li>
+                  <li>If the <b>Login</b> screen shows up (see a tip below), enter credential information.</li>
+                  <li>Enter <b>Meeting Name</b>, <b>Start time</b>, <b>End time</b>, <b>Day of week</b>, <b>Address</b>, and <b>Meeting Description</b> (an optional field). Also see a tip for <b>End time</b> below.</li>
+                  <li>Click the <b>Validate Address</b> button to check the address.</li>
+                  <li>Click the <b>Submit</b> button if all inputs are valid.</li>
+                </ol>
+                <br/>
+                <b>Tips:</b>
+                <ul>
+                  <li>The <b>Login</b> screen will show up at step 2 if you have not logged in using the most current  version of AA Buddy.</li>
+                  <li>Set the <b>Start time</b> FIRST and let the <b>End time</b> is set at one hour after the <b>Start time</b>.</li>
+                </ul>
+                <p> <a href="#" class="hideLink" onclick="showHide('add_meeting');return false;">Hide <b>Add Meeting</b> content.</a> </p>
+              </div>
+            </li>
+            <li> <a href="#" id="find_meeting_show" class="showLink" onclick="showHide('find_meeting');return false;"><b>Find Meeting</b> </a>
+              <div id="find_meeting" class="more"> <b>Steps to find meetings</b>
+                <ol>
+                  <li>Click the <b>Find Meeting</b> on the Main Screen.</li>
+                  <li>Create a query by entering <b>Meeting Name</b>, <b>Start time</b>, <b>End time</b>, <b>Days of week</b>, <b>Address</b>, and <b>Within</b>. Also see tips for <b>Start time</b> and <b>End time</b> below</li>
+                  <li>Click the <b>Search</b> button to get the list of Meeting Search Results.</li>
+                </ol>
+                <br/>
+                <b>Map of a meeting location</b>
+                <ul>
+                  <li>Long-click on an item in the list of Meeting Search Results to display a map.</li>
+                </ul>
+                <br/>
+                <b>Mark Meeting Not There</b>
+                <ul>
+                  <li>If you go to a meeting location and the meeting is not there,  please find the meeting and click the <b>Not There</b> button to warn others. </li>
+                  <li>If you go to a meeting location and the meeting specifics are incorrect,  please find the meeting, click the <b>Not There</b> button and provide correct information in the text box. </li>
+                </ul>
+                <br/>
+                <b>Tips</b>
+                <ul>
+                  <li><b>Start time</b> and <b>End time</b>: click the <b>X</b> icon to erase time and then find all meetings in a specific day</li>
+                </ul>
+                <p><a href="#" class="hideLink" onclick="showHide('find_meeting');return false;">Hide <b>Find Meeting</b> content.</a> </p>
+              </div>
+            </li>
+            <li><a href="#" id="settings_show" class="showLink" onclick="showHide('settings');return false;"><b>Settings</b></a>
+              <div id="settings" class="more"> There are three preset fields: <b>Meeting Server Secure Base URL</b>, <b>Meeting Server Unsecure Base URL</b>, and <b>Trust All certificates</b>. They are for use in future versions. Please do not make any changes to these fields. <br/>
+                You may <b>Reset Password</b> from this screen. See Log In / Log Out, Register and Reset Password for details.<br/>
+                <p> <a href="#" class="hideLink" onclick="showHide('settings');return false;">Hide <b>Settings</b> content.</a> </p>
+              </div>
+            </li>
+            <li> <a href="#" id="login_show" class="showLink" onclick="showHide('login');return false;"><b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b> </a>
+              <div id="login" class="more"> Click the <b>Log In</b> icon to find three features, <b>Login to Add a Meeting</b>, <b>Register</b>, and <b>Reset Password</b> in the <b>Log In</b> screen. Note, the <b>Log In</b> icon will be replaced by the <b>Log Out</b> icon after you log in at the first time.  <br/>
+              	
+                <br/><h4>Feature Details</h4>
+                <a href="#" id="login_to_show" class="showLink" onclick="showHide('login_to');return false;"><b>Login to Add a Meeting</b> </a>
+                <div id="login_to" class="more_l2"> Using the same device you only have to log in once per version of AA Buddy.
+                  There are two ways to log in
+                  <ol>
+                    <li>Click the <b>Add Meeting</b> icon on the Main screen. The <b>Add Meeting</b> screen will show up after login or </li>
+                    <li>Click the <b>Log In</b> icon on the Main screen. The Main screen will show up after login. Note, the <b>Log In</b> icon in the Main screen is replaced by the <b>Log Out</b> icon after login.<br/></li>
+                    <li>Enter the email address you use to register and your password</li>
+                    <li>Click <b>Log In </b>button</li>
+                  </ol>
+                  
+                  <p> <a href="#" class="hideLink" onclick="showHide('login_to');return false;">Hide <b>Login to Add a Meeting</b> content.</a> </p>
+                </div>
+                <br />
+                 <a href="#" id="logout_show" class="showLink" onclick="showHide('logout');return false;"><b>Log Out</b></a>
+                <div id="logout" class="more_l2"> <br/>When the <b>Log Out</b> icon is shown in the Main screen, your credential information currently stored in your cell phone from your initial server logon. You do not need to re-log in again.
+                  Click the <b>Log Out</b> icon if you want
+                  <ul>
+                    <li>To <b>Register</b> with another account.</li>
+                    <li>To <b>Add Meeting</b> with another account.</li>
+                    <li>To <b>Reset Password</b>.</li>
+                  </ul>
+                  <p> <a href="#" class="hideLink" onclick="showHide('logout');return false;">Hide <b>Log Out</b> content.</a> </p>
+                </diV>
+                <br />
+                 <a href="#" id="register_show" class="showLink" onclick="showHide('register');return false;"><b>Register</b></a>
+                <div id="register" class="more_l2"> Before you can <b>Add Meeting</b>, you have to register. <b>Steps to register:</b>
+                  <ol>
+                    <li>Click the <b>Log In</b> icon on the Main screen.</li>
+                    <li>Click the <b>Register Now</b> button to register.</li>
+                    <li>Enter all fields and click the <b>Register Now</b> button. Then, click <b>OK</b>.</li>
+                    <li>AA Buddy will send a confirmation email to you and you have to click the link in the email to complete the registration.</li>
+                  </ol>
+                  <p> <a href="#" class="hideLink" onclick="showHide('register');return false;">Hide <b>Register</b> content.</a> </p>
+                </diV>
+                <br />
+                <a href="#" id="reset_show" class="showLink" onclick="showHide('reset');return false;"><b>Reset Password</b> </a>
+                <div id="reset" class="more_l2"> You have to <b>Log Out</b> on the Main screen if you have logged in to the server. <b>Steps to reset password:</b>
+                  <ol>
+                    <li>Click the <b>Log In</b> icon on the Main screen.</li>
+                    <li>Click the <b>Reset Password</b> button in the <b>Login</b> screen.</li>
+                    <li>AA Buddy will send a confirmation email to you and you have to click the link in the email.</li>
+                    <li>After you click the link, a reset password form will be displayed in a browser.</li>
+                    <li>Enter <b>Username</b> (i.e., your email address), <b>New Password</b>, and <b>Confirm Password</b> and then click the <b>Submit</b> button.</li>
+                  </ol>
+                  <p> <a href="#" class="hideLink" onclick="showHide('reset');return false;">Hide <b>Reset Password</b> content.</a> </p>
+                </diV>
+                <p> <a href="#" class="hideLink" onclick="showHide('login');return false;">Hide <b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b> content.</a> </p>
+              </div>
+            </li>
+            
+          </ul>
+        </div>
+</body>
 </html>
