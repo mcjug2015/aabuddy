@@ -1,13 +1,16 @@
 ''' Test package for views.py '''
 from django.test import TestCase
+import django.core.mail as django_mail
 from aabuddy.views import temp_meeting_to_json_obj, temp_json_obj_to_meeting,\
-    DayOfWeekGetParams, TimeParams, get_meetings_count_query_set
+    DayOfWeekGetParams, TimeParams, get_meetings_count_query_set,\
+    send_email_to_user
 from aabuddy.models import Meeting
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.gis.geos.factory import fromstr
 import json
 from mockito import unstub, when, any, mock, verify, contains
+
 from django.http import QueryDict
 import re
 
@@ -117,6 +120,19 @@ class TestViews(TestCase):
                                           time_params, limit, offset, order_by)
         self.assertEqual(count, 0)
         self.assertEqual(len(meetings), 0)
+
+    def test_send_email_to_user(self):
+        when(django_mail).send_mail(subject="mooo", message="aaa", from_email="aabuddy@noreply.com",
+                                    recipient_list=["vsemenov@gmail.com"],
+                                    fail_silently=False).thenReturn(None)
+        send_email_to_user(User.objects.get(username='test_user'), "mooo", "aaa")
+        '''
+        sure would be nice if the python mockito guy would fix 
+        https://bitbucket.org/szczepiq/mockito-python/issue/11/problem-with-named-parameters
+        verify(django_mail, times=1).send_mail(subject="mooo", message="aaa", from_email="aabuddy@noreply.com",
+                                               recipient_list=["vsemenov@gmail.com"],
+                                               fail_silently=False)
+        '''
 
 
 class TestDayOfWeekGetParams(TestCase):
