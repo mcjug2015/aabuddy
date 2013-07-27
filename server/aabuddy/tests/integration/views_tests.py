@@ -167,10 +167,10 @@ class TestViews(TestCase):
 
 class TestResetPassword(TestCase):
     ''' tests for the reset password form '''
+    fixtures = ['test_users.json']
     
     def test_reset_password_form_password_mismatch(self):
-        resp = self.client.post("/aabuddy/reset_password/", {"username": "moooo",
-                                                             "new_password": "aaaa",
+        resp = self.client.post("/aabuddy/reset_password/", {"new_password": "aaaa",
                                                              "confirm_password": "bbb",
                                                              "user_confirmation": "123"})
         self.assertEqual(resp.status_code, 200)
@@ -178,13 +178,71 @@ class TestResetPassword(TestCase):
     
     def test_reset_password_form_valid(self):
         ''' when the form is valid, but user conf is not in the db we get an explosion. '''
-        resp = self.client.post("/aabuddy/reset_password/", {"username": "moooo",
-                                                             "new_password": "aaaa",
+        resp = self.client.post("/aabuddy/reset_password/", {"new_password": "aaaa",
                                                              "confirm_password": "aaaa",
                                                              "user_confirmation": "123"})
         self.assertEqual(resp.status_code, 401)
         self.assertIn("User confirmation is invalid, expired or does not exist", resp.content)
+        
+    def test_reset_password_happy_path(self):
+        credentials = base64.b64encode('test_user:1chpok1')
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials
+        resp = self.client.post('/aabuddy/validate_user_creds')
+        self.assertEqual(resp.status_code, 200)
+        uc = UserConfirmation(user=User.objects.get(username='test_user'),
+                              expiration_date=datetime.datetime.now() + datetime.timedelta(days=3),
+                              confirmation_key='mooo123')
+        uc.save()
+        resp = self.client.post("/aabuddy/reset_password/", {"new_password": "aaaa",
+                                                             "confirm_password": "aaaa",
+                                                             "user_confirmation": "mooo123"})
+        self.assertEqual(resp.status_code, 200)
+        credentials = base64.b64encode('test_user:aaaa')
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials
+        resp = self.client.post('/aabuddy/validate_user_creds')
+        self.assertEqual(resp.status_code, 200)
 
+    def test_expired_conf(self):
+        credentials = base64.b64encode('test_user:1chpok1')
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials
+        resp = self.client.post('/aabuddy/validate_user_creds')
+        self.assertEqual(resp.status_code, 200)
+        uc = UserConfirmation(user=User.objects.get(username='test_user'),
+                              expiration_date=datetime.datetime.now() - datetime.timedelta(days=3),
+                              confirmation_key='mooo123')
+        uc.save()
+        resp = self.client.post("/aabuddy/reset_password/", {"new_password": "aaaa",
+                                                             "confirm_password": "aaaa",
+                                                             "user_confirmation": "mooo123"})
+        self.assertEqual(resp.status_code, 401)
+        self.assertIn("User confirmation is expired.", resp.content)
+        credentials = base64.b64encode('test_user:1chpok1')
+        self.client.defaults['HTTP_AUTHORIZATION'] = 'Basic ' + credentials
+        resp = self.client.post('/aabuddy/validate_user_creds')
+        self.assertEqual(resp.status_code, 200)
+        
+    def test_get_happy_path(self):
+        uc = UserConfirmation(user=User.objects.get(username='test_user'),
+                              expiration_date=datetime.datetime.now() + datetime.timedelta(days=3),
+                              confirmation_key='mooo123')
+        uc.save()
+        resp = self.client.get("/aabuddy/reset_password/", {"confirmation": "mooo123"})
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.context['form'].fields['user_confirmation'].widget.attrs['value'], "mooo123")
+        
+    def test_get_no_user_conf(self):
+        resp = self.client.get("/aabuddy/reset_password/")
+        self.assertEqual(resp.status_code, 401)
+        self.assertIn("User confirmation is invalid, expired or does not exist", resp.content)
+        
+    def test_get_expired_user_conf(self):
+        uc = UserConfirmation(user=User.objects.get(username='test_user'),
+                              expiration_date=datetime.datetime.now() - datetime.timedelta(days=3),
+                              confirmation_key='mooo123')
+        uc.save()
+        resp = self.client.get("/aabuddy/reset_password/", {"confirmation": "mooo123"})
+        self.assertEqual(resp.status_code, 401)
+        self.assertIn("User confirmation is invalid, expired or does not exist", resp.content)
 
 class TestGetMeetingsMethod(TestCase):
     ''' class to test the get_meetings_count_query_set method '''

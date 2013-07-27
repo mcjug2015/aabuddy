@@ -7,7 +7,7 @@ import logging
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 from django.contrib.auth.models import User
-from django.core.mail import send_mail
+import django.core.mail as django_mail
 import random
 import string
 from django import forms
@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 
 class ResetPasswordForm(forms.Form):
-    username = forms.CharField(max_length=100, label='Username', required=True)
     new_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='New Password', required=True)
     confirm_password = forms.CharField(widget=forms.PasswordInput, max_length=100, label='Confirm Password')
     user_confirmation = forms.CharField(widget=forms.HiddenInput, required=True)
@@ -278,7 +277,7 @@ def reset_password(request):
                     user_confirmation.save()
                     return render_to_response('reset_password.html', {})
                 else:
-                    return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
+                    return HttpResponse(content="User confirmation is expired.", status=401)
             else:
                 return HttpResponse(content="User confirmation is invalid, expired or does not exist", status=401)
     else:
@@ -297,7 +296,7 @@ def reset_password(request):
 
 def send_email_to_user(user, subject_text, message_text):
     logger.debug("About to send conf email with message %s" % message_text)
-    send_mail(subject=subject_text, 
+    django_mail.send_mail(subject=subject_text, 
               message=message_text, 
               from_email="aabuddy@noreply.com", recipient_list=[user.email], fail_silently=False)
 
@@ -368,7 +367,6 @@ def post_meeting_not_there(request):
             notThere.user_agent = request.META['HTTP_USER_AGENT']
         if request.user.is_authenticated() and request.user.is_active:
             notThere.user = request.user
-        logger.debug("OOOOO %s" % str(request.POST.items))
         notThere.meeting = Meeting.objects.get(pk = request.POST.get('meeting_id', None))
         notThere.unique_phone_id = request.POST.get('unique_phone_id', None)
         note = request.POST.get('note', None)
