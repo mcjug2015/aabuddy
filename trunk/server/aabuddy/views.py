@@ -14,6 +14,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.core.exceptions import ValidationError
+import sys
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +112,7 @@ def temp_meeting_to_json_obj(meeting):
 def temp_json_obj_to_meeting(json_obj):
     meeting = Meeting()
     meeting.day_of_week = json_obj['day_of_week']
-    if not (meeting.day_of_week >= 1 and meeting.day_of_week) <= 7:
+    if not (meeting.day_of_week >= 1 and meeting.day_of_week <= 7):
         raise ValueError("Day of week must be an integer between 1 and 7 inclusive")
     meeting.start_time = datetime.datetime.strptime(json_obj['start_time'], '%H:%M:%S')
     meeting.end_time = datetime.datetime.strptime(json_obj['end_time'], '%H:%M:%S')
@@ -315,10 +316,16 @@ def get_json_obj_for_meetings(meetings, total_count=None, current_count=None):
 def find_similar(request):
     if request.method == 'POST':
         json_obj = json.loads(request.raw_post_data)
-        meeting = temp_json_obj_to_meeting(json_obj)
+        try:
+            meeting = temp_json_obj_to_meeting(json_obj)
+        except:
+            return HttpResponse(content="The meeting object you sent in was invalid. Error was %s" % str(sys.exc_info()[0]),
+                                status=401)
         similar_meetings = find_similar_to_meeting(meeting)
         retval_obj = get_json_obj_for_meetings(similar_meetings)
         return HttpResponse(content=json.dumps(retval_obj))
+    else:
+        return HttpResponse(content="You must use POST to find similar meetings", status=400)
 
 
 def find_similar_to_meeting(meeting):

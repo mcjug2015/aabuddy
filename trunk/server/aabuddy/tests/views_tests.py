@@ -3,7 +3,7 @@ from django.test import TestCase
 import django.core.mail as django_mail
 from aabuddy.views import temp_meeting_to_json_obj, temp_json_obj_to_meeting,\
     DayOfWeekGetParams, TimeParams, get_meetings_count_query_set,\
-    send_email_to_user
+    send_email_to_user, get_json_obj_for_meetings
 from aabuddy.models import Meeting
 import datetime
 from django.contrib.auth.models import User
@@ -133,6 +133,12 @@ class TestViews(TestCase):
                                                recipient_list=["vsemenov@gmail.com"],
                                                fail_silently=False)
         '''
+    
+    def test_get_json_obj_for_meetings(self):
+        meetings = Meeting.objects.all()
+        json_obj = get_json_obj_for_meetings(meetings)
+        self.assertEqual(json_obj['meta']['total_count'], 1)
+        self.assertEqual(json_obj['meta']['current_count'], 1)
 
 
 class TestDayOfWeekGetParams(TestCase):

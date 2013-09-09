@@ -370,3 +370,22 @@ class TestGetMeetingsMethod(TestCase):
                                  views.get_meetings_count_query_set, 
                                  None, None, None, None, views.DayOfWeekGetParams({}), 
                                  None, views.TimeParams({}), 2, None, 'name')
+
+class FindSimilarTest(TestCase):
+    ''' class to test the find_similar method '''
+    fixtures = ['test_users.json', 'test_meetings.json']
+    
+    def test_happy_path(self):
+        resp = self.client.post('/aabuddy/find_similar', json.dumps({'day_of_week': 1,
+                                                          'start_time': '11:51:00',
+                                                          'end_time': '13:09:00',
+                                                          'name': 'mooo',
+                                                          'description': 'test',
+                                                          'address': 'irrelevant',
+                                                          'lat': 39.4142,
+                                                          'long': -77.4108}), content_type="application/json")
+        self.assertEqual(resp.status_code, 200)
+        json_meeting_obj = json.loads(resp.content)
+        self.assertEquals(json_meeting_obj['objects'][0]['name'], 'test_meeting1')
+        self.assertEquals(json_meeting_obj['meta']['total_count'], 1)
+        self.assertEquals(json_meeting_obj['meta']['current_count'], 1)
