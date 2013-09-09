@@ -67,7 +67,9 @@ class ActiveMeetingNotThereViewAdmin(admin.ModelAdmin):
 
 class MeetingNotThereAdmin(admin.ModelAdmin):
     list_display = ('meeting', 'request_host', 'user', 'unique_phone_id', 'created_date')
-    list_filter = ('meeting', 'request_host', 'user', 'unique_phone_id', 'created_date')
+    list_filter = ('request_host', 'user', 'unique_phone_id')
+    readonly_fields = ('meeting',)
+    list_select_related = True
 
 @add_meeting_link_field(target_model = 'meeting', field = 'meeting', app='aabuddy', field_name='link')
 class NotThereViewAdmin(admin.ModelAdmin):
@@ -86,7 +88,8 @@ class MeetingNotThereInline(admin.TabularInline):
 
 class MeetingAdmin(admin.GeoModelAdmin):
     list_display = ('name', 'description', 'address', 'day_of_week', 'start_time', 'end_time', 'internal_type', 'creator', 'created_date', 'geo_location')
-    list_filter = ('name', 'description', 'address', 'day_of_week', 'start_time', 'end_time', 'internal_type', 'creator', 'created_date',)
+    list_filter = ('day_of_week', 'start_time', 'end_time', 'internal_type', 'creator',)
+    list_per_page = 25
     inlines = [MeetingNotThereInline,]
     actions = [get_meetings_psv]
 
