@@ -59,6 +59,8 @@
         android:layout_below="@id/meetingAddress"
         android:layout_marginLeft="10dp"
         android:textColor="#797979"
+        android:ellipsize="end"
+        android:singleLine="true"
         android:textSize="14sp" />
 
 </RelativeLayout>
