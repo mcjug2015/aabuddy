@@ -55,9 +55,6 @@ Mariposa Fellow 2|Location is: Mariposa Fellow|6|19:00:00|20:00:00|5008 Highway 
 Mariposa Fellow 5|Location is: Mariposa Fellow|7|10:30:00|11:30:00|5008 Highway 140, Mariposa, CA 95338|37.4836212|-119.9638084
 Mariposa Fellow|Location is: Mariposa Fellow|7|00:00:00|01:00:00|5008 Highway 140, Mariposa, CA 95338|37.4836212|-119.9638084
 Mariposa Fellow 2|Location is: Mariposa Fellow|7|19:00:00|20:00:00|5008 Highway 140, Mariposa, CA 95338|37.4836212|-119.9638084
-Yosemite Village|Location is: YCS|1|19:30:00|20:30:00|, Yosemite Valley, CA |37.74557009999999|-119.59360379999998
-Yosemite Village|Location is: YCS|3|19:30:00|20:30:00|, Yosemite Valley, CA |37.74557009999999|-119.59360379999998
-Yosemite Village|Location is: YCS|5|19:30:00|20:30:00|, Yosemite Valley, CA |37.74557009999999|-119.59360379999998
 Hobie House|Location is: Hobie House|1|09:00:00|10:00:00|1301 Yosemite Parkway, Merced, CA 95340|37.295468|-120.45927799999998
 Hobie House|Location is: Hobie House|2|20:00:00|21:00:00|1301 Yosemite Parkway, Merced, CA 95340|37.295468|-120.45927799999998
 Square Pegs|Location is: Square Pegs|2|00:00:00|01:00:00|520 W. 20th Street, Merced, CA 95340|37.3043013|-120.48238809999998
@@ -116,7 +113,6 @@ GRIFFITH AVE|Location is: BAPTIST CHURCH|1|19:30:00|20:30:00|408 GRIFFITH AVE, W
 AA DE WASCO|Location is: VETERANS HALL|4|12:00:00|13:00:00|11TH AND POPLAR, , CA  USA, CA 93280|35.5888522|-119.34486119999997
 Lake Don Pedro Group|Location is: Lake Don Pedro Group|3|14:00:00|15:00:00|Hwy 132 & Arbolada, Lake Don Pedro, CA |37.3130667|-121.91104230000002
 aa|Location is: mission baptist church|6|13:06:00|14:06:00|14525 campground road , delhi, CA |37.4044979|-120.75112999999999
-SHAFTER GROUP|Location is: VETERENS HALL|4|20:00:00|21:00:00|, SHAFTER, CA |35.5005139|-119.27177610000001
 ORTA VIDA|Location is: ORTA VIDA|4|19:00:00|20:00:00|285 EAST LERDO HWY, SHAFTER, CA 93263|35.499549|-119.274003
 Hilmar Group|Location is: Hilmar Group|4|19:00:00|20:00:00|Lander & American, Hilmar, CA 95324|37.411518|-120.85002600000001
 Hilmar Group|Location is: Hilmar Group|4|14:00:00|15:00:00|20037 American, Hilmar, CA 95324|37.4114369|-120.85058179999999
@@ -213,10 +209,6 @@ Carrying the Message Group|Location is: Carrying the Message Group|3|14:30:00|15
 Cherokee Road Group|Location is: Cherokee Road Group|4|14:30:00|15:30:00|19361 Cherokee Rd, Tuolumne City, CA 95379|37.9752398|-120.25159960000002
 Cherokee Road Group|Location is: Cherokee Road Group|5|14:00:00|15:00:00|19361 Cherokee Rd, Tuolumne City, CA 95379|37.9752398|-120.25159960000002
 SENIOR CENTER|Location is: SENIOR CENTER|2|12:00:00|13:00:00|LAKE ISABELLA, LAKE ISABELLA, CA |35.6179861|-118.47756670000001
-SENIOR CENTER|Location is: SENIOR CENTER|4|12:00:00|13:00:00|, LAKE ISABELLA, CA |35.6180087|-118.473141
-LAKE ISABELLA|Location is: SENIOR CENTER|5|19:30:00|20:30:00|, LAKE ISABELLA, CA |35.6180087|-118.473141
-SENIOR CENTER|Location is: SENIOR CENTER|6|12:00:00|13:00:00|, LAKE ISABELLA, CA |35.6180087|-118.473141
-LAKE ISABELLA BREAKFAST ($7)|Location is: SENIOR CENTER|1|10:00:00|11:00:00|, LAKE ISABELLA, CA |35.6180087|-118.473141
 HEART OF HEARTS|Location is: ST MARKS|2|17:30:00|18:30:00|1510 MCCRAY, BAKERSFIELD, CA 93308|35.420162|-119.02968599999997
 HEART OF HEARTS|Location is: ST MARKS|4|17:30:00|18:30:00|1510 MCCRAY, BAKERSFIELD, CA 93308|35.420162|-119.02968599999997
 HEART OF HEARTS|Location is: ST MARKS|5|17:30:00|18:30:00|1510 MCCRAY, BAKERSFIELD, CA 93308|35.420162|-119.02968599999997
@@ -715,7 +707,6 @@ Easy Does It Group|Location is: Easy Does It Group|3|14:30:00|15:30:00|162 Churc
 K.I. S.S.|Location is: K.I. S.S.|2|14:00:00|15:00:00|414 Oak St, San Andreas, CA 95249|38.194426|-120.68671999999998
 Up From the Bottom Group|Location is: Up From the Bottom Group|6|14:30:00|15:30:00|1703 E. Yosemite Ave, Manteca, CA 95336|37.798196|-121.18973
 Up From The Bottom|Location is: Up From The Bottom|6|14:00:00|15:00:00|Perko's Banquet Room, Manteca, CA |37.7974273|-121.21605260000001
-Railroad Flat|Location is: Railroad Flat|3|14:00:00|15:00:00|, Railroad Flat, CA |38.3432471|-120.5121479
 Don't Drink Today|Location is: Don't Drink Today|1|14:00:00|15:00:00|New Jerusalem School, Tracy, CA |37.6674298|-121.32355259999997
 3 River Lodge|Location is: 3 River Lodge|3|14:00:00|15:00:00|1305 S. Union St., Manteca, CA 95337|37.785741|-121.23418559999999
 3 River Lodge|Location is: 3 River Lodge|6|14:00:00|15:00:00|1305 S. Union St., Manteca, CA 95337|37.785741|-121.23418559999999
@@ -804,10 +795,6 @@ DAILY REFLECTIONS|Location is: SOUTH AND COMMERCIAL|5|12:00:00|13:00:00|SOUTH AN
 12X12 REBOUNDERS|Location is: SOUTH AND COMMERCIAL|5|19:00:00|20:00:00|SOUTH AND COMMERCIAL, TEHACHAPI, CA 93561|35.1205452|-118.49260219999996
 Morro Bay LGBT|Location is: Morro Bay Library|3|18:30:00|19:30:00|625 Harbor Street, Morro Bay, CA 93442|35.367349|-120.84599600000001
 CROSSROADS COMMUNITY CHURCH|Location is: CROSSROADS COMMUNITY CHURCH|2|19:00:00|20:00:00|235 NORTH CHINA LAKE BLVD, RIDGECREST, CA 93555|35.6253552|-117.6701506
-WANDERING MENS|Location is: CALL ALANO CLUB FOR LOCATION 371-9120|4|19:00:00|20:00:00|, RIDGECREST, CA |35.6224561|-117.67089659999999
-EARLY BIRDS|Location is: CALL ALANO CLUB FOR LOCATION 371-9120|1|09:00:00|10:00:00|, RIDGECREST, CA |35.6224561|-117.67089659999999
-GROUPO NUEVO AMANECER|Location is: CALL ALANO CLUB FOR LOCATION 371-9120|1|19:30:00|20:30:00|, RIDGECREST, CA |35.6224561|-117.67089659999999
-YOUNG AT HEART|Location is: CALL ALANO CLUB FOR LOCATION 371-9120|1|20:00:00|21:00:00|, RIDGECREST, CA |35.6224561|-117.67089659999999
 BEAR VALLEY MEETING|Location is: BEAR VALLEY SPRINGS COMMUNITY CHURCH|5|17:30:00|18:30:00|FRONT GATE GUARD, TEHACHAPI, CA |35.1321877|-118.4489739
 STEERING COMMITEE MEETING|Location is: CORNER OF SOUTH AND COMMERCIAL|1|16:00:00|17:00:00|SECOND SUNDAY OF EACH MONTH, TEHACHAPI, CA |35.1321877|-118.4489739
 Morro Bay Group|Location is: Morro Bay Group|1|17:30:00|18:30:00|1000 Quintana (upstairs), Morro Bay, CA |35.3658075|-120.8499013
@@ -1179,7 +1166,6 @@ Step Eleven Men's Group|Location is: Church|2|23:00:00|00:00:00|26 Florido Stree
 Stag Eleven Group|Location is: Unitarian Fellowship Hall|2|23:00:00|00:00:00|6401 Freedom Blvd, Aptos, CA 95003|36.984678|-121.861539
 Awareness Group|Location is: Valencia Hall|4|23:00:00|00:00:00|2555 Valencia Road, Aptos, CA 95003|36.996601|-121.86657600000001
 H.O.W. Group|Location is: Church behind CHP building|3|23:00:00|00:00:00|10707 Soquel Drive, Aptos, CA 95003|36.969919|-121.87054499999999
-Fire on the Mountain|Location is: New Camaldoli Hermitage |6|19:15:00|20:15:00|, Big Sur, CA |36.2704212|-121.807976
 Aptos Women's Serenity Group|Location is: Church|6|16:00:00|17:00:00|221 Thunderbird Drive, Aptos, CA 95003|36.958387|-121.87443200000001
 Normandy Group|Location is: Normandy Group|6|14:00:00|15:00:00|1515 W Ben Holt, Stockton, CA 95219|38.0082185|-121.33050630000002
 WILDERNESS GROUP|Location is: ESALEN INSTITUTE|4|19:00:00|20:00:00|HWY 1, BIG SUR, CA |36.0495804|-121.58980930000001
@@ -1366,8 +1352,6 @@ Delta Presbyterian  Church|Location is: Delta Presbyterian  Church|1|19:30:00|20
 Sunday Night Candle Light Group|Location is: Church|1|23:00:00|00:00:00|2500 Soquel Ave, Santa Cruz, CA 95062|36.983612|-121.99158299999999
 Solutions in the Sand Group|Location is: Solutions in the Sand Group|4|23:00:00|00:00:00|Twin Lakes Beach, Santa Cruz, CA 95062|36.9619658|-121.997926
 Monday Miracles|Location is: Campbell|2|08:30:00|09:30:00|2211 Shamrock Dr, San Jose, CA 95008|37.269766|-121.93904600000002
-Furnace Creek AA|Location is: FIRE STATION|1|19:30:00|20:30:00|, FURNACE CREEK, CA |36.4580039|-116.8708863
-Furnace Creek AA|Location is: FIRE STATION|4|19:30:00|20:30:00|, FURNACE CREEK, CA |36.4580039|-116.8708863
 Grupo Santa Cruz|Location is: Grupo Santa Cruz|4|22:30:00|23:30:00|1817 Soquel Avenue, Santa Cruz, CA 95062|36.9815917|-122.00109700000002
 Grupo Santa Cruz|Location is: Grupo Santa Cruz|5|22:30:00|23:30:00|1817 Soquel Avenue, Santa Cruz, CA 95062|36.9815917|-122.00109700000002
 Stag 12x12 Group|Location is: Church Hall|4|15:00:00|16:00:00|515 Frederick Street, Santa Cruz, CA 95062|36.977424|-122.004303
@@ -1471,7 +1455,6 @@ AA Sober Slugs|Location is: Women's Center|3|21:00:00|22:00:00|UCSC Cardiff Hous
 UCSC Big Book Study|Location is: Cardiff House / Women's Center|6|15:00:00|16:00:00|1156 High Street, Santa Cruz, CA 95064|36.9776244|-122.05431820000001
 Sunol Underground #1|Location is: The Little Brown Church|3|20:00:00|21:00:00|143 Kilkare Road, Sunol, CA 94586|37.5966328|-121.89019209999998
 Sunol Underground #2|Location is: The Little Brown Church|5|19:30:00|20:30:00|143 Kilkare Road, Sunol, CA 94586|37.5966328|-121.89019209999998
-Beatty Meeting|Location is: SENIOR CENTER|6|19:00:00|20:00:00|, BEATTY, CA |52.9001271|-104.80945439999999
 Felton Group|Location is: Church|5|23:00:00|00:00:00|6090 Hwy 9, Felton, CA 95018|37.0493582|-122.07330709999997
 Staying In The Book|Location is: Tri-Valley YMCA|5|17:30:00|18:30:00|4725 First Street, Pleasanton, CA 94566|37.657003|-121.876868
 Hilltop Group|Location is: Lynwood Methodist Church|4|19:30:00|20:30:00|4444 Black Avenue, Pleasanton, CA 94566|37.6721324|-121.87642149999999
@@ -1579,7 +1562,6 @@ Saturday Night Jive|Location is: Saturday Night Jive|7|14:30:00|15:30:00|1237 Pi
 Saturday Night Jive|Location is: Saturday Night Jive|4|14:00:00|15:00:00|1237 Pine St. (Ch), Boulder, CA 95006|37.1745211|-122.1495099
 Only Requirement|Location is: Only Requirement|4|14:30:00|15:30:00|1128 Pine St. (Ch), Boulder, CA 95006|37.175357|-122.15284159999999
 Womens Meeting|Location is: Womens Meeting|2|14:00:00|15:00:00|100 Jackson Blvd, Isleton, CA 95641|38.159795|-121.61246800000004
-LIGHTHOUSE|Location is: ST. TERESA CHURCH|1|19:00:00|20:00:00|, ISLETON, CA |38.1618614|-121.61162059999998
 Book & Step Study|Location is: Davenport Resource Center|4|23:00:00|00:00:00|100 Church Street, Davenport, CA 95017|37.0121453|-122.19373029999997
 Ocean View Group|Location is: Davenport Resource Center|6|23:00:00|00:00:00|100 Church Street, Davenport, CA 95017|37.0121453|-122.19373029999997
 Motherlode Women&#39;s Meeting|Location is: Motherlode Fellowship|6|18:00:00|19:00:00|5850 Motherlode Dr. , placerville, CA |38.684737|-120.86402800000002
@@ -1706,7 +1688,6 @@ Presbyterian Church 4|Location is: Presbyterian Church|3|17:30:00|18:30:00|222 W
 Presbyterian Church 4|Location is: Presbyterian Church|5|17:30:00|18:30:00|222 W El Pintado, Danville, CA 94526|37.8251826|-121.99819539999999
 Presbyterian Church 5|Location is: Presbyterian Church|5|19:30:00|20:30:00|222 W El Pintado, Danville, CA 94526|37.8251826|-121.99819539999999
 Presbyterian Church 3|Location is: Presbyterian Church|4|12:00:00|13:00:00|222 W El Pintado, Danville, CA 94526|37.8251826|-121.99819539999999
-For location call:326-1923|Location is: MONDAY HAPPY HOUR|2|12:00:00|13:00:00|, MENLO PARK, CA |37.4538274|-122.18218709999996
 Presby. Church|Location is: ATHERTON GROUP|4|12:00:00|13:00:00|1111 University-Building D-Rm D11, MENLO PARK, CA |37.4499939|-122.18696499999999
 Presby. Church|Location is: MENLO PARK FRIDAY NIGHT|6|20:00:00|21:00:00|1111 University-Building D-Rm 10, MENLO PARK, CA |37.4499939|-122.18696499999999
 MIDDLE ROAD SOLUTION|Location is: MIDDLE ROAD SOLUTION|7|19:30:00|20:30:00|DISCONTINUED 9/29/08, MENLO PARK, CA |37.4538274|-122.18218709999996
@@ -2108,7 +2089,6 @@ Lavender Hill Gay, Beginners|Location is: Lavender Hill Gay, Beginners|3|11:00:0
 LGBT People of Color|Location is: St Paul's Ch|7|15:00:00|16:00:00|1658 Excelsior Ave at  Woodruff Ave, OAKLAND, CA 94602|37.8018659|-122.22208799999999
 Satin Dolls|Location is: Satin Dolls|3|17:00:00|18:00:00|1658 Excelsior Ave at Woodruff Ave, OAKLAND, CA 94602|37.8018659|-122.22208799999999
 Monday Night Men's Literature Study|Location is: Satin Dolls|2|19:00:00|20:00:00|1658 Excelsior Ave at Woodruff Ave, OAKLAND, CA 94602|37.8018659|-122.22208799999999
-Amargosa Meeting|Location is: SENIOR CENTER|2|19:00:00|20:00:00|, AMARGOSA, CA 92328|36.39256|-116.6515738
 Park St Center 10|Location is: Park St Center|1|06:30:00|07:30:00|1510 Oak St, ALAMEDA, CA 94501|37.7663126|-122.24299250000001
 Park St Center 6|Location is: Park St Center|1|17:30:00|18:30:00|1510 Oak St, ALAMEDA, CA 94501|37.7663126|-122.24299250000001
 Park St Center 8|Location is: Park St Center|1|19:00:00|20:00:00|1510 Oak St, ALAMEDA, CA 94501|37.7663126|-122.24299250000001
@@ -2242,9 +2222,6 @@ St. Paul’s Church|Location is: BURLINGAME MEN’S GROUP|5|20:00:00|21:00:00|41
 Fellowship Speakers Meeting|Location is: Fellowship Speakers Meeting|6|19:00:00|20:00:00|1010 Murray Ave. Sierra Vista Hospital - Auditorium, San Luis Obispo, CA 95678|31.5520284|-110.23636929999998
 Godless Heathens II|Location is: Grand Lake Neighborhood Ctr|4|20:00:00|21:00:00|530 Lake Park Ave, OAKLAND, CA 94610|37.8102946|-122.24656979999997
 Lakeshore Lushes|Location is: Lady of Lourdes Ch(Library)|6|19:00:00|20:00:00|2808 Lakeshore Ave, OAKLAND, CA 94610|37.8078189|-122.2492545
-Roseville 5th St Fellowship|Location is: Roseville Alano Club|3|11:30:00|12:30:00|, , CA |36.778261|-119.41793239999998
-Roseville 5th St Fellowship|Location is: Roseville Alano Club|4|11:30:00|12:30:00|, , CA |36.778261|-119.41793239999998
-Roseville 5th St Fellowship|Location is: Roseville Alano Club|5|11:30:00|12:30:00|, , CA |36.778261|-119.41793239999998
 Roseville Tuesday night Group|Location is: meeting hall|7|20:00:00|21:00:00|Lincoln Ave, roseville, CA 95677|38.7812884|-121.262541
 Just The Book|Location is: Methodist Church|3|19:00:00|20:00:00|1330 Lakeshore Ave, OAKLAND, CA 94606|37.798953|-122.25779799999998
 Lady A|Location is: Methodist Church|5|19:45:00|20:45:00|1330 Lakeshore Ave, OAKLAND, CA 94606|37.798953|-122.25779799999998
@@ -2325,7 +2302,6 @@ Road of Happy Destiny|Location is: Rockridge Fellowship|7|17:30:00|18:30:00|5767
 Came to Believe|Location is: Rockridge Fellowship|7|20:30:00|21:30:00|5767 Broadway, OAKLAND, CA 94618|37.844051|-122.24667299999999
 Attitude Adjustment|Location is: Rockridge Fellowship|1|09:00:00|10:00:00|5767 Broadway, OAKLAND, CA 94618|37.844051|-122.24667299999999
 Young People's Meeting|Location is: St. Augustine's Ch|2|20:00:00|21:00:00|525 29th St. @ Telegraph, OAKLAND, CA |37.81820829999999|-122.26763210000001
-Breath of Fresh Air|Location is: Outdoors|1|10:00:00|11:00:00|, Oakland, CA |37.8043637|-122.2711137
 Late Lunch Bunch|Location is: Kaiser Center|6|10:30:00|11:30:00|969  Broadway, OAKLAND, CA 94607|37.8013736|-122.27323560000002
 Attraction Grp|Location is: Kaiser Outpatient Clinic|5|19:30:00|20:30:00|969 Broadway, Oakland, CA 94607|37.8013736|-122.27323560000002
 Finally Smart|Location is: Kaiser Outpatient Clinic|5|20:00:00|21:00:00|969 Broadway, Oakland, CA 94607|37.8013736|-122.27323560000002
@@ -2345,7 +2321,6 @@ Rap At Noon|Location is: Unitarian Church|4|20:00:00|21:00:00|685 14th St at Cas
 Rap At Noon|Location is: Unitarian Church|5|20:00:00|21:00:00|685 14th St at Castro St, OAKLAND, CA 94612|37.806304|-122.27691600000003
 Rap At Noon|Location is: Unitarian Church|6|00:00:00|01:00:00|685 14th St at Castro St, OAKLAND, CA 94612|37.806304|-122.27691600000003
 UN DIA A LA VEZ|Location is: UN DIA A LA VEZ|1|09:00:00|10:00:00|225 S. Cabrillo Hwy Rm200A, HALF MOON BAY, CA |37.4635519|-122.42858619999998
-Half Moon Bay Airport-Three Zero Café|Location is: MENS 'Language of the Heart' STUDY|3|19:00:00|20:00:00|, HALF MOON BAY, CA |37.4635519|-122.42858619999998
 Our Lady of Pillar Church|Location is: FRIDAY NIGHT GROUP|6|20:00:00|21:00:00|540 Kelly (Church St), HALF MOON BAY, CA 94019|37.4638104|-122.43108319999999
 Rio LInda Fellowship|Location is: Rio Linda, CA|4|19:30:00|20:30:00|5 th & L ST, rio_linda, CA 95673|38.6893261|-121.4534021
 Safe Haven|Location is: St Augustine's Ch, Colby St entrance|1|20:00:00|21:00:00|400 Alcatraz Ave, OAKLAND, CA 94609|37.8506685|-122.25757770000001
@@ -2527,7 +2502,6 @@ STILL HUMAN|Location is: GRACE EPISCOPAL CHURCH|3|18:00:00|19:00:00|1st AND KENT
 STILL HUMAN|Location is: GRACE EPISCOPAL CHURCH|6|18:00:00|19:00:00|1st AND KENTUCKY, FAIRFIELD, CA 94533|38.25178289999999|-122.05242199999998
 TWIN CITIES GROUP|Location is: GRACE EPISCOPAL CHURCH|6|20:00:00|21:00:00|1st AND KENTUCKY, FAIRFIELD, CA 94533|38.25178289999999|-122.05242199999998
 Church|Location is: Church|5|20:00:00|21:00:00|5570 Olinda Rd., El Sobrante, CA 94803|37.959443|-122.27807100000001
-The Buck|Location is: Camarillo|6|05:00:00|06:00:00|?, Camarillo, CA 93010|34.2163937|-119.0376023
 Kaiser Hospital|Location is: MIDWAY SOUTH SF GROUP|5|20:00:00|21:00:00|1200 El Camino, SOUTH SAN FRANCISCO, CA 94080|37.6591467|-122.43931550000002
 Late Night Young People Spk|Location is: St. Columba's Episcopal Church|6|21:30:00|22:30:00|1251 Las Posas Rd, Camarillo, CA 93010|34.2327423|-119.05542730000002
 Crockett Group|Location is: Saint Mark_s Church|2|20:00:00|21:00:00|Pomona St, Crockett, CA 94525|38.0523745|-122.21961469999997
@@ -2633,12 +2607,10 @@ residence|Location is: residence|1|10:00:00|11:00:00|557 Rincon Rd, El Sobrante,
 Big Book Breakfast Club|Location is: residence|1|22:00:00|23:00:00|557 Rincon Rd, El Sobrante, CA 94803|37.978902|-122.299239
 Sesame Step|Location is: Noe Valley Ministry|3|19:30:00|20:30:00|1021 Sanchez Street, san_francisco, CA 94114|37.75282860000001|-122.42943660000003
 Open Door Group|Location is: St John's Ch|6|08:30:00|09:30:00|2727 College, CASTRO VALLEY, CA |37.7576918|-122.4346845
-living with hiv|Location is: our lady of safeway|4|18:00:00|19:00:00|., san_francisco, CA |37.7749295|-122.41941550000001
 Pacifica Comm. Center|Location is: GOLDEN GATE SOUTH GROUP|6|18:00:00|19:00:00|540 Crespi Dr., PACIFICA, CA 94044|37.5987994|-122.49919190000003
 Freedom Fellowship|Location is: 901 Mariposa Avenue|4|10:00:00|11:00:00|Rodeo Ave, Rodeo, CA 94572|38.0327683|-122.26816710000003
 Beach (Mar-Oct.)|Location is: DAILY REFLECTIONS|1|10:30:00|11:30:00|California 1 & Crespi Dr, Pacifica, CA 94044|37.59948|-122.4999942
 Dark Secrets|Location is: SF Alano Club|6|22:00:00|23:00:00|1748 Market St, San Francisco, CA 94102|37.7724266|-122.4228994
-Womens AA group|Location is: Our Redeemer Luthern Church|5|19:30:00|20:30:00|, Oxnard, CA |34.1975048|-119.17705160000003
 UNITY GROUP|Location is: Community Presbyterian Church|3|20:15:00|21:15:00|425 Hemlock Street, Vacaville, CA 95688|38.3644151|-122.0023903
 HOW GROUP|Location is: Community Presbyterian Church|6|20:00:00|21:00:00|425 Hemlock Street, Vacaville, CA 95688|38.3644151|-122.0023903
 ALL GROUPS BIRTHDAY NIGHT|Location is: Community Presbyterian Church|7|20:30:00|21:30:00|425 Hemlock Street, Vacaville, CA 95688|38.3644151|-122.0023903
@@ -2874,7 +2846,6 @@ Sober Solutions|Location is: Life's In Session - Celebrate Life SpkrPart|7|10:00
 Love and Care Women's Group|Location is: Life's In Session - Celebrate Life SpkrPart|7|12:30:00|13:30:00|17251 Sherman Way (Church), Van Nuys, CA |34.200176|-118.44497000000001
 Life's In Session -|Location is: Life's In Session - Celebrate Life SpkrPart|7|20:00:00|21:00:00|17251 Sherman Way (Church), Van Nuys, CA |34.200176|-118.44497000000001
 Life's In Session - Newcomers|Location is: Life's In Session - Celebrate Life SpkrPart|1|18:00:00|19:00:00|17251 Sherman Way (Church), Van Nuys, CA |34.200176|-118.44497000000001
-Sober Sals - Women&#39;s Stag|Location is: Unname Location|4|13:00:00|14:00:00|, San Fernando Valley, CA |34.1825782|-118.43967559999999
 Encino Hills|Location is: Encino Hills|2|20:00:00|21:00:00|5429 Lindley Ave. (Temple), Tarzana, CA |34.1494848|-118.5506158
 Tues Nite Big Book & Candlelight|Location is: Tues Nite Big Book & Candlelight|3|19:30:00|20:30:00|6220 Corbin (Church), Tarzana, CA |34.1494848|-118.5506158
 5929 Donna Ave. (Sober living house)|Location is: 5929 Donna Ave. (Sober living house)|4|18:30:00|19:30:00|5929 Donna Ave. (Sober living house), Tarzana, CA |34.1494848|-118.5506158
@@ -3225,7 +3196,6 @@ Women's Book|Location is: Women's Book|2|18:00:00|19:00:00|100 Universal Pl, (Bl
 The Promises|Location is: Women's Book|3|18:00:00|19:00:00|100 Universal Pl, (Bldg #2250- Webb Conf Rm), Universal City, CA |34.1397694|-118.35057790000002
 Try God|Location is: Women's Book|4|12:30:00|13:30:00|100 Universal Pl, (Bldg #2250- Webb Conf Rm), Universal City, CA |34.1397694|-118.35057790000002
 Living In The Solution|Location is: Living In The Solution|6|18:00:00|19:00:00|100 Universal Pl, (Bldg #2250- Webb Conf Rm), Universal City, CA |34.1397694|-118.35057790000002
-Road&#39;s End|Location is: Salem Lutheran Church|2|19:00:00|20:00:00|, , CA |36.778261|-119.41793239999998
 185 Man-to-Man Stag|Location is: Our Saviour Lutheran Church|5|19:00:00|20:00:00|185 W. Altadena Drive, altadena, CA 91001|34.1957442|-118.15089219999999
 GLENDALE GROUP|Location is: St. George's Episcopal church|7|20:30:00|21:30:00|Glendale & Lanham-Severn Roads, Glendale, CA |34.1425078|-118.25507500000003
 Jumpstart|Location is: Jumpstart|2|07:30:00|08:30:00|1812 Verdugo (Hospital - cafeteria), Glendale, CA |34.1425078|-118.25507500000003
@@ -3267,14 +3237,6 @@ Sicker Than Most / Mens stag|Location is: back of the church|4|19:00:00|20:00:00
 Bravo&#39;s Men&#39;s Stag (Bravo Company)|Location is: Santa Monica, where else?|1|12:00:00|13:00:00|1319 3rd St, santa_monica, CA 90401|34.016634|-118.49698319999999
 Westside We Agnostics|Location is: Zen Center|6|19:30:00|20:30:00|1001A Colorado, santa_monica, CA 90401|34.0184881|-118.48635439999998
 Privite underground meeting|Location is: na|3|17:30:00|18:30:00|na, santa_cruz, CA 91007|34.1216975|-118.04788259999998
-San Marino Thursday Night Men&#39;s Stag|Location is: San Marino Community Church (downstairs)|5|20:30:00|21:30:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |1|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |2|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |3|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |4|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |5|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |6|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
-Brovo&#39;s Mens Stag|Location is: Santa Monica, |7|12:00:00|13:00:00|, , CA |36.778261|-119.41793239999998
 We Agnostics|Location is: Church Hall|3|19:00:00|20:00:00|1515 Maple, santa_monica, CA 90405|34.0119629|-118.4698664
 Book Worms|Location is: Venice Recovery Center|4|17:30:00|18:30:00|414 Lincoln, venice, CA 90291|34.0004931|-118.46606209999999
 Keeping It Real Alternative Lifestyles|Location is: 4808 Crenshaw Boulevard|6|21:00:00|22:00:00|Los Angeles, Califorrnia, los_angeles, CA |34.0522342|-118.2436849
@@ -3606,7 +3568,6 @@ Eastside AA Group|Location is: Eastside Lutheran Church|5|17:30:00|18:30:00|1300
 marina pacifica group|Location is: hall|2|07:00:00|08:00:00|Pacific Coast Hwy, Long Beach, CA 90815|33.7899116|-118.14365550000002
 WOMEN DO RECOVER|Location is: Church|1|19:00:00|20:00:00|5895 Ball Rd, CYPRESS, CA 90630|33.817453|-118.029991
 10+ GROUP|Location is: Club|1|17:00:00|18:00:00|5450 Atherton St, LONG BEACH, CA 90815|33.787911|-118.12616100000002
-SUN SPOTS|Location is: Alamitos at Ocean Blvd.- Beach/Picnic Area|1|11:30:00|12:30:00|, Long Beach, CA |33.768321|-118.19561679999998
 EAST BAY GROUP|Location is: Rec Ctr|1|19:00:00|20:00:00|5620 Atherton, LONG BEACH, CA 90815|33.7886844|-118.12205059999997
 LOS ALTOS OPEN DOOR|Location is: Church|2|20:00:00|21:00:00|5550 E Atherton, LONG BEACH, CA 90815|33.7884332|-118.122792
 TUES NIGHT LIVE BOOK STUDY|Location is: Church|3|20:00:00|21:00:00|5550 Atherton, LONG BEACH, CA 90815|33.7884332|-118.122792
@@ -4188,7 +4149,6 @@ BILL'S ARMY AA MEETING|Location is: CAMEL CLUB LAS VEGAS|2|08:30:00|09:30:00|230
 BYOC BRING YOUR OWN CAKE AA MEETING|Location is: CAMEL CLUB LAS VEGAS|1|19:00:00|20:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 LET'S TALK AA SPEAKER MEETING|Location is: CAMEL CLUB LAS VEGAS|6|19:00:00|20:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 BIG CHILL AA MEETING|Location is: CAMEL CLUB LAS VEGAS|5|19:00:00|20:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
-PULP FICTION AA MEETING MONDAY 7PM|Location is: CAMEL CLUB LAS VEGAS|2|19:00:00|20:00:00|, , CA |36.778261|-119.41793239999998
 CRUSHED GRAPES AA MEETING|Location is: CAMEL CLUB LAS VEGAS|4|19:00:00|20:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 NEW DAY AA SUNRISE MEETING|Location is: CAMEL CLUB LAS VEGAS|6|07:00:00|08:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 NEW DAY AA SUNRISE MEETING|Location is: CAMEL CLUB LAS VEGAS|4|07:00:00|08:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
@@ -4197,13 +4157,6 @@ HAPPY JOYOUS FREE AA MEETING|Location is: CAMEL CLUB LAS VEGAS|2|10:00:00|11:00:
 THE COSMOS AA BIG BOOK MEETING|Location is: CAMEL CLUB LAS VEGAS|3|20:30:00|21:30:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 TURN IT OVER AA MEETING|Location is: CAMEL CLUB LAS VEGAS|3|19:00:00|20:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV 89119, las vegas, CA 89119|36.0715597|-115.12019479999998
 NEW DAY|Location is: CAMEL CLUB LAS VEGAS|2|07:00:00|08:00:00|2301 E. SUNSET ROAD SUITE 2 LAS VEGAS NV, las vegas, CA 89119|36.0715597|-115.12019479999998
-Mom&#39;s AA|Location is: Chico, CA|2|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|3|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|4|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|5|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|6|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|7|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
-Mom&#39;s AA|Location is: Chico, CA|1|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
 Men's Stag|Location is: SILKWORTH HOUSE|6|17:30:00|18:30:00|5581 MCLEOD DRIVE, LAS VEGAS, CA 89120|36.0776542|-115.10984300000001
 Men's Stag|Location is: SILKWORTH HOUSE|1|19:00:00|20:00:00|5581 MCLEOD DRIVE, LAS VEGAS, CA 89120|36.0776542|-115.10984300000001
 Men's Stag|Location is: SILKWORTH HOUSE|4|19:00:00|20:00:00|5581 MCLEOD DRIVE, LAS VEGAS, CA 89120|36.0776542|-115.10984300000001
@@ -4373,8 +4326,6 @@ Anthem Women's 12 X 12|Location is: NEW SONG CHURCH|6|10:00:00|11:00:00|1291 COR
 Promise|Location is: ST FRANCIS OF ASSISI CHURCH|2|19:00:00|20:00:00|2300 SUNRIDGE HEIGHTS PARKWAY, HENDERSON, CA 89052|35.9987799|-115.08948900000001
 Over the Hill Breakfast|Location is: BUCKMAN’S TAVERN|7|09:00:00|10:00:00|2600 HAMPTON ROAD, HENDERSON, CA 89052|35.9549981|-115.10225509999998
 Morongo Valley Book Study|Location is: Valley View Mobile Home Park|1|16:00:00|17:00:00|10888 West Dr., Morongo Valley, CA 92256|34.054996|-116.57765039999998
-New Beginnings|Location is: Morongo Indian Reservation|3|19:30:00|20:30:00|, Cabazon, CA |33.9175154|-116.78723990000003
-Saturday Night Meeting (Meeting is DARK, not being held anymore)|Location is: Covington Park|7|18:30:00|19:30:00|, Morongo Valley, CA |34.0469549|-116.5808472
 theeffect AA|Location is: San Juan Capistrano, CA|4|18:15:00|19:15:00|27122 Paseo Espada #1001, San Juan Capistrano, CA 92675|33.5008148|-117.65616979999999
 UNITED METHODIST CHURCH|Location is: UNITED METHODIST CHURCH|4|19:00:00|20:00:00|29250 PIPING ROCK ROAD, SUN CITY, CA 92586|33.6961784|-117.18018219999999
 Raw Truth (non-smoking)|Location is: TEMPLE NER TAMID|5|09:30:00|10:30:00|55 N VALLE VERDE, HENDERSON, CA 89074|36.028945|-115.06406300000003
@@ -4475,7 +4426,6 @@ ARRID CLUB|Location is: ARRID CLUB|1|10:30:00|11:30:00|699 N. San Jacinto, HEMET
 BIG BOOK COMES ALIVE|Location is: BIG BOOK COMES ALIVE|3|17:30:00|18:30:00|140 NORTH BUENA VISTA, HEMET, CA 92543|33.748723|-116.96701200000001
 CHICAGO STYLE|Location is: UNITY VALLEY CHURCH|5|18:00:00|19:00:00|140 N. Buena Vista, HEMET, CA 92543|33.748723|-116.96701200000001
 HALO LIFE RECOVERY|Location is: TRIBAL HALL|4|19:00:00|20:00:00|23904 SOBOBA ROAD, SAN JACINTO, CA 92544|33.7741949|-116.9113944
-SATURDAY NIGHT LIVE|Location is: Room 113 Medical Buildings|7|20:00:00|21:00:00|, , CA |36.778261|-119.41793239999998
 DAUGHTERS OF BILL AND BOB|Location is: CITIBANK|5|18:00:00|19:00:00|1700 E FLORIDA, HEMET, CA 92544|33.7478551|-116.95367060000001
 HAPPY HOUR|Location is: CITIBANK|2|17:30:00|18:30:00|1700 E FLORIDA, HEMET, CA 92544|33.7478551|-116.95367060000001
 MOTHER HEN’S CHICKS|Location is: CITIBANK|3|18:00:00|19:00:00|1700 E FLORIDA, HEMET, CA 92544|33.7478551|-116.95367060000001
@@ -4655,14 +4605,12 @@ ATTITUDE ADJUSTMENT|Location is: SERENITY CIRCLE HALL|4|07:00:00|08:00:00|42066 
 ATTITUDE ADJUSTMENT|Location is: SERENITY CIRCLE HALL|5|07:00:00|08:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 ATTITUDE ADJUSTMENT|Location is: SERENITY CIRCLE HALL|6|07:00:00|08:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 ATTITUDE ADJUSTMENT|Location is: SERENITY CIRCLE HALL|7|08:00:00|09:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
-BATS IN THE BELFRY|Location is: PECHANGA RESERVATION|6|19:30:00|20:30:00|, TEMECULA, CA |33.4936391|-117.14836479999997
 BIG BOOK|Location is: SERENITY CIRCLE HALL|1|10:00:00|11:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 BREAKFAST CLUB|Location is: SERENITY CIRCLE HALL|4|10:00:00|11:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 DAWN PATROL|Location is: SERENITY CIRCLE HALL|4|06:00:00|07:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 I CAN’T SLEEP|Location is: SERENITY CIRCLE HALL|7|22:00:00|23:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 LIVING SOBER|Location is: SERENITY CIRCLE HALL|3|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 MENS STAG|Location is: SERENITY CIRCLE HALL|3|19:30:00|20:30:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
-MONDAY MADNESS|Location is: PECHANGA RESERVATION|2|18:00:00|19:00:00|, TEMECULA, CA |33.4936391|-117.14836479999997
 NOON MEETING|Location is: SERENITY CIRCLE HALL|1|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 NOON MEETING|Location is: SERENITY CIRCLE HALL|2|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 NOON MEETING|Location is: SERENITY CIRCLE HALL|5|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
@@ -4674,7 +4622,6 @@ SERENITY HOUR|Location is: SERENITY CIRCLE HALL|4|18:00:00|19:00:00|42066 Avenid
 SERENITY HOUR|Location is: SERENITY CIRCLE HALL|5|18:00:00|19:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 SERENITY HOUR|Location is: SERENITY CIRCLE HALL|6|18:00:00|19:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 SERENITY SEEKERS|Location is: SERENITY CIRCLE HALL|5|19:15:00|20:15:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
-STEP SISTERS|Location is: PECHANGA RESERVATION|4|19:00:00|20:00:00|, TEMECULA, CA |33.4936391|-117.14836479999997
 YOUNG AT HEART|Location is: SERENITY CIRCLE HALL|7|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 SERENITY CIRCLE HALL|Location is: SERENITY CIRCLE HALL|4|12:00:00|13:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
 SERENITY CIRCLE HALL|Location is: SERENITY CIRCLE HALL|7|18:00:00|19:00:00|42066 Avenida Alvarado, TEMECULA, CA |33.5122593|-117.1683625
@@ -4839,7 +4786,6 @@ Attitude Adjustment|Location is: Aqua Blanca Plaza|3|06:30:00|07:30:00|41750 Ran
 Fearless & Thorough|Location is: Aqua Blanca Plaza|3|18:30:00|19:30:00|41750 Rancho Las Palmas Dr, Rancho Mirage, CA 92270|33.7428376|-116.41038149999997
 Attitude Adjustment|Location is: Aqua Blanca Plaza|4|06:30:00|07:30:00|41750 Rancho Las Palmas Dr, Rancho Mirage, CA 92270|33.7428376|-116.41038149999997
 Ladies Night Out|Location is: Aqua Blanca Plaza|4|18:30:00|19:30:00|41750 Rancho Las Palmas Dr, Rancho Mirage, CA 92270|33.7428376|-116.41038149999997
-JACKMAN BIG BOOK DISCUSSION GROUP|Location is: JACKMAN LIBRARY|3|19:00:00|20:00:00|, JACKMAN, CA |45.6240392|-70.25215120000001
 SHEPHERD LUTHERAN CHURCH|Location is: SHEPHERD LUTHERAN CHURCH|3|19:00:00|20:00:00|56095 PENA ROAD, ANZA, CA 92539|33.5597354|-116.68045280000001
 SHEPHERD OF THE VALLEY LUTHERAN CHURCH|Location is: SHEPHERD LUTHERAN CHURCH|4|20:00:00|21:00:00|56095 PENA ROAD, ANZA, CA 92539|33.5597354|-116.68045280000001
 Serenity Group|Location is: Cinemas Palme D'Or, Theater 4|1|09:00:00|10:00:00|Back of Westfield Mall Highway 111, Palm Desert, CA 92260|33.7236369|-116.392223
@@ -4917,11 +4863,9 @@ Women's Candlelight|Location is: Discussion|5|19:30:00|20:30:00|44375 Palm St, I
 Book Study|Location is: Book Study|1|19:30:00|20:30:00|44435 Biskra St, Indio, CA 92201|33.7248|-116.22654
 Serenity by the RIver |Location is: Villa Columba .|4|18:00:00|19:00:00|Rio St, red_bluff, CA 96080|40.1765794|-122.23266690000003
 Attitudes In Action|Location is: St Peter's Episcopal Church|6|19:00:00|20:00:00|510 Jefferson Street, red bluff, CA 96080|40.1749685|-122.23557160000001
-Meeting|Location is: EPISCOPAL CHURCH|5|19:00:00|20:00:00|, PIOCHE, CA |37.72832830000001|-122.42138499999999
 Weds. 8pm Beginners|Location is: Alano Club of Escondido|4|20:00:00|21:00:00|2319-A East Valley Parkway, escondido, CA 92027|33.1401143|-117.04583680000002
 Beginners Meeting|Location is: Escondido Alano Club|4|20:00:00|21:00:00|2319-A E. Valley Parkway, escondido, CA 92027|33.1401143|-117.04583680000002
 As Bill Sees It|Location is: Church Room|4|12:00:00|13:00:00|119 4th Ave, Escondido, CA 92025|33.11895|-117.07886000000002
-begot group|Location is: Escondido|7|19:00:00|20:00:00|, , CA |36.778261|-119.41793239999998
 Mesquite Sharing & Caring 2|Location is: MESQUITE CAMPUS COMPLEX|6|12:00:00|13:00:00|150 N YUCCA, MESQUITE, CA 89027|34.6044337|-113.94010709999998
 Mesquite Sharing & Caring 3|Location is: MESQUITE CAMPUS COMPLEX|6|18:30:00|19:30:00|150 N YUCCA, MESQUITE, CA 89027|34.6044337|-113.94010709999998
 Mesquite Sharing & Caring|Location is: MESQUITE CAMPUS COMPLEX|6|09:00:00|10:00:00|150 N YUCCA, MESQUITE, CA 89027|34.6044337|-113.94010709999998
@@ -4944,7 +4888,6 @@ Mesquite Sharing & Caring 2|Location is: MESQUITE CAMPUS COMPLEX|4|12:00:00|13:0
 Mesquite Sharing & Caring 3|Location is: MESQUITE CAMPUS COMPLEX|4|18:30:00|19:30:00|150 N YUCCA, MESQUITE, CA 89027|34.6044337|-113.94010709999998
 Mesquite Sharing & Caring|Location is: MESQUITE CAMPUS COMPLEX|4|09:00:00|10:00:00|150 N YUCCA, MESQUITE, CA 89027|34.6044337|-113.94010709999998
 Any Lengths Group|Location is: Valley Christian Center|5|18:00:00|19:00:00|2831 Freeman Street, Anderson, CA 96007|40.4496935|-122.29767119999997
-PINE VALEEY LANE AND BLACK PINE TR|Location is: PINE VALEEY LANE AND BLACK PINE TR|6|07:00:00|08:00:00|, PINE MOUNTAIN, CA 89008|51.7857667|-100.54544720000001
 Cedar Pocket Group|Location is: Cedar Pocket Campground|1|20:00:00|21:00:00|Exit 18 on the Arizona Strip, littlefield, CA 86432|36.3058486|-113.66807470000003
 TGIF Group|Location is: BAPTIST CHURCH|6|18:00:00|19:00:00|AVENUE N, ELY, CA 89301|45.6127941|-72.20654300000001
 Old Time AA|Location is: Bee Ririe Hospital|4|19:00:00|20:00:00|1500 Avenue H, Ely, CA 89301|45.6533089|-72.15726540000003
@@ -5082,13 +5025,7 @@ Big Book Study|Location is: New Firehouse|5|19:00:00|20:00:00|1 East Center Stre
 ROUNDTABLE|Location is: St. Ann`s Church|2|20:30:00|21:30:00|Wisc. & Yuma, Northwest, CA |36.778261|-119.41793239999998
 Panguitch Group|Location is: Panguitch Group|6|19:00:00|20:00:00|25 South 200 East, Panguitch, CA 84759|36.0939655|-115.02761420000002
 Sunday Candle Light Meeting|Location is: Downstairs |1|20:00:00|21:00:00|1111 Main st., klamath falls, CA 97601|42.228099|-121.778906
-Wendover Group #1|Location is: West Wendover Minimall|7|13:00:00|14:00:00|, Wendover, CA |45.57274899999999|-75.12757299999998
-Wendover Group #1|Location is: West Wendover Minimall|1|18:00:00|19:00:00|, Wendover, CA |45.57274899999999|-75.12757299999998
-Wendover Group #1|Location is: West Wendover Minimall|5|19:00:00|20:00:00|, Wendover, CA |45.57274899999999|-75.12757299999998
-Wendover Group #1|Location is: West Wendover Minimall|3|20:00:00|21:00:00|, Wendover, CA |45.57274899999999|-75.12757299999998
 Foothills Women&#39;s Meeting|Location is: Yuma Foothills|6|18:00:00|19:00:00|40th St., yuma, CA |32.6548831|-114.62576819999998
-Ash Fork Group|Location is: A.F. Community Center|3|17:30:00|18:30:00|, Ash Fork, CA |36.3736629|-118.09242210000002
-Ash Fork Group|Location is: A.F. Community Center|5|17:30:00|18:30:00|, Ash Fork, CA |36.3736629|-118.09242210000002
 Afternooners|Location is: Challis Mission Church|2|13:00:00|14:00:00|Hwy 93 @ Butte Street, challis, CA 83226|41.4158013|-114.74969529999998
 A.A. MEETING|Location is: GRACE BIBLE CHURCH|2|18:00:00|19:00:00|608 GHOST TOWN RD., CONGRESS, CA 85332|33.8438674|-117.99907569999999
 Beyond New Horizons|Location is: New Horizon's Community Church|2|19:00:00|20:00:00|400 W Main St., Delta, CA 84624|41.5734556|-84.01467359999998
@@ -5141,7 +5078,6 @@ Nooners Group|Location is: United Methodist Church|6|12:00:00|13:00:00|N Zircon 
 12X12 Nooners Group|Location is: United Methodist Church|5|12:00:00|13:00:00|N Zircon Dr, Prescott Valley, CA 86314|34.5958079|-112.30894380000001
 Nooners Group|Location is: United Methodist Church|4|12:00:00|13:00:00|N Zircon Dr, Prescott Valley, CA 86314|34.5958079|-112.30894380000001
 Nooners Group|Location is: United Methodist Church|2|12:00:00|13:00:00|N Zircon Dr, Prescott Valley, CA 86314|34.5958079|-112.30894380000001
-Escalante Group|Location is: Escalante Library|2|19:00:00|20:00:00|, Escalante, CA |34.145206|-117.7581123
 MENS BIG BOOK STUDY|Location is: EPISCOPAL CHURCH|3|19:30:00|20:30:00|9TH AND 1ST SOUTH, CLARKDALE, CA 86324|34.8528761|-112.11917570000003
 WE CARE GROUP|Location is: EPISCOPAL CHURCH|1|20:00:00|21:00:00|9TH AND 1ST SOUTH, CLARKDALE, CA 86324|34.8528761|-112.11917570000003
 LUNCH BUNCH|Location is: GROUP VERDE VALLEY GUIDANCE CLINIC|5|07:00:00|08:00:00|OFF ST WILLARD ST, COTTONWOOD, CA 86326|34.7028729|-112.02379029999997
@@ -5151,7 +5087,6 @@ eye opener|Location is: Verde Valley Alano Club|2|07:00:00|08:00:00|1309 E. Cher
 12x12 Staying Alive|Location is: Legion Hall|2|20:00:00|21:00:00|50 South State Street, Salina, CA 84654|34.4259856|-119.67216740000003
 12x12 Staying Alive|Location is: Legion Hall|3|20:00:00|21:00:00|50 South State Street, Salina, CA 84654|34.4259856|-119.67216740000003
 12x12 Staying Alive|Location is: Legion Hall|6|20:00:00|21:00:00|50 South State Street, Salina, CA 84654|34.4259856|-119.67216740000003
-SOBRIETY R US|Location is: Saguaro Janes Community Center|5|19:30:00|20:30:00|, Wittmann, CA 85361|33.8777925|-118.05812049999997
 H.O.W. Group|Location is: Old Airport|2|19:00:00|20:00:00|on Sage Street between Aero Avenue and 10th Avenue, Page, CA 86040|36.7597999|-111.3798928
 H.O.W. Group|Location is: Old Airport|4|19:00:00|20:00:00|on Sage Street between Aero Avenue and 10th Avenue, Page, CA 86040|36.7597999|-111.3798928
 H.O.W. Group|Location is: Old Airport|6|19:00:00|20:00:00|on Sage Street between Aero Avenue and 10th Avenue, Page, CA 86040|36.7597999|-111.3798928
@@ -5512,12 +5447,6 @@ PUTTIN' SOBER|Location is: FELLOWSHIP HALL|7|20:00:00|21:00:00|2740 W. WINDROSE 
 PUTTIN' SOBER|Location is: FELLOWSHIP HALL|1|13:30:00|14:30:00|2740 W. WINDROSE DR., PHOENIX, CA 85029|33.6021659|-112.11856399999999
 PUTTIN' SOBER|Location is: FELLOWSHIP HALL|2|18:30:00|19:30:00|2740 W. WINDROSE DR., PHOENIX, CA 85029|33.6021659|-112.11856399999999
 Puttin&#39; Sober|Location is: I-17 and Cactus-(E. of 28th Dr. & S. of Sweetwater Ave.) |1|13:30:00|14:30:00|2740 W. Windrose, phoenix, CA 85029|33.5973469|-112.10725279999997
-MORNING SERENITY|Location is: FELLOWSHIP HALL|4|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
-MORNING SERENITY|Location is: FELLOWSHIP HALL|5|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
-MORNING SERENITY|Location is: FELLOWSHIP HALL|6|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
-MORNING SERENITY|Location is: FELLOWSHIP HALL|7|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
-MORNING SERENITY|Location is: FELLOWSHIP HALL|2|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
-MORNING SERENITY|Location is: FELLOWSHIP HALL|3|09:00:00|10:00:00|, , CA |36.778261|-119.41793239999998
 IF I CAN YOU CAN|Location is: ALL HEART SOBER LIVING|3|19:00:00|20:00:00|6325 W. CHEERY LYNN, PHOENIX, CA 85033|33.4943072|-112.20263469999998
 SUNDAY WINNERS|Location is: MARYVALE HOSP.|1|10:00:00|11:00:00|5102 W.CAMPBELL AVE., PHOENIX, CA 85031|37.2952463|-121.9685212
 PASS IT ON|Location is: MOON VALLEY BIBLE CHURCH|5|20:00:00|21:00:00|16207 N. 3RD AVE., PHOENIX, CA 85022|42.2832185|-122.81449220000002
@@ -5990,13 +5919,6 @@ ANDY CAPP|Location is: ST. BARNABAS CHURCH|5|19:30:00|20:30:00|6715 N. MOCKINGBI
 LADYBUGS|Location is: ST. BARNABAS CHURCH|5|13:00:00|14:00:00|6715 N. MOCKINGBIRD LN., PARADISE VALLEY, CA 85253|47.5288716|-52.85559090000004
 STORIES AT SUNDOWN|Location is: ST. PATRICK'S CHURCH|5|18:00:00|19:00:00|10815 N. 84TH ST., SCOTTSDALE, CA 85260|41.7397085|-87.75804529999999
 12+12 STUDY|Location is: ST. PATRICK'S CHURCH|5|19:30:00|20:30:00|10815 N. 84TH ST., SCOTTSDALE, CA 85260|41.7397085|-87.75804529999999
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|1|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|7|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|4|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|6|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|2|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|3|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
-5:30 HAPPY HOUR|Location is: PRINCE OF PEACE CHURCH|5|17:30:00|18:30:00|, , CA |36.778261|-119.41793239999998
 17 & 17|Location is: 17 & 17|7|08:30:00|09:30:00|1626 S 1700 E SOUTH DOOR CHURCH, SALT LAKE CITY, CA 84044|40.7388429|-112.10725279999997
 Grupo Superacion Personal|Location is: Grupo Superacion Personal|4|19:30:00|20:30:00|175 No. Main Street, Spanish Fork, CA 84660|40.112057|-111.65534600000001
 Grupo Superacion Personal|Location is: Grupo Superacion Personal|5|19:30:00|20:30:00|175 No. Main Street, Spanish Fork, CA 84660|40.112057|-111.65534600000001
@@ -6383,7 +6305,6 @@ MURRAY GROUP|Location is: MURRAY GROUP|4|20:00:00|21:00:00|5770 S 170 E, SALT LA
 Murray Group|Location is: Murray Group|4|20:00:00|21:00:00|5770 South 170 East, Salt Lake City, CA 84107|33.9555664|-118.1843518
 PRICE IS RIGHT|Location is: LIVING FAITH CHURCH|3|19:00:00|20:00:00|1945 E. GUADALUPE RD., TEMPE, CA 85283|33.3637749|-111.90505869999998
 11TH STEP MEETING|Location is: LIVING FAITH CHURCH|2|19:00:00|20:00:00|1945 E. GUADALUPE RD., TEMPE, CA 85283|33.3637749|-111.90505869999998
-SPIRITED WOMEN|Location is: Arizona Community Church|6|10:00:00|11:00:00|, , CA |36.778261|-119.41793239999998
 VOICES OF ANGELS|Location is: VOA WOMEN'S DETOX|6|19:00:00|20:00:00|697 W 4170 S, SALT LAKE CITY, CA 84123|33.9555664|-118.1843518
 Voices of Angels|Location is: VOA Women's detox|6|19:00:00|20:00:00|697 West 4170 South, Salt Lake City, CA 84123|33.9555664|-118.1843518
 Women and Mothers|Location is: VOA Women's detox|4|19:00:00|20:00:00|697 West 4170 South, Salt Lake City, CA 84123|33.9555664|-118.1843518
@@ -6697,10 +6618,6 @@ OFF THE CUFF|Location is: CHURCH|3|20:00:00|21:00:00|2631 E MURRAYHOLLADAY RD, S
 HOLLADAY GROUP|Location is: CHURCH|5|20:30:00|21:30:00|2631 E MURRAYHOLLADAY RD, SALT LAKE CITY, CA |41.6426708|-120.2168926
 HAPPY, JOYOUS & FREE|Location is: HAPPY, JOYOUS & FREE|5|19:00:00|20:00:00|CALL LISA 2686860, SALT LAKE CITY, CA |41.6426708|-120.2168926
 HILL AFB GROUP|Location is: HILL AFB GROUP|5|11:30:00|12:30:00|CHAPEL ANNEX BLDG 445, SALT LAKE CITY, CA |41.6426708|-120.2168926
-WENDOVER GROUP 1 WEST|Location is: Saint Anne's Catholic School|7|13:00:00|14:00:00|, Salt Lake City, CA |34.27148890000001|-118.54701
-WENDOVER GROUP # 1|Location is: Saint Anne's Catholic School|5|19:00:00|20:00:00|, Salt Lake City, CA |34.27148890000001|-118.54701
-WENDOVER GROUP 1|Location is: Saint Anne's Catholic School|1|18:00:00|19:00:00|, Salt Lake City, CA |34.27148890000001|-118.54701
-WENDOVER GROUP I|Location is: Saint Anne's Catholic School|3|19:00:00|20:00:00|, Salt Lake City, CA |34.27148890000001|-118.54701
 Downtown Men's|Location is: First Step House|4|20:00:00|21:00:00|411 North 758 West, Salt Lake City, CA |34.27148890000001|-118.54701
 Men in Recovery|Location is: First Step House|5|20:00:00|21:00:00|411 North 758 West, Salt Lake City, CA |34.27148890000001|-118.54701
 WOMEN IN TOUCH|Location is: CHURCH OF GOD, S BLDG.|2|19:00:00|20:00:00|683 N. ALMA SCHOOL RD., CHANDLER, CA 85225|43.0961837|-84.48380750000001
@@ -6878,8 +6795,6 @@ ARBOR DAILY NOON GROUP|Location is: ETERNAL LIFE CHURCH|3|12:00:00|13:00:00|7000
 EAST ENDERS GROUP|Location is: ETERNAL LIFE CHURCH|2|19:00:00|20:00:00|7000 E. ARBOR, MESA, CA 85207|32.9117284|-117.19439219999998
 ARBOR DAILY NOON GROUP|Location is: ETERNAL LIFE CHURCH|7|12:00:00|13:00:00|7000 E. ARBOR, MESA, CA 85207|32.9117284|-117.19439219999998
 ARBOR DAILY NOON GROUP|Location is: ETERNAL LIFE CHURCH|2|12:00:00|13:00:00|7000 E. ARBOR, MESA, CA 85207|32.9117284|-117.19439219999998
-MARICOPA GROUP|Location is: Maricopa Lutheran Church|6|19:00:00|20:00:00|, , CA |36.778261|-119.41793239999998
-MARICOPA GROUP|Location is: Maricopa Lutheran Church|3|18:30:00|19:30:00|, , CA |36.778261|-119.41793239999998
 SOUTH DAVIS|Location is: CHURCH|5|19:00:00|20:00:00|150 N 400 E, BOUNTIFUL, CA 84010|37.8443606|-121.97024499999998
 BOUNTIFUL COMMUNITY GROUP|Location is: CHURCH|3|19:00:00|20:00:00|150 N 400 E, BOUNTIFUL, CA 84010|37.8443606|-121.97024499999998
 SERENITY VIEW|Location is: CHURCH|4|19:00:00|20:00:00|150 N 400 E, BOUNTIFUL, CA 84010|37.8443606|-121.97024499999998
@@ -6905,9 +6820,7 @@ Hour Of Power|Location is: Our Lady|3|07:30:00|08:30:00|230 Main St., Centervill
 Hour Of Power|Location is: Our Lady|4|07:30:00|08:30:00|230 Main St., Centerville, CA 84014|46.1882034|-60.016865499999994
 New Meeting|Location is: Salt Valley Baptist Church|7|20:00:00|21:00:00|160 East 1700 South, Clearfield, CA 84015|37.730512|-122.49131820000002
 Last Chance Nooners Group|Location is: Salt Valley Baptist Church|2|12:00:00|13:00:00|160 East 1700 South, Clearfield, CA 84015|37.730512|-122.49131820000002
-Hill Field Group|Location is: Chapel Annex|5|11:30:00|12:30:00|, Clearfield, CA |38.6041576|-121.34880220000002
 OUR PRIMARY PURPOSE|Location is: CHURCH|2|19:00:00|20:00:00|1332 N HILLFIELD RD, LAYTON, CA |36.778261|-119.41793239999998
-Hill Group|Location is: Chapel Annex|5|11:30:00|12:30:00|, Layton, CA |36.4332835|-119.68679900000001
 Serenity Happy Hour|Location is: Davis Behavioral Campus|1|10:00:00|11:00:00|2250 North 1700 West, Layton, CA 84041|49.32297130000001|-123.00653469999997
 CLEARFIELD GROUP|Location is: CHURCH|7|17:00:00|18:00:00|200 S 500 E, CLEARFIELD, CA 84015|37.7298918|-122.49088510000001
 Sisters' In Sobriety|Location is: Clearfield Community Church|3|17:00:00|18:00:00|200 South 500 East, Clearfield, CA 84015|37.5971868|-122.4049114
