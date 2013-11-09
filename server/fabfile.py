@@ -191,6 +191,15 @@ def setup():
     psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/topology.sql
     psql -U postgres -d aabuddy -f /usr/local/pgsql-9.2/share/contrib/postgis-2.0/topology_comments.sql
     
+    on prod
+    psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/postgis.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/postgis_comments.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/spatial_ref_sys.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/rtpostgis.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/raster_comments.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/topology.sql
+psql -p5433 -U postgres -d aabuddy -f /usr/pgsql-9.2/share/contrib/postgis-2.0/topology_comments.sql
+    
     '''
     
     # disable default site

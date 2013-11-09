@@ -100,7 +100,7 @@ curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockvi
 
 
 Post a meeting_not_there object:
-curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=meeting_sucks' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
 also works without a user and password
 curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/aabuddy/post_meeting_not_there
 ** NEW **
