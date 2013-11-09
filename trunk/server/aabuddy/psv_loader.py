@@ -9,6 +9,8 @@ import datetime
 from django.contrib.gis.geos.factory import fromstr
 from aabuddy.views import find_similar_to_meeting
 import logging
+import glob
+from django.contrib.auth.models import User
 logger = logging.getLogger(__name__)
 
 
@@ -24,7 +26,14 @@ class PsvLoader():
         self.delimiter = '|'
         self.quote_char = '"'
         self.load_errors = []
+    
+    def load_dir(self, dir_path):
+        ''' load all psv files in a folder. dir_path MUST end in "/" '''
+        psv_files = glob.glob(dir_path + "*.psv")
+        for psv_file in psv_files:
+            self.load_psv(User.objects.get(username='admin'), open(psv_file, 'rU'), True)
         
+
     def load_psv(self, assigner, psv_in, skip_header=False):
         ''' load a whole csv '''
         self.load_errors = []
