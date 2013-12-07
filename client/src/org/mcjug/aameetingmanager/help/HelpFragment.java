@@ -1,8 +1,6 @@
 package org.mcjug.aameetingmanager.help;
 
-import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.id;
-import org.mcjug.aameetingmanager.R.layout;
+import org.mcjug.meetingfinder.R;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -26,20 +24,20 @@ public class HelpFragment extends Fragment {
 			Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.help_fragment, container,
 				false);
-		
+
 		WebView webView = (WebView) view.findViewById(R.id.WebView01);
-		
+
 		WebSettings webSettings = webView.getSettings();
 		webSettings.setBuiltInZoomControls(true);
 		webSettings.setJavaScriptEnabled(true);
-		
+
 		webView.setWebViewClient(new AABuddyWebViewClient());
-		
+
 		webView.loadUrl("file:///android_asset/index.html");
-		
+
 		return view;
 	}
-	
+
 	private class AABuddyWebViewClient extends WebViewClient {
         @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url) {

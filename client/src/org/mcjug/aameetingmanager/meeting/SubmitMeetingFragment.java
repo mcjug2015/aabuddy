@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.aameetingmanager.LocationFinder;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindSimilarMeetingsTask.FindSimilarMeetingsListener;

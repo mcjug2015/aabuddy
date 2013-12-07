@@ -1,6 +1,6 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;

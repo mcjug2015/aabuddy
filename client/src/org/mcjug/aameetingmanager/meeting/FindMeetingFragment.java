@@ -12,7 +12,7 @@ import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 

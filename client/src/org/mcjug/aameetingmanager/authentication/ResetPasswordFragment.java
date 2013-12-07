@@ -11,7 +11,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingManager;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.ValidationUtil;
 

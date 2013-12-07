@@ -2,11 +2,10 @@ package org.mcjug.aameetingmanager;
 
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.ResetPasswordFragmentActivity;
-
+import org.mcjug.meetingfinder.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.preference.Preference;
-
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.actionbarsherlock.view.MenuItem;
 

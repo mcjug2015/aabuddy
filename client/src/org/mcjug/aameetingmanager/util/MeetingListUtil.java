@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 

@@ -2,9 +2,7 @@ package org.mcjug.aameetingmanager.meeting;
 
 import java.util.List;
 
-import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.id;
-import org.mcjug.aameetingmanager.R.layout;
+import org.mcjug.meetingfinder.R;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -18,9 +16,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class MeetingAdapter extends ArrayAdapter<Meeting>{
-	private List<Meeting> meetings;
+	private final List<Meeting> meetings;
     private int selectedItem = -1;
-    
+
 	public MeetingAdapter(Context context, int textViewResourceId, List<Meeting> meetings) {
 		super (context, textViewResourceId, meetings);
 		this.meetings = meetings;
@@ -35,7 +33,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	public void setSelectedItem(int selectedItem) {
 		this.selectedItem = selectedItem;
 	}
-	
+
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
@@ -46,7 +44,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 
 			LayoutInflater inflater = LayoutInflater.from(context);
 			view = inflater.inflate(R.layout.meeting_list_row, null);
-			
+
 			holder = new ViewHolder();
 			holder.address = (TextView) view.findViewById(R.id.meetingAddress);
 			holder.day = (TextView) view.findViewById(R.id.meetingDay);
@@ -69,12 +67,12 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 			holder.time.setText(meeting.getTimeRange());
 			holder.name.setText(meeting.getName());
 		}
-		
+
 		if (Build.VERSION.SDK_INT < 11) {
 			RelativeLayout activeItem = (RelativeLayout) view;
 			if (position == selectedItem) {
 				activeItem.setBackgroundColor(Color.argb(0x80, 0x10, 0xb0, 0xe4));
-	
+
 	            // set focus on list item
 	            int top = (activeItem == null) ? 0 : activeItem.getTop();
 	            ListView listView = (ListView) parent;
@@ -82,10 +80,10 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	        } else {
 	        	activeItem.setBackgroundColor(Color.TRANSPARENT);
 	        }
-		}		
+		}
 		return view;
-	}   
-	
+	}
+
 	private class ViewHolder {
 		TextView address;
 		TextView day;

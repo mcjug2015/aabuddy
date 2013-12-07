@@ -1,7 +1,7 @@
 package org.mcjug.aameetingmanager.authentication;
 
 import org.mcjug.aameetingmanager.AdminPrefsActivity;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 
 import android.content.Intent;
 import android.os.Bundle;

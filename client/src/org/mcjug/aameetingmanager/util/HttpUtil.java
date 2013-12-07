@@ -16,7 +16,7 @@ import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.HttpParams;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 
 import android.content.Context;
 import android.content.SharedPreferences;

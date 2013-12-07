@@ -6,7 +6,7 @@ import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
 import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
-
+import org.mcjug.meetingfinder.R;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
 public class AAMeetingManager extends SherlockFragmentActivity 
