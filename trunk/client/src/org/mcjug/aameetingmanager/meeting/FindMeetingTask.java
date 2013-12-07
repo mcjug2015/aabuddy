@@ -6,7 +6,7 @@ import org.apache.http.StatusLine;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 

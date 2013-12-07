@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.mcjug.aameetingmanager"
+    package="org.mcjug.meetingfinder"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -12,13 +12,13 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name="AAMeetingApplication"
+        android:name="org.mcjug.aameetingmanager.AAMeetingApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".AAMeetingManager"
+            android:name="org.mcjug.aameetingmanager.AAMeetingManager"
             android:label="@string/title_activity_main" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -26,39 +26,39 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".meeting.FindMeetingFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity"
             android:label="@string/findMeeting" />
         <activity
-            android:name=".meeting.SubmitMeetingFragmentActivity"            
+            android:name="org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity"            
             android:label="@string/submitMeeting" />
         <activity
-            android:name=".meeting.MeetingListFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.meeting.MeetingListFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/meetingList" />
         <activity
-            android:name=".AdminPrefsActivity"
+            android:name="org.mcjug.aameetingmanager.AdminPrefsActivity"
             android:label="@string/adminPrefActivityTitle" />
         <activity
-            android:name=".AdminPrefsWithFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.AdminPrefsWithFragmentActivity"
             android:label="@string/adminPrefActivityTitle" />
         <activity
-            android:name=".authentication.LoginFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.authentication.LoginFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/loginActivityTitle" />
         <activity
-            android:name=".authentication.RegisterFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.authentication.RegisterFragmentActivity"
            	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/registrationActivityTitle" />
         <activity
-            android:name=".authentication.ResetPasswordFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.authentication.ResetPasswordFragmentActivity"
            	android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/resetPasswordActivityTitle" />
         <activity
-            android:name=".authentication.ChangePasswordFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.authentication.ChangePasswordFragmentActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:label="@string/changePasswordActivityTitle" />
         <activity
-            android:name=".help.HelpFragmentActivity"
+            android:name="org.mcjug.aameetingmanager.help.HelpFragmentActivity"
             android:label="@string/helpActivityTitle" />
     </application>
 

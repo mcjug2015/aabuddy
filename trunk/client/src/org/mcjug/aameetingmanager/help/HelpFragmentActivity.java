@@ -1,8 +1,7 @@
 package org.mcjug.aameetingmanager.help;
 
 import org.mcjug.aameetingmanager.AAMeetingManager;
-import org.mcjug.aameetingmanager.R;
-import org.mcjug.aameetingmanager.R.layout;
+import org.mcjug.meetingfinder.R;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,11 +10,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.MenuItem;
 
 public class HelpFragmentActivity extends SherlockFragmentActivity {
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.help_activity);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
@@ -32,5 +31,5 @@ public class HelpFragmentActivity extends SherlockFragmentActivity {
 		}
 		return true;
 	}
-	
+
 }

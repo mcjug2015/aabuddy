@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.aameetingmanager.R;
+import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.meeting.MeetingListFragment.ListActionModeCallback;
 
 import android.content.Context;
