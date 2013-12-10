@@ -105,7 +105,7 @@ public class GeoMeetingLatLonValidator {
 	}
 	
 	public static void main(String[] args) {
-		int stateIndex = 0;
+		int stateIndex = 39;
 		validateGeoMeetingFiles(STATE_ABBREVIATIONS[stateIndex], STATE_NAMES[stateIndex]);
 	}
 
@@ -119,13 +119,13 @@ public class GeoMeetingLatLonValidator {
 
 	public static final String[] STATE_NAMES = new String[] {
 		"Alabama", "Alaska", "Arizona", "Arkansas", "California",
-		"Colorado", "Connecticut", "Deleware", "Florida", "Georgia",
+		"Colorado", "Connecticut", "Delaware", "Florida", "Georgia",
 		"Hawaii", "Idaho", "Illinois", "Indiana", "Iowa",
-		"Kansas", "Kentucky", "Lousianna", "Maine", "Maryland",
+		"Kansas", "Kentucky", "Louisiana", "Maine", "Maryland",
 		"Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
 		"Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
 		"New Mexico", "New York", "North Carolina", "North Dakota", "Ohio",
-		"Oklahoma", "Oregan", "Pennsylvania", "Rhode Island", "South Carolina",
+		"Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina",
 		"South Dakota", "Tennessee", "Texas", "Utah", "Vermont",
 		"Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"
 	};

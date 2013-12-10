@@ -41,8 +41,8 @@ public class MeetingScraper extends JFrame {
 	};
 	*/
 	public static final String[] STATES = new String[] {
-		// "AL", "AK"
-		"AZ", "AR"
+		// "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA"
+		"HI"
 	};
 	private static final int FRAME_WIDTH = 750;
 	private static final int FRAME_HEIGHT = 500;
