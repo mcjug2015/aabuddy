@@ -54,8 +54,12 @@ public class HttpScraperUtil {
 			
 			// extract necessary paging parameters from the home page for this region
 			String parametersString = getPagingParameters(firstPageOutputFile);
-			int lastEqualsIndex = parametersString.lastIndexOf("=");
-			int lastPage = Integer.parseInt(parametersString.substring(lastEqualsIndex+1));
+			int lastEqualsIndex = 1;
+			int lastPage = 1;
+			if (parametersString != null) {
+				lastEqualsIndex = parametersString.lastIndexOf("=");
+				lastPage = Integer.parseInt(parametersString.substring(lastEqualsIndex+1));
+			}
 			int page;
 			
 			// download all pages from this region
