@@ -7,5 +7,5 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^admin/django_logtail/', include(logtail_urls)),
     url(r'^admin/', include(admin.site.urls)),
-    (r'^aabuddy/', include('aabuddy.urls')),
+    (r'^meetingmanager/', include('aabuddy.urls')),
 )
