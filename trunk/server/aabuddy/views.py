@@ -198,8 +198,8 @@ def send_reset_conf(request):
             user_confirmation.save()
             link_address = '?confirmation=' + user_confirmation.confirmation_key
             link_address = request.build_absolute_uri('reset_password/') + link_address
-            message_text = "Click the link below to reset your Meeting Manager password\n%s" % link_address
-            send_email_to_user(user, "Your Meeting Manager reset password confirmation", message_text)
+            message_text = "Click the link below to reset your Meeting Finder password\n%s" % link_address
+            send_email_to_user(user, "Your Meeting Finder reset password confirmation", message_text)
             return HttpResponse(status=200)
         else:
             return HttpResponse(content="You must specify a valid username to send a password reset confirmation", status=401)
@@ -224,7 +224,7 @@ def create_user(request):
             user_confirmation.save()
             link_address = request.build_absolute_uri() + '/?confirmation=' + user_confirmation.confirmation_key
             message_text = "Click the link below to complete the registration process\n%s" % link_address
-            send_email_to_user(user, "Thanks you for registering on Meeting Manager", message_text)
+            send_email_to_user(user, "Thanks you for registering on Meeting Finder", message_text)
             return HttpResponse(status=200)
         else:
             return HttpResponse(content="You must pass in an untaken username and a non-empty password.", status=401)
@@ -299,7 +299,7 @@ def send_email_to_user(user, subject_text, message_text):
     logger.debug("About to send conf email with message %s" % message_text)
     django_mail.send_mail(subject=subject_text, 
               message=message_text, 
-              from_email="meetingmanager@noreply.com", recipient_list=[user.email], fail_silently=False)
+              from_email="meetingfinder@noreply.com", recipient_list=[user.email], fail_silently=False)
 
 def get_json_obj_for_meetings(meetings, total_count=None, current_count=None):
     if total_count is None:
