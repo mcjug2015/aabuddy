@@ -34,16 +34,16 @@
     <string name="sslTrustAllFlagSummaryOn">All certificates will be trusted.</string>
     <string name="sslTrustAllFlagDefaultValue">false</string>
         
-    <string name="save_meeting_url_path">/meetingmanager/save_meeting/</string>
-    <string name="get_meetings_url_path">/meetingmanager/get_meetings/</string>
-    <string name="get_meeting_by_id_url_path">/meetingmanager/get_meeting_by_id/</string>
-    <string name="find_similar_meetings_url_path">/meetingmanager/find_similar/</string>
-    <string name="post_meeting_not_there_url_path">/meetingmanager/post_meeting_not_there</string>
-    <string name="create_user_url_path">/meetingmanager/create_user</string>
-    <string name="validate_user_url_path">/meetingmanager/validate_user_creds</string>
- 	<string name="reset_password_url_path">/meetingmanager/send_reset_conf</string>
- 	<string name="change_password_url_path">/meetingmanager/change_password</string>
- 	<string name="delete_meeting_url_path">/meetingmanager/delete_my_meeting</string>
+    <string name="save_meeting_url_path">/meetingfinder/save_meeting/</string>
+    <string name="get_meetings_url_path">/meetingfinder/get_meetings/</string>
+    <string name="get_meeting_by_id_url_path">/meetingfinder/get_meeting_by_id/</string>
+    <string name="find_similar_meetings_url_path">/meetingfinder/find_similar/</string>
+    <string name="post_meeting_not_there_url_path">/meetingfinder/post_meeting_not_there</string>
+    <string name="create_user_url_path">/meetingfinder/create_user</string>
+    <string name="validate_user_url_path">/meetingfinder/validate_user_creds</string>
+ 	<string name="reset_password_url_path">/meetingfinder/send_reset_conf</string>
+ 	<string name="change_password_url_path">/meetingfinder/change_password</string>
+ 	<string name="delete_meeting_url_path">/meetingfinder/delete_my_meeting</string>
  			   
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
