@@ -78,7 +78,7 @@ class MeetingNotThere(classic_models.Model):
         return ("Not There id: %s, host: %s" % (str(self.pk), str(self.request_host)))
 
 class NotThereView(models.Model):
-    meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING, null=True, blank=True)
+    meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING, null=False, blank=False)
     not_there_count = models.IntegerField()
     meeting_name = models.CharField(max_length=100)
     latest_not_there = models.DateTimeField()
