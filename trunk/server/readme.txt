@@ -19,23 +19,23 @@ $> fab localvm deploy_workingenv
 
 
 ** make sure that a username and password are valid and the user is active(allowed to submit meetings)
-curl -v --user USERNAME:PASSWORD https://localhost:8888/aabuddy/validate_user_creds
-curl -v --user USERNAME:PASSWORD https://mcasg.org/aabuddy/validate_user_creds --insecure
+curl -v --user USERNAME:PASSWORD https://localhost:8888/meetingmanager/validate_user_creds
+curl -v --user USERNAME:PASSWORD https://mcasg.org/meetingmanager/validate_user_creds --insecure
 
 ** delete a meeting created by a user you authenticate
-curl -v --user USERNAME:PASSWORD https://localhost:8888/aabuddy/delete_my_meeting?meeting_id=1 --insecure
+curl -v --user USERNAME:PASSWORD https://localhost:8888/meetingmanager/delete_my_meeting?meeting_id=1 --insecure
 
 ** test creating an inactive user with curl
-curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" https://localhost:8888/aabuddy/create_user
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com&password=testpassword1" https://localhost:8888/meetingmanager/create_user
 
 
 
 ** change user password, you must pass in valid existing username/password and use a POST. After that you can
 ** use validate_user_creds to verify that the change went through.
-curl -v --user victor.semenov@gmail.com:testpassword1 -H "Content-Type: application/json" -X POST -d "new_password=mooo" https://localhost:8888/aabuddy/change_password
+curl -v --user victor.semenov@gmail.com:testpassword1 -H "Content-Type: application/json" -X POST -d "new_password=mooo" https://localhost:8888/meetingmanager/change_password
 
 ** test requesting a password reset for email for a user with curl
-curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" https://localhost:8888/aabuddy/send_reset_conf
+curl -v -H "Content-Type: application/json" -X POST -d "username=victor.semenov@gmail.com" https://localhost:8888/meetingmanager/send_reset_conf
 
 
 ** test uploading a meeting with curl:
@@ -48,8 +48,8 @@ day_of_week goes from 1 to 7
 
 internal_type valid values can be found in aabuddy/models.py/Meeting/INTERNAL_TYPE_CHOICES. They are case insensitive
 when submitted to the url below, so Submitted and submitted are both valid. If success and status 200, the returned number is the meeting id.
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD https://108.179.217.242/aabuddy/save_meeting
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 https://mcasg.org/aabuddy/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD https://108.179.217.242/meetingmanager/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 https://mcasg.org/meetingmanager/save_meeting
 
 For querying the day_of_week can be passed in with the following modifiers:
 __eq - day of week equals to
@@ -62,21 +62,21 @@ start_time and end_time can be queried just like day_of_week, but do not support
 
 ** grab meetings:
 -- all:
-http://localhost:8888/aabuddy/get_meetings/
+http://localhost:8888/meetingmanager/get_meetings/
 -- all that contain the string mooo in their name(case insensitive):
-http://localhost:8888/aabuddy/get_meetings/?name=mooo
+http://localhost:8888/meetingmanager/get_meetings/?name=mooo
 -- within 50 miles of specified location
-http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50
+http://localhost:8888/meetingmanager/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50
 -- within 50 miles of specified location between monday and wednesday inclusive:
-http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3
+http://localhost:8888/meetingmanager/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3
 -- within 50 miles of specified location between monday and wednesday inclusive, starting at or after 4:30pm and ending before 6:30pm:
-http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
+http://localhost:8888/meetingmanager/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week__gte=1&day_of_week__lte=3&start_time__gte=163000&end_time__lte=183000
 -- within 50 miles of specified location on either monday or saturday
-http://localhost:8888/aabuddy/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week_in=1&day_of_week_in=6
+http://localhost:8888/meetingmanager/get_meetings/?lat=39.0839&long=-77.1531&distance_miles=50&day_of_week_in=1&day_of_week_in=6
 -- the 0th to the 2nd meeting of all meetings, sorted by description; total returned - 3 meetings, notice the n+1 passed to the limit.
-http://localhost:8888/aabuddy/get_meetings/?offset=0&limit=3&order_by=description
+http://localhost:8888/meetingmanager/get_meetings/?offset=0&limit=3&order_by=description
 -- the 3rd meeting out of the list of all meetings sorted by start_time
-http://localhost:8888/aabuddy/get_meetings/?offset=2&limit=3&order_by=start_time
+http://localhost:8888/meetingmanager/get_meetings/?offset=2&limit=3&order_by=start_time
 
 The returned json object looks like this:
 {
@@ -88,7 +88,7 @@ total_count is the number of meetings you would have gotten back if didn't pass 
 current_count is the number of meetings currently in the "objects" list(with limit and offset applied if you passed them in) 
 
 Find meeting by db id:
-http://localhost:8888/aabuddy/get_meeting_by_id?meeting_id=1
+http://localhost:8888/meetingmanager/get_meeting_by_id?meeting_id=1
 returns same json as above with a single meeting in the "objects"
 
 
@@ -96,16 +96,16 @@ Find meetings similar to the one you submit via post
 Rules - no authentication needed.
 Post the full meeting object.
 Currently similarity is determined via day_of_week, start_time and end_time +/- 10 minutes, and distance within 0.1 miles
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' http://mcasg.org/aabuddy/find_similar
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' http://mcasg.org/meetingmanager/find_similar
 
 
 Post a meeting_not_there object:
-curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=meeting_sucks' --user admin:1chpok1 http://localhost:8888/aabuddy/post_meeting_not_there
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=meeting_sucks' --user admin:1chpok1 http://localhost:8888/meetingmanager/post_meeting_not_there
 also works without a user and password
-curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/aabuddy/post_meeting_not_there
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' http://localhost:8888/meetingmanager/post_meeting_not_there
 ** NEW **
 You can optionally add notes to meeting_not_there:
-curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=NO_MEETING_WAS_HELD' http://localhost:8888/aabuddy/post_meeting_not_there
+curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=NO_MEETING_WAS_HELD' http://localhost:8888/meetingmanager/post_meeting_not_there
 
 VM u/p:
 root/reverse
