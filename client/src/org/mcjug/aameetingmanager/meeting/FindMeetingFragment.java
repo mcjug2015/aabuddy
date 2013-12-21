@@ -67,8 +67,8 @@ public class FindMeetingFragment extends Fragment {
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 
 		startTimeCalendar = Calendar.getInstance();
-		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
-		startTimeCalendar.set(Calendar.MINUTE, minutes);
+		startTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		startTimeCalendar.set(Calendar.MINUTE, 0);
 
 		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
@@ -92,8 +92,8 @@ public class FindMeetingFragment extends Fragment {
 		});
 
 		endTimeCalendar = Calendar.getInstance();
-		endTimeCalendar.set(Calendar.MINUTE, minutes);
-		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+		endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
+		endTimeCalendar.set(Calendar.MINUTE, 59);
 
 		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
