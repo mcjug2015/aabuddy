@@ -98,7 +98,7 @@
  	<string name="deleteMeetingMustBeCreatorMsg">You must be the creator of the meeting in order to delete it.</string> 
  	<string name="deleteMeetingConfirmTitle">Delete Meeting</string> 
  	<string name="deleteMeetingConfirmMsg">Are you sure you want to delete meeting %s ?</string> 
- 		
+ 			
     <string name="mapMenuItem">Map</string>
     <string name="deleteMenuItem">Delete</string>
     
@@ -111,7 +111,8 @@
 	<string name="confirmPasswordText">Confirm Password:</string>
 	<string name="loginButton">Login</string>
 	<string name="loggingInProgressMsg">Logging In</string>
-		
+ 	<string name="loginNotRequiredMsg">Login not required to find meetings</string>
+			
 	<string name="registrationActivityTitle">Registration</string>
 	<string name="registrationText">Haven\'t registered?</string>
 	<string name="registerButton">Register Now</string>
