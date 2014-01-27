@@ -14,6 +14,7 @@ from django import forms
 from django.shortcuts import render_to_response
 from django.core.context_processors import csrf
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 import sys
 
 logger = logging.getLogger(__name__)
@@ -316,12 +317,14 @@ def get_json_obj_for_meetings(meetings, total_count=None, current_count=None):
 def find_similar(request):
     if request.method == 'POST':
         json_obj = json.loads(request.raw_post_data)
+        logger.debug("Looking for meeting similar to %s" % str(json_obj))
         try:
             meeting = temp_json_obj_to_meeting(json_obj)
         except:
             return HttpResponse(content="The meeting object you sent in was invalid. Error was %s" % str(sys.exc_info()[0]),
                                 status=401)
         similar_meetings = find_similar_to_meeting(meeting)
+        logger.debug("found %s similar meetings " % str(len(similar_meetings)))
         retval_obj = get_json_obj_for_meetings(similar_meetings)
         return HttpResponse(content=json.dumps(retval_obj))
     else:
@@ -329,11 +332,12 @@ def find_similar(request):
 
 
 def find_similar_to_meeting(meeting):
-    similar_meetings = Meeting.objects.filter(day_of_week=meeting.day_of_week, 
-                                                  start_time__lte=meeting.start_time+datetime.timedelta(minutes=10),
-                                                  start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
-                                                  end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
-                                                  end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
+    time_q = Q(start_time=meeting.start_time, end_time=meeting.end_time)
+    time_q = time_q | Q(start_time__lte=meeting.start_time+datetime.timedelta(minutes=10),
+                        start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
+                        end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
+                        end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
+    similar_meetings = Meeting.objects.filter(time_q, day_of_week=meeting.day_of_week)
     similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=0.1)))
     similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
     similar_meetings = similar_meetings[0:20]
