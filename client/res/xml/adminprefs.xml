@@ -21,5 +21,16 @@
                 android:targetPackage="org.mcjug.meetingfinder" />
         </Preference>
     </PreferenceCategory>
+    
+    <!-- Time Preferences -->
+    <PreferenceCategory android:title="@string/timePreferencesTitle" >
+       <ListPreference
+            android:key="@string/timeFormatKey"
+            android:entries="@array/timeFormat"
+            android:summary="@string/timeFormatSummary"
+            android:entryValues="@array/timeFormatValues"
+            android:defaultValue="12"
+            android:title="@string/timeFormatTitle" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

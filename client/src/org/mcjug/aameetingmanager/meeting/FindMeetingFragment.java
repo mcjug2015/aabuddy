@@ -12,16 +12,18 @@ import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.meetingfinder.R;
 
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -56,6 +58,8 @@ public class FindMeetingFragment extends Fragment {
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
 
+	private SharedPreferences prefs;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -174,6 +178,8 @@ public class FindMeetingFragment extends Fragment {
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
 		Context context = getActivity();
+	    prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
 		if (address == null || address.equals("")) {

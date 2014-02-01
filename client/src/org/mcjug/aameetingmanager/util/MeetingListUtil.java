@@ -11,7 +11,9 @@ import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -33,6 +35,9 @@ public class MeetingListUtil {
 	public static MeetingListResults getMeetingList(Context context, HttpResponse httpResponse) throws Exception {
 		String jsonStr = HttpUtil.getContent(httpResponse);		
 	    Log.d(TAG, "Meeting list: " + jsonStr);
+	    
+	    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+	    String timeFormatStr = sharedPrefs.getString(context.getString(R.string.timeFormatKey), "12");
 	    
 	    MeetingListResults meetingListResults = new MeetingListResults();
 		List<Meeting> meetings = new ArrayList<Meeting>();
