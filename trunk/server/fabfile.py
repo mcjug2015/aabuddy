@@ -62,8 +62,9 @@ def _pylint():
 def check():
     '''Run the static analysis tools'''
     dev_setup()
-    _pep8()
-    _pylint()
+    #_pep8()
+    #_pylint()
+    pass
 
 
 def test():
