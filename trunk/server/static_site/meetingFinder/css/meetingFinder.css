@@ -1,0 +1,137 @@
+
+body {
+    background: #F5F4EF;
+    color: #000305;
+    font-size: 87.5%; /* Base font size: 14px */
+    font-family: 'Trebuchet MS', Trebuchet, 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    line-height: 1.429;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+
+/* Headings */
+
+/* 24px */
+h1 {
+    font-size: 1.714em
+}
+
+/* 22px */
+h2 {
+    font-size: 1.571em
+}
+
+/* 20px */
+h3 {
+    font-size: 1.429em
+}
+
+/* 18px */
+h4 {
+    font-size: 1.286em
+}
+
+/* 16px */
+h5 {
+    font-size: 1.143em
+}
+
+/* 14px */
+h6 {
+    font-size: 1em
+}
+
+/* 11px */
+h2, h3, h4, h5, h6 {
+    font-weight: 400;
+    line-height: 1.1;
+    margin-bottom: .8em;
+}
+
+/* Anchors */
+a {
+    outline: 0;
+}
+
+a img {
+    border: 0px;
+    text-decoration: none;
+}
+
+a:link, a:visited {
+    padding: 0 1px;
+    text-decoration: underline;
+}
+
+a:hover, a:active {
+    text-decoration: underline;
+}
+
+/* Paragraphs */
+p {
+    margin-bottom: 1.143em;
+}
+
+* p:last-child {
+    margin-bottom: 0;
+}
+
+strong, b {
+    font-weight: bold;
+}
+
+::-moz-selection {
+    background: #F6CF74;
+    color: #fff;
+}
+::selection {
+    background: #F6CF74;
+    color: #fff;
+}
+
+/* Lists */
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-before: 1em;
+    margin-after: 1em;
+    margin-start: 0;
+    margin-end: 0;
+    font-size: 1.571em;
+    padding-start: 40px; }
+
+
+#banner {
+    margin: 0 auto;
+    padding: 2.5em 0 0 0;
+}
+
+/* Banner */
+#banner h1 {
+    font-size: 3.571em;
+    line-height: .6;
+}
+
+#banner h1 a:link, #banner h1 a:visited {
+    color: #000305;
+    display: block;
+    font-weight: bold;
+    margin: 0 0 .6em .2em;
+    text-decoration: none;
+    width: 427px;
+}
+
+#banner h1 a:hover, #banner h1 a:active {
+    background: none;
+    color: #C74350;
+    text-shadow: none;
+}
+
+#banner h1 strong {
+    font-size: 0.36em;
+    font-weight: normal;
+}
+
+
+
