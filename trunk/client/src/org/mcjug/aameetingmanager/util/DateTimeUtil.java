@@ -2,44 +2,57 @@ package org.mcjug.aameetingmanager.util;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-
+import org.mcjug.meetingfinder.R;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 
 public class DateTimeUtil {
 
-	public static String getTimeStr(Calendar calendar) {
-		return String.format("%1$tH:%1$tM ", calendar);
+	public static boolean is24HourTime(Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		String timeFormat = prefs.getString(context.getString(R.string.timeFormatKey), "12");
+		if (timeFormat.equals("24")) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 
+	public static String getTimeStr(Calendar calendar, boolean is24HourTime) {
+		if (is24HourTime) {
+			return String.format("%1$tH:%1$tM ", calendar);
+		} else {
+			return String.format("%1$tI:%1$tM %Tp ", calendar);
+		}
+	}
+	
 	public static String getFindMeetingTimeStr(Calendar calendar) {
 		return String.format("%1$tH%1$tM00", calendar);
 	}
-
+	
 	public static String getSubmitMeetingTimeStr(Calendar calendar) {
 		return String.format("%1$tH:%1$tM:00", calendar);
 	}
-
-	public static long getTimeDurationMinutes(Calendar startTime,
-			Calendar endTime) {
-		long startMillis = startTime.getTimeInMillis();
-		long endMillis = endTime.getTimeInMillis();
-		if (startMillis > endMillis) {
-			endMillis += (24 * 60 * 60 * 1000);
-		}
-
-		long diffMinutes = (endMillis - startMillis) / (60 * 1000);
-		return diffMinutes;
-	}
-
-	public static int roundMinutes(int currentMinutes) {
-		return (currentMinutes + 5) / 10 * 10;
-	}
-
 	
+	public static long getTimeDurationMinutes(Calendar startTime, Calendar endTime) {
+		 long startMillis = startTime.getTimeInMillis();
+	     long endMillis = endTime.getTimeInMillis();
+	     if (startMillis > endMillis) {
+	    	 endMillis += (24 * 60 * 60 * 1000);
+	     }
+	     
+	     long diffMinutes = (endMillis - startMillis) / (60 * 1000);
+	     return diffMinutes;
+	}
+	
+	public static int roundMinutes(int currentMinutes) {
+		return (currentMinutes + 5) / 10 * 10;	   
+	}
 	
 	///////////////////////////////////////////////////
 	// Methods to add a meeting to the phone's calendar
@@ -109,6 +122,7 @@ public class DateTimeUtil {
 		}
 		context.startActivity(intent);
 	}
+
 
 	private void insertNewEventIntoCalendar() {
 		// Create calendar date for the test day of week
