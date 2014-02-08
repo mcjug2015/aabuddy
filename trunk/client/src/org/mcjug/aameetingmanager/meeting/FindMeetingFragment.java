@@ -19,11 +19,9 @@ import org.mcjug.meetingfinder.R;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -58,7 +56,7 @@ public class FindMeetingFragment extends Fragment {
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
 
-	private SharedPreferences prefs;
+	private boolean is24HourTime;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,57 +67,7 @@ public class FindMeetingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
-
-		startTimeCalendar = Calendar.getInstance();
-		startTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
-		startTimeCalendar.set(Calendar.MINUTE, 0);
-
-		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
-		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
-		startTimeButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				TimePickerDialog dialog = new TimePickerDialog(getActivity(), startTimeDialogListener, startTimeCalendar
-						.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
-				dialog.show();
-			}
-		});
-
-		startTimeClearButton = (Button) view.findViewById(R.id.findMeetingStartTimeClearButton);
-		startTimeClearButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				int width = startTimeButton.getWidth();
-				startTimeButton.setText(EMPTY_TIME);
-				startTimeButton.setWidth(width);
-			}
-		});
-
-		endTimeCalendar = Calendar.getInstance();
-		endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
-		endTimeCalendar.set(Calendar.MINUTE, 59);
-
-		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
-		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
-		endTimeButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener, endTimeCalendar
-						.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
-				dialog.show();
-			}
-		});
-
-		endTimeClearButton = (Button) view.findViewById(R.id.findMeetingEndTimeClearButton);
-		endTimeClearButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				int width = endTimeButton.getWidth();
-				endTimeButton.setText(EMPTY_TIME);
-				endTimeButton.setWidth(width);
-			}
-		});
-
+		
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
 		Calendar calendar = Calendar.getInstance();
@@ -171,14 +119,69 @@ public class FindMeetingFragment extends Fragment {
 		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
 		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
 		distanceSpinner.setSelection(distanceValues.indexOf("10"));
-
 		return view;
 	}
 
+	private void updateTimeWidgets(final boolean is24HourTime) {
+		View view = getView();
+		
+		startTimeCalendar = Calendar.getInstance();
+		startTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		startTimeCalendar.set(Calendar.MINUTE, 0);
+
+		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
+		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+		
+		startTimeButton.setOnClickListener(new OnClickListener() {
+			@Override
+            public void onClick(View v) {
+				TimePickerDialog dialog = new TimePickerDialog(getActivity(), startTimeDialogListener, startTimeCalendar
+						.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), is24HourTime);
+				dialog.show();
+			}
+		});
+
+		startTimeClearButton = (Button) view.findViewById(R.id.findMeetingStartTimeClearButton);
+		startTimeClearButton.setOnClickListener(new OnClickListener() {
+			@Override
+            public void onClick(View v) {
+				int width = startTimeButton.getWidth();
+				startTimeButton.setText(EMPTY_TIME);
+				startTimeButton.setWidth(width);
+			}
+		});
+
+		endTimeCalendar = Calendar.getInstance();
+		endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
+		endTimeCalendar.set(Calendar.MINUTE, 59);
+
+		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
+		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+		endTimeButton.setOnClickListener(new OnClickListener() {
+			@Override
+            public void onClick(View v) {
+				TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener, endTimeCalendar
+						.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), is24HourTime);
+				dialog.show();
+			}
+		});
+
+		endTimeClearButton = (Button) view.findViewById(R.id.findMeetingEndTimeClearButton);
+		endTimeClearButton.setOnClickListener(new OnClickListener() {
+			@Override
+            public void onClick(View v) {
+				int width = endTimeButton.getWidth();
+				endTimeButton.setText(EMPTY_TIME);
+				endTimeButton.setWidth(width);
+			}
+		});
+	}
+	
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
 		Context context = getActivity();
-	    prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		is24HourTime = DateTimeUtil.is24HourTime(context);
+	    updateTimeWidgets(is24HourTime);
 
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
@@ -219,10 +222,10 @@ public class FindMeetingFragment extends Fragment {
 
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		@Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
-			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
+			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 		}
 	};
 
@@ -231,7 +234,7 @@ public class FindMeetingFragment extends Fragment {
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
-			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 		}
 	};
 
