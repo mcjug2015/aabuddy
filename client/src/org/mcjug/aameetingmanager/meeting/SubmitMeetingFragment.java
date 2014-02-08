@@ -62,6 +62,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private Spinner dayOfWeekSpinner;
   
 	private boolean isTimeValid = true;
+	private boolean is24HourTime;
 	
 	private ProgressDialog locationProgress;
 	private ProgressDialog submitProgressDialog;
@@ -119,36 +120,6 @@ public class SubmitMeetingFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment		
 		View view = inflater.inflate(R.layout.submit_meeting_fragment, container, false);		
-		
-		startTimeCalendar = Calendar.getInstance();
-		clearTimeFields(startTimeCalendar);
-		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
-		startTimeCalendar.set(Calendar.MINUTE, minutes);
-		
-		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
-		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
-		startTimeButton.setOnClickListener(new OnClickListener() { 
-			public void onClick(View v) {
-				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), startTimePickerListener, 
-						startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), true);
-				timePicker.show();
-			} 
-		}); 
-		
-		endTimeCalendar = Calendar.getInstance();
-		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-		clearTimeFields(endTimeCalendar);
-		endTimeCalendar.set(Calendar.MINUTE, minutes);
-		
-		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
-		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
-		endTimeButton.setOnClickListener(new OnClickListener() { 
-			public void onClick(View v) {
-				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), endTimePickerListener, 
-						endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), true);
-				timePicker.show();
-			} 
-		}); 
 		
 		nameEditText = (EditText) view.findViewById(R.id.submitMeetingNameEditText);
 		nameEditText.addTextChangedListener(new TextWatcher() {			
@@ -234,7 +205,40 @@ public class SubmitMeetingFragment extends Fragment {
 		dayOfWeekSpinner.setSelection(dayOfWeek - 1);
 		return view;
 	}
+	
+	private void updateTimeWidgets(final boolean is24HourTime) {
+		View view = getView();
 		
+		startTimeCalendar = Calendar.getInstance();
+		clearTimeFields(startTimeCalendar);
+		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
+		startTimeCalendar.set(Calendar.MINUTE, minutes);
+		
+		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
+		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+		startTimeButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), startTimePickerListener, 
+						startTimeCalendar.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), is24HourTime);
+				timePicker.show();
+			} 
+		}); 
+		
+		endTimeCalendar = Calendar.getInstance();
+		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+		clearTimeFields(endTimeCalendar);
+		endTimeCalendar.set(Calendar.MINUTE, minutes);
+		
+		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
+		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+		endTimeButton.setOnClickListener(new OnClickListener() { 
+			public void onClick(View v) {
+				TimePickerDialog timePicker = new TimePickerDialog(getActivity(), endTimePickerListener, 
+						endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), is24HourTime);
+				timePicker.show();
+			} 
+		});
+	}
 	private void submitMeeting(Credentials credentials) {
 		FragmentActivity activity = getActivity();
 		try {
@@ -268,6 +272,9 @@ public class SubmitMeetingFragment extends Fragment {
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		Context context = getActivity();
+		is24HourTime = DateTimeUtil.is24HourTime(context);
+		updateTimeWidgets(is24HourTime);
+		
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
 		if (address == null || address.equals("")) {
@@ -305,12 +312,12 @@ public class SubmitMeetingFragment extends Fragment {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			startTimeCalendar.set(Calendar.MINUTE, minute);
-			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar));
+			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 			clearTimeFields(startTimeCalendar);			
 			
 			endTimeCalendar.setTime(startTimeCalendar.getTime());
 			endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-		    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+		    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 
 			isTimeValid = true;
 			submitMeetingButton.setEnabled(isTimeValid);	
@@ -321,7 +328,7 @@ public class SubmitMeetingFragment extends Fragment {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
 			endTimeCalendar.set(Calendar.MINUTE, minute);
-			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar));
+			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 			clearTimeFields(endTimeCalendar);
 			
 			Context context = view.getContext();
