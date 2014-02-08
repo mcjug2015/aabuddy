@@ -22,9 +22,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -55,11 +57,12 @@ public class MeetingListFragment extends ListFragment {
 
 	private ProgressDialog deleteProgressDialog;
 	private Meeting selectedMeeting;
+	private TextView selectedMeetingDescription;
 	private MenuItem meetingNotThereMenuItem;
 	private ActionMode actionMode;
 	private ListActionModeCallback listActionModeCallback;
 	private String userName;
-
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.meeting_list_fragment, container, false);
@@ -130,19 +133,44 @@ public class MeetingListFragment extends ListFragment {
 		}
 	};
 
+	
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
 		selectedMeeting = (Meeting)listView.getItemAtPosition(position);
 		listAdapter.setSelectedItem(position);
-
+		
 		if (actionMode == null) {
 			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
 			actionMode = activity.startActionMode(listActionModeCallback);
 		}
 
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
+		
+		clearPrevSelectedTextFormat();
+		
+		if (view == null)
+			view = View.inflate(listView.getContext(), position, listView);
+		
+		if (view != null) {
+			TextView tvDescription  = (TextView) view.findViewById(R.id.meetingDescription);
+			tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+			tvDescription.setMarqueeRepeatLimit(-1);
+			tvDescription.setSelected(true);
+			tvDescription.setSingleLine(true);
+			selectedMeetingDescription  = tvDescription;
+		}
 	}
 
+	private void clearPrevSelectedTextFormat() {
+		if (selectedMeetingDescription != null) {
+			selectedMeetingDescription.setEllipsize(TextUtils.TruncateAt.END);
+			selectedMeetingDescription.setMarqueeRepeatLimit(-1);
+			selectedMeetingDescription = null;
+		}
+	}
+	
+		
+	
 	private void sortList() {
 		String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
 		List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
@@ -232,6 +260,7 @@ public class MeetingListFragment extends ListFragment {
 			listView.clearChoices();
 			listView.clearFocus();
 			listView.setSelector(android.R.color.transparent);
+			clearPrevSelectedTextFormat();
 
 			listAdapter.setSelectedItem(-1);
 			listAdapter.notifyDataSetChanged();
