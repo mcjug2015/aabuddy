@@ -56,7 +56,9 @@ public class FindMeetingFragment extends Fragment {
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
 
+	private Context context;
 	private boolean is24HourTime;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -179,9 +181,7 @@ public class FindMeetingFragment extends Fragment {
 	
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
-		Context context = getActivity();
-		is24HourTime = DateTimeUtil.is24HourTime(context);
-	    updateTimeWidgets(is24HourTime);
+		context = getActivity();
 
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
@@ -219,7 +219,15 @@ public class FindMeetingFragment extends Fragment {
 
 		super.onActivityCreated(savedInstanceState);
 	}
+	
+	@Override
+	public void onResume() {
+		is24HourTime = DateTimeUtil.is24HourTime(context);
+	    updateTimeWidgets(is24HourTime);
 
+		super.onResume();
+	}
+	
 	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 		@Override
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
