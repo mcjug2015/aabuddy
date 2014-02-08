@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
+import android.provider.Telephony.Sms.Conversations;
 import android.util.Log;
 
 public class MeetingListUtil {
@@ -36,8 +37,7 @@ public class MeetingListUtil {
 		String jsonStr = HttpUtil.getContent(httpResponse);		
 	    Log.d(TAG, "Meeting list: " + jsonStr);
 	    
-	    SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-	    String timeFormatStr = sharedPrefs.getString(context.getString(R.string.timeFormatKey), "12");
+	    boolean is24HourTime = DateTimeUtil.is24HourTime(context);
 	    
 	    MeetingListResults meetingListResults = new MeetingListResults();
 		List<Meeting> meetings = new ArrayList<Meeting>();
@@ -51,30 +51,35 @@ public class MeetingListUtil {
 		    if (meetingsJson != null) {
 				JSONObject meetingJson;
 				Meeting meeting;
+				String startTime;
+				String endTime;
 				for (int i = 0; i < meetingsJson.length(); i++) {
-					meetingJson = meetingsJson.getJSONObject(i);
-					
-					meeting = new Meeting();
-					meeting.setId(meetingJson.getInt(ID));
-					meeting.setName(meetingJson.getString(NAME));
-					meeting.setDescription(meetingJson.getString(DESCRIPTION));
-					meeting.setCreator(meetingJson.getString(CREATOR));
-				
-					String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
-					int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
-					meeting.setDayOfWeek(daysOfWeek[dayOfWeek - 1]);
+					try {
+						meetingJson = meetingsJson.getJSONObject(i);
 						
-					String startTime = meetingJson.getString(START_TIME).substring(0, 5);
-					String endTime = meetingJson.getString(END_TIME).substring(0, 5);
-					meeting.setTimeRange(startTime + " - " +  endTime);
-					
-					meeting.setAddress(meetingJson.getString(ADDRESS));
-					meeting.setDistance(String.format("%.2f", Double.parseDouble(meetingJson.getString(DISTANCE))));
-					
-					meeting.setLatitude(meetingJson.getDouble(LATITUDE));
-					meeting.setLongitude(meetingJson.getDouble(LONGITUDE));					
-					
-					meetings.add(meeting);
+						meeting = new Meeting();
+						meeting.setId(meetingJson.getInt(ID));
+						meeting.setName(meetingJson.getString(NAME));
+						meeting.setDescription(meetingJson.getString(DESCRIPTION));
+						meeting.setCreator(meetingJson.getString(CREATOR));
+
+						String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
+						int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
+						meeting.setDayOfWeek(daysOfWeek[dayOfWeek - 1]);
+							
+						startTime = convertTime(meetingJson, START_TIME, is24HourTime);
+						endTime = convertTime(meetingJson, END_TIME, is24HourTime);
+						meeting.setTimeRange(startTime + " - " +  endTime);
+						
+						meeting.setAddress(meetingJson.getString(ADDRESS));
+						meeting.setDistance(String.format("%.2f", Double.parseDouble(meetingJson.getString(DISTANCE))));
+						
+						meeting.setLatitude(meetingJson.getDouble(LATITUDE));
+						meeting.setLongitude(meetingJson.getDouble(LONGITUDE));					
+						
+						meetings.add(meeting);
+					} catch (Exception e) {
+					}
 				}
 				
 				meetingListResults.setMeetings(meetings);
@@ -82,6 +87,23 @@ public class MeetingListUtil {
 		}
 		
 		return meetingListResults;
+	}
+	
+	private static String convertTime(JSONObject meetingJson, String timeKey, boolean is24HourTime) throws Exception {
+		String time;
+		if (is24HourTime) {
+			time =  meetingJson.getString(timeKey).substring(0, 5);
+		} else {
+			int hour = Integer.parseInt(meetingJson.getString(timeKey).substring(0, 2));
+			if (hour > 12) {
+				hour = hour - 12;
+				time = String.format("%02d%s", hour, meetingJson.getString(timeKey).substring(2, 5)) + " PM";
+			} else {				
+				time = meetingJson.getString(timeKey).substring(0, 5) + " AM";
+			}
+		}
+
+		return time;
 	}
 	
 	public static String getUniqueDeviceId(Context context) {
