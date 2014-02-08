@@ -69,6 +69,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private LocationResult locationResult;
 	private Credentials submitCredentials;
 	private String submitMeetingParams;
+	private Context context;
 	
 	private static final int BEFORE_SUBMIT_LOGIN_ACTIVITY 	= 1;
 	private static final int AFTER_SUBMIT_LOGIN_ACTIVITY 	= 2;
@@ -271,7 +272,7 @@ public class SubmitMeetingFragment extends Fragment {
 	}
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
-		Context context = getActivity();
+		context = getActivity();
 		is24HourTime = DateTimeUtil.is24HourTime(context);
 		updateTimeWidgets(is24HourTime);
 		
@@ -308,6 +309,14 @@ public class SubmitMeetingFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
+	@Override
+	public void onResume() {
+		is24HourTime = DateTimeUtil.is24HourTime(context);
+	    updateTimeWidgets(is24HourTime);
+
+		super.onResume();
+	}
+	
 	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
