@@ -1,15 +1,19 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import java.util.Date;
+
 public class Meeting {
 	private int id;
 	
 	private String name;
 	private String description;
-	private String dayOfWeek;
 	private String creator;
+	private Date startTime;
+	private Date endTime;
 	private String timeRange;
 	private String address;
 	private String distance;
+	private int dayOfWeekIdx;
 	private double latitude;
 	private double longitude;
 	
@@ -45,21 +49,38 @@ public class Meeting {
 		this.creator = creator;
 	}
 
-	public String getDayOfWeek() {
-		return dayOfWeek;
+	public int getDayOfWeekIdx() {
+		return dayOfWeekIdx;
 	}
-	
-	public void setDayOfWeek(String dayOfWeek) {
-		this.dayOfWeek = dayOfWeek;
+
+	public void setDayOfWeekIdx(int dayOfWeekIdx) {
+		this.dayOfWeekIdx = dayOfWeekIdx;
 	}
-	
+
 	public String getTimeRange() {
 		return timeRange;
 	}
+	
 	public void setTimeRange(String timeRange) {
 		this.timeRange = timeRange;
-	}
+	}	
 	
+	public Date getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(Date startTime) {
+		this.startTime = startTime;
+	}
+
+	public Date getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(Date endTime) {
+		this.endTime = endTime;
+	}
+
 	public String getAddress() {
 		return address;
 	}
