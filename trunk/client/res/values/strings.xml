@@ -95,6 +95,7 @@
     <string name="deleteMeetingConfirmMsg">Are you sure you want to delete meeting %s ?</string>
     <string name="mapMenuItem">Map</string>
     <string name="deleteMenuItem">Delete</string>
+    <string name="calendarMenuItem">Calendar</string>
 
     <item name="paginationSize" type="integer">50</item>
 
@@ -171,6 +172,15 @@
         <item>Th</item>
         <item>F</item>
         <item>Sa</item>
+    </string-array>
+    <string-array name="daysOfWeekCalendar">
+        <item>SU</item>
+        <item>MO</item>
+        <item>TU</item>
+        <item>WE</item>
+        <item>TH</item>
+        <item>FR</item>
+        <item>SA</item>
     </string-array>
     <string-array name="searchDistances">
         <item>1 mile</item>
