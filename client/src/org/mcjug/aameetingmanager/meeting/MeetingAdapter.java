@@ -4,9 +4,11 @@ import java.util.List;
 
 import org.mcjug.meetingfinder.R;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +36,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 		this.selectedItem = selectedItem;
 	}
 
+	@SuppressLint("CutPasteId")
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		final Context context = getContext();
@@ -72,6 +75,9 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 
 		if (Build.VERSION.SDK_INT < 11) {
 			RelativeLayout activeItem = (RelativeLayout) view;
+			
+			TextView tvDescription = (TextView) view.findViewById(R.id.meetingDescription);
+			
 			if (position == selectedItem) {
 				activeItem.setBackgroundColor(Color.argb(0x80, 0x10, 0xb0, 0xe4));
 
@@ -79,8 +85,20 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	            int top = (activeItem == null) ? 0 : activeItem.getTop();
 	            ListView listView = (ListView) parent;
 	            listView.setSelectionFromTop(position, top);
+	            
+	            if (tvDescription != null) {
+					tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+					tvDescription.setMarqueeRepeatLimit(-1);
+					tvDescription.setSelected(true);
+					tvDescription.setSingleLine(true);
+				}
+	            
 	        } else {
 	        	activeItem.setBackgroundColor(Color.TRANSPARENT);
+	        	if (tvDescription != null) {
+	        		tvDescription.setEllipsize(TextUtils.TruncateAt.END);
+	        		tvDescription.setMarqueeRepeatLimit(3);
+	        	}
 	        }
 		}
 		return view;
