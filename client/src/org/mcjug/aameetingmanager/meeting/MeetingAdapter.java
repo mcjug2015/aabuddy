@@ -40,6 +40,8 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 
 		View view = convertView;
 		ViewHolder holder;
+		String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
+
 		if (view == null) {
 
 			LayoutInflater inflater = LayoutInflater.from(context);
@@ -61,7 +63,7 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 		final Meeting meeting = getItem(position);
 		if (meeting != null) {
 			holder.address.setText(meeting.getAddress());
-			holder.day.setText(meeting.getDayOfWeek());
+			holder.day.setText(daysOfWeek[meeting.getDayOfWeekIdx() - 1]);
 			holder.description.setText(meeting.getDescription());
 			holder.distance.setText(meeting.getDistance());
 			holder.time.setText(meeting.getTimeRange());
