@@ -26,8 +26,6 @@ public class HttpUtil {
 
 	public static DefaultHttpClient createHttpClient() {
 		Context context = AAMeetingApplication.getInstance();
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
 		boolean defaultSslTrustAllFlag = Boolean.parseBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));
 
 		SchemeRegistry schemeRegistry = new SchemeRegistry();
