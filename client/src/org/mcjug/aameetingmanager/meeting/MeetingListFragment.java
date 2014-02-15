@@ -11,6 +11,7 @@ import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.meeting.DeleteMeetingTask.DeleteMeetingListener;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -26,7 +27,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
@@ -241,6 +241,11 @@ public class MeetingListFragment extends ListFragment {
 				mode.finish();
 				return true;
 
+			case R.id.calendar:
+				displayCalendar(selectedMeeting);
+				mode.finish();
+				return true;
+
 			case R.id.meetingNotThere:
 				getMeetingNotThereDialog().show();
 				mode.finish();
@@ -317,6 +322,10 @@ public class MeetingListFragment extends ListFragment {
 			Intent geoMap = new Intent(Intent.ACTION_VIEW, geo);
 			startActivity(geoMap);
 		}
+	}
+	
+	private void displayCalendar(Meeting meeting) {	
+		DateTimeUtil.addToCalendar(getActivity(), meeting);
 	}
 
 	private AlertDialog.Builder getMeetingNotThereDialog() {
