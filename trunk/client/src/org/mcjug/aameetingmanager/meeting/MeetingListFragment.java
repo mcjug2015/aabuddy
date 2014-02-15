@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
@@ -146,18 +147,17 @@ public class MeetingListFragment extends ListFragment {
 
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
 		
-		clearPrevSelectedTextFormat();
-		
-		if (view == null)
-			view = View.inflate(listView.getContext(), position, listView);
-		
-		if (view != null) {
-			TextView tvDescription  = (TextView) view.findViewById(R.id.meetingDescription);
-			tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
-			tvDescription.setMarqueeRepeatLimit(-1);
-			tvDescription.setSelected(true);
-			tvDescription.setSingleLine(true);
-			selectedMeetingDescription  = tvDescription;
+		if (Build.VERSION.SDK_INT >= 11) {
+			clearPrevSelectedTextFormat();
+			if (view != null) {
+				TextView tvDescription = (TextView) view.findViewById(R.id.meetingDescription);
+				tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
+				tvDescription.setMarqueeRepeatLimit(-1);
+				tvDescription.setSelected(true);
+				tvDescription.setSingleLine(true);				
+				selectedMeetingDescription = tvDescription;
+				listAdapter.notifyDataSetChanged();
+			}
 		}
 	}
 
