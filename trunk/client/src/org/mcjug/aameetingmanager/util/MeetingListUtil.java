@@ -1,12 +1,13 @@
 package org.mcjug.aameetingmanager.util;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 
@@ -50,6 +51,7 @@ public class MeetingListUtil {
 				Meeting meeting;
 				String startTime;
 				String endTime;
+				
 				for (int i = 0; i < meetingsJson.length(); i++) {
 					try {
 						meetingJson = meetingsJson.getJSONObject(i);
@@ -60,10 +62,12 @@ public class MeetingListUtil {
 						meeting.setDescription(meetingJson.getString(DESCRIPTION));
 						meeting.setCreator(meetingJson.getString(CREATOR));
 
-						String[] daysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
-						int dayOfWeek = meetingJson.getInt(DAY_OF_WEEK);
-						meeting.setDayOfWeek(daysOfWeek[dayOfWeek - 1]);
-
+						int dayOfWeekIdx = meetingJson.getInt(DAY_OF_WEEK);
+						meeting.setDayOfWeekIdx(dayOfWeekIdx);
+						
+						meeting.setStartTime(getMeetingTime(meetingJson, START_TIME));
+						meeting.setEndTime(getMeetingTime(meetingJson, END_TIME));
+						
 						startTime = convertTime(meetingJson, START_TIME, is24HourTime);
 						endTime = convertTime(meetingJson, END_TIME, is24HourTime);
 						meeting.setTimeRange(startTime + " - " +  endTime);
@@ -101,6 +105,19 @@ public class MeetingListUtil {
 		}
 
 		return time;
+	}
+
+	private static Date getMeetingTime(JSONObject meetingJson, String timeKey) throws Exception {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(new Date());
+
+	    int hour = Integer.parseInt(meetingJson.getString(timeKey).substring(0, 2));
+	    int minutes = Integer.parseInt(meetingJson.getString(timeKey).substring(3, 5));
+
+	    calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.MINUTE, minutes);
+	
+		return calendar.getTime();
 	}
 
 	public static String getUniqueDeviceId(Context context) {
