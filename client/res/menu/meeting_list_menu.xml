@@ -7,6 +7,11 @@
         android:showAsAction="always"
         android:title="@string/mapMenuItem"/>
     <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/calendar"
+        android:showAsAction="always"
+        android:title="@string/calendarMenuItem"/>
+    <item
         android:id="@+id/deleteMeeting"
         android:icon="@drawable/trashcan"
         android:showAsAction="always"
