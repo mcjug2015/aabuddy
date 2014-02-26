@@ -64,6 +64,8 @@ public class SubmitMeetingFragment extends Fragment {
 	private boolean isTimeValid = true;
 	private boolean is24HourTime;
 	
+	private TimePickerDialog.OnTimeSetListener startTimePickerListener;
+	private TimePickerDialog.OnTimeSetListener endTimePickerListener;
 	private ProgressDialog locationProgress;
 	private ProgressDialog submitProgressDialog;
 	private LocationResult locationResult;
@@ -314,47 +316,47 @@ public class SubmitMeetingFragment extends Fragment {
 		is24HourTime = DateTimeUtil.is24HourTime(context);
 	    updateTimeWidgets(is24HourTime);
 
-		super.onResume();
-	}
-	
-	private final TimePickerDialog.OnTimeSetListener startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-			startTimeCalendar.set(Calendar.MINUTE, minute);
-			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
-			clearTimeFields(startTimeCalendar);			
-			
-			endTimeCalendar.setTime(startTimeCalendar.getTime());
-			endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-		    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+	    startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				startTimeCalendar.set(Calendar.MINUTE, minute);
+				startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+				clearTimeFields(startTimeCalendar);			
+				
+				endTimeCalendar.setTime(startTimeCalendar.getTime());
+				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+			    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 
-			isTimeValid = true;
-			submitMeetingButton.setEnabled(isTimeValid);	
-		}		
-	};
-	
-	private final TimePickerDialog.OnTimeSetListener endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-			endTimeCalendar.set(Calendar.MINUTE, minute);
-			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
-			clearTimeFields(endTimeCalendar);
-			
-			Context context = view.getContext();
-			isTimeValid = true;
-			if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
-				isTimeValid = false;
-				Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
-			
-			} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
-				long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
-				String msg = String.format(getString(R.string.meetingDuration), timeDurationMins);
-				Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+				isTimeValid = true;
+				submitMeetingButton.setEnabled(isTimeValid);	
+			}		
+	    };
+	    
+	    endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				endTimeCalendar.set(Calendar.MINUTE, minute);
+				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+				clearTimeFields(endTimeCalendar);
+				
+				Context context = view.getContext();
+				isTimeValid = true;
+				if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
+					isTimeValid = false;
+					Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
+				
+				} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
+					long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
+					String msg = String.format(getString(R.string.meetingDuration), timeDurationMins);
+					Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+				}
+				
+				checkMeetingFieldsValid();
 			}
-			
-			checkMeetingFieldsValid();
-		}		
-	};
+	    };
+	    
+		super.onResume();
+	}	
 	
 	private void clearTimeFields(Calendar calendar) {
 		calendar.set(Calendar.DAY_OF_YEAR, 1);
