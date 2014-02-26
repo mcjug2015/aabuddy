@@ -136,6 +136,15 @@ public class FindMeetingFragment extends Fragment {
 		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 		
+	    startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+				@Override
+				public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+					startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+					startTimeCalendar.set(Calendar.MINUTE, minute);
+					startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+				}
+		 };
+		
 		startTimeButton.setOnClickListener(new OnClickListener() {
 			@Override
             public void onClick(View v) {
@@ -159,6 +168,15 @@ public class FindMeetingFragment extends Fragment {
 		endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
 		endTimeCalendar.set(Calendar.MINUTE, 59);
 
+	    endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+				@Override
+		        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+					endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+					endTimeCalendar.set(Calendar.MINUTE, minute);
+					endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+				}
+			};
+			
 		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 		endTimeButton.setOnClickListener(new OnClickListener() {
@@ -224,28 +242,8 @@ public class FindMeetingFragment extends Fragment {
 	
 	@Override
 	public void onResume() {
-		is24HourTime = DateTimeUtil.is24HourTime(context);
-	
-	    startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-			@Override
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				startTimeCalendar.set(Calendar.MINUTE, minute);
-				startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
-			}
-	    };
-	    
-	    endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-			@Override
-	        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				endTimeCalendar.set(Calendar.MINUTE, minute);
-				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
-			}
-		};
-		
+		is24HourTime = DateTimeUtil.is24HourTime(context);	
 	    updateTimeWidgets(is24HourTime);
-
 		super.onResume();
 	}
 	
