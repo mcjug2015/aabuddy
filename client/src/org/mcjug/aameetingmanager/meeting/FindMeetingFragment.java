@@ -52,6 +52,8 @@ public class FindMeetingFragment extends Fragment {
 	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
 	private Spinner distanceSpinner;
 
+	private TimePickerDialog.OnTimeSetListener startTimeDialogListener;
+	private TimePickerDialog.OnTimeSetListener endTimeDialogListener;
 	private ProgressDialog locationProgress;
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
@@ -225,27 +227,27 @@ public class FindMeetingFragment extends Fragment {
 		is24HourTime = DateTimeUtil.is24HourTime(context);
 	    updateTimeWidgets(is24HourTime);
 
+	    startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+			@Override
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				startTimeCalendar.set(Calendar.MINUTE, minute);
+				startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+			}
+	    };
+	    
+	    endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
+			@Override
+	        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				endTimeCalendar.set(Calendar.MINUTE, minute);
+				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+			}
+		};
+		
 		super.onResume();
 	}
 	
-	private final TimePickerDialog.OnTimeSetListener startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-		@Override
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-			startTimeCalendar.set(Calendar.MINUTE, minute);
-			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
-		}
-	};
-
-	private final TimePickerDialog.OnTimeSetListener endTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
-		@Override
-        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-			endTimeCalendar.set(Calendar.MINUTE, minute);
-			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
-		}
-	};
-
 	private final MultiSpinnerListener daysOfWeekSpinnerListener = new MultiSpinnerListener() {
 		@Override
         public void onItemsSelected(boolean[] selected) {
