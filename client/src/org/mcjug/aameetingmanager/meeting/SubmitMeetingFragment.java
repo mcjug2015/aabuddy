@@ -217,6 +217,22 @@ public class SubmitMeetingFragment extends Fragment {
 		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
 		startTimeCalendar.set(Calendar.MINUTE, minutes);
 		
+		startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				startTimeCalendar.set(Calendar.MINUTE, minute);
+				startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+				clearTimeFields(startTimeCalendar);			
+
+				endTimeCalendar.setTime(startTimeCalendar.getTime());
+				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+
+				isTimeValid = true;
+				submitMeetingButton.setEnabled(isTimeValid);	
+			}		
+		};
+
 		startTimeButton = (Button) view.findViewById(R.id.submitMeetingStartTimeButton); 
 		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 		startTimeButton.setOnClickListener(new OnClickListener() { 
@@ -232,6 +248,29 @@ public class SubmitMeetingFragment extends Fragment {
 		clearTimeFields(endTimeCalendar);
 		endTimeCalendar.set(Calendar.MINUTE, minutes);
 		
+		endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
+			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				endTimeCalendar.set(Calendar.MINUTE, minute);
+				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+				clearTimeFields(endTimeCalendar);
+
+				Context context = view.getContext();
+				isTimeValid = true;
+				if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
+					isTimeValid = false;
+					Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
+
+				} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
+					long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
+					String msg = String.format(getString(R.string.meetingDuration), timeDurationMins);
+					Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
+				}
+
+				checkMeetingFieldsValid();
+			}
+		};		    
+		
 		endTimeButton = (Button) view.findViewById(R.id.submitMeetingEndTimeButton); 
 		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 		endTimeButton.setOnClickListener(new OnClickListener() { 
@@ -242,6 +281,7 @@ public class SubmitMeetingFragment extends Fragment {
 			} 
 		});
 	}
+	
 	private void submitMeeting(Credentials credentials) {
 		FragmentActivity activity = getActivity();
 		try {
@@ -314,48 +354,7 @@ public class SubmitMeetingFragment extends Fragment {
 	@Override
 	public void onResume() {
 		is24HourTime = DateTimeUtil.is24HourTime(context);
-	
-	    startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				startTimeCalendar.set(Calendar.MINUTE, minute);
-				startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
-				clearTimeFields(startTimeCalendar);			
-				
-				endTimeCalendar.setTime(startTimeCalendar.getTime());
-				endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-			    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
-
-				isTimeValid = true;
-				submitMeetingButton.setEnabled(isTimeValid);	
-			}		
-	    };
-	    
-	    endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				endTimeCalendar.set(Calendar.MINUTE, minute);
-				endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
-				clearTimeFields(endTimeCalendar);
-				
-				Context context = view.getContext();
-				isTimeValid = true;
-				if (startTimeCalendar.compareTo(endTimeCalendar) == 0) {
-					isTimeValid = false;
-					Toast.makeText(context, getString(R.string.startAndEndTimesAreEqual), Toast.LENGTH_LONG).show();
-				
-				} else if (startTimeCalendar.compareTo(endTimeCalendar) == 1) {
-					long timeDurationMins = DateTimeUtil.getTimeDurationMinutes(startTimeCalendar, endTimeCalendar);
-					String msg = String.format(getString(R.string.meetingDuration), timeDurationMins);
-					Toast.makeText(context, msg, Toast.LENGTH_LONG).show();
-				}
-				
-				checkMeetingFieldsValid();
-			}
-	    };
-	    
 	    updateTimeWidgets(is24HourTime);
-
 		super.onResume();
 	}	
 	
