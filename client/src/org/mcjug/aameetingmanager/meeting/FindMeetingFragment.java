@@ -225,8 +225,7 @@ public class FindMeetingFragment extends Fragment {
 	@Override
 	public void onResume() {
 		is24HourTime = DateTimeUtil.is24HourTime(context);
-	    updateTimeWidgets(is24HourTime);
-
+	
 	    startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -245,6 +244,8 @@ public class FindMeetingFragment extends Fragment {
 			}
 		};
 		
+	    updateTimeWidgets(is24HourTime);
+
 		super.onResume();
 	}
 	
