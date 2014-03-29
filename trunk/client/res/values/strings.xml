@@ -141,10 +141,21 @@
     <string name="changePasswordButton">Change Password</string>
     <string name="passwordPreferencesTitle">Password Preferences</string>
     <string name="helpActivityTitle">Help</string>
+    
+    <string name="recoveryDateAllowed">RecoveryDateAllowed</string>
+    <string name="recoveryDateAllowedCheckbox">recoveryDateAllowedCheckbox</string>
+    <string name="recoveryDatePrompt">Set Recovery Date</string>
+    <string name="recoveryDateValue">RecoveryDateValue</string>
+   	<string name="x">X</string>
+   	
+   	<string name="recoveryDatePreferencesKey">recoveryDatePreference</string>
+   	<string name="recoveryDatePreferencesTitle">Recovery Date Preference</string>
+   	 
     <string name="timeFormatTitle">Time Format</string>
     <string name="timeFormatKey">timeFormat</string>
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
+
 
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>

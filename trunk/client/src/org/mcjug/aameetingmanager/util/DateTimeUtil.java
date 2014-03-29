@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
@@ -128,4 +129,63 @@ public class DateTimeUtil {
 
 		return calendar;
 	}
+	
+	public static String getOrdinalFor(int value) {
+		int hundredRemainder = value % 100;
+		int tenRemainder = value % 10;
+		if(hundredRemainder - tenRemainder == 10) {
+			return "th";
+		}
+
+		switch (tenRemainder) {
+			case 1:  return "st";
+			case 2:  return "nd";
+			case 3:  return "rd";
+			default: return "th";
+		}
+	}
+
+	public static void resetRecoveryDate (Context context){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		Editor editor = prefs.edit();
+		editor.remove(context.getString(R.string.recoveryDateValue));
+		editor.commit();
+	}
+	
+	public static Calendar getRecoveryDate (Context context) {
+		Calendar recoveryDate = null;
+		// recoveryDate.setTime(new Date(Long.MAX_VALUE));
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		long longRecoveryDate = prefs.getLong(context.getString(R.string.recoveryDateValue), 0);
+		if (longRecoveryDate > 0) {
+			recoveryDate = Calendar.getInstance();
+			recoveryDate.setTime(new Date(longRecoveryDate));
+		}
+		return (recoveryDate);
+	}
+	
+	public static void setRecoveryDate (Context context, Calendar calendar){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		Editor editor = prefs.edit();
+		long longRecoveryDate = calendar.getTimeInMillis();
+		editor.putLong(context.getString(R.string.recoveryDateValue), longRecoveryDate);
+		editor.commit();
+	}
+	
+	public static boolean getRecoveryDateAllowed (Context context) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		boolean boolRecoveryDateAllowed = prefs.getBoolean(context.getString(R.string.recoveryDateAllowed), true);
+		return (boolRecoveryDateAllowed);
+	}
+	
+	public static void setRecoveryDateAllowed (Context context, boolean value) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		Editor editor = prefs.edit();
+		editor.putBoolean(context.getString(R.string.recoveryDateAllowed), value);
+		if (!value)
+			editor.remove(context.getString(R.string.recoveryDateValue));
+		editor.commit();
+	}
+	
 }

@@ -33,4 +33,15 @@
             android:title="@string/timeFormatTitle" />
     </PreferenceCategory>
 
+    <!-- Recovery Date Preferences -->
+    <PreferenceCategory android:title="@string/recoveryDatePreferencesTitle">
+        <CheckBoxPreference 
+            android:id="@+id/recoveryDateAllowedCheckbox"
+            android:key="@string/recoveryDatePreferencesKey"
+            android:title="@string/recoveryDatePreferencesTitle"
+            android:defaultValue="true"
+            android:summary="Show Recovery Date Note?"
+            />
+        <!--  <ListPreference /> -->
+    </PreferenceCategory>
 </PreferenceScreen>
