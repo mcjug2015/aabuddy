@@ -7,12 +7,44 @@
     android:background="@android:color/white"
     >
 
+    <RelativeLayout
+        android:layout_width="224dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/textViewRecoveryDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:clickable="true"
+            android:onClick="onClickShowDatePickerDialog"
+            android:singleLine="true"
+            android:text="@string/recoveryDatePrompt"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <TextView
+            android:id="@+id/textViewRecoveryDateBlock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/textViewRecoveryDate"
+            android:clickable="true"
+            android:onClick="onClickBlockRecoveryDate"
+            android:text="@string/x" />
+        
+    </RelativeLayout>
+    
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:gravity="center"
         android:layout_marginTop="18dp"
+        android:layout_weight="2.11"
+        android:gravity="center"
         android:orientation="horizontal" >
 
         <RelativeLayout
