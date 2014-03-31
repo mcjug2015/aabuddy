@@ -2,13 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
-    android:orientation="vertical" 
     android:background="@android:color/white"
-    >
+    android:gravity="center"
+    android:orientation="vertical" >
 
     <RelativeLayout
-        android:layout_width="224dp"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
         android:gravity="center"
@@ -18,32 +17,39 @@
             android:id="@+id/textViewRecoveryDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_centerVertical="true"
-            android:clickable="true"
-            android:onClick="onClickShowDatePickerDialog"
-            android:singleLine="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp"
+            android:maxLines="@integer/abs__max_action_buttons"    
             android:text="@string/recoveryDatePrompt"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            android:textColor="#666666" 
+            />
+        
+<!--    android:singleLine="true"
+     android:clickable="true" 
+        android:onClick="onClickShowDatePickerDialog" 
+     -->
 
-        <TextView
-            android:id="@+id/textViewRecoveryDateBlock"
+        <ImageButton
+            android:id="@+id/imageButtonRecoveryDateHide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@id/textViewRecoveryDate"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="false"
+            android:layout_toRightOf="@+id/textViewRecoveryDate"
+            android:background="#ffffff"
             android:clickable="true"
-            android:onClick="onClickBlockRecoveryDate"
-            android:text="@string/x" />
+            android:contentDescription="@string/hideRecoveryDateButtonDescription"
+            android:onClick="onClickHideRecoveryDate"
+            android:src="@drawable/delete" />
         
+        <!-- android:background="@drawable/button_text_color" -->
     </RelativeLayout>
     
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:layout_weight="2.11"
+        android:layout_marginTop="8dp"
+        android:layout_weight="2.0"
         android:gravity="center"
         android:orientation="horizontal" >
 

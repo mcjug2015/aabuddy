@@ -146,7 +146,7 @@ public class DateTimeUtil {
 	}
 
 	public static void resetRecoveryDate (Context context){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = prefs.edit();
 		editor.remove(context.getString(R.string.recoveryDateValue));
 		editor.commit();
@@ -166,7 +166,7 @@ public class DateTimeUtil {
 	}
 	
 	public static void setRecoveryDate (Context context, Calendar calendar){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = prefs.edit();
 		long longRecoveryDate = calendar.getTimeInMillis();
 		editor.putLong(context.getString(R.string.recoveryDateValue), longRecoveryDate);
@@ -183,8 +183,10 @@ public class DateTimeUtil {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = prefs.edit();
 		editor.putBoolean(context.getString(R.string.recoveryDateAllowed), value);
+		/*
 		if (!value)
 			editor.remove(context.getString(R.string.recoveryDateValue));
+		*/
 		editor.commit();
 	}
 	

@@ -144,9 +144,11 @@
     
     <string name="recoveryDateAllowed">RecoveryDateAllowed</string>
     <string name="recoveryDateAllowedCheckbox">recoveryDateAllowedCheckbox</string>
-    <string name="recoveryDatePrompt">Set Recovery Date</string>
+    <string name="recoveryDatePrompt">Set Recovery  </string>
     <string name="recoveryDateValue">RecoveryDateValue</string>
-   	<string name="x">X</string>
+<!--    	<string name="x">X</string> -->
+   	<string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>
+   	<string name="howToRecoverToastNote">To turn your Sobriety Date on, go to settings and check the box</string>
    	
    	<string name="recoveryDatePreferencesKey">recoveryDatePreference</string>
    	<string name="recoveryDatePreferencesTitle">Recovery Date Preference</string>
