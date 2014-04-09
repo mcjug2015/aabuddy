@@ -17,34 +17,24 @@
             android:id="@+id/textViewRecoveryDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="4dp"
-            android:maxLines="@integer/abs__max_action_buttons"    
-            android:text="@string/recoveryDatePrompt"
-            android:textColor="#666666" 
-            />
-        
-<!--    android:singleLine="true"
-     android:clickable="true" 
-        android:onClick="onClickShowDatePickerDialog" 
-     -->
+            android:layout_marginTop="6dp"
+           android:textColor="#666666" />
 
         <ImageButton
             android:id="@+id/imageButtonRecoveryDateHide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_centerVertical="false"
             android:layout_toRightOf="@+id/textViewRecoveryDate"
             android:background="#ffffff"
             android:clickable="true"
             android:contentDescription="@string/hideRecoveryDateButtonDescription"
             android:onClick="onClickHideRecoveryDate"
             android:src="@drawable/delete" />
-        
-        <!-- android:background="@drawable/button_text_color" -->
     </RelativeLayout>
-    
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -62,7 +52,7 @@
                 android:id="@+id/findMeetingImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                 android:src="@drawable/find_meeting" />
+                android:src="@drawable/find_meeting" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -155,14 +145,14 @@
                 android:text="@string/Help" />
         </RelativeLayout>
     </LinearLayout>
-    
-      <TextView
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#666666"
-        android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
         android:gravity="center"
-        android:text="@string/loginNotRequiredMsg" />
+        android:text="@string/loginNotRequiredMsg"
+        android:textColor="#666666" />
 
 </LinearLayout>
