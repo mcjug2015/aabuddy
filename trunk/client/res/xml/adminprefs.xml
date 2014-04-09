@@ -21,27 +21,32 @@
                 android:targetPackage="org.mcjug.meetingfinder" />
         </Preference>
     </PreferenceCategory>
-    
+
     <!-- Time Preferences -->
     <PreferenceCategory android:title="@string/timePreferencesTitle" >
-       <ListPreference
-            android:key="@string/timeFormatKey"
-            android:entries="@array/timeFormat"
-            android:summary="@string/timeFormatSummary"
-            android:entryValues="@array/timeFormatValues"
+        <ListPreference
             android:defaultValue="12"
+            android:entries="@array/timeFormat"
+            android:entryValues="@array/timeFormatValues"
+            android:key="@string/timeFormatKey"
+            android:summary="@string/timeFormatSummary"
             android:title="@string/timeFormatTitle" />
     </PreferenceCategory>
 
     <!-- Recovery Date Preferences -->
-    <PreferenceCategory android:title="@string/recoveryDatePreferencesTitle">
-        <CheckBoxPreference 
+    <PreferenceCategory android:title="@string/recoveryDatePreferencesTitle" >
+        <CheckBoxPreference
             android:id="@+id/recoveryDateAllowedCheckbox"
-            android:key="@string/recoveryDatePreferencesKey"
-            android:title="@string/recoveryDatePreferencesTitle"
             android:defaultValue="true"
-            android:summary="Show Recovery Date Note?"
-            />
-        <!--  <ListPreference /> -->
+            android:key="@string/recoveryDateAllowedPreferenceKey"
+            android:summary="@string/recoveryDateAllowedPreferenceSummary"
+            android:title="@string/recoveryDateAllowedPreferenceTitle" />
+
+        <org.mcjug.aameetingmanager.util.RecoveryDatePreference
+            android:key="@string/recoveryDatePreferenceKey"
+            android:summary="@string/recoveryDatePreferenceSummary"
+            android:title="@string/recoveryDatePreferenceTitle" />
+        
     </PreferenceCategory>
+
 </PreferenceScreen>

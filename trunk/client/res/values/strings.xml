@@ -141,23 +141,22 @@
     <string name="changePasswordButton">Change Password</string>
     <string name="passwordPreferencesTitle">Password Preferences</string>
     <string name="helpActivityTitle">Help</string>
-    
-    <string name="recoveryDateAllowed">RecoveryDateAllowed</string>
-    <string name="recoveryDateAllowedCheckbox">recoveryDateAllowedCheckbox</string>
-    <string name="recoveryDatePrompt">Set Recovery  </string>
-    <string name="recoveryDateValue">RecoveryDateValue</string>
-<!--    	<string name="x">X</string> -->
-   	<string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>
-   	<string name="howToRecoverToastNote">To turn your Sobriety Date on, go to settings and check the box</string>
-   	
-   	<string name="recoveryDatePreferencesKey">recoveryDatePreference</string>
-   	<string name="recoveryDatePreferencesTitle">Recovery Date Preference</string>
-   	 
+    <string name="recoveryDatePrompt">Set Recovery Date or clear this message</string>
+    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>   	
+    <string name="howToRecoverToastNote">Go to settings to show Recovery Date again</string>
+    <string name="recoveryDatePreferencesTitle">Recovery Date Preferences</string>
+    <string name="recoveryDateAllowedPreferenceKey">recoveryDateAllowed</string>
+    <string name="recoveryDateAllowedPreferenceTitle">Show Recovery Date Note</string>
+    <string name="recoveryDateAllowedPreferenceSummary">Indicates if recovery date note should be shown</string>
+    <string name="recoveryDatePreferenceKey">recoveryDatePreference</string>
+    <string name="recoveryDatePreferenceTitle">Recovery Date</string>
+    <string name="recoveryDatePreferenceSummary">Set recovery date</string>
+    <string name="recoveryDateCongratulationsMsg">Congratulations on your %1$d%2$s day of recovery</string>
+    <string name="recoveryDateSelectDateInPastMsg">Select a recovery date in the past</string>
     <string name="timeFormatTitle">Time Format</string>
     <string name="timeFormatKey">timeFormat</string>
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
-
 
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
