@@ -169,8 +169,6 @@ public class MeetingListFragment extends ListFragment {
 		}
 	}
 	
-		
-	
 	private void sortList() {
 		String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
 		List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");

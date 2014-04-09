@@ -1,6 +1,7 @@
 package org.mcjug.aameetingmanager;
 
 import java.util.Calendar;
+
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
@@ -10,7 +11,6 @@ import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.meetingfinder.R;
 
-import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,7 +21,6 @@ import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.DatePicker;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,12 +28,10 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 
-
 public class AAMeetingManager extends SherlockFragmentActivity 
-	implements LogoutDialogFragment.LogoutDialogListener 
-{
-	private static final String TAG = AAMeetingManager.class.getSimpleName();
-	
+implements LogoutDialogFragment.LogoutDialogListener {
+
+	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
 
 	/**
@@ -52,7 +49,7 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		findMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), FindMeetingFragmentActivity.class)
-						.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
 
@@ -60,16 +57,16 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		submitMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), SubmitMeetingFragmentActivity.class)
-						.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 
 			}
 		});
-		
+
 		ImageView settingsImageView = (ImageView)findViewById(R.id.settingsImageView);
 		settingsImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-		        startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class)
-                		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+				startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class)
+				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
 
@@ -77,51 +74,49 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		helpImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), HelpFragmentActivity.class)
-        		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
-		
-		initRecoveryText();
-		
+
+		initRecoveryText();		
 	}
 
 	public void initLoginLogoutButton() {
 		ImageView loginInImageView = (ImageView)findViewById(R.id.loginImageView);
 		final TextView loginTextView = (TextView)findViewById(R.id.loginTextView);
 		OnClickListener loginImageViewClickListener = null;
-		
+
 		Credentials credentials = Credentials.readFromPreferences(getApplicationContext());
-	
+
 		//toggle login/logout functionality
 		if (!credentials.isSet()) {
 			//show login button
 			loginInImageView.setImageResource(R.drawable.login);
 			loginTextView.setText(getString(R.string.login));
+
 			loginImageViewClickListener = new OnClickListener() {
 				public void onClick(View v) {
-		            startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
-		            		.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+					startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
+					.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 				}
 			};
-			
+
 		} else {
-			//show logout button
+			// show logout button
 			loginInImageView.setImageResource(R.drawable.logout);
 			loginTextView.setText(getString(R.string.logout));
-			
+
 			loginImageViewClickListener = new OnClickListener() {
 				public void onClick(View v) {
-					LogoutDialogFragment logoutDialogFragment = 
-						new LogoutDialogFragment();
-					
+					LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();					
 					logoutDialogFragment.show(getSupportFragmentManager(), LOGOUT_TAG);
 				}
 			};
 		}
-		
+
 		loginInImageView.setOnClickListener(loginImageViewClickListener);
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -130,141 +125,102 @@ public class AAMeetingManager extends SherlockFragmentActivity
 	}
 
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
-		
 		Credentials.removeFromPreferences(getApplicationContext());
-		
 		initLoginLogoutButton();
 	}
-	
-	/***************************************************************/
-	
-	public void initRecoveryText () {
+
+	private void initRecoveryText () {
 		TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
-		// textView = (TextView) findViewById(R.id.textViewRecoveryDateBlock);
-		
-		if (DateTimeUtil.getRecoveryDateAllowed (getApplicationContext())){
+
+		if (DateTimeUtil.getRecoveryDateAllowed(getApplicationContext())) {
 			Calendar recoveryDate = DateTimeUtil.getRecoveryDate(getApplicationContext());
-			if (buildRecoveryDateText(this.getApplicationContext(), recoveryDate, textView)) {
-				SpannableString link = makeLinkSpan("Date", new View.OnClickListener() {          
-	                @Override
-	                public void onClick(View view) {
-	                	onClickShowDatePickerDialog(view);
-	                }
-	            });
-				textView.append(link);
+			if (buildRecoveryDateText(getApplicationContext(), recoveryDate, textView)) {
+
+				String recoveryDatePrompt = getApplicationContext().getString(R.string.recoveryDatePrompt);
+				SpannableString link = new SpannableString(recoveryDatePrompt);
+				int spanStart = recoveryDatePrompt.indexOf("Recovery Date");
+				makeLinkSpan(link, spanStart, spanStart + "Recovery Date".length(), setDateClickListener);
 				makeLinksFocusable(textView);
+				textView.setText(link);				
 			}
-			// textView.setVisibility(View.VISIBLE);
+
 			ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
 			imageButton.setVisibility(View.VISIBLE);
-		}
-		else {
-			
+		} else {
 			textView.setVisibility(View.GONE);
-			//textView = (TextView) findViewById(R.id.textViewRecoveryDateBlock);
-			//textView.setVisibility(View.GONE);
 			ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
 			imageButton.setVisibility(View.GONE);
 		}
-	}
-	
-	public static boolean buildRecoveryDateText(Context context, Calendar recoveryDate, TextView textView) {
+	}	
+
+	private View.OnClickListener setDateClickListener = new View.OnClickListener() {
+		@Override
+		public void onClick(View view) {
+			startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class).
+					addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+		}
+	};
+
+	private static boolean buildRecoveryDateText(Context context, Calendar recoveryDate, TextView textView) {
 		boolean needToAddDate = false;
 		textView.setVisibility(View.VISIBLE);
+
 		if (recoveryDate != null) {
 			Calendar today = Calendar.getInstance();
 			long diffInMillisec = today.getTimeInMillis() - recoveryDate.getTimeInMillis();
 			if (diffInMillisec >= 1) {
 				long diffInDays = diffInMillisec / (24 * 60 * 60 * 1000) + 1;
-				String s = "Congratulations on your " + diffInDays + 
-								DateTimeUtil.getOrdinalFor ((int) diffInDays) + " day of recovery";
-				textView.setText(s);
+				String ordinal = DateTimeUtil.getOrdinalFor ((int) diffInDays);
+				String congratulationsMsg = context.getString(R.string.recoveryDateCongratulationsMsg);
+				String message = String.format(congratulationsMsg, diffInDays, ordinal);
+
+				textView.setText(message);
+			} else {
+				textView.setText(context.getString(R.string.recoveryDateSelectDateInPastMsg));
 			}
-			else {
-				textView.setText("Select a recovery date in past");
-			}
-		}
-		else {
-			textView.setText(context.getString(R.string.recoveryDatePrompt));
+		} else {
 			needToAddDate = true;
 		}
+
 		return needToAddDate;
 	}
 
-	private static void makeLinksFocusable(TextView textView) {
+	private void makeLinksFocusable(TextView textView) {
 		MovementMethod movementMethodm = textView.getMovementMethod();  
-        if ((movementMethodm == null) || !(movementMethodm instanceof LinkMovementMethod)) {  
-            if (textView.getLinksClickable()) {  
-            	textView.setMovementMethod(LinkMovementMethod.getInstance());  
-            }  
-        }
+		if ((movementMethodm == null) || !(movementMethodm instanceof LinkMovementMethod)) {  
+			if (textView.getLinksClickable()) {  
+				textView.setMovementMethod(LinkMovementMethod.getInstance());  
+			}  
+		}
 	}
 
-	public static class DatePickerFragment extends DialogFragment
-    					implements DatePickerDialog.OnDateSetListener {
-		@Override
-	    public android.app.Dialog onCreateDialog(Bundle savedInstanceState) {
-			// If Recovery DAte was saved, use it as the default in the picker
-			Calendar c = DateTimeUtil.getRecoveryDate(getActivity());
-			if (c == null) {
-		        // If not set, use the current date
-		        c = Calendar.getInstance();
-			}
-	        int year = c.get(Calendar.YEAR);
-	        int month = c.get(Calendar.MONTH);
-	        int day = c.get(Calendar.DAY_OF_MONTH);
-
-	        // Create a new instance of DatePickerDialog and return it
-	        return new DatePickerDialog(getActivity(), this, year, month, day);
-	    }
-
-	    public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-	    	TextView topTextView = (TextView) getActivity(). findViewById(R.id.textViewRecoveryDate);
-	    	Calendar recoveryDate = Calendar.getInstance();
-	    	
-	    	recoveryDate.set(Calendar.YEAR, year);
-	    	recoveryDate.set(Calendar.MONTH, monthOfYear);
-	    	recoveryDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-	    	DateTimeUtil.setRecoveryDate( this.getActivity().getApplicationContext(), recoveryDate);
-	    	
-	    	buildRecoveryDateText(this.getActivity().getApplicationContext(), recoveryDate, topTextView);
-
-	    }
+	private void makeLinkSpan(SpannableString link, int spanStart, int spanEnd, View.OnClickListener listener) {
+		link.setSpan(new ClickableString(listener), spanStart, spanEnd, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
 	}
-	
-	// private static SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
-    private static SpannableString makeLinkSpan(CharSequence text, View.OnClickListener listener) {
-        SpannableString link = new SpannableString(text);
-        link.setSpan(new ClickableString(listener), 0, text.length(), 
-            SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-        return link;
-    }
-    
-	
-    private static class ClickableString extends ClickableSpan {  
-    	private View.OnClickListener mListener;          
-        public ClickableString(View.OnClickListener listener) {              
-            mListener = listener;  
-        }          
-        @Override  
-        public void onClick(View v) {  
-            mListener.onClick(v);  
-        }   
-    }
-    
-	public void onClickShowDatePickerDialog(View v) {
-		DialogFragment datePickerFragment = new DatePickerFragment();
-	    datePickerFragment.show(getSupportFragmentManager(), "datePicker");
-	};
-	
-	public void onClickHideRecoveryDate (View v) {
+
+	private static class ClickableString extends ClickableSpan {  
+		private View.OnClickListener mListener;          
+		public ClickableString(View.OnClickListener listener) {              
+			mListener = listener;  
+		} 
+
+		@Override  
+		public void onClick(View v) { 
+			mListener.onClick(v);  
+		}   
+	}    
+
+	public void onClickHideRecoveryDate (View view) {
 		TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
 		textView.setVisibility(View.GONE);
+
 		ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
 		imageButton.setVisibility(View.GONE);
+
 		DateTimeUtil.setRecoveryDateAllowed(getApplicationContext(), false);
+
 		Toast.makeText(getApplicationContext(), 
 				getApplicationContext().getString(R.string.howToRecoverToastNote), 
-				Toast.LENGTH_SHORT).show();	
+				Toast.LENGTH_LONG).show();	
 	}
 }

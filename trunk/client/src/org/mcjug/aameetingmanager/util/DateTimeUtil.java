@@ -100,17 +100,6 @@ public class DateTimeUtil {
 		calendar.setTime(meetingTime);
 		int targetHours = calendar.get(Calendar.HOUR_OF_DAY);
 		int targetMinutes = calendar.get(Calendar.MINUTE);
-		
-		// Normalize start times to a round quarter an hour
-//		if (targetMinutes < 15)
-//			targetMinutes = 0;
-//		else if (targetMinutes < 30)
-//			targetMinutes = 15;
-//		else if (targetMinutes < 45)
-//			targetMinutes = 30;
-//		else
-//			targetMinutes = 45;
-	
 		calendar.setTime(new Date());
 		
 		int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
@@ -145,49 +134,21 @@ public class DateTimeUtil {
 		}
 	}
 
-	public static void resetRecoveryDate (Context context){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor editor = prefs.edit();
-		editor.remove(context.getString(R.string.recoveryDateValue));
-		editor.commit();
-	}
-	
 	public static Calendar getRecoveryDate (Context context) {
-		Calendar recoveryDate = null;
-		// recoveryDate.setTime(new Date(Long.MAX_VALUE));
-		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		long longRecoveryDate = prefs.getLong(context.getString(R.string.recoveryDateValue), 0);
-		if (longRecoveryDate > 0) {
-			recoveryDate = Calendar.getInstance();
-			recoveryDate.setTime(new Date(longRecoveryDate));
-		}
-		return (recoveryDate);
-	}
-	
-	public static void setRecoveryDate (Context context, Calendar calendar){
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		Editor editor = prefs.edit();
-		long longRecoveryDate = calendar.getTimeInMillis();
-		editor.putLong(context.getString(R.string.recoveryDateValue), longRecoveryDate);
-		editor.commit();
+		Calendar recoveryDate = RecoveryDatePreference.getDateFor(PreferenceManager.getDefaultSharedPreferences(context), 
+				context.getString(R.string.recoveryDatePreferenceKey));
+		return recoveryDate;
 	}
 	
 	public static boolean getRecoveryDateAllowed (Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		boolean boolRecoveryDateAllowed = prefs.getBoolean(context.getString(R.string.recoveryDateAllowed), true);
-		return (boolRecoveryDateAllowed);
+		return prefs.getBoolean(context.getString(R.string.recoveryDateAllowedPreferenceKey), true);
 	}
 	
 	public static void setRecoveryDateAllowed (Context context, boolean value) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Editor editor = prefs.edit();
-		editor.putBoolean(context.getString(R.string.recoveryDateAllowed), value);
-		/*
-		if (!value)
-			editor.remove(context.getString(R.string.recoveryDateValue));
-		*/
+		editor.putBoolean(context.getString(R.string.recoveryDateAllowedPreferenceKey), value);
 		editor.commit();
 	}
-	
 }
