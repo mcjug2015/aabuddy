@@ -115,12 +115,14 @@ public class LocationUtil {
 		} catch (Exception e) {
 		    Log.d(TAG, "Error getting address");
 		}
+		
 		/*********** If does not work - imitate **************/
-		if (location == null) {
-			 location = new Address(Locale.getDefault());
-			 location.setLatitude(38.9867417000000032);
-			 location.setLongitude(-77.1008364999999998);
-		}
+//		if (location == null) {
+//			 location = new Address(Locale.getDefault());
+//			 location.setLatitude(38.9867417000000032);
+//			 location.setLongitude(-77.1008364999999998);
+//		}
+		
 		return location;
 	}	
 }
