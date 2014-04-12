@@ -389,8 +389,7 @@ public class MeetingListFragment extends ListFragment {
 		AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
 		String deleteMeetingMsg = String.format(getString(R.string.deleteMeetingConfirmMsg), selectedMeeting.getName());
-		builder.setTitle(R.string.deleteMeetingConfirmTitle)
-		.setMessage(deleteMeetingMsg)
+		builder.setTitle(R.string.deleteMeetingConfirmTitle).setMessage(deleteMeetingMsg)
 
 		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 			@Override
