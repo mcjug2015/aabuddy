@@ -175,8 +175,6 @@ implements LogoutDialogFragment.LogoutDialogListener {
 				String message = String.format(congratulationsMsg, diffInDays, ordinal);
 
 				textView.setText(message);
-			} else {
-				textView.setText(context.getString(R.string.recoveryDateSelectDateInPastMsg));
 			}
 		} else {
 			needToAddDate = true;

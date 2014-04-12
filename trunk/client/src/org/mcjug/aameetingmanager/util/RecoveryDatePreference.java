@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.mcjug.meetingfinder.R;
+
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,12 +19,19 @@ import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.DatePicker;
+import android.widget.Toast;
 
 public class RecoveryDatePreference extends DialogPreference implements DatePicker.OnDateChangedListener {
 
+	/*
+	 * https://github.com/bostonandroid/DatePreference
+	 */
+	
 	private String dateString;
 	private String changedValueCanBeNull;
 	private DatePicker datePicker;
+	private boolean okButtonClicked = false;
+	private boolean valueValid = true;
 
 	public RecoveryDatePreference(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
@@ -164,7 +173,7 @@ public class RecoveryDatePreference extends DialogPreference implements DatePick
 	 */
 	public void onDateChanged(DatePicker view, int year, int month, int day) {
 		Calendar selected = new GregorianCalendar(year, month, day);
-		this.changedValueCanBeNull = formatter().format(selected.getTime());
+		changedValueCanBeNull = formatter().format(selected.getTime());
 	}
 
 	/**
@@ -173,11 +182,20 @@ public class RecoveryDatePreference extends DialogPreference implements DatePick
 	 */
 	@Override
 	protected void onDialogClosed(boolean shouldSave) {
-		if (shouldSave && this.changedValueCanBeNull != null) {
-			setTheDate(this.changedValueCanBeNull);
-			this.changedValueCanBeNull = null;
+		if (valueValid && shouldSave && changedValueCanBeNull != null) {
+			setTheDate(changedValueCanBeNull);
+			changedValueCanBeNull = null;
 		}
 	}
+
+	public void onDismiss(DialogInterface dialog) {
+		if (valueValid || !okButtonClicked) {
+			super.onDismiss(dialog);
+		} else {
+			Toast.makeText(getContext(), getContext().getString(R.string.recoveryDateSelectDateInPastMsg), Toast.LENGTH_LONG).show();
+			getDialog().show();
+		}
+	} 
 
 	private void setTheDate(String s) {
 		setDate(s);
@@ -221,9 +239,16 @@ public class RecoveryDatePreference extends DialogPreference implements DatePick
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		super.onClick(dialog, which);
-		datePicker.clearFocus();
-		onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
-		onDialogClosed(which == DialogInterface.BUTTON1); // OK?
+		okButtonClicked = (which == DialogInterface.BUTTON1 ? true: false);
+		Calendar selected = new GregorianCalendar(datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+		if (selected.before(Calendar.getInstance())) {	
+			valueValid = true;
+			datePicker.clearFocus();
+			onDateChanged(datePicker, datePicker.getYear(), datePicker.getMonth(), datePicker.getDayOfMonth());
+			onDialogClosed(which == DialogInterface.BUTTON1); // OK?
+		} else {
+			valueValid = false;
+		}
 	}
 
 	/**
