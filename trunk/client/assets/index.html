@@ -34,7 +34,7 @@ p.subtitle {
 	display: none;
 	padding-bottom: 1px;
 	background-color: #DFF;
-	
+
 }
 a.showLink, a.hideLink {
 	text-decoration: none;
@@ -53,7 +53,13 @@ a.showLink, a.hideLink {
           <br/>
           The main features are:
           <ul>
-           
+
+            <li> <b>Set Recovery Date:</b>
+			  <ul>
+			    <li><b>Show Recovery Date Note</b> Indicates if a Recovery Date note should be shown.</li>
+			    <li><b>Recover Date</b> Set a Recovery Date that applies to your recovery.</li>
+			  </ul>
+            </li>
             <li> <b>Find Meeting:</b>
               <ul>
                 <li><b>Select Meetings</b> that interest you</li>
@@ -63,10 +69,45 @@ a.showLink, a.hideLink {
             </li>
              <li><b>Add Meeting:</b> Create a record for a new meeting. You must be logged in to access this feature.
           </ul><br/>
-          The addtition features are: <b>Settings</b>, and <b>Log In</b> / <b>Log Out</b> <br/>
+          The addtition features are: <b>Settings</b>, <b>Auto Scrolling</b>, <b>Time Format</b>,and <b>Log In</b> / <b>Log Out</b> <br/>
           <br/>
           <h4>Feature Details</h4>
           <ul>
+           <li> <a href="#" id="recovery_date_show" class="showLink" onclick="showHide('recovery_date');return false;"><b>Set Recovery Date Note</b> </a>
+		           <div id="recovery_date" class="more">
+
+		                  <b>Steps to show a Recovery Date Note:</b>
+		                  <ol>
+		                    <li>Select the <b>Show Recovery Date</b> link located on top of the Main Screen.</li>
+		                    <li>On the Setting Screen, select the <b>Show Recovery Date Note</b> check-box ( Note: it will turn green once it is selected).</li>
+		                  </ol>
+		                  <br/>
+		                  <b>Steps to set a Recovery Date:</b>
+						  <ol>
+						    <li>Select the <b>Show Recovery Date</b> link located on top of the Main Screen.</li>
+						    <li>On the Setting Screen, select the <b>Recovery Date</b> link.</li>
+						    <li>Define the <b> Recovery Date </b>, select the <b>Month</b>, <b>Day</b>, and <b>Year</b>.</li>
+						    <li>Click the <b>OK</b> command button if all inputs are correct.</li>
+						    <li>Next, your are returned to the <b>Settings</b> screen and your <b>Recovery Date</b> is displayed in lower part of the screen.</li>
+						    <li>Note, the application tracks & displays your recovery.</li>
+						  </ol>
+		                  <br/>
+		              <p> <a href="#" class="hideLink" onclick="showHide('recovery_date');return false;">Hide <b>Set Recovery Date Note</b> content.</a> </p>
+		            </div>
+             </li>
+            <li> <a href="#" id="time_format_show" class="showLink" onclick="showHide('time_format');return false;"><b>Time Format</b> </a>
+              <div id="time_format" class="more">
+                <b>Steps to set the Time Format:</b>
+                <ol>
+                  <li>Select the <b>Settings</b> icon on the Main Screen.</li>
+                  <li>Select the <b>Time Format</b> link on the Settings Screen.</li>
+                  <li>Select either the <b>12 hour(AM/PM)</b> radio button or the <b>24 hour(0:00 - 23:59)</b> radio button.</li>
+                  <li>Note, your are returned to <b>Settings</b> screen.</li>
+                </ol>
+                <br/>
+                <p> <a href="#" class="hideLink" onclick="showHide('time_format');return false;">Hide <b>Time Format</b> content.</a> </p>
+              </div>
+            </li>
             <li> <a href="#" id="add_meeting_show" class="showLink" onclick="showHide('add_meeting');return false;"><b>Add Meeting</b> </a>
               <div id="add_meeting" class="more"> <b>Prerequisites:</b> To add meeting you must  first register with an email account and subsequently log in. <br/>
                 <br/>
@@ -121,7 +162,7 @@ a.showLink, a.hideLink {
             </li>
             <li> <a href="#" id="login_show" class="showLink" onclick="showHide('login');return false;"><b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b> </a>
               <div id="login" class="more"> Click the <b>Log In</b> icon to find three features, <b>Login to Add a Meeting</b>, <b>Register</b>, and <b>Reset Password</b> in the <b>Log In</b> screen. Note, the <b>Log In</b> icon will be replaced by the <b>Log Out</b> icon after you log in at the first time.  <br/>
-              	
+
                 <br/><h4>Feature Details</h4>
                 <a href="#" id="login_to_show" class="showLink" onclick="showHide('login_to');return false;"><b>Login to Add a Meeting</b> </a>
                 <div id="login_to" class="more_l2"> Using the same device you only have to log in once per version of Meeting Finder.
@@ -132,7 +173,7 @@ a.showLink, a.hideLink {
                     <li>Enter the email address you use to register and your password</li>
                     <li>Click <b>Log In </b>button</li>
                   </ol>
-                  
+
                   <p> <a href="#" class="hideLink" onclick="showHide('login_to');return false;">Hide <b>Login to Add a Meeting</b> content.</a> </p>
                 </div>
                 <br />
@@ -172,7 +213,7 @@ a.showLink, a.hideLink {
                 <p> <a href="#" class="hideLink" onclick="showHide('login');return false;">Hide <b>Log In</b> / <b>Log Out</b>, <b>Register</b>, and <b>Reset Password</b> content.</a> </p>
               </div>
             </li>
-            
+
           </ul>
         </div>
 </body>
