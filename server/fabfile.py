@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from fabric.api import env, local, sudo, require, run, put, settings, cd
+from fabric.api import env, local, sudo, require, run, put, settings, cd, lcd
 import os
 import sys
 import time
@@ -16,14 +16,12 @@ env.reject_unknown_hosts = False
 env.mysql_super_user = 'root'
 
 def localvm():
-    "Use a local vmware instance"
-    env.hosts = ['127.0.0.1:2222'] # replace by the one appropriate for you
-    env.start_user = 'root' # the initial user pre-installed on image
     env.path = '/var/www/%(prj_name)s' % env
     env.virtualhost_path = env.path
     env.tmppath = '/var/tmp/django_cache/%(prj_name)s' % env
     env.deployment = 'localvm'
-    env.use_ssh_keys = False
+    env.user = 'clonobyte'
+    env.release = 'initial'
 
 def prod():
     env.hosts = ['mcasg.org'] # replace by the one appropriate for you
@@ -76,6 +74,13 @@ def test():
 def clean():
     '''Cleans up generated files from the local file system'''
     local('rm -rf reports')
+
+
+def refresh_local():
+    dev_setup()
+    install_site()
+    local_migrate()
+    restart_webserver()
 
 
 def setup_user():
@@ -180,7 +185,9 @@ def setup():
     
     #psycopg2 make sure pg_config is on the path.
     #run('cd ~/; source .profile; cd %(path)s; source local-python/bin/activate; easy_install psycopg2' % env, pty=True)
-    
+    # or
+    #sudo yum install postgresql92-devel.x86_64
+    #PATH=$PATH:/usr/pgsql-9.2/bin/ pip install psycopg2
     
     '''
     Turn database into postgis2.0 database
@@ -263,13 +270,19 @@ def upload_local_archive():
 def install_site():
     "Add the virtualhost config file to the webserver's config, activate logrotate"
     require('release')
-    with cd('%(path)s/releases/%(release)s/%(prj_name)s' % env):
-        if env.deployment == 'localvm':
-            sudo('cp environments/%(deployment)s/aabuddy.conf /etc/httpd/conf.d/%(prj_name)s.conf' % env, pty=True)
-        elif env.deployment == 'prod':
+    
+    if env.deployment == 'localvm':
+        with lcd('%(path)s/releases/%(release)s/%(prj_name)s' % env):
+            local('sudo rm -f /etc/httpd/conf.d/clonobyte.conf')
+            local('sudo cp environments/%(deployment)s/aabuddy.conf /etc/httpd/conf.d/%(prj_name)s.conf' % env)
+        with lcd('%(path)s/releases/%(release)s' % env):
+            local('rm -rf static')
+            local('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.7/site-packages/django/contrib/admin/static/admin/ admin' % env)
+    elif env.deployment == 'prod':
+        with cd('%(path)s/releases/%(release)s/%(prj_name)s' % env):
             sudo('cp environments/%(deployment)s/aabuddy.conf /usr/local/apache/conf/includes/%(prj_name)s.conf' % env, pty=True)
-    with cd('%(path)s/releases/%(release)s' % env):
-        run('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.7/site-packages/django/contrib/admin/static/admin/ admin' % env)
+        with cd('%(path)s/releases/%(release)s' % env):
+            run('mkdir static && cd static && ln -s %(path)s/local-python/lib/python2.7/site-packages/django/contrib/admin/static/admin/ admin' % env)
 
 
 def install_requirements():
@@ -293,6 +306,17 @@ def remote_test():
         run('%(path)s/local-python/bin/python manage.py test --settings=settings --verbosity=2 --with-xunit --xunit-file=reports/nosetests.xml --cover-package=aabuddy --cover-html --cover-erase --cover-html-dir=reports/coverage' % env)
 
 
+def local_migrate():
+    require('prj_name')
+    require('path')
+    with lcd('%(path)s/releases/initial/%(prj_name)s' % env):
+        local('cp environments/%(deployment)s/%(deployment)s_settings.py local_settings.py' % env)
+        local('%(path)s/local-python/bin/python manage.py syncdb --noinput --settings=settings' % env)
+        local('%(path)s/local-python/bin/python manage.py migrate --settings=settings aabuddy' % env)
+        local('%(path)s/local-python/bin/python manage.py migrate --settings=settings tastypie' % env)
+        local('%(path)s/local-python/bin/python manage.py loaddata aabuddy initial_users --settings=settings' % env)
+
+
 def migrate():
     "Update the database"
     require('prj_name')
@@ -309,6 +333,6 @@ def restart_webserver():
     "Restart the web server"
     with settings(warn_only=True):
         if env.deployment == 'localvm':
-            sudo('service httpd restart')
+            local('sudo service httpd restart')
         elif env.deployment == 'prod':
             sudo('cd /usr/local/apache/bin; ./apachectl restart;', pty=True)
