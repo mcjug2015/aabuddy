@@ -1,9 +1,9 @@
 ''' Test package for views.py '''
 from django.test import TestCase
 import django.core.mail as django_mail
-from aabuddy.views import temp_meeting_to_json_obj, temp_json_obj_to_meeting,\
-    DayOfWeekGetParams, TimeParams, get_meetings_count_query_set,\
-    send_email_to_user, get_json_obj_for_meetings
+from aabuddy.views import (temp_meeting_to_json_obj, temp_json_obj_to_meeting,
+                           DayOfWeekGetParams, TimeParams, get_meetings_count_query_set,
+                           send_email_to_user, get_json_obj_for_meetings)
 from aabuddy.models import Meeting
 import datetime
 from django.contrib.auth.models import User

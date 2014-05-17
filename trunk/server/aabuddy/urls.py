@@ -1,13 +1,13 @@
 ''' urls module for aa buddy app '''
-#from tastypie.api import Api
-#from aabuddy.api import MeetingNotThereResource
-from django.conf.urls import patterns, url#, include
+from tastypie.api import Api
+from aabuddy.api import ServerMessageResource
+from django.conf.urls import patterns, url, include
 
-#AABUDDY_API = Api(api_name="v1")
-#AABUDDY_API.register(MeetingNotThereResource())
+AABUDDY_API = Api(api_name="v1")
+AABUDDY_API.register(ServerMessageResource())
 
 urlpatterns = patterns('',
-#    url(r'^api/', include(AABUDDY_API.urls)),
+    url(r'^api/', include(AABUDDY_API.urls)),
     url(r'^get_meetings', 'aabuddy.views.get_meetings_within_distance'),
     url(r'^get_meeting_by_id', 'aabuddy.views.get_meeting_by_id'),
     url(r'^save_meeting', 'aabuddy.views.save_meeting'),

@@ -1,6 +1,6 @@
 from django.contrib.gis import admin
 from aabuddy.models import Meeting, UserConfirmation, MeetingNotThere,\
-    PsvFileUpload, NotThereView, ActiveNotTheresView
+    PsvFileUpload, NotThereView, ActiveNotTheresView, ServerMessage
 from django import forms
 from django.core.exceptions import ValidationError
 import tempfile
@@ -154,3 +154,4 @@ admin.site.register(MeetingNotThere, MeetingNotThereAdmin)
 admin.site.register(PsvFileUpload, PsvFileUploadAdmin)
 admin.site.register(NotThereView, NotThereViewAdmin)
 admin.site.register(ActiveNotTheresView, ActiveMeetingNotThereViewAdmin)
+admin.site.register(ServerMessage)
