@@ -77,6 +77,7 @@ class MeetingNotThere(classic_models.Model):
     def __str__(self):
         return ("Not There id: %s, host: %s" % (str(self.pk), str(self.request_host)))
 
+
 class NotThereView(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.DO_NOTHING, null=False, blank=False)
     not_there_count = models.IntegerField()
@@ -86,6 +87,7 @@ class NotThereView(models.Model):
     def __str__(self):
         return ("NTV row meeting_name: %s, count: %s" % (str(self.meeting_name), str(self.not_there_count)))
 
+
 class ActiveNotTheresView(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING, null=True, blank=True)
     unique_phone_id = models.CharField(max_length=400, null=True, blank=True)
@@ -93,9 +95,17 @@ class ActiveNotTheresView(models.Model):
     distinct = models.IntegerField()
     created_date = models.DateTimeField()
 
+
 class UserConfirmation(models.Model):
     user = models.ForeignKey(User, related_name='confirmations', null=False, blank=False, on_delete=models.CASCADE)
     created_date = models.DateTimeField(null=False, blank=False, default=datetime.datetime.now())
     expiration_date = models.DateTimeField(null=False, blank=False)
     confirmation_key = models.CharField(max_length=64, null=False, blank=False)
-    
+
+
+class ServerMessage(models.Model):
+    created_date = models.DateTimeField(auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True)
+    message = models.TextField()
+    short_message = models.CharField(null=True, blank=True, max_length=255)
+    is_active = models.BooleanField(default=True)
