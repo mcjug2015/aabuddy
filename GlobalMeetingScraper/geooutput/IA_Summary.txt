@@ -1,6 +1,0 @@
-Among files Addresses_output_nn.txt, there are 3353 distinct addresses which have valid latitude and longitude.
-
-
-There are 9693 meetings total.
-There are 9655 meetings having valid latitude and longitude.
-There are 38 meetings NOT having valid latitude and longitude.
