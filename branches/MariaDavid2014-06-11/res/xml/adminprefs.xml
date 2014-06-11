@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- Password Preferences -->
+    <PreferenceCategory android:title="@string/passwordPreferencesTitle" >
+        <Preference
+            android:key="@+string/changePasswordPreferenceKey"
+            android:summary="@string/changePasswordPreferenceSummary"
+            android:title="@string/changePasswordPreferenceTitle" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="org.mcjug.aameetingmanager.authentication.ChangePasswordFragmentActivity"
+                android:targetPackage="org.mcjug.meetingfinder" />
+        </Preference>
+        <Preference
+            android:key="@+string/resetPasswordPreferenceKey"
+            android:title="@string/resetPasswordPreferenceTitle" >
+            <intent
+                android:action="android.intent.action.VIEW"
+                android:targetClass="org.mcjug.aameetingmanager.authentication.ResetPasswordFragmentActivity"
+                android:targetPackage="org.mcjug.meetingfinder" />
+        </Preference>
+    </PreferenceCategory>
+
+    <!-- Time Preferences -->
+    <PreferenceCategory android:title="@string/timePreferencesTitle" >
+        <ListPreference
+            android:defaultValue="12"
+            android:entries="@array/timeFormat"
+            android:entryValues="@array/timeFormatValues"
+            android:key="@string/timeFormatKey"
+            android:summary="@string/timeFormatSummary"
+            android:title="@string/timeFormatTitle" />
+    </PreferenceCategory>
+
+    <!-- Recovery Date Preferences -->
+    <PreferenceCategory android:title="@string/recoveryDatePreferencesTitle" >
+        <CheckBoxPreference
+            android:id="@+id/recoveryDateAllowedCheckbox"
+            android:defaultValue="true"
+            android:key="@string/recoveryDateAllowedPreferenceKey"
+            android:summary="@string/recoveryDateAllowedPreferenceSummary"
+            android:title="@string/recoveryDateAllowedPreferenceTitle" />
+
+        <org.mcjug.aameetingmanager.util.RecoveryDatePreference
+            android:key="@string/recoveryDatePreferenceKey"
+            android:summary="@string/recoveryDatePreferenceSummary"
+            android:title="@string/recoveryDatePreferenceTitle" />
+        
+    </PreferenceCategory>
+
+</PreferenceScreen>
