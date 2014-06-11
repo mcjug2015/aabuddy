@@ -1,5 +1,0 @@
-django==1.5.8
-South==0.8.4
-django-tastypie==0.11.0
-django_nose==0.1.3
-django_logtail==0.0.6
