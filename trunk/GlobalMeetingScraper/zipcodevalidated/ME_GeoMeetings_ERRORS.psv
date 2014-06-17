@@ -65,14 +65,75 @@ Sunday Night|Location is: Divine Word Seminary|1|20:00:00|21:00:00|101 Park St.,
 Mexico Tuesday Nite|Location is: Presbyterian Church|3|20:00:00|21:00:00|New York 69, Mexico, ME 13114|44.1256221|-70.89251150000001
 COMMUNITY CENTER|Location is: COMMUNITY CENTER|1|19:30:00|20:30:00|US 33, Wolf Lake, ME 12790|43.6451709|-70.72662149999996
 #1 Group|Location is: St. Patricks RC Church|1|20:00:00|21:00:00|235 Glen St, Glen Cove, ME 11542|44.122146|-69.09744649999999
+AA ON THE HILL|Location is: Community Room|1|18:00:00|19:00:00|1344 Nelson Av , , ME |47.34423779999999|-68.36871630000002
+AA ON THE HILL|Location is: Community Room|5|19:00:00|20:00:00|1344 Nelson Av , , ME |47.34423779999999|-68.36871630000002
+MONROE SUN RISERS/SUNSET|Location is: Monroe United Methodist Church|2|19:00:00|20:00:00|47 Maple Av   , New York, ME |43.0966537|-70.77388100000002
+MONROE SUN RISERS/SUNSET|Location is: Monroe United Methodist Church|7|null|N/A|47 Maple Av   , New York, ME |43.0966537|-70.77388100000002
+MIDDLETOWN MIRACLE|Location is: St. Paul's United Methodist Church|3|19:30:00|20:30:00|58 W Main St    , New York, ME |43.1008551|-70.77488690000001
 NORWALK NO BOOZE|Location is: Congregational Church on the Green|2|20:00:00|21:00:00|59 East Ave, Valley Stream, ME 11580|45.0506242|-70.0567691
 NORWALK|Location is: St. Paul's Episcopal Church|5|20:30:00|21:30:00|60 East Ave, Valley Stream, ME 11580|45.0506242|-70.0567691
 NORWALK|Location is: St. Paul's Episcopal Church|7|20:30:00|21:30:00|60 East Ave, Valley Stream, ME 11580|45.0506242|-70.0567691
+BELLMORE THERE IS A LIGHT|Location is: East Bay Reform Temple|1|19:00:00|20:00:00|2569 Merrick Road , , ME |43.2708062|-70.86872
+BELLMORE THERE IS A LIGHT|Location is: East Bay Reform Temple|4|20:00:00|21:00:00|2569 Merrick Road , , ME |43.2708062|-70.86872
+FISHKILL S.O.S. (SERENITY ON SATURDAY)|Location is: Church of the Nazarene|7|13:00:00|14:00:00|953 Main St , New York, ME |43.1102368|-70.78584030000002
+PEEKSKILL                         (:III)|Location is: United Methodist Church|7|10:30:00|11:30:00|1040 Main Street  , New York, ME |43.110253|-70.7858109
+PEEKSKILL PATHWAY TO SOBRIETY|Location is: Peekskill Area Health Center|3|19:00:00|20:00:00|1045 Main St , New York, ME |43.1102368|-70.78584030000002
+BRIDGEHAMPTON-FIRESIDE|Location is: Presbyterian Church of Bridgehampton|6|20:00:00|21:00:00|2429 Main Street , New York, ME |43.1147317|-70.79194940000002
+PARK BENCH|Location is: Central Presbyterian Church|2|00:15:00|01:15:00|593 Park Avenue, 5th Floor , New York, ME |43.0898591|-70.75276930000001
+PARK BENCH|Location is: Central Presbyterian Church|3|00:15:00|01:15:00|593 Park Avenue, 5th Floor , New York, ME |43.0898591|-70.75276930000001
+PARK BENCH|Location is: Central Presbyterian Church|5|00:15:00|01:15:00|593 Park Avenue, 5th Floor , New York, ME |43.0898591|-70.75276930000001
+ATLANTIC GROUP (:I)|Location is: Christ United Methodist Church|3|19:00:00|20:00:00|520 Park Avenue , New York, ME |43.0898591|-70.75276930000001
+ATLANTIC GROUP (:I)|Location is: Christ United Methodist Church|5|19:00:00|20:00:00|520 Park Avenue , New York, ME |43.0898591|-70.75276930000001
+PORT WASHINGTON SOBER ON MAIN|Location is: Port Washington Counseling Center|3|null|N/A|225 Main Street  , New York, ME |43.1146429|-70.79186379999999
+PORT WASHINGTON SOBER ON MAIN|Location is: Port Washington Counseling Center|7|11:00:00|12:00:00|225 Main Street  , New York, ME |43.1146429|-70.79186379999999
+WEST NYACK|Location is: St. Anthony's Church|2|20:00:00|21:00:00|34 E Rt 59 , New York, ME |43.0861262|-70.74696829999999
+WEST NYACK|Location is: St. Anthony's Church|7|20:00:00|21:00:00|34 E Rt 59 , New York, ME |43.0861262|-70.74696829999999
+HUNTINGTON|Location is: Old First Church|1|18:45:00|19:45:00|125 Main Street  , New York, ME |43.1086721|-70.78367379999997
+HUNTINGTON|Location is: Old First Church|3|13:00:00|14:00:00|125 Main Street  , New York, ME |43.1086721|-70.78367379999997
+HUNTINGTON|Location is: Old First Church|4|19:15:00|20:15:00|125 Main Street  , New York, ME |43.1086721|-70.78367379999997
+STONY POINT KEEP ON STEPPIN'|Location is: Stony Point Presbyterian Church|4|10:30:00|11:30:00|125 W Main St  , New York, ME |43.1086721|-70.78367379999997
+STONY POINT NEW LIGHT|Location is: Stony Point Presbyterian Church|1|19:30:00|20:30:00|125 W Main St  , New York, ME |43.1086721|-70.78367379999997
+MIDDLETOWN ONE DAY AT A TIME|Location is: First Congregational Church|3|18:00:00|19:00:00|35 East Main Street  , New York, ME |43.1147317|-70.79194940000002
+ST. BART'S TWELVE-THIRTIES|Location is: St. Bartholomew's Church|2|00:30:00|01:30:00|325 Park Avenue , New York, ME |43.0898591|-70.75276930000001
+ST. BART'S TWELVE-THIRTIES|Location is: St. Bartholomew's Church|4|00:30:00|01:30:00|325 Park Avenue , New York, ME |43.0898591|-70.75276930000001
+ST. BART'S TWELVE-THIRTIES|Location is: St. Bartholomew's Church|6|00:30:00|01:30:00|325 Park Avenue , New York, ME |43.0898591|-70.75276930000001
+YONKERS THE NEW BEGINNING|Location is: Yonkers General Hospital|1|18:00:00|19:00:00|2 Park Av , New York, ME |43.0904383|-70.75375400000001
+MASSAPEQUA PARK|Location is: Community Methodist Church|2|11:30:00|12:30:00|100 Park Blvd  , New York, ME |43.0894412|-70.75210149999998
+MASSAPEQUA PARK|Location is: Community Methodist Church|5|20:00:00|21:00:00|100 Park Blvd  , New York, ME |43.0894412|-70.75210149999998
+MASSAPEQUA PARK|Location is: Community Methodist Church|6|17:30:00|18:30:00|100 Park Blvd  , New York, ME |43.0894412|-70.75210149999998
 BEHIND THE WALLS|Location is: GSO OFFICES|1|01:00:00|02:00:00|468 PARK AVE, new york, ME 10016|43.0898591|-70.75276930000001
+FRIDAY NIGHT WOMEN'S GROUP|Location is: Olivet Presbyterian Church|6|19:00:00|20:00:00|97 Myrtle Avenue , New York, ME |43.4161167|-70.97866090000002
+TUESDAY NITE DISCUSSION|Location is: St. Philip's Episcopal Church|3|18:30:00|19:30:00|265 Decatur St , New York, ME |43.0828526|-70.74337930000002
+NYACK|Location is: Grace Episcopal Church|2|19:00:00|20:00:00|130 First Avenue , New York, ME |43.2627977|-70.85957129999997
+NYACK|Location is: Grace Episcopal Church|5|19:30:00|20:30:00|130 First Avenue , New York, ME |43.2627977|-70.85957129999997
 100-101|Location is: Auburn,NY|1|10:30:00|11:30:00|State St, Auburn, ME 13021|44.0892399|-70.23505439999997
+YOUNG AND WISE|Location is: Interfaith Yoga Center|6|20:00:00|21:00:00|25 1st Avenue, 2nd Floor , New York, ME |43.2635487|-70.85963559999999
+first in sobriety|Location is: Interfaith Yoga Center|2|03:00:00|04:00:00|25 First Avenue, 3rd Floor , New York, ME |43.2635487|-70.85963559999999
+ASTORIA WORKSHOP|Location is: Astoria Center for Israel|1|10:00:00|11:00:00|27-35 Crescent Street, Basement , New York, ME |43.1232027|-70.81010879999997
+ASTORIA WORKSHOP|Location is: Astoria Center for Israel|2|19:00:00|20:00:00|27-35 Crescent Street, Basement , New York, ME |43.1232027|-70.81010879999997
+ASTORIA WORKSHOP|Location is: Astoria Center for Israel|4|19:00:00|20:00:00|27-35 Crescent Street, Basement , New York, ME |43.1232027|-70.81010879999997
+CROTON SATURDAY MEN|Location is: Asbury United Methodist Church|7|10:00:00|11:00:00|19 Old Post Road, Basement , New York, ME |43.091404|-70.754005
+GRUPO UNA SOLUCION|Location is: Iglesia Episcopal San Andres|3|20:00:00|21:00:00|4917 4th Avenue, Basement , New York, ME |43.10702819999999|-70.78650089999996
+GRUPO UNA SOLUCION|Location is: Iglesia Episcopal San Andres|6|20:00:00|21:00:00|4917 4th Avenue, Basement , New York, ME |43.10702819999999|-70.78650089999996
+JUST TRYING|Location is: Fordham Lutheran Church|2|00:30:00|01:30:00|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+JUST TRYING|Location is: Fordham Lutheran Church|3|00:30:00|01:30:00|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+JUST TRYING|Location is: Fordham Lutheran Church|4|00:30:00|01:30:00|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+JUST TRYING|Location is: Fordham Lutheran Church|5|00:30:00|01:30:00|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+JUST TRYING|Location is: Fordham Lutheran Church|6|00:30:00|01:30:00|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+ROOSEVELT ISLAND SERENITY|Location is: Chapel of the Good Shepherd|7|18:30:00|19:30:00|543 Main Street, Basement  , New York, ME |43.1090193|-70.78412500000002
+SOUTH BRONX|Location is: Saint Angela Merci Church Rectory|1|16:00:00|17:00:00|917 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+STRICTLY ALCOHOL|Location is: Fordham Lutheran Church|1|null|N/A|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
+STRICTLY ALCOHOL|Location is: Fordham Lutheran Church|7|null|N/A|2427 Morris Avenue, Basement , New York, ME |43.0822222|-70.739168
 Holcomb Monday Night|Location is: United Methodist Church|2|20:00:00|21:00:00|2 Park Place, Bloomfield, ME 07003|44.4700159|-68.31485800000002
+HI-STEPPERS|Location is: St. Christopher's Community Center|5|20:30:00|21:30:00|135 Midland Avenue , , ME |45.1796503|-67.289715
+NYACK STEPS TO SOBRIETY|Location is: Nyack Hospital|6|19:00:00|20:00:00|160 North Midland Av , , ME |45.1796503|-67.289715
 Spiritual Awakenings Group Westfield BB Workshop|Location is: Presbyterian Church of Westfield|1|18:30:00|19:30:00|140 Mountain Ave E, Westfield, ME 07090|46.5997119|-68.02225499999997
 Westfield Big Book Workshop|Location is: Westfield Presbyterian Church|1|18:30:00|19:30:00|140 Mountain Ave E, Westfield, ME 07090|46.5997119|-68.02225499999997
+HIGHLAND FALLS|Location is: Holy Innocents Episcopal Church|2|19:30:00|20:30:00|112 Main St  , , ME |47.3527934|-68.29884219999997
+HIGHLAND FALLS|Location is: Holy Innocents Episcopal Church|3|20:30:00|21:30:00|112 Main St  , , ME |47.3527934|-68.29884219999997
+HIGHLAND FALLS|Location is: Holy Innocents Episcopal Church|5|19:30:00|20:30:00|112 Main St  , , ME |47.3527934|-68.29884219999997
+HIGHLAND FALLS|Location is: Holy Innocents Episcopal Church|7|10:00:00|11:00:00|112 Main St  , , ME |47.3527934|-68.29884219999997
+MT. KISCO MAIN STREET|Location is: United Methodist Church of Mt. Kisco|7|19:30:00|20:30:00|300 East Main Street, 1st Floor , , ME |47.354881|-68.31902409999998
 PORTLAND UNITY GROUP|Location is: Old Farmers Bank Bldg|2|13:30:00|14:30:00|124 Main St, Portland, ME 18351|43.6353435|-70.28706820000002
 PORTLAND UNITY GROUP|Location is: Old Farmers Bank Bldg|3|13:00:00|14:00:00|124 Main St, Portland, ME 18351|43.6353435|-70.28706820000002
 PORTLAND UNITY GROUP|Location is: Old Farmers Bank Bldg|4|13:30:00|14:30:00|124 Main St, Portland, ME 18351|43.6353435|-70.28706820000002
