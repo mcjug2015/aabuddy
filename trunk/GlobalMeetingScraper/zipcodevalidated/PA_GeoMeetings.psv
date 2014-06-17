@@ -802,7 +802,6 @@ AA IS GOOD LIVING|Location is: St. Paul's Lutheran Church|4|11:15:00|12:15:00|21
 AA IS GOOD LIVING|Location is: St. Paul's Lutheran Church|5|11:15:00|12:15:00|2134 Newbold Avenue, Basement , New York, PA |39.9625984|-76.72774500000003
 AA IS GOOD LIVING|Location is: St. Paul's Lutheran Church|6|11:15:00|12:15:00|2134 Newbold Avenue, Basement , New York, PA |39.9625984|-76.72774500000003
 AA IS-YOUR-WAY|Location is: Holy Family Church|4|null|N/A|2158 Watson Avenue,  Mechler Hall , New York, PA |39.9625984|-76.72774500000003
-AA MIRACLES|Location is: Our Lady of Grace Rectory|6|19:00:00|20:00:00|430 Avenue  W, Basement , New York, PA |41.3660474|-74.69963740000003
 ACTIVE|Location is: St. Jean Baptiste Church|4|18:00:00|19:00:00|184 East 76th Street, Basement , New York, PA |40.0502226|-78.51448240000002
 AFTERNOON WORKSHOP|Location is: Christ Church|2|14:00:00|15:00:00|5030 Henry Hudson Pkwy., Ground Floor , New York, PA |39.9625984|-76.72774500000003
 AFTERNOON WORKSHOP|Location is: Christ Church|4|14:00:00|15:00:00|5030 Henry Hudson Pkwy., Ground Floor , New York, PA |39.9625984|-76.72774500000003
@@ -932,7 +931,6 @@ CRESTWOOD GARDENS           (:I)|Location is: Annunciation Roman Catholic Church
 CRESTWOOD GARDENS      (:II)|Location is: Annunciation Roman Catholic Church|2|19:30:00|20:30:00|470 Westchester Avenue, Church Rectory  , New York, PA |39.9625984|-76.72774500000003
 CRESTWOOD GARDENS      (:II)|Location is: Annunciation Roman Catholic Church|7|11:30:00|12:30:00|470 Westchester Avenue, Church Rectory  , New York, PA |39.9625984|-76.72774500000003
 CROTON SATURDAY MEN|Location is: Asbury United Methodist Church|7|10:00:00|11:00:00|19 Old Post Road, Basement , New York, PA |41.8977299|-76.89167989999999
-DECKER AVENUE STEP GROUP|Location is: St. Paul & St. Luke's Church|2|20:00:00|21:00:00|186 Decker Avenue, Basement , New York, PA |41.99928449999999|-75.48047009999999
 DON'T DRINK TODAY|Location is: St. Stanislaus B & M Church|5|20:00:00|21:00:00|88-10 102nd Avenue, Basement , New York, PA |39.9625984|-76.72774500000003
 DOWN TO EARTH|Location is: Manhattan College  Engineering Building|3|19:00:00|20:00:00|240th Street & Corlear Avenue,  Cafeteria , New York, PA |39.9625984|-76.72774500000003
 DOWN TO EARTH|Location is: Manhattan College  Engineering Building|6|19:00:00|20:00:00|240th Street & Corlear Avenue,  Cafeteria , New York, PA |39.9625984|-76.72774500000003
@@ -1262,7 +1260,6 @@ ROOM FOR IMPROVEMENT     (:I)|Location is: St. Anthony of Padua Church|3|null|N/
 ROOM FOR IMPROVEMENT     (:I)|Location is: St. Anthony of Padua Church|4|null|N/A|Houston & Sullivan Streets,  Downstairs , New York, PA |39.9625984|-76.72774500000003
 ROOM FOR IMPROVEMENT     (:I)|Location is: St. Anthony of Padua Church|5|null|N/A|Houston & Sullivan Streets,  Downstairs , New York, PA |39.9625984|-76.72774500000003
 ROOM FOR IMPROVEMENT     (:I)|Location is: St. Anthony of Padua Church|6|null|N/A|Houston & Sullivan Streets,  Downstairs , New York, PA |39.9625984|-76.72774500000003
-ROOSEVELT ISLAND SERENITY|Location is: Chapel of the Good Shepherd|7|18:30:00|19:30:00|543 Main Street, Basement  , New York, PA |42.0619389|-78.17043669999998
 RUDE AWAKENING|Location is: Volunteers of America|4|20:30:00|21:30:00|340 West 85th Street, Basement , New York, PA |39.9625984|-76.72774500000003
 SAG HARBOR SPIRITUAL SOLUTION|Location is: Old Whalers Presbyterian Church|2|null|N/A|44 Union Street, Lower Level  , New York, PA |39.9625984|-76.72774500000003
 SAG HARBOR SPIRITUAL SOLUTION|Location is: Old Whalers Presbyterian Church|3|null|N/A|44 Union Street, Lower Level  , New York, PA |39.9625984|-76.72774500000003
@@ -1387,7 +1384,6 @@ THE FAMILY AFTERWARD GROUP (:II)|Location is: Staten Island Hospital South|6|19:
 THE FRIDAY-NITE BIG BOOK DISCUSSION GROUP|Location is: Rossville A.M.E. Zion Church|6|22:30:00|23:30:00|584 Bloomingdale Road, Basement , New York, PA |39.9625984|-76.72774500000003
 THE HOLE IN THE DONUT|Location is: Our Lady of Mount Carmel Church|7|18:00:00|19:00:00|275 North 8th Street, Basement , New York, PA |41.5727591|-75.25348650000001
 THE POINT GROUP|Location is: St. Andrew's Episcopal Church|7|17:00:00|18:00:00|45 Old Mill Road, Helmsley Hall  , New York, PA |39.9625984|-76.72774500000003
-THE PORT RICHMOND GROUP|Location is: St. Paul & St. Luke's Church|6|20:30:00|21:30:00|186 Decker Avenue, Basement , New York, PA |41.99928449999999|-75.48047009999999
 THIRD STEP ONE FLIGHT UP|Location is: St Francis Xavier School|2|null|N/A|752 President Street,  Lyceum - Green Door , New York, PA |39.9625984|-76.72774500000003
 THIRD STEP ONE FLIGHT UP|Location is: St Francis Xavier School|3|null|N/A|752 President Street,  Lyceum - Green Door , New York, PA |39.9625984|-76.72774500000003
 THIRD STEP ONE FLIGHT UP|Location is: St Francis Xavier School|4|null|N/A|752 President Street,  Lyceum - Green Door , New York, PA |39.9625984|-76.72774500000003
@@ -1576,12 +1572,8 @@ FAST BREAK WEEKEND|Location is: West Side YMCA|7|null|N/A|5 West 63rd Street, 1s
 OVINGTON|Location is: Bethlehem Lutheran Church|5|19:15:00|20:15:00|440 Ovington Avenue, Enter on 4th Avenue.  , New York, PA |39.9625984|-76.72774500000003
 OVINGTON|Location is: Bethlehem Lutheran Church|7|18:15:00|19:15:00|440 Ovington Avenue, Enter on 4th Avenue.  , New York, PA |39.9625984|-76.72774500000003
 WESTSIDE 11th STEP MEDITATION WORKSHOP|Location is: Addiction Institute|4|19:00:00|20:00:00|306 West 102nd Street, 2nd Floor , New York, PA |39.9625984|-76.72774500000003
-WOMEN'S ELEVENTH STEP|Location is: McGraw Hill Building|4|17:45:00|18:45:00|1221 Avenue of the Americas , New York, PA |41.3621062|-74.70390929999996
 MADISON PARK BEGINNERS|Location is: Intercare|4|10:00:00|11:00:00|51 E 25th St , New York, PA |42.1133013|-80.07278550000001
 MADISON PARK BEGINNERS|Location is: Intercare|5|17:30:00|18:30:00|51 E 25th St , New York, PA |42.1133013|-80.07278550000001
-CALLICOON    |Location is: St. James Episcopal Church|7|null|N/A|Route 17B  , , PA |41.9992431|-76.5491379
-MONTGOMERY 17K GROUP|Location is: Brick Reformed Church|2|20:00:00|21:00:00|Rte 17K , , PA |41.9992431|-76.5491379
-MONTGOMERY 17K GROUP|Location is: Brick Reformed Church|6|20:00:00|21:00:00|Rte 17K , , PA |41.9992431|-76.5491379
 SECOND AVENUE CLEAN AND DRY     (:I)|Location is: Church of the Nativity|1|17:00:00|18:00:00|44 2nd Avenue , New York, PA |41.897039|-79.84891600000003
 BROOKLYN HEIGHTS|Location is: Grace Episcopal Church|2|18:45:00|19:45:00|50 Grace Court @ Hicks Street, Guild Hall Enter Guild Hall on Grace Court , , PA |41.2033216|-77.19452469999999
 BROOKLYN HEIGHTS|Location is: Grace Episcopal Church|5|18:45:00|19:45:00|50 Grace Court @ Hicks Street, Guild Hall Enter Guild Hall on Grace Court , , PA |41.2033216|-77.19452469999999
@@ -1789,11 +1781,6 @@ STARTING OVER|Location is: Community United Methodist Church|1|19:30:00|20:30:00
 BEDFORD WOMEN'S MEETING|Location is: Bedford Village Presbyterian Church|6|18:30:00|19:30:00|44 Bedford Village Green, 2nd Floor , , PA |40.44341250000001|-79.98136769999996
 A ROOM OF ONE'S OWN|Location is: St. Francis Xavier|7|18:00:00|19:00:00|752 President  Street , , PA |41.4094758|-79.53138890000002
 FREE SPIRIT|Location is: New Utrecht Reformed Church|2|19:15:00|20:15:00|1828 83rd St , , PA |39.899703|-75.25323639999999
-MID-DAY SOBRIETY TWO FOR ONE|Location is: Greenwood Baptist Church|2|null|N/A|262 7th Avenue , New York, PA |41.36567900000001|-74.70316170000001
-MID-DAY SOBRIETY TWO FOR ONE|Location is: Greenwood Baptist Church|3|null|N/A|262 7th Avenue , New York, PA |41.36567900000001|-74.70316170000001
-MID-DAY SOBRIETY TWO FOR ONE|Location is: Greenwood Baptist Church|4|null|N/A|262 7th Avenue , New York, PA |41.36567900000001|-74.70316170000001
-MID-DAY SOBRIETY TWO FOR ONE|Location is: Greenwood Baptist Church|5|null|N/A|262 7th Avenue , New York, PA |41.36567900000001|-74.70316170000001
-MID-DAY SOBRIETY TWO FOR ONE|Location is: Greenwood Baptist Church|6|null|N/A|262 7th Avenue , New York, PA |41.36567900000001|-74.70316170000001
 PARK WEST|Location is: Old First Reformed Church|1|19:00:00|20:00:00|729 Carroll Street , , PA |40.3149317|-75.92876690000003
 PARK WEST|Location is: Old First Reformed Church|3|19:15:00|20:15:00|729 Carroll Street , , PA |40.3149317|-75.92876690000003
 PARK WEST|Location is: Old First Reformed Church|6|20:30:00|21:30:00|729 Carroll Street , , PA |40.3149317|-75.92876690000003
@@ -1931,7 +1918,6 @@ KINGSWAY|Location is: St. Brendan's School|7|20:00:00|21:00:00|1520 East 13th St
 GRUPO 28 DE OCTUBRE|Location is: Centao Carismatico de Catolicos Hispanos|1|16:00:00|17:00:00|826 E 166th St  , , PA |40.028186|-76.31724600000001
 GRUPO 28 DE OCTUBRE|Location is: Centao Carismatico de Catolicos Hispanos|5|20:00:00|21:00:00|826 E 166th St  , , PA |40.028186|-76.31724600000001
 COURAGE TO CHANGE|Location is: Bethany Baptist Church|4|18:30:00|19:30:00|460 Sumner Avenue , , PA |40.6182199|-75.47421889999998
-BIG BOOK DISCUSSION|Location is: Advent Lutheran Church|7|10:00:00|11:00:00|Avenue P , , PA |41.364425|-74.6990927
 AA ON PORTER AVENUE   |Location is: Peter J. Sharp Bldg|7|19:00:00|20:00:00|89-111 Porter Av , , PA |40.1091113|-79.58429999999998
 GRUPO MI AMIGO|Location is: St. Margaret's Church|2|19:00:00|20:00:00|948 E 156th St , , PA |40.025047|-76.31492800000001
 GRUPO MI AMIGO|Location is: St. Margaret's Church|7|17:00:00|18:00:00|948 E 156th St , , PA |40.025047|-76.31492800000001
@@ -2006,8 +1992,6 @@ LAST GASPERS|Location is: Catholic War Veterans - Post #1927|4|11:00:00|12:00:00
 LAST GASPERS|Location is: Catholic War Veterans - Post #1927|6|11:00:00|12:00:00|79-05 31st Avenue, 2nd Floor , New York, PA |42.1082425|-80.06954810000002
 ALCOHOLICS IN GOD'S HANDS|Location is: Catholic War Veterans - Post #1927|2|18:30:00|19:30:00|79-07 31st Avenue, 2nd Floor , New York, PA |42.1082425|-80.06954810000002
 PRIDE IN WOODSIDE|Location is: St. Jacobus Lutheran Church|3|19:00:00|20:00:00|72-01 43rd  Avenue , New York, PA |42.110603|-80.02512990000002
-GATEWAY AFTERNOON DISCUSSION|Location is: Holy Trinity Lutheran Church|3|13:30:00|14:30:00|4118 Avenue R , , PA |41.3611612|-74.7002003
-GATEWAY AFTERNOON DISCUSSION|Location is: Holy Trinity Lutheran Church|6|13:30:00|14:30:00|4118 Avenue R , , PA |41.3611612|-74.7002003
 OCEAN HILL|Location is: Our Lady of Presentation Church|7|11:00:00|12:00:00|1677 St. Mark's Avenue , , PA |40.45881809999999|-80.02132689999996
 VAN NEST|Location is: St. Martha's Episcopal Church|1|20:00:00|21:00:00|1858 Hunt Av , , PA |39.8135746|-77.22752500000001
 VAN NEST|Location is: St. Martha's Episcopal Church|5|20:00:00|21:00:00|1858 Hunt Av , , PA |39.8135746|-77.22752500000001
@@ -2206,18 +2190,6 @@ CHAPPAQUA                           (:I)|Location is: First Congregational Churc
 CHAPPAQUA                           (:I)|Location is: First Congregational Church|3|20:00:00|21:00:00|210 Orchard Ridge Road , New York, PA |39.9625984|-76.72774500000003
 CHAPPAQUA                           (:I)|Location is: First Congregational Church|5|20:00:00|21:00:00|210 Orchard Ridge Road , New York, PA |39.9625984|-76.72774500000003
 CHAPPAQUA                           (:I)|Location is: First Congregational Church|6|20:00:00|21:00:00|210 Orchard Ridge Road , New York, PA |39.9625984|-76.72774500000003
-HAND IN HAND WORKSHOP|Location is: I Can Club|1|11:00:00|12:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-HAND IN HAND WORKSHOP|Location is: I Can Club|2|13:00:00|14:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-HAND IN HAND WORKSHOP|Location is: I Can Club|4|13:00:00|14:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-HAND IN HAND WORKSHOP|Location is: I Can Club|5|13:00:00|14:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-HAND IN HAND WORKSHOP|Location is: I Can Club|6|13:00:00|14:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-HAND IN HAND WORKSHOP|Location is: I Can Club|7|13:00:00|14:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-SOBER HOLIDAY|Location is: I Can Club|6|17:00:00|18:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-SPRUCE|Location is: I Can Club|3|19:30:00|20:30:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-SPRUCE|Location is: I Can Club|7|20:00:00|21:00:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-TRADITIONS|Location is: I Can Club|4|18:30:00|19:30:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-WE CAN DO IT TOGETHER|Location is: I Can Club|5|19:30:00|20:30:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
-WOMAN TO WOMAN|Location is: I Can Club|6|19:30:00|20:30:00|110-54 Farmers Blvd , New York, PA |41.99864420000001|-75.5851793
 OAKLAND GARDENS|Location is: Holliswood Community Church|3|19:00:00|20:00:00|82nd Av & Bell Blvd , New York, PA |39.9625984|-76.72774500000003
 OAKLAND GARDENS|Location is: Holliswood Community Church|5|19:00:00|20:00:00|82nd Av & Bell Blvd , New York, PA |39.9625984|-76.72774500000003
 DOUGLASTON FRESH START|Location is: Zion Episcopal Church|1|19:15:00|20:15:00|243-01 Northern Blvd , New York, PA |40.0262047|-76.93017650000002
