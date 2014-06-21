@@ -68,7 +68,7 @@ def check():
 def test():
     '''Run the test suite and bail out if it fails'''
     dev_setup()
-    local("python manage.py test --verbosity=2")
+    local("python manage.py test --verbosity=2 --xunit-file=reports/nosetests.xml --with-coverage --cover-package=aabuddy --cover-erase --cover-html --cover-html-dir=reports/coverage --cover-branches --settings=settings")
 
 
 def clean():
