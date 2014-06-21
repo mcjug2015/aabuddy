@@ -13,11 +13,11 @@ from django.http.response import HttpResponse
 
 
 def get_meetings_psv(modeladmin, request, queryset):
-    meetings = Meeting.objects.all()
+    meetings = Meeting.objects.filter(is_active=True)
     response = HttpResponse(get_meetings_stream(meetings), mimetype='application/force-download')
     response['Content-Disposition'] = 'attachment; filename=meetings.psv'
     return response
-get_meetings_psv.short_description = "Get all meetings as a .psv file"
+get_meetings_psv.short_description = "Get all active meetings as a .psv file"
 
 def get_meetings_stream(meetings):
     yield "Name|Description|Day_of_week(1sunday-7saturday)|Start time(military time)|End time(military time)|Address|Latitude|Longitude\n"
@@ -138,7 +138,7 @@ class PsvFileUploadAdmin(admin.ModelAdmin):
         tf_name = tf.name
         tf.close()
         tf = open(tf_name, 'rU')
-        errors = loader.load_psv(request.user, tf, True)
+        errors = loader.load_psv(request.user, tf, form.cleaned_data['psv_file'], True)
         tf.close()
         for error in errors:
             messages.error(request, message="The following rows could not be loaded: " + error)

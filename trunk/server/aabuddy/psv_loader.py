@@ -31,10 +31,10 @@ class PsvLoader():
         ''' load all psv files in a folder. dir_path MUST end in "/" '''
         psv_files = glob.glob(dir_path + "*.psv")
         for psv_file in psv_files:
-            self.load_psv(User.objects.get(username='admin'), open(psv_file, 'rU'), True)
-        
+            self.load_psv(User.objects.get(username='admin'), open(psv_file, 'rU'), psv_file, True)
 
-    def load_psv(self, assigner, psv_in, skip_header=False):
+
+    def load_psv(self, assigner, psv_in, data_source_name, skip_header=False):
         ''' load a whole csv '''
         self.load_errors = []
         row_number = 1
@@ -45,12 +45,12 @@ class PsvLoader():
             row_number += 1
         
         for row in reader:
-            self.load_row(assigner, row, row_number)
+            self.load_row(assigner, row, row_number, data_source_name)
             row_number += 1
         
         return self.load_errors
     
-    def load_row(self, assigner, row, row_number):
+    def load_row(self, assigner, row, row_number, data_source_name):
         ''' load a list of values. row[0] = assignee, row[1] = reason, row[2] = num_points '''
         try:
             meeting = Meeting()
@@ -62,6 +62,9 @@ class PsvLoader():
             meeting.address = row[5]
             meeting.geo_location = fromstr('POINT(%s %s)' % (row[7], row[6]), srid=4326)
             meeting.creator = assigner
+            meeting.data_source = str(data_source_name)
+            if len(row) > 8:
+                meeting.data_source = row[8]
             similar_meetings = find_similar_to_meeting(meeting)
             if similar_meetings:
                 self.load_errors.append('#%s %s seems to be a duplicate of %s and %s other meetings. It will not be loaded' %

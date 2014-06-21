@@ -40,6 +40,8 @@ class Meeting(models.Model):
     creator = models.ForeignKey(User, related_name='meetings', null=True, on_delete=models.CASCADE)
     created_date = models.DateTimeField(editable=False,null=False, blank=False, default=datetime.datetime(1982,12,22))
     geo_location = models.PointField()
+    data_source = models.CharField(max_length=255, null=True, blank=True, default="user_submitted")
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         meeting_str = 'Meeting id: %s, ' % str(self.pk)
@@ -57,7 +59,8 @@ class Meeting(models.Model):
         retval += self.end_time.strftime("%H:%M:%S") + "|"
         retval += str(self.address) + "|"
         retval += str(self.geo_location.y) + "|"
-        retval += str(self.geo_location.x)
+        retval += str(self.geo_location.x) + "|"
+        retval += str(self.data_source)
         return retval
 
     def save(self, **kwargs):
@@ -109,3 +112,6 @@ class ServerMessage(models.Model):
     message = models.TextField()
     short_message = models.CharField(null=True, blank=True, max_length=255)
     is_active = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return ("%s(%s, %s)" % (str(self.short_message), str(self.is_active), str(self.updated_date)))
