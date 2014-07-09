@@ -10,7 +10,7 @@ import android.app.Application;
 public class AAMeetingApplication extends Application {
 	private MeetingListResults meetingListResults;
 	private List<Integer> meetingNotThereList = null;
-    
+
 	//instance 
     private static AAMeetingApplication instance = null;
     
@@ -21,10 +21,10 @@ public class AAMeetingApplication extends Application {
 		LocationFinder locationTask = new LocationFinder(this, null);
 		locationTask.requestLocation();
 		
-	    //set instance for our static accessor
+	    //set instance for our static accessory
         instance = this;
 	}
-
+	
 	public MeetingListResults getMeetingListResults() {
 		return meetingListResults; 
 	}
