@@ -20,7 +20,7 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="6dp"
-           android:textColor="#666666" />
+            android:textColor="#666666" />
 
         <ImageButton
             android:id="@+id/imageButtonRecoveryDateHide"
@@ -33,12 +33,34 @@
             android:contentDescription="@string/hideRecoveryDateButtonDescription"
             android:onClick="onClickHideRecoveryDate"
             android:src="@drawable/delete" />
+	    
+	    
     </RelativeLayout>
+    
+	<RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+	    
+	    <TextView
+	        android:id="@+id/messageFromServer"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/messageFromServer"
+	        android:textColor="#666666"
+	        
+	        android:text="@string/messageFromServer"
+	         />
+	        
+	    </RelativeLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="10dp"
         android:layout_weight="2.0"
         android:gravity="center"
         android:orientation="horizontal" >
@@ -52,6 +74,7 @@
                 android:id="@+id/findMeetingImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/findMeeting"
                 android:src="@drawable/find_meeting" />
 
             <TextView
@@ -60,7 +83,10 @@
                 android:layout_below="@+id/findMeetingImageView"
                 android:layout_centerHorizontal="true"
                 android:text="@string/findMeeting" />
+            
+            
         </RelativeLayout>
+
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -70,6 +96,7 @@
                 android:id="@+id/submitMeetingImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@drawable/submit_meeting"
                 android:src="@drawable/submit_meeting" />
 
             <TextView
@@ -97,6 +124,7 @@
                 android:id="@+id/settingsImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@drawable/settings"
                 android:src="@drawable/settings" />
 
             <TextView
@@ -116,6 +144,7 @@
                 android:id="@+id/loginImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@drawable/login"
                 android:src="@drawable/login" />
 
             <TextView
@@ -135,6 +164,7 @@
                 android:id="@+id/helpImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@drawable/help_icon"
                 android:src="@drawable/help_icon" />
 
             <TextView

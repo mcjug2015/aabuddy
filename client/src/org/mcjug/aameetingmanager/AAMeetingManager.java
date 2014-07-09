@@ -1,5 +1,6 @@
 package org.mcjug.aameetingmanager;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.mcjug.aameetingmanager.authentication.Credentials;
@@ -11,14 +12,21 @@ import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.meetingfinder.R;
 
+
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -27,13 +35,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class AAMeetingManager extends SherlockFragmentActivity 
 implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
-
+	private DownloadServerMessage downloadService = null;
+	private BroadcastReceiver receiver = null;
+	private ServerMessage receivedServerMessage = null;	
+	
 	/**
 	 * (non-Javadoc)
 	 * 
@@ -78,7 +91,8 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			}
 		});
 
-		initRecoveryText();		
+		initRecoveryText();	
+		initMessageFromServer();
 	}
 
 	public void initLoginLogoutButton() {
@@ -122,8 +136,16 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
+		initMessageFromServer();
 	}
 
+	@Override
+	protected void onPause() {
+	    super.onPause();
+	    unbindService(downloadServiceConnection);
+	    handler.removeCallbacks(runnableTicker);
+	}
+	
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
 		Credentials.removeFromPreferences(getApplicationContext());
 		initLoginLogoutButton();
@@ -153,6 +175,87 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		}
 	}	
 
+	private void initMessageFromServer () {
+
+		Intent intent= new Intent(this, DownloadServerMessage.class);
+		bindService(intent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
+		Log.v(TAG, "onResume bindService");
+
+		TextView textView = (TextView) findViewById(R.id.messageFromServer);
+		//textView.setVisibility(View.GONE);
+		textView.setText("init...");
+
+		//showServerMessage();
+		handler.postDelayed (runnableTicker, 1000);
+	}
+
+
+	private Handler handler = new Handler();
+
+	private Runnable runnableTicker = new Runnable() {
+		@Override
+		public void run() {
+			showServerMessage();
+			handler.postDelayed(this, 60000);
+		}
+	};
+
+	private void showServerMessage () {
+		TextView textView = (TextView) findViewById(R.id.messageFromServer);
+		textView.setVisibility(View.GONE);
+		if (downloadService != null) {
+			int resultCode = downloadService.getResult();
+			if (resultCode  == RESULT_OK) {
+				String stringJson = downloadService.getLoadedString();
+				if (stringJson !="") {
+					processServerMessage(stringJson);
+					if (receivedServerMessage != null) {
+						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedServerMessage.toString());
+						textView.setVisibility(View.VISIBLE);
+						String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+						textView.setText(timeStamp + " " + receivedServerMessage.firstShortMessage());
+						// textView.setText(receivedServerMessage.toString());
+					}
+					else
+						Log.v(TAG, "ServerMessage is empty");
+				}
+				else
+					Log.v(TAG, "JSON is empty");	
+			}
+			else 
+				Log.v(TAG, "Result not OK: " + resultCode);
+		}
+		else
+			Log.v(TAG, "Service is disconnected");
+	}
+	
+	public void processServerMessage (String messageJson) {
+		if (messageJson.length() > 0) {
+			// Log.v(TAG, "processing " + messageJson);
+			GsonBuilder gsonBuilder = new GsonBuilder();
+			gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
+			Gson gson = gsonBuilder.create();
+			receivedServerMessage = gson.fromJson(messageJson, ServerMessage.class);
+			return;
+		}
+		receivedServerMessage = null;
+	}
+
+	  private ServiceConnection downloadServiceConnection = new ServiceConnection() {
+
+		  public void onServiceConnected(ComponentName className, IBinder binder) {
+			  DownloadServerMessage.ServiceBinder bndr = (DownloadServerMessage.ServiceBinder) binder;
+			  downloadService = bndr.getService();
+			  Log.v(TAG, "onServiceConnected");
+		  }
+
+		  public void onServiceDisconnected(ComponentName className) {
+			  downloadService = null;
+			  Log.v(TAG, "onServiceDisconnected");
+		  }
+	  };
+	  
+	
 	private View.OnClickListener setDateClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {

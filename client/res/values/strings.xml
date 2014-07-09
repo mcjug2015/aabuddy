@@ -142,7 +142,8 @@
     <string name="passwordPreferencesTitle">Password Preferences</string>
     <string name="helpActivityTitle">Help</string>
     <string name="recoveryDatePrompt">Set Recovery Date or clear this message</string>
-    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>   	
+    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>
+    <string name="messageFromServer">Message From Server</string>
     <string name="howToRecoverToastNote">Go to settings to show Recovery Date again</string>
     <string name="recoveryDatePreferencesTitle">Recovery Date Preferences</string>
     <string name="recoveryDateAllowedPreferenceKey">recoveryDateAllowed</string>
@@ -158,6 +159,8 @@
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
 
+    <string name="serviceName">Server Messages Retrieval Service</string>
+    
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
         <item>Monday</item>
