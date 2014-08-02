@@ -222,8 +222,6 @@ PEARL RIVER|Location is: Church of the Good Shepherd|1|20:00:00|21:00:00|112 N M
 PEARL RIVER|Location is: Church of the Good Shepherd|6|19:45:00|20:45:00|112 N Main St , , NJ |39.6977598|-74.25777299999999
 EAST ROCKAWAY|Location is: Bethany Congregational Church|5|19:30:00|20:30:00|100 Main Street  , , NJ |40.7393318|-74.37590699999998
 EAST ROCKAWAY|Location is: Bethany Congregational Church|7|20:00:00|21:00:00|100 Main Street  , , NJ |40.7393318|-74.37590699999998
-Tri-boro Riverton Group|Location is: Sacred Heart Catholic Church|1|20:00:00|21:00:00|103 4th Street, riverton, NJ |40.0089|-75.01850000000002
-Tri-boro Riverton Group|Location is: Sacred Heart Catholic Church|4|20:00:00|21:00:00|103 4th Street, riverton, NJ |40.0089|-75.01850000000002
 LYNDHURST |Location is: United Presbyterian Church|3|13:00:00|14:00:00|Ridge Rd & Page Av  , , NJ |40.8042156|-74.1217724
 LYNDHURST |Location is: United Presbyterian Church|7|null|N/A|Ridge Rd & Page Av  , , NJ |40.8042156|-74.1217724
 ONLY REQUIREMENT GROUP|Location is: GOOD SHEPHERD CHURCH|2|19:00:00|20:00:00|ROUTE 9 AND MATHISTOWN ROAD, TUCKERTON, NJ 08087|39.5970223|-74.38349249999999
@@ -259,8 +257,6 @@ AMBOY ELTINGVILLE|Location is: St. Alban's Episcopal Church|4|20:30:00|21:30:00|
 THE PROMISES|Location is: St. Alban's Episcopal Church|4|18:30:00|19:30:00|76 St.  Albans Place , , NJ |39.8187953|-74.94691390000003
 Collingswood Monday Night|Location is: Holy Trinity Episcopa Church|2|20:00:00|21:00:00|839 Haddon Ave, collingswood, NJ 08108|39.915505|-75.064999
 POUGHKEEPSIE CONSCIOUS CONTACT|Location is: St. Paul's Church|4|20:00:00|21:00:00|Mansion Square  , , NJ |39.887247|-75.075625
-BEACHCOMBERS  (:II)|Location is: Christ Lutheran Church|4|10:00:00|11:00:00|121 Cleveland Avenue  , , NJ |40.0359|-74.96370000000002
-K.I.S.S.|Location is: Christ Lutheran Church|5|10:00:00|11:00:00|121 Cleveland Avenue  , , NJ |40.0359|-74.96370000000002
 Esperanza (Portuguese)|Location is: Esperanza (Portuguese)|7|17:00:00|18:00:00|92 Union Sq.,, Somerville, NJ 08876|40.5711281|-74.59557760000001
 Audubon Friday Night |Location is: Logan Presbyterian Church - Calvin Hall|6|20:00:00|21:00:00|18 W. Merchant Street, audubon, NJ 08106|39.89458|-75.07062400000001
 SHEEPS BY THE BAY|Location is: St Margaret Mary Church|3|19:30:00|20:30:00|215 Exeter St , , NJ |40.50220119999999|-74.41242219999998
@@ -352,8 +348,6 @@ OSSINING EYES ON THE PRIZE|Location is: First Baptist Church|2|20:00:00|21:00:00
 DARIEN PASS IT ON|Location is: First Congregational Church|1|18:30:00|19:30:00|14 Brookside Rd  , , NJ |40.824852|-74.57203700000002
 DARIEN PASS IT ON|Location is: First Congregational Church|3|19:30:00|20:30:00|14 Brookside Rd  , , NJ |40.824852|-74.57203700000002
 DARIEN PASS IT ON|Location is: First Congregational Church|6|19:15:00|20:15:00|14 Brookside Rd  , , NJ |40.824852|-74.57203700000002
-POUGHKEEPSIE BRIDGE CITY 164|Location is: Friends Meeting House|2|19:00:00|20:00:00|249 Hooker Avenue  , , NJ |40.03408650000001|-74.9513622
-POUGHKEEPSIE BRIDGE CITY 164|Location is: Friends Meeting House|5|19:00:00|20:00:00|249 Hooker Avenue  , , NJ |40.03408650000001|-74.9513622
 BLOOMINGBURG BOTTOM OF THE MOUNTAIN|Location is: Our Lady of Assumption Parish Hall|1|15:00:00|16:00:00|High Street  , , NJ |41.05700239999999|-74.76083729999999
 WALKER HOUSE GROUP|Location is: WALKER HOUSE GROUP|1|10:00:00|11:00:00|231 S BECHAM, TYLER, NJ |40.0583238|-74.4056612
 CONGERS LEGACY|Location is: Veterans Memorial Assoc Hall|1|19:00:00|20:00:00|65 Lake Rd E  , , NJ |39.6322311|-75.32300939999999
@@ -518,9 +512,6 @@ CLINTON-CARROLL MORNING|Location is: St. Paul's Parish Hall|3|null|N/A|199 Carro
 CLINTON-CARROLL MORNING|Location is: St. Paul's Parish Hall|4|null|N/A|199 Carroll Street,  , , NJ |40.9171033|-74.16198029999998
 CLINTON-CARROLL MORNING|Location is: St. Paul's Parish Hall|5|null|N/A|199 Carroll Street,  , , NJ |40.9171033|-74.16198029999998
 CLINTON-CARROLL MORNING|Location is: St. Paul's Parish Hall|6|null|N/A|199 Carroll Street,  , , NJ |40.9171033|-74.16198029999998
-PARK WEST|Location is: Old First Reformed Church|1|19:00:00|20:00:00|729 Carroll Street , , NJ |40.0329247|-74.9582873
-PARK WEST|Location is: Old First Reformed Church|3|19:15:00|20:15:00|729 Carroll Street , , NJ |40.0329247|-74.9582873
-PARK WEST|Location is: Old First Reformed Church|6|20:30:00|21:30:00|729 Carroll Street , , NJ |40.0329247|-74.9582873
 Newark Early Evening|Location is: First United Methodist Church|5|19:00:00|20:00:00|Main Street, Newark, NJ 07105|40.7277249|-74.14739350000002
 GRUPO EN BUSCA DE LA VERDAD/PORT CHESTER|Location is: St. Peter's Episcopal Church|1|14:30:00|15:30:00|Westchester Av at Smith St  , , NJ |40.0583238|-74.4056612
 GRUPO EN BUSCA DE LA VERDAD/PORT CHESTER|Location is: St. Peter's Episcopal Church|7|19:00:00|20:00:00|Westchester Av at Smith St  , , NJ |40.0583238|-74.4056612
@@ -631,8 +622,6 @@ PORT NEWARK THURSDAY NITE|Location is: Modular Warehouse Office #1|5|20:30:00|21
 PORT NEWARK THURSDAY NITE|Location is: Modular Warehouse Office #1|6|null|N/A|1170 McLeister St  , New York, NJ |40.66880700000001|-74.16196300000001
 STATLER AT NOON|Location is: St. John the Baptist Church|3|null|N/A|210 West 31st Street, Basement , New York, NJ |40.6740872|-74.12162890000002
 STATLER AT NOON|Location is: St. John the Baptist Church|5|null|N/A|210 West 31st Street, Basement , New York, NJ |40.6740872|-74.12162890000002
-WARWICK COMPLETE ABANDON|Location is: United Methodist Church|3|00:30:00|01:30:00|Forester Av & Rte 17A , New York, NJ |41.2506268|-74.34955719999999
-WARWICK COMPLETE ABANDON|Location is: United Methodist Church|5|00:30:00|01:30:00|Forester Av & Rte 17A , New York, NJ |41.2506268|-74.34955719999999
 CARMEL GLENEIDA|Location is: Gilead United Presbyterian Church|2|19:00:00|20:00:00|Seminary Hill Road & Church Street , , NJ |40.0583238|-74.4056612
 CARMEL GLENEIDA|Location is: Gilead United Presbyterian Church|4|19:00:00|20:00:00|Seminary Hill Road & Church Street , , NJ |40.0583238|-74.4056612
 PHOENICIA SATURDAY NITE LIVE|Location is: Methodist Church|7|20:00:00|21:00:00|Church St.  , , NJ |40.6496056|-75.08263269999998
@@ -649,7 +638,6 @@ BIG BOOK BY THE SEA  (big book study) |Location is: CHURCH OF THE EPIPHANY|5|19:
 VENTNOR SEASHORE GROUP|Location is: CHURCH OF THE EPIPHANY|7|20:00:00|21:00:00|6605 ATLANTIC AVE, VENTNOR, NJ 08406|39.3358429|-74.48425900000001
 WALDWICK FELLOWSHIP|Location is: Waldwick United Methodist Church|7|10:30:00|11:30:00|Franklin Tpk  , New York, NJ |39.562506|-75.04317600000002
 VENTNOR SEASHORE GROUP|Location is: TRINITY METHODIST CHURCH|6|22:00:00|23:00:00|MELBOURNE AND VENTNOR AVE, VENTNOR, NJ 08406|39.3344188|-74.4899828
-NEW LOTS-LINWOOD|Location is: St. Gabriel's RC Church|1|14:00:00|15:00:00|749 Linwood St , , NJ |39.9508794|-75.11342250000001
 HARTSDALE ARDSLEY                   (:I)|Location is: Our Lady of Perpetual Help Church|2|19:30:00|20:30:00|535 Ashford Av , , NJ |39.76978860000001|-74.8461431
 HARTSDALE ARDSLEY                   (:I)|Location is: Our Lady of Perpetual Help Church|7|19:30:00|20:30:00|535 Ashford Av , , NJ |39.76978860000001|-74.8461431
 NEW HOPE|Location is: Messiah Baptist Church|7|null|N/A|866 Sutter Av , , NJ |40.4408415|-74.52449389999998
@@ -660,11 +648,6 @@ POCANTICO HILLS  MEN 1,2,3 TO SERENITY|Location is: Church of the Magdalene|7|nu
 HARRISON LITTLE HOUSE|Location is: All Saints Church|2|19:30:00|20:30:00|300 Harrison Avenue, 1st Floor , , NJ |40.743485|-74.1617349
 HARRISON LITTLE HOUSE|Location is: All Saints Church|4|19:30:00|20:30:00|300 Harrison Avenue, 1st Floor , , NJ |40.743485|-74.1617349
 HARRISON LITTLE HOUSE|Location is: All Saints Church|6|19:30:00|20:30:00|300 Harrison Avenue, 1st Floor , , NJ |40.743485|-74.1617349
-LONG BEACH SERENITY BY THE SEA A.M.|Location is: St. James Episcopal Church|2|10:00:00|11:00:00|230 West Penn Street , , NJ |39.9486728|-75.12430549999999
-LONG BEACH SERENITY BY THE SEA A.M.|Location is: St. James Episcopal Church|3|10:00:00|11:00:00|230 West Penn Street , , NJ |39.9486728|-75.12430549999999
-LONG BEACH SERENITY BY THE SEA A.M.|Location is: St. James Episcopal Church|4|10:00:00|11:00:00|230 West Penn Street , , NJ |39.9486728|-75.12430549999999
-LONG BEACH SERENITY BY THE SEA A.M.|Location is: St. James Episcopal Church|5|10:00:00|11:00:00|230 West Penn Street , , NJ |39.9486728|-75.12430549999999
-LONG BEACH SERENITY BY THE SEA A.M.|Location is: St. James Episcopal Church|6|10:00:00|11:00:00|230 West Penn Street , , NJ |39.9486728|-75.12430549999999
 SOBRIETY OVERDRIVE|Location is: Community Center of Cypress Hill|5|19:00:00|20:00:00|475 Fountain Av , , NJ |40.06348300000001|-74.8416216
 PLEASANTVILLE SATURDAY MORNING|Location is: St. John's Episcopal Church|7|null|N/A|8 Sunnyside Avenue , , NJ |40.9373861|-73.9945189
 MONTROSE BUCHANAN STEP             (:II)|Location is: Old Verplanck School|4|20:00:00|21:00:00|6th Street & Broadway , , NJ |40.6585508|-74.1952048
@@ -752,10 +735,6 @@ SOBRIETY ON SUTPHIN|Location is: Masjio Al-Ham-Dul-Lilah|7|null|N/A|121-01 Sutph
 A BETTER WAY|Location is: Rust Temple A.M.E. Church|3|18:00:00|19:00:00|119-48 Sutphin Blvd. , New York, NJ |40.4042442|-74.24002989999997
 Bloomsbury Believers|Location is: Bloomsbury, NJ|6|20:00:00|21:00:00|Route 579S, bloomsbury, NJ 08804|40.642782|-75.06706830000002
 WEST SIDE FRIENDLY|Location is: Cove Church|1|13:15:00|14:15:00|12501 Lake Ave. parking off Cove, Lakewood, NJ |40.08212899999999|-74.20970139999997
-NYACK FREEDOM OF CHOICE|Location is: Grace Episcopal Church|2|null|N/A|N Franklin St & 1st Av  , , NJ |41.0932412|-73.92111799999998
-NYACK FREEDOM OF CHOICE|Location is: Grace Episcopal Church|5|null|N/A|N Franklin St & 1st Av  , , NJ |41.0932412|-73.92111799999998
-NYACK FREEDOM OF CHOICE|Location is: Grace Episcopal Church|6|null|N/A|N Franklin St & 1st Av  , , NJ |41.0932412|-73.92111799999998
-NYACK FREEDOM OF CHOICE|Location is: Grace Episcopal Church|7|14:00:00|15:00:00|N Franklin St & 1st Av  , , NJ |41.0932412|-73.92111799999998
 HARRIMAN WOODBURY/TUTHILL|Location is: St Anastasia RC Church|2|13:30:00|14:30:00|Main St , New York, NJ |41.0491755|-74.02280569999999
 HARRIMAN WOODBURY/TUTHILL|Location is: St Anastasia RC Church|3|13:30:00|14:30:00|Main St , New York, NJ |41.0491755|-74.02280569999999
 HARRIMAN WOODBURY/TUTHILL|Location is: St Anastasia RC Church|4|13:30:00|14:30:00|Main St , New York, NJ |41.0491755|-74.02280569999999
@@ -1049,10 +1028,6 @@ SAILING FREE GROUP|Location is: CAPE MAY PRESBYTERIAN CHURCH|2|19:30:00|20:30:00
 ST NIGHT SPECIAL GROUP|Location is: CAPE MAY PRESBYTERIAN CHURCH|7|19:30:00|20:30:00|DECATUR AND COLUMBIA, CAPE MAY, NJ 08204|38.9312548|-74.92143099999998
 Northwestern Group|Location is: Ebenezer UCC Church|5|19:00:00|20:00:00|7200 Decatur St (Rt 143), New Tripoli, NJ |40.0583238|-74.4056612
 Northwestern Group|Location is: Ebenezer UCC Church|3|19:00:00|20:00:00|7200 Decatur St (Rt 143), New Tripoli, NJ |40.0583238|-74.4056612
-Camden Thursday/Sunday Group|Location is: St. Paul_s Episcopal Church|1|20:00:00|21:00:00|Old North Road, Camden, NJ |39.9558464|-75.12607689999999
-Camden Thursday/Sunday Group|Location is: St. Paul_s Episcopal Church|5|20:00:00|21:00:00|Old North Road, Camden, NJ |39.9558464|-75.12607689999999
-Camden Saturday|Location is: St. Paul_s Episcopal Church|7|09:30:00|10:30:00|Old North Road, Camden, NJ |39.9558464|-75.12607689999999
-As Bill Sees It|Location is: St. Paul_s Episcopal Church|7|19:00:00|20:00:00|Old North Road, Camden, NJ |39.9558464|-75.12607689999999
 Camden Saturday|Location is: St. Paul&#39;s Episcopal Church|7|09:30:00|10:30:00|Old North Road, dover, NJ |40.8475337|-74.50507149999999
 HIGH HOPES|Location is: HIGH HOPES|4|19:00:00|20:00:00|13000 Olive @ San Antonio, NORWALK, NJ |40.0583238|-74.4056612
 Sober Today|Location is: Pacific Union Ch.|3|19:00:00|20:00:00|526 Old Colony Rd., Westport, NJ |40.0583238|-74.4056612
@@ -1515,7 +1490,6 @@ Nashoba|Location is: Central Baptist on Common|1|19:00:00|20:00:00|Westford & Ac
 Central Baptist on Common|Location is: Central Baptist on Common|3|12:15:00|13:15:00|Westford & Academy Sts., Chelmsford, NJ |40.0583238|-74.4056612
 Central Baptist on Common|Location is: Central Baptist on Common|5|12:15:00|13:15:00|Westford & Academy Sts., Chelmsford, NJ |40.0583238|-74.4056612
 Central Baptist on Common|Location is: Central Baptist on Common|6|12:15:00|13:15:00|Westford & Academy Sts., Chelmsford, NJ |40.0583238|-74.4056612
-Simply Steps|Location is: Unitarian Church|3|19:00:00|20:00:00|Central Square, Chelmsford, NJ |41.1043843|-74.0848992
 Willingness|Location is: MGH Hth. Ctr.|7|10:00:00|11:00:00|73 High St., 2nd Fl. Conf., Charlestown, NJ |40.0583238|-74.4056612
 St. John's|Location is: St. John's|3|20:00:00|21:00:00|Devons & Old Rutherford, Charlestown, NJ |40.0583238|-74.4056612
 Here & Now|Location is: Here & Now|2|19:15:00|20:15:00|YMCA, Navy Yard, Charlestown, NJ |40.0583238|-74.4056612
@@ -1626,7 +1600,6 @@ Foglifters|Location is: Thompson Presb Church|5|07:00:00|08:00:00|Aquetong Rd. P
 Foglifters|Location is: Thompson Presb Church|6|07:00:00|08:00:00|Aquetong Rd. PA, Hamilton, NJ |40.2115109|-74.67966509999997
 Our Happy Hour|Location is: Thompson Presb Church|6|18:45:00|19:45:00|Aquetong Rd. PA, Hamilton, NJ |40.2115109|-74.67966509999997
 Foglifters|Location is: Thompson Presb Church|3|07:00:00|08:00:00|Aquetong Rd. PA, Hamilton, NJ |40.2115109|-74.67966509999997
-Second Chance|Location is: Second Chance|7|14:00:00|15:00:00|White Whale, Hale St., Beverly, NJ |40.06538889999999|-74.91905580000002
 West Bloomfield|Location is: Congregational Church|7|20:00:00|21:00:00|SE Corner County Rd 37&Rts 5/20, W Bloomfield, NJ |40.8067546|-74.1854209
 Sane And Sober|Location is: Unitarian Universalist Church|3|19:00:00|20:00:00|16 Ashland St., Lower Level, Haverhill, NJ |40.0583238|-74.4056612
 Honest Effort Group|Location is: Effort Baptist Church|2|19:30:00|20:30:00|7820 Thomas Jefferson Pkwy. Rte. 618 Just off Rte. 53, Palmyra, Charlottesville, NJ |40.0583238|-74.4056612
