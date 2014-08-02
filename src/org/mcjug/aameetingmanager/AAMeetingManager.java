@@ -1,6 +1,9 @@
 package org.mcjug.aameetingmanager;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
@@ -9,16 +12,23 @@ import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.aameetingmanager.util.MessageService;
 import org.mcjug.meetingfinder.R;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -33,6 +43,8 @@ implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
+	
+	MessageReceiver messageReceiver;
 
 	/**
 	 * (non-Javadoc)
@@ -78,7 +90,13 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			}
 		});
 
-		initRecoveryText();		
+		initRecoveryText();	
+		
+		
+		registerReceiver();
+		//initService();
+		initServiceScheduler();
+		Log.v(TAG, "---onCreate---");
 	}
 
 	public void initLoginLogoutButton() {
@@ -122,7 +140,21 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
+		Log.v(TAG, "---onResume---");
 	}
+	
+//	@Override
+//    protected void onPause() {
+//        super.onPause();
+//        unregisterReceiver(messageReceiver);
+//        Log.v(TAG, "---onPause---");
+//    }
+	
+	@Override
+    public void onDestroy() {
+        this.unregisterReceiver(messageReceiver);
+        super.onDestroy();
+    }
 
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
 		Credentials.removeFromPreferences(getApplicationContext());
@@ -220,5 +252,46 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		Toast.makeText(getApplicationContext(), 
 				getApplicationContext().getString(R.string.howToRecoverToastNote), 
 				Toast.LENGTH_LONG).show();	
+	}
+	
+	public void initServiceScheduler() {
+		// Start service using AlarmManager
+		Intent messageIntent = new Intent(this, MessageService.class);
+		messageIntent.putExtra(MessageService.PARAM_IN_MSG, 
+				"https://mcasg.org/meetingfinder/api/v1/server_message?is_active=true&format=json");
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, messageIntent, 0);
+		
+		AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+				10*1000, pendingIntent);
+	}
+	
+	public void registerReceiver() {
+		IntentFilter filter = new IntentFilter(MessageReceiver.ACTION_RESPONSE);
+        filter.addCategory(Intent.CATEGORY_DEFAULT);
+        messageReceiver = new MessageReceiver();
+        registerReceiver(messageReceiver, filter);	
+	}
+	
+	public void initService() {
+		Log.v(TAG, "initService() starting");
+		
+		Intent messageIntent = new Intent(this, MessageService.class);
+		messageIntent.putExtra(MessageService.PARAM_IN_MSG, 
+				"https://mcasg.org/meetingfinder/api/v1/server_message?is_active=true&format=json");
+        startService(messageIntent);
+	}
+	
+	public class MessageReceiver extends BroadcastReceiver {
+	    public static final String ACTION_RESPONSE = "com.mcjug.intent.action.MESSAGE_PROCESSED";
+	    
+	    @Override
+	    public void onReceive(Context context, Intent intent) {  
+	    	Format formatter = new SimpleDateFormat("hh:mm:ss a");
+
+	       TextView result = (TextView) findViewById(R.id.textViewServiceMessage);	       
+	       String text = intent.getStringExtra(MessageService.PARAM_OUT_MSG) + "  " + formatter.format(new Date());
+	       result.setText(text);
+	    }  
 	}
 }
