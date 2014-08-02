@@ -10,9 +10,13 @@ import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.meetingfinder.R;
+import org.mcjug.messagemanager.MessageAlarmManager;
+import org.mcjug.messagemanager.MessageService;
+import org.mcjug.messagemanager.MessageUpdateReceiver;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
@@ -21,6 +25,9 @@ import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -33,6 +40,8 @@ implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
+
+	private MessageUpdateReceiver messageUpdateReceiver;
 
 	/**
 	 * (non-Javadoc)
@@ -79,6 +88,18 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		});
 
 		initRecoveryText();		
+
+		CheckBox messageAlarm = (CheckBox) findViewById(R.id.messageAlarmCheckBox);
+		messageAlarm.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				if (isChecked) {
+					MessageAlarmManager.updateAlarm(getApplicationContext());
+				} else {
+					MessageAlarmManager.cancelAlarm(getApplicationContext());
+				}
+			}
+		});
 	}
 
 	public void initLoginLogoutButton() {
@@ -122,6 +143,17 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
+
+		// Register for message updates
+		messageUpdateReceiver = new MessageUpdateReceiver();
+		IntentFilter filter = new IntentFilter(MessageService.MESSAGE_NOTIFICATION_INTENT_ACTION);
+		registerReceiver(messageUpdateReceiver, filter);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		unregisterReceiver(messageUpdateReceiver);
 	}
 
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
