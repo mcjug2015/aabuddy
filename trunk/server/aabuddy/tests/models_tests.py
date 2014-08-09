@@ -24,7 +24,7 @@ class TestMeeting(TestCase):
         return meeting
 
     def test_meeting_get_psv_row(self):
-        self.assertEqual(self.__get_test_meeting().get_psv_row(), "a|b|3|12:20:00|00:00:00|c|1.0|2.0")
+        self.assertEqual(self.__get_test_meeting().get_psv_row(), "a|b|3|12:20:00|00:00:00|c|1.0|2.0|user_submitted")
         
     def test_meeting_save(self):
         meeting = self.__get_test_meeting()

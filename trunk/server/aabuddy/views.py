@@ -127,7 +127,7 @@ def temp_json_obj_to_meeting(json_obj):
 def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                            day_of_week_params, day_of_week_in_params,
                            time_params, limit, offset, order_by_column):
-    meetings = Meeting.objects.all()
+    meetings = Meeting.objects.filter(is_active=True)
     if name:
         meetings = meetings.filter(name__icontains=name)
     meetings = day_of_week_params.apply_filters(meetings)
@@ -337,7 +337,7 @@ def find_similar_to_meeting(meeting):
                         start_time__gte=meeting.start_time-datetime.timedelta(minutes=10),
                         end_time__lte=meeting.end_time+datetime.timedelta(minutes=10),
                         end_time__gte=meeting.end_time-datetime.timedelta(minutes=10))
-    similar_meetings = Meeting.objects.filter(time_q, day_of_week=meeting.day_of_week)
+    similar_meetings = Meeting.objects.filter(is_active=True).filter(time_q, day_of_week=meeting.day_of_week)
     similar_meetings = similar_meetings.filter(geo_location__distance_lte=(meeting.geo_location, D(mi=0.1)))
     similar_meetings = similar_meetings.distance(meeting.geo_location).order_by('distance')
     similar_meetings = similar_meetings[0:20]
