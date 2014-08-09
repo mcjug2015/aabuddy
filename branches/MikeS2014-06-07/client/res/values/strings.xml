@@ -161,6 +161,27 @@
 
     <string name="serviceName">Server Messages Retrieval Service</string>
     
+        <string name="app_name">Server Messages</string>
+    <string name="service_name">Service Name</string>
+    <string name="service_start_preference">Service Start Mode</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="welcome_title">MultiStart Service Demo</string>
+    <string name="service_info">Service info</string>
+    <string name="internet_download">Download from Internet</string>
+    <string name="service_start">Start Service</string>
+    <string name="service_stop">Stop Service</string>
+    
+    <string name="cb_on_boot">Start on BOOT</string>
+    <string name="cb_on_app_load">Start on APP load</string>
+    
+    <string name="empty_line">></string>
+    
+    <string name="selectGroup">Run:</string>
+    <string name="selectOnClick">Once</string>
+    <string name="select1min">1 min</string>
+    <string name="select5min">5 min</string>
+    
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
         <item>Monday</item>

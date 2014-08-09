@@ -44,16 +44,148 @@
         android:gravity="center"
         android:orientation="horizontal" >
 	    
+	 <CheckBox
+        android:id="@+id/checkBoxBoot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        	         
+        android:text="@string/cb_on_boot"
+        android:textAppearance="?android:attr/textAppearanceSmall" 
+        />
+    
+    <CheckBox
+        android:id="@+id/checkBoxAppLoad"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+    
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        
+        android:layout_alignParentRight="true"
+        android:text="@string/cb_on_app_load"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_toRightOf="@+id/checkBoxBoot" 
+        android:layout_gravity="right"
+        
+        />
+    
+    <RadioGroup
+        android:id="@+id/radioSelectInterval"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxAppLoad"
+        android:contentDescription="@string/selectGroup"
+        android:orientation="horizontal" >
+
+		     <TextView
+		         android:id="@+id/textViewRadio"
+		         android:layout_width="wrap_content"
+		         android:maxLines="1"
+		         android:layout_marginLeft="10dp"
+		         android:scrollbars="none"
+		         android:text="@string/selectGroup"
+		         android:textAppearance="?android:attr/textAppearanceSmall"
+		          />
+        
+        	<RadioButton 
+        		android:id="@+id/radioOnClick"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="@string/selectOnClick"
+            	android:checked="true"
+            	android:padding="2dp"
+            	android:onClick="onRadioButtonClicked"
+        	    />
+        	
+        	<RadioButton 
+        		android:id="@+id/radioOneMin"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="@string/select1min"
+            	android:checked="false"
+            	android:padding="2dp"
+            	android:onClick="onRadioButtonClicked"
+        	    />
+
+        	<RadioButton 
+        		android:id="@+id/radioFiveMin"
+            	android:layout_width="wrap_content"
+            	android:layout_height="wrap_content"
+            	android:text="@string/select5min"
+            	android:checked="false"
+            	android:padding="2dp"
+            	android:onClick="onRadioButtonClicked"
+        	    />
+        	
+    </RadioGroup>
+    
+    <ImageButton
+        android:id="@+id/imageButtonStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
+        android:contentDescription="@string/service_start"
+        android:onClick="onButtonStartClick"
+        android:src="@drawable/actionsprocessstarticon64x64"
+        android:layout_below="@+id/radioSelectInterval"
+         />
+        
+    <ImageButton
+        android:id="@+id/imageButtonStop"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioSelectInterval"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/imageButtonStart"
+        android:contentDescription="@string/service_stop"
+        android:onClick="onButtonStopClick"
+        android:src="@drawable/actionsprocessstopicon64x64" />
+
+    <ImageButton
+        android:id="@+id/imageButtonInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioSelectInterval"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/imageButtonStop"
+        android:contentDescription="@string/service_info"
+        android:onClick="onButtonInfoClick"
+        android:src="@drawable/actionsinfoicon64x64" />
+
+     <ImageButton
+        android:id="@+id/imageButtonConfigure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/radioSelectInterval"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/imageButtonInfo"
+        android:contentDescription="@string/service_info"
+        android:onClick="onButtonConfigureClick"
+        android:src="@drawable/actionsconfigureicon64x64" />
+     
+	    
 	    <TextView
 	        android:id="@+id/messageFromServer"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:contentDescription="@string/messageFromServer"
 	        android:textColor="#666666"
-	        
 	        android:text="@string/messageFromServer"
-	         />
+	        android:layout_marginLeft="10dp"
+	        android:layout_marginTop="5dp"
+	        android:layout_below="@+id/imageButtonStart"
 	        
+	         />
+	    
 	    </RelativeLayout>
 
 
@@ -88,6 +220,7 @@
         </RelativeLayout>
 
 
+
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" >
@@ -105,6 +238,7 @@
                 android:layout_below="@+id/submitMeetingImageView"
                 android:layout_centerHorizontal="true"
                 android:text="@string/submitMeeting" />
+            
         </RelativeLayout>
     </LinearLayout>
 
