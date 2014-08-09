@@ -106,6 +106,22 @@ class UserConfirmation(models.Model):
     confirmation_key = models.CharField(max_length=64, null=False, blank=False)
 
 
+class MeetingTypeValue(models.Model):
+    ''' the type of meeting '''
+    short_name = models.CharField(null=False, blank=False, max_length=250)
+    name = models.CharField(null=False, blank=False, max_length=250)
+    description = models.CharField(null=False, blank=False, max_length=250)
+    def __str__(self):
+        return ("%s(%s)" % (self.name, self.short_name))
+
+
+class MeetingType(models.Model):
+    ''' The link between a meeting and a meetingtypevalue '''
+    meeting = models.ForeignKey(Meeting, related_name='type_links', null=False, blank=False)
+    type_value = models.ForeignKey(MeetingTypeValue, related_name='meeting_links', null=False, blank=False)
+    def __str__(self):
+        return ("%s %s" % (self.meeting, self.type_value))
+
 class ServerMessage(models.Model):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
