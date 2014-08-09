@@ -12,11 +12,13 @@ import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.meetingfinder.R;
 
+import org.mcjug.aameetingmanager.util.ServiceConfig;
 
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,8 +31,10 @@ import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,9 +47,13 @@ implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
+	private CheckBox mCheckboxBoot, mCheckboxAppLoad;
+	private TextView mText;
 	private DownloadServerMessage downloadService = null;
-	private BroadcastReceiver receiver = null;
+	// private BroadcastReceiver receiver = null;
+	private ScheduleReceiver scheduleReceiver;
 	private ServerMessage receivedServerMessage = null;	
+	private ServiceConfig config;
 	
 	/**
 	 * (non-Javadoc)
@@ -55,9 +63,85 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		config = new ServiceConfig (getApplicationContext());
 		// Inflate the layout
 		setContentView(R.layout.aa_meeting_manager);
+		
+		addListenerOnCheckboxBoot();
+		addListenerOnCheckboxAppLoad();
+    	
+		addListenerOnFindMeetingImageView();
+		addListenerOnSubmitMeetingImageView ();
+		addListenerOnSettingsImageView();
+		addListenerOnHelpImageView ();
+		
+		mText = (TextView) findViewById(R.id.messageFromServer);
+			
+		initMessageFromServer();
 
+		updateTicker(receivedBroadcastMessage);
+		handler.postDelayed (runnableTicker, 1000);
+		// Show that the message is not fresh:
+		receivedBroadcastMessage += "_";
+	
+		initRecoveryText();
+		
+	}
+	
+	private void initiateScheduleReceiver () {
+		scheduleReceiver = new ScheduleReceiver(); 
+    	registerReceiver (scheduleReceiver, new IntentFilter(ScheduleReceiver.NOTIFICATION));
+		Intent intent = new Intent(ScheduleReceiver.NOTIFICATION);
+		sendBroadcast(intent);
+	}
+	
+	private String receivedBroadcastMessage = " ? ";
+	
+	private BroadcastReceiver localReceiver = new BroadcastReceiver() {
+		  @Override
+		  public void onReceive(Context context, Intent intent) {
+			  Log.v(TAG, "LocalBroadcastReceiver onReceive: Broadcast intent detected " + intent.getAction());
+				// broadcastResult = intent.getAction();
+				if (intent.hasExtra(ServiceConfig.LOADEDSTRING)) {
+					receivedBroadcastMessage = intent.getExtras().getString(ServiceConfig.LOADEDSTRING);
+		        }
+				else {
+					receivedBroadcastMessage = "LOADEDSTRING not found";
+				}
+				Log.v(TAG, "LocalBroadcastReceiver onReceive broadcastResult: " + receivedBroadcastMessage);
+		  }
+		};
+	
+		private int tickerNumber = 0;
+
+		private void updateTicker (String message) {
+			tickerNumber++;
+			mText.setText(tickerNumber + ". " + message);
+		}
+
+	public void addListenerOnCheckboxBoot () {
+    	mCheckboxBoot = (CheckBox) findViewById(R.id.checkBoxBoot);
+    	mCheckboxBoot.setChecked(config.isCheckboxBootChecked());
+   	 	mCheckboxBoot.setOnClickListener(new OnClickListener() {
+    	  @Override
+    	  public void onClick(View v) {
+    		  config.setCheckboxBootIsChecked (((CheckBox) v).isChecked());
+    	  }
+    	});
+      }
+    
+    public void addListenerOnCheckboxAppLoad () {
+    	mCheckboxAppLoad = (CheckBox) findViewById(R.id.checkBoxAppLoad );
+    	mCheckboxAppLoad.setChecked(config.isCheckboxAppLoadChecked());
+    	mCheckboxAppLoad.setOnClickListener(new OnClickListener() { 
+    	  @Override
+    	  public void onClick(View v) {
+    		  config.setCheckboxAppLoadChecked (((CheckBox) v).isChecked());
+    	  }
+    	});
+      }
+
+	public void addListenerOnFindMeetingImageView() {
 		ImageView findMeetingImageView = (ImageView) findViewById(R.id.findMeetingImageView);
 		findMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -66,6 +150,9 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			}
 		});
 
+	}
+	
+	public void addListenerOnSubmitMeetingImageView() {
 		ImageView submitMeetingImageView = (ImageView) findViewById(R.id.submitMeetingImageView);
 		submitMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -74,7 +161,9 @@ implements LogoutDialogFragment.LogoutDialogListener {
 
 			}
 		});
+	}
 
+	public void addListenerOnSettingsImageView() {
 		ImageView settingsImageView = (ImageView)findViewById(R.id.settingsImageView);
 		settingsImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -82,19 +171,18 @@ implements LogoutDialogFragment.LogoutDialogListener {
 				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
+	}
 
+	public void addListenerOnHelpImageView () {
 		ImageView helpImageView = (ImageView)findViewById(R.id.helpImageView);
 		helpImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), HelpFragmentActivity.class)
 				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
-		});
-
-		initRecoveryText();	
-		initMessageFromServer();
+		});		
 	}
-
+	
 	public void initLoginLogoutButton() {
 		ImageView loginInImageView = (ImageView)findViewById(R.id.loginImageView);
 		final TextView loginTextView = (TextView)findViewById(R.id.loginTextView);
@@ -136,15 +224,58 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
-		initMessageFromServer();
+		registerReceiver(localReceiver, new IntentFilter(DownloadServerMessage.NOTIFICATION));	
+        Log.v(TAG, "onResume: localBroadcastReceiver registered");
+        // && !config.isActiveScheduleReceiver()
+        if (config.isCheckboxAppLoadChecked() && (config.serviceMode.getServiceRunMode() > 0)) {
+        	initiateScheduleReceiver();
+        	Log.v(TAG, "onResume: scheduleReceiver registered");
+        }
 	}
 
 	@Override
 	protected void onPause() {
 	    super.onPause();
-	    unbindService(downloadServiceConnection);
+	    config.saveConfig(getApplicationContext());
+        Log.v(TAG, "onPause");
+        unregisterReceiver(localReceiver);
 	    handler.removeCallbacks(runnableTicker);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		doUnbindService();
+	    config.saveConfig(getApplicationContext());
+	    Log.v(TAG, "onDestroy: broadcastReceiver unregistered");
+		super.onDestroy();
+	}
+	
+	@SuppressWarnings("unused")
+	private DownloadServerMessage mBoundService;
+	private ServiceConnection mConnection = new ServiceConnection() {
+	    public void onServiceConnected(ComponentName className, IBinder service) {
+	    	Log.v(TAG, "MainActivity onServiceConnected");
+	    	mBoundService = ((DownloadServerMessage.ServiceBinder)service).getService();
+	    }
+	    public void onServiceDisconnected(ComponentName className) {
+	        mBoundService = null;
+	    }
+	};
+	
+	boolean mIsBound = false;
+	void doBindService() {
+		Intent intent = new Intent(this, DownloadServerMessage.class);
+	    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+	    mIsBound = true;
+	}
+	
+	void doUnbindService() {
+	    if (mIsBound) {
+	        unbindService(mConnection);
+	        mIsBound = false;
+	    }
+	}
+
 	
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
 		Credentials.removeFromPreferences(getApplicationContext());
@@ -176,17 +307,19 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	}	
 
 	private void initMessageFromServer () {
-
-		Intent intent= new Intent(this, DownloadServerMessage.class);
-		bindService(intent, downloadServiceConnection, Context.BIND_AUTO_CREATE);
-		Log.v(TAG, "onResume bindService");
-
-		TextView textView = (TextView) findViewById(R.id.messageFromServer);
-		//textView.setVisibility(View.GONE);
-		textView.setText("init...");
-
-		//showServerMessage();
-		handler.postDelayed (runnableTicker, 1000);
+		if (config.isCheckboxAppLoadChecked()) {
+        	if((config.serviceMode.getServiceRunMode() > 0)) {
+            	initiateScheduleReceiver();
+            	Log.v(TAG, "onCreate: scheduleReceiver registered");        		
+        	}
+        	else {
+        		// If RUN_ONCE run downloader service once
+        		startService(new Intent(this, DownloadServerMessage.class));
+        		
+    			Log.v(TAG, "onCreate: run DownloaderService once");
+        	}
+        }
+        Log.v(TAG, "broadcastReceiver initialized: " + receivedBroadcastMessage + "/" + config.serviceMode.name());
 	}
 
 
@@ -196,13 +329,13 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		@Override
 		public void run() {
 			showServerMessage();
-			handler.postDelayed(this, 60000);
+			handler.postDelayed(this, 30000);
 		}
 	};
 
 	private void showServerMessage () {
-		TextView textView = (TextView) findViewById(R.id.messageFromServer);
-		textView.setVisibility(View.GONE);
+		
+		mText.setVisibility(View.GONE);
 		if (downloadService != null) {
 			int resultCode = downloadService.getResult();
 			if (resultCode  == RESULT_OK) {
@@ -211,9 +344,9 @@ implements LogoutDialogFragment.LogoutDialogListener {
 					processServerMessage(stringJson);
 					if (receivedServerMessage != null) {
 						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedServerMessage.toString());
-						textView.setVisibility(View.VISIBLE);
+						mText.setVisibility(View.VISIBLE);
 						String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-						textView.setText(timeStamp + " " + receivedServerMessage.firstShortMessage());
+						mText.setText(timeStamp + " " + receivedServerMessage.firstShortMessage());
 						// textView.setText(receivedServerMessage.toString());
 					}
 					else
@@ -324,4 +457,52 @@ implements LogoutDialogFragment.LogoutDialogListener {
 				getApplicationContext().getString(R.string.howToRecoverToastNote), 
 				Toast.LENGTH_LONG).show();	
 	}
+	
+	
+	public void onButtonStartClick(View v) {
+		
+		if (config.serviceMode != ServiceConfig.ServiceRunModes.RUN_ONCE && !config.isActiveScheduleReceiver()) {
+			initiateScheduleReceiver();
+			Log.v(TAG, "onButtonStartClick -- ScheduleReceiver ");
+		}
+		else {
+			startService(new Intent(this, DownloadServerMessage.class));
+			Log.v(TAG, "onButtonStartClick -- DownloaderService");
+		}
+		
+		doBindService();
+	}
+	
+	public void onButtonStopClick (View v) {
+		Log.v(TAG, "onButtonStopClick");
+		doUnbindService();
+	}
+	
+	public void onButtonInfoClick (View v) {
+		CharSequence text = "Hello there!";
+		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+	}
+	
+	public void onButtonConfigureClick(View v) {
+    	config.saveConfig(getApplicationContext());
+	}
+
+	
+	public void onRadioButtonClicked(View v) {
+	    RadioButton button = (RadioButton) v;
+	    switch(button.getId()) {
+	    	case R.id.radioOnClick:
+	    		config.serviceMode = ServiceConfig.ServiceRunModes.RUN_ONCE;
+	    		break;
+	    	case R.id.radioOneMin:
+	    		config.serviceMode = ServiceConfig.ServiceRunModes.ONE_MIN;
+	    		break;
+	    	default:
+	    		config.serviceMode = ServiceConfig.ServiceRunModes.FIVE_MIN;
+	    		break;
+	    }
+	    Log.v(TAG, "onRadioButtonClicked " + button.getText() + " service mode " + config.serviceMode);
+	}
+	
+	
 }
