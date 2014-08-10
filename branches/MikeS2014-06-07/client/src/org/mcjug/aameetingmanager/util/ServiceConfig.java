@@ -16,7 +16,8 @@ public final class ServiceConfig {
 	private boolean activeScheduleReceiver;
 	
 	
-	public static final String LOADEDSTRING = "loadedString";
+	public static final String LOADEDMESSAGE = "LoadedMessage";
+	public static final String SERVICESTATUS = "ServiceStatus";
 	
 	public enum ServiceRunModes {
 		RUN_ONCE(0), ONE_MIN(1), FIVE_MIN(5);

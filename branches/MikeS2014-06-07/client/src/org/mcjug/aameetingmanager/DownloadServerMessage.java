@@ -22,7 +22,6 @@ public class DownloadServerMessage extends Service {
 	
 	private int result = Activity.RESULT_CANCELED;
 	public static final String URL = "https://mcasg.org/meetingfinder/api/v1/server_message?is_active=true&format=json";
-	//public static final String LOADEDSTRING = "";
 	public static final String RESULT = "result";
 	public static final String NOTIFICATION = "DownloaderServiceBroadcast";
 	static final SimpleDateFormat sdf = new SimpleDateFormat(" yyyy-M-dd hh:mm:ss", Locale.US);
@@ -42,7 +41,7 @@ public class DownloadServerMessage extends Service {
 		  mDate = new Date();
 		  Log.v(TAG, "Service onCreate:" + sdf.format(mDate));
 		  result = Activity.RESULT_OK;
-		  publishResults("starting service", result);
+		  publishResults("", "starting service", result);
 	  }
 	
 	@Override
@@ -76,52 +75,65 @@ public class DownloadServerMessage extends Service {
 	
 	protected void handleIntent(final Intent intent) {
 		new Thread(new Runnable() {
-			   public void run() {
-				   String urlPath = intent.getStringExtra(URL);
-					StringBuilder sb = new StringBuilder();
-					InputStream stream = null;
-					try {
-						
-						URL url = new URL(urlPath);
-						stream = url.openConnection().getInputStream();
-						InputStreamReader reader = new InputStreamReader(stream);
+			public void run() {
+				// String urlPath = intent.getStringExtra(URL);
+				StringBuilder sb = new StringBuilder();
+				InputStream stream = null;
+				try {
+					Log.v(TAG, "DownloadServerMessage try start on " + URL);
+					URL url = new URL(URL);
+					Log.v(TAG, "DownloadServerMessage URL created");
+					stream = url.openConnection().getInputStream();
+					Log.v(TAG, "DownloadServerMessage Connection open");
+					InputStreamReader reader = new InputStreamReader(stream);
+					Log.v(TAG, "DownloadServerMessage reader initiated");
 
-						char[] buffer = new char[4*1024];
-						int next = -1;
-						while ((next = reader.read(buffer, 0, buffer.length)) != -1) {
-							sb.append(buffer, 0, next);
-						}
-						result = Activity.RESULT_OK;
-						publishResults(sb.toString(), result);
-						setLoadedString(sb.toString());
-						/*
+					char[] buffer = new char[4*1024];
+					int next = -1;
+					while ((next = reader.read(buffer, 0, buffer.length)) != -1) {
+						sb.append(buffer, 0, next);
+					}
+					Log.v(TAG, "DownloadServerMessage buffer processed");
+					result = Activity.RESULT_OK;
+					publishResults(sb.toString(), getServiceTicker(), result);
+					Log.v(TAG, "DownloadServerMessage result published");
+					setLoadedString(sb.toString());
+					/*
 						publishResults(jsonSource, result);
 						setLoadedString(jsonSource);
-						*/
-					} catch (Exception e) {
-						Log.v(TAG, "DownloadServerMessage exception: " + e.getCause());
-						result = Activity.RESULT_CANCELED;
-						e.printStackTrace();
-					} finally {
-						if (stream != null) {
-							try {
-								stream.close();
-							} catch (IOException e) {
-								result = Activity.RESULT_CANCELED;
-								e.printStackTrace();
-							}
+					 */
+				} catch (Exception e) {
+					Log.v(TAG, "DownloadServerMessage exception: " + e.getCause());
+					result = Activity.RESULT_CANCELED;
+					e.printStackTrace();
+				} finally {
+					if (stream != null) {
+						try {
+							stream.close();
+						} catch (IOException e) {
+							result = Activity.RESULT_CANCELED;
+							e.printStackTrace();
 						}
 					}
-			   }                        
-			}).start();
-		
+				}
+			}                        
+		}).start();
 	}
 
+	private int tickerNumber = 0;
+
+	private String getServiceTicker () {
+		tickerNumber++;
+		Log.v(TAG, "DownloaderService Ticker " + tickerNumber);
+		String currentTimeString = new SimpleDateFormat("> HH:mm", Locale.US).format(new Date());
+		return ("SRV" + tickerNumber + currentTimeString);
+	}
 	
-	private void publishResults(String loadedMessage, int result) {
+	private void publishResults(String loadedMessage, String serviceStatus, int result) {
 		Log.v(TAG, "DownloadServerMessage publishResults");
 		Intent intent = new Intent(NOTIFICATION);
-		intent.putExtra(ServiceConfig.LOADEDSTRING, loadedMessage);
+		intent.putExtra(ServiceConfig.LOADEDMESSAGE, loadedMessage);
+		intent.putExtra(ServiceConfig.SERVICESTATUS, serviceStatus);
 		intent.putExtra(RESULT, result);
 		sendBroadcast(intent);
 	}
