@@ -49,10 +49,10 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	private static final String LOGOUT_TAG = "logoutTag";
 	private CheckBox mCheckboxBoot, mCheckboxAppLoad;
 	private TextView mText;
-	private DownloadServerMessage downloadService = null;
+	//private DownloadServerMessage downloadService = null;
 	// private BroadcastReceiver receiver = null;
 	private ScheduleReceiver scheduleReceiver;
-	private ServerMessage receivedServerMessage = null;	
+	private ServerMessage processedServerMessage = null;	
 	private ServiceConfig config;
 	
 	/**
@@ -69,7 +69,7 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		
 		addListenerOnCheckboxBoot();
 		addListenerOnCheckboxAppLoad();
-    	
+    	setRadioButton();
 		addListenerOnFindMeetingImageView();
 		addListenerOnSubmitMeetingImageView ();
 		addListenerOnSettingsImageView();
@@ -79,10 +79,10 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			
 		initMessageFromServer();
 
-		updateTicker(receivedBroadcastMessage);
-		handler.postDelayed (runnableTicker, 1000);
+		// updateTicker(receivedBroadcastMessage);
+		//handler.postDelayed (runnableTicker, 1000);
 		// Show that the message is not fresh:
-		receivedBroadcastMessage += "_";
+		// receivedBroadcastMessage += "_";
 	
 		initRecoveryText();
 		
@@ -95,29 +95,72 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		sendBroadcast(intent);
 	}
 	
-	private String receivedBroadcastMessage = " ? ";
 	
-	private BroadcastReceiver localReceiver = new BroadcastReceiver() {
-		  @Override
-		  public void onReceive(Context context, Intent intent) {
-			  Log.v(TAG, "LocalBroadcastReceiver onReceive: Broadcast intent detected " + intent.getAction());
-				// broadcastResult = intent.getAction();
-				if (intent.hasExtra(ServiceConfig.LOADEDSTRING)) {
-					receivedBroadcastMessage = intent.getExtras().getString(ServiceConfig.LOADEDSTRING);
-		        }
-				else {
-					receivedBroadcastMessage = "LOADEDSTRING not found";
-				}
-				Log.v(TAG, "LocalBroadcastReceiver onReceive broadcastResult: " + receivedBroadcastMessage);
-		  }
-		};
-	
-		private int tickerNumber = 0;
+	private String receivedBroadcastMessage = "";
 
-		private void updateTicker (String message) {
-			tickerNumber++;
-			mText.setText(tickerNumber + ". " + message);
+	private BroadcastReceiver localReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.v(TAG, "LocalBroadcastReceiver onReceive: Broadcast intent detected " + intent.getAction());
+			String status = "Undefined";
+			if (intent.hasExtra(ServiceConfig.SERVICESTATUS)) {
+				status = intent.getExtras().getString(ServiceConfig.SERVICESTATUS);	
+			}
+			if (intent.hasExtra(ServiceConfig.LOADEDMESSAGE)) {
+				receivedBroadcastMessage = intent.getExtras().getString(ServiceConfig.LOADEDMESSAGE);
+				if (receivedBroadcastMessage != "") {
+					processServerMessage(receivedBroadcastMessage);
+					if (processedServerMessage != null) {
+						receivedBroadcastMessage = processedServerMessage.toString();
+						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedBroadcastMessage);
+						showServiceMessage();
+					}
+					else {
+						Log.v(TAG, "ServerMessage is empty, status " + status);	
+					}
+				}
+				else {
+					Log.v(TAG, "JSON is empty, status " + status);
+				}
+	        }
+			else {
+				receivedBroadcastMessage = "Not found, status " + status;
+			}
+			
+			Log.v(TAG, "LocalBroadcastReceiver onReceive broadcastResult: " + receivedBroadcastMessage);
+			
+			/*
+			int resultCode = downloadService.getResult();
+			if (resultCode  == RESULT_OK) {
+				String stringJson = downloadService.getLoadedString();
+				if (stringJson !="") {
+					processServerMessage(stringJson);
+					if (receivedServerMessage != null) {
+						receivedBroadcastMessage = receivedServerMessage.toString();
+						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedBroadcastMessage);
+						showServiceMessage();
+					}
+					else
+						Log.v(TAG, "ServerMessage is empty");
+				}
+				else
+					Log.v(TAG, "JSON is empty");
+			}
+			else
+				Log.v(TAG, "Result is not OK");
+			*/
+
 		}
+	};
+
+	/*
+	private int tickerNumber = 0;
+
+	private void updateTicker (String message) {
+		tickerNumber++;
+		mText.setText(tickerNumber + ". " + message);
+	}
+	*/
 
 	public void addListenerOnCheckboxBoot () {
     	mCheckboxBoot = (CheckBox) findViewById(R.id.checkBoxBoot);
@@ -141,6 +184,16 @@ implements LogoutDialogFragment.LogoutDialogListener {
     	});
       }
 
+    public void setRadioButton () {
+    	RadioButton radioButton;
+    	switch (config.serviceMode.getServiceRunMode()) {
+	    	case 0: radioButton = (RadioButton) findViewById(R.id.radioOnClick); break;
+	    	case 1: radioButton = (RadioButton) findViewById(R.id.radioOneMin); break;
+	    	default: radioButton = (RadioButton) findViewById(R.id.radioFiveMin); break;
+    	}
+    	radioButton.setChecked(true);	
+    }
+    
 	public void addListenerOnFindMeetingImageView() {
 		ImageView findMeetingImageView = (ImageView) findViewById(R.id.findMeetingImageView);
 		findMeetingImageView.setOnClickListener(new OnClickListener() {
@@ -239,7 +292,7 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	    config.saveConfig(getApplicationContext());
         Log.v(TAG, "onPause");
         unregisterReceiver(localReceiver);
-	    handler.removeCallbacks(runnableTicker);
+	    //handler.removeCallbacks(runnableTicker);
 	}
 	
 	@Override
@@ -322,7 +375,7 @@ implements LogoutDialogFragment.LogoutDialogListener {
         Log.v(TAG, "broadcastReceiver initialized: " + receivedBroadcastMessage + "/" + config.serviceMode.name());
 	}
 
-
+/*
 	private Handler handler = new Handler();
 
 	private Runnable runnableTicker = new Runnable() {
@@ -332,7 +385,7 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			handler.postDelayed(this, 30000);
 		}
 	};
-
+	
 	private void showServerMessage () {
 		
 		mText.setVisibility(View.GONE);
@@ -361,34 +414,49 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		else
 			Log.v(TAG, "Service is disconnected");
 	}
-	
+	*/
 	public void processServerMessage (String messageJson) {
 		if (messageJson.length() > 0) {
 			// Log.v(TAG, "processing " + messageJson);
 			GsonBuilder gsonBuilder = new GsonBuilder();
 			gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 			Gson gson = gsonBuilder.create();
-			receivedServerMessage = gson.fromJson(messageJson, ServerMessage.class);
+			processedServerMessage = gson.fromJson(messageJson, ServerMessage.class);
 			return;
 		}
-		receivedServerMessage = null;
+		processedServerMessage = null;
 	}
 
-	  private ServiceConnection downloadServiceConnection = new ServiceConnection() {
-
-		  public void onServiceConnected(ComponentName className, IBinder binder) {
-			  DownloadServerMessage.ServiceBinder bndr = (DownloadServerMessage.ServiceBinder) binder;
-			  downloadService = bndr.getService();
-			  Log.v(TAG, "onServiceConnected");
-		  }
-
-		  public void onServiceDisconnected(ComponentName className) {
-			  downloadService = null;
-			  Log.v(TAG, "onServiceDisconnected");
-		  }
-	  };
-	  
+	public void showServiceMessage () {
+		if (processedServerMessage != null) {
+			mText.setVisibility(View.VISIBLE);
+			String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
+			mText.setText(timeStamp + " " + processedServerMessage.firstShortMessage());			
+		}
+		else
+			mText.setVisibility(View.INVISIBLE);
+	}
 	
+	/*
+	@SuppressWarnings("unused")
+	private DownloadServerMessage downloadService = null;
+
+	@SuppressWarnings("unused")
+	private ServiceConnection downloadServiceConnection = new ServiceConnection() {
+
+		public void onServiceConnected(ComponentName className, IBinder binder) {
+			DownloadServerMessage.ServiceBinder bndr = (DownloadServerMessage.ServiceBinder) binder;
+			downloadService = bndr.getService();
+			Log.v(TAG, "onServiceConnected");
+		}
+
+		public void onServiceDisconnected(ComponentName className) {
+			downloadService = null;
+			Log.v(TAG, "onServiceDisconnected");
+		}
+	};
+	 */
+
 	private View.OnClickListener setDateClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -486,7 +554,6 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	public void onButtonConfigureClick(View v) {
     	config.saveConfig(getApplicationContext());
 	}
-
 	
 	public void onRadioButtonClicked(View v) {
 	    RadioButton button = (RadioButton) v;
@@ -503,6 +570,5 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	    }
 	    Log.v(TAG, "onRadioButtonClicked " + button.getText() + " service mode " + config.serviceMode);
 	}
-	
 	
 }
