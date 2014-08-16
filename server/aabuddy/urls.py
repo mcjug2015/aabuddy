@@ -1,10 +1,11 @@
 ''' urls module for aa buddy app '''
 from tastypie.api import Api
-from aabuddy.api import ServerMessageResource
+from aabuddy.api import ServerMessageResource, MeetingTypeResource
 from django.conf.urls import patterns, url, include
 
 AABUDDY_API = Api(api_name="v1")
 AABUDDY_API.register(ServerMessageResource())
+AABUDDY_API.register(MeetingTypeResource())
 
 urlpatterns = patterns('',
     url(r'^api/', include(AABUDDY_API.urls)),

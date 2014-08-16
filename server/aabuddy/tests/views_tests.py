@@ -43,16 +43,17 @@ class TestViews(TestCase):
                           geo_location=location)
     
     def test_temp_meeting_to_json_obj(self):
-        ''' test the temp_meeting_to_json_obj without a distance or an id '''
+        ''' test the temp_meeting_to_json_obj without a distance '''
         meeting = self.__get_test_meeting()
+        meeting.save()
         retval = temp_meeting_to_json_obj(meeting)
         self.assertEqual(retval['name'], meeting.name)
         self.assertEqual(retval['distance'], 0)
-        self.assertEqual(retval['id'], None)
         
     def test_temp_meeting_to_json_obj_with_distance(self):
         ''' test the temp_meeting_to_json_obj with a distance '''
         meeting = self.__get_test_meeting()
+        meeting.save()
         meeting.distance = mock()
         meeting.distance.mi = 3.9
         retval = temp_meeting_to_json_obj(meeting)

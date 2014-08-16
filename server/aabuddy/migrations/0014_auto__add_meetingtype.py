@@ -8,30 +8,31 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'MeetingTypeValue'
-        db.create_table(u'aabuddy_meetingtypevalue', (
+        # Adding model 'MeetingType'
+        db.create_table(u'aabuddy_meetingtype', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('short_name', self.gf('django.db.models.fields.CharField')(max_length=250)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=250)),
             ('description', self.gf('django.db.models.fields.CharField')(max_length=250)),
         ))
-        db.send_create_signal(u'aabuddy', ['MeetingTypeValue'])
-
-        # Adding model 'MeetingType'
-        db.create_table(u'aabuddy_meetingtype', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('meeting', self.gf('django.db.models.fields.related.ForeignKey')(related_name='type_links', to=orm['aabuddy.Meeting'])),
-            ('type_value', self.gf('django.db.models.fields.related.ForeignKey')(related_name='meeting_links', to=orm['aabuddy.MeetingTypeValue'])),
-        ))
         db.send_create_signal(u'aabuddy', ['MeetingType'])
+
+        # Adding M2M table for field types on 'Meeting'
+        m2m_table_name = db.shorten_name(u'aabuddy_meeting_types')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('meeting', models.ForeignKey(orm[u'aabuddy.meeting'], null=False)),
+            ('meetingtype', models.ForeignKey(orm[u'aabuddy.meetingtype'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['meeting_id', 'meetingtype_id'])
 
 
     def backwards(self, orm):
-        # Deleting model 'MeetingTypeValue'
-        db.delete_table(u'aabuddy_meetingtypevalue')
-
         # Deleting model 'MeetingType'
         db.delete_table(u'aabuddy_meetingtype')
+
+        # Removing M2M table for field types on 'Meeting'
+        db.delete_table(db.shorten_name(u'aabuddy_meeting_types'))
 
 
     models = {
@@ -58,7 +59,8 @@ class Migration(SchemaMigration):
             'internal_type': ('django.db.models.fields.CharField', [], {'default': "'submitted'", 'max_length': '10'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'start_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(11, 30)'})
+            'start_time': ('django.db.models.fields.TimeField', [], {'default': 'datetime.time(11, 30)'}),
+            'types': ('django.db.models.fields.related.ManyToManyField', [], {'blank': 'True', 'related_name': "'meetings'", 'null': 'True', 'symmetrical': 'False', 'to': u"orm['aabuddy.MeetingType']"})
         },
         u'aabuddy.meetingnotthere': {
             'Meta': {'object_name': 'MeetingNotThere'},
@@ -73,12 +75,6 @@ class Migration(SchemaMigration):
         },
         u'aabuddy.meetingtype': {
             'Meta': {'object_name': 'MeetingType'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'meeting': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'type_links'", 'to': u"orm['aabuddy.Meeting']"}),
-            'type_value': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'meeting_links'", 'to': u"orm['aabuddy.MeetingTypeValue']"})
-        },
-        u'aabuddy.meetingtypevalue': {
-            'Meta': {'object_name': 'MeetingTypeValue'},
             'description': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '250'}),
@@ -108,7 +104,7 @@ class Migration(SchemaMigration):
         u'aabuddy.userconfirmation': {
             'Meta': {'object_name': 'UserConfirmation'},
             'confirmation_key': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 8, 9, 0, 0)'}),
+            'created_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2014, 8, 16, 0, 0)'}),
             'expiration_date': ('django.db.models.fields.DateTimeField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'confirmations'", 'to': u"orm['auth.User']"})

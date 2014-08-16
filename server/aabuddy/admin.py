@@ -1,7 +1,7 @@
 from django.contrib.gis import admin
 from aabuddy.models import (Meeting, UserConfirmation, MeetingNotThere,
                             PsvFileUpload, NotThereView, ActiveNotTheresView, ServerMessage,
-                            MeetingTypeValue, MeetingType)
+                            MeetingType)
 from django import forms
 from django.core.exceptions import ValidationError
 import tempfile
@@ -85,13 +85,22 @@ class MeetingNotThereInline(admin.TabularInline):
     model = MeetingNotThere
     extra = 0
     readonly_fields = ['user', 'request_host', 'user_agent', 'unique_phone_id', 'created_date']
-    
+
+
+class MeetingTypesInline(admin.TabularInline):
+
+    def has_add_permission(self, request):
+        return False
+
+    model = MeetingType
+    extra = 0
+
 
 class MeetingAdmin(admin.GeoModelAdmin):
     list_display = ('name', 'description', 'address', 'day_of_week', 'start_time', 'end_time', 'internal_type', 'creator', 'created_date', 'geo_location')
     list_filter = ('day_of_week', 'start_time', 'end_time', 'internal_type', 'creator',)
     list_per_page = 25
-    inlines = [MeetingNotThereInline,]
+    inlines = [MeetingNotThereInline]
     actions = [get_meetings_psv]
 
 
@@ -155,6 +164,5 @@ admin.site.register(MeetingNotThere, MeetingNotThereAdmin)
 admin.site.register(PsvFileUpload, PsvFileUploadAdmin)
 admin.site.register(NotThereView, NotThereViewAdmin)
 admin.site.register(ActiveNotTheresView, ActiveMeetingNotThereViewAdmin)
-admin.site.register(MeetingTypeValue)
 admin.site.register(MeetingType)
 admin.site.register(ServerMessage)

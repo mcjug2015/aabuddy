@@ -107,6 +107,7 @@ def temp_meeting_to_json_obj(meeting):
     json_obj['id'] = meeting.pk
     json_obj['creator'] = meeting.creator.username
     json_obj['created_date'] = meeting.created_date.isoformat()
+    json_obj['types'] = [meeting_type.id for meeting_type in meeting.types.all()]
     return json_obj
 
 
