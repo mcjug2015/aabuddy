@@ -1,16 +1,16 @@
 package org.mcjug.aameetingmanager.meeting;
 
 public class MeetingType {	
-	String id;
+	int id;
 	String name;
 	String shortName;
 	String description;
 	String resourceUri;
 	
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	

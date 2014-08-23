@@ -1,10 +1,11 @@
 package org.mcjug.aameetingmanager.meeting;
 
 import java.util.Date;
+import java.util.List;
 
 public class Meeting {
 	private int id;
-	
+
 	private String name;
 	private String description;
 	private String creator;
@@ -16,7 +17,8 @@ public class Meeting {
 	private int dayOfWeekIdx;
 	private double latitude;
 	private double longitude;
-	
+	private List<MeetingType> meetingTypes;
+
 	public int getId() {
 		return id;
 	}
@@ -24,23 +26,23 @@ public class Meeting {
 	public void setId(int id) {
 		this.id = id;
 	}	
-	
+
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}	
-	
+
 	public String getDescription() {
 		return description;
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public String getCreator() {
 		return creator;
 	}
@@ -60,11 +62,11 @@ public class Meeting {
 	public String getTimeRange() {
 		return timeRange;
 	}
-	
+
 	public void setTimeRange(String timeRange) {
 		this.timeRange = timeRange;
 	}	
-	
+
 	public Date getStartTime() {
 		return startTime;
 	}
@@ -84,15 +86,15 @@ public class Meeting {
 	public String getAddress() {
 		return address;
 	}
-	
+
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	
+
 	public String getDistance() {
 		return distance;
 	}
-	
+
 	public void setDistance(String distance) {
 		this.distance = distance;
 	}
@@ -112,4 +114,13 @@ public class Meeting {
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
 	}
+
+	public List<MeetingType> getMeetingTypes() {
+		return meetingTypes;
+	}
+
+	public void setMeetingTypes(List<MeetingType> meetingTypes) {
+		this.meetingTypes = meetingTypes;
+	}
+
 }
