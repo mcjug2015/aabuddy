@@ -44,6 +44,7 @@
     <string name="reset_password_url_path">/meetingfinder/send_reset_conf</string>
     <string name="change_password_url_path">/meetingfinder/change_password</string>
     <string name="delete_meeting_url_path">/meetingfinder/delete_my_meeting</string>
+    <string name="get_meeting_types_url_path">/meetingfinder/api/v1/meeting_type/?format=json/</string>
     <string name="all_days_of_week">All</string>
     <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
     <string name="sortBy">Sort By:</string>
