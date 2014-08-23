@@ -8,11 +8,12 @@ import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 
 import android.app.Application;
+import android.util.SparseArray;
 
 public class AAMeetingApplication extends Application {
 	private MeetingListResults meetingListResults;
 	private List<Integer> meetingNotThereList = null;
-	private List<MeetingType> meetingTypes = new ArrayList<MeetingType>();
+	private SparseArray<MeetingType> meetingTypes = new SparseArray<MeetingType>();
 
 	// instance 
 	private static AAMeetingApplication instance = null;
@@ -38,11 +39,11 @@ public class AAMeetingApplication extends Application {
 		this.meetingListResults = meetingListResults;
 	}
 
-	public List<MeetingType> getMeetingTypes() {
+	public SparseArray<MeetingType> getMeetingTypes() {
 		return meetingTypes;
 	}
 
-	public void setMeetingTypes(List<MeetingType> meetingTypes) {
+	public void setMeetingTypes(SparseArray<MeetingType> meetingTypes) {
 		this.meetingTypes = meetingTypes;
 	}
 

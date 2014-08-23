@@ -8,18 +8,21 @@ import java.util.List;
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
+import org.mcjug.aameetingmanager.meeting.MeetingType;
 
 import android.content.Context;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.util.Log;
+import android.util.SparseArray;
 
 public class MeetingListUtil {
-    private static final String TAG = MeetingListUtil.class.getSimpleName();
+	private static final String TAG = MeetingListUtil.class.getSimpleName();
 
-    private static final String ID = "id";
+	private static final String ID = "id";
 	private static final String NAME = "name";
 	private static final String DESCRIPTION = "description";
 	private static final String CREATOR = "creator";
@@ -30,28 +33,30 @@ public class MeetingListUtil {
 	private static final String DISTANCE = "distance";
 	private static final String LATITUDE = "lat";
 	private static final String LONGITUDE = "long";
+	private static final String MEETING_TYPE_IDS = "types";
 
 	public static MeetingListResults getMeetingList(Context context, HttpResponse httpResponse) throws Exception {
 		String jsonStr = HttpUtil.getContent(httpResponse);
-	    Log.d(TAG, "Meeting list: " + jsonStr);
+		Log.d(TAG, "Meeting list: " + jsonStr);
 
-	    boolean is24HourTime = DateTimeUtil.is24HourTime(context);
+		boolean is24HourTime = DateTimeUtil.is24HourTime(context);
 
-	    MeetingListResults meetingListResults = new MeetingListResults();
+		MeetingListResults meetingListResults = new MeetingListResults();
 		List<Meeting> meetings = new ArrayList<Meeting>();
-	    if (jsonStr != null) {
-		    JSONObject jsonObj = new JSONObject(jsonStr);
+		if (jsonStr != null) {
+			JSONObject jsonObj = new JSONObject(jsonStr);
 
-		    JSONObject metaJson = jsonObj.getJSONObject("meta");
-		    meetingListResults.setTotalMeetingCount(metaJson.getInt("total_count"));
+			JSONObject metaJson = jsonObj.getJSONObject("meta");
+			meetingListResults.setTotalMeetingCount(metaJson.getInt("total_count"));
 
-		    JSONArray meetingsJson = jsonObj.getJSONArray("objects");
-		    if (meetingsJson != null) {
+			JSONArray meetingsJson = jsonObj.getJSONArray("objects");
+			if (meetingsJson != null) {
 				JSONObject meetingJson;
 				Meeting meeting;
 				String startTime;
 				String endTime;
-				
+				SparseArray<MeetingType> allMeetingTypes = AAMeetingApplication .getInstance().getMeetingTypes();
+
 				for (int i = 0; i < meetingsJson.length(); i++) {
 					try {
 						meetingJson = meetingsJson.getJSONObject(i);
@@ -64,10 +69,10 @@ public class MeetingListUtil {
 
 						int dayOfWeekIdx = meetingJson.getInt(DAY_OF_WEEK);
 						meeting.setDayOfWeekIdx(dayOfWeekIdx);
-						
+
 						meeting.setStartTime(getMeetingTime(meetingJson, START_TIME));
 						meeting.setEndTime(getMeetingTime(meetingJson, END_TIME));
-						
+
 						startTime = convertTime(meetingJson, START_TIME, is24HourTime);
 						endTime = convertTime(meetingJson, END_TIME, is24HourTime);
 						meeting.setTimeRange(startTime + " - " +  endTime);
@@ -78,13 +83,25 @@ public class MeetingListUtil {
 						meeting.setLatitude(meetingJson.getDouble(LATITUDE));
 						meeting.setLongitude(meetingJson.getDouble(LONGITUDE));
 
+						List<MeetingType> meetingTypes = new ArrayList<MeetingType>();
+						MeetingType meetingType;
+						JSONArray meetingTypeIds = meetingJson.getJSONArray(MEETING_TYPE_IDS);
+						for (int idx = 0; idx < meetingTypeIds.length(); idx++) {
+							int id = (Integer)meetingTypeIds.get(idx);
+							meetingType = allMeetingTypes.get(id);
+							if (meetingType != null) {
+								meetingTypes.add(meetingType);
+							}
+						}						
+						meeting.setMeetingTypes(meetingTypes);
+
 						meetings.add(meeting);
 					} catch (Exception e) {
 					}
 				}
 
 				meetingListResults.setMeetings(meetings);
-		    }
+			}
 		}
 
 		return meetingListResults;
@@ -111,12 +128,12 @@ public class MeetingListUtil {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(new Date());
 
-	    int hour = Integer.parseInt(meetingJson.getString(timeKey).substring(0, 2));
-	    int minutes = Integer.parseInt(meetingJson.getString(timeKey).substring(3, 5));
+		int hour = Integer.parseInt(meetingJson.getString(timeKey).substring(0, 2));
+		int minutes = Integer.parseInt(meetingJson.getString(timeKey).substring(3, 5));
 
-	    calendar.set(Calendar.HOUR_OF_DAY, hour);
+		calendar.set(Calendar.HOUR_OF_DAY, hour);
 		calendar.set(Calendar.MINUTE, minutes);
-	
+
 		return calendar.getTime();
 	}
 
@@ -141,7 +158,7 @@ public class MeetingListUtil {
 
 		id.append(deviceId);
 
-	    Log.d(TAG, "getUniqueDeviceId: " + id);
+		Log.d(TAG, "getUniqueDeviceId: " + id);
 
 		return id.toString();
 	}
