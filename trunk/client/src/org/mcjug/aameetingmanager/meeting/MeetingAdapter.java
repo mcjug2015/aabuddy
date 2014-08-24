@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	private final List<Meeting> meetings;
-    private int selectedItem = -1;
+	private int selectedItem = -1;
 
 	public MeetingAdapter(Context context, int textViewResourceId, List<Meeting> meetings) {
 		super (context, textViewResourceId, meetings);
@@ -57,10 +57,11 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 			holder.distance = (TextView) view.findViewById(R.id.meetingDistance);
 			holder.time = (TextView) view.findViewById(R.id.meetingTime);
 			holder.name = (TextView) view.findViewById(R.id.meetingName);
+			holder.types = (TextView) view.findViewById(R.id.meetingTypes);
 
 			view.setTag(holder);
 		} else {
-		    holder = (ViewHolder) convertView.getTag();
+			holder = (ViewHolder) convertView.getTag();
 		}
 
 		final Meeting meeting = getItem(position);
@@ -71,35 +72,51 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 			holder.distance.setText(meeting.getDistance());
 			holder.time.setText(meeting.getTimeRange());
 			holder.name.setText(meeting.getName());
+
+			List<MeetingType> meetingTypes = meeting.getMeetingTypes();
+			StringBuilder typesStr = new StringBuilder();
+			for (MeetingType meetingType : meetingTypes) {
+				typesStr.append(meetingType.shortName + ",");
+			}
+
+			if (typesStr.length() > 0) {
+				int idx = typesStr.lastIndexOf(",");
+				typesStr = typesStr.deleteCharAt(idx);
+				holder.types.setText(typesStr);	
+				holder.types.setVisibility(View.VISIBLE);
+			} else {
+				holder.types.setVisibility(View.GONE);
+			}
+
 		}
 
 		if (Build.VERSION.SDK_INT < 11) {
 			RelativeLayout activeItem = (RelativeLayout) view;
-			
+
 			TextView tvDescription = (TextView) view.findViewById(R.id.meetingDescription);
-			
+
 			if (position == selectedItem) {
 				activeItem.setBackgroundColor(Color.argb(0x80, 0x10, 0xb0, 0xe4));
 
-	            // set focus on list item
-	            int top = (activeItem == null) ? 0 : activeItem.getTop();
-	            ListView listView = (ListView) parent;
-	            listView.setSelectionFromTop(position, top);
-	            
-	            if (tvDescription != null) {
+				// set focus on list item
+				int top = (activeItem == null) ? 0 : activeItem.getTop();
+				ListView listView = (ListView) parent;
+				listView.setSelectionFromTop(position, top);
+
+				if (tvDescription != null) {
 					tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 					tvDescription.setMarqueeRepeatLimit(-1);
 					tvDescription.setSelected(true);
 					tvDescription.setSingleLine(true);
 				}
-	            
-	        } else {
-	        	activeItem.setBackgroundColor(Color.TRANSPARENT);
-	        	if (tvDescription != null) {
-	        		tvDescription.setEllipsize(TextUtils.TruncateAt.END);
-	        		tvDescription.setMarqueeRepeatLimit(3);
-	        	}
-	        }
+
+			} else {
+				activeItem.setBackgroundColor(Color.TRANSPARENT);
+				if (tvDescription != null) {
+					tvDescription.setEllipsize(TextUtils.TruncateAt.END);
+					tvDescription.setMarqueeRepeatLimit(3);
+				}
+			}
 		}
 		return view;
 	}
@@ -111,5 +128,6 @@ public class MeetingAdapter extends ArrayAdapter<Meeting>{
 		TextView distance;
 		TextView time;
 		TextView name;
+		TextView types;
 	}
 }
