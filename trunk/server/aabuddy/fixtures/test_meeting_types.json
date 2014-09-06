@@ -1,0 +1,29 @@
+[
+    {
+        "pk": 1,
+        "model": "aabuddy.meetingtype",
+        "fields": {
+            "short_name": "o",
+            "name": "open meeting",
+            "description": "an open meeting of aa"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "aabuddy.meetingtype",
+        "fields": {
+            "short_name": "c",
+            "name": "closed meeting",
+            "description": "a closed meeting of aa"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "aabuddy.meetingtype",
+        "fields": {
+            "short_name": "bb",
+            "name": "big book meeting",
+            "description": "a big book meeting"
+        }
+    }
+]

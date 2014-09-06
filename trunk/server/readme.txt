@@ -107,6 +107,13 @@ curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO' http://localhos
 You can optionally add notes to meeting_not_there:
 curl -v -X POST -d 'meeting_id=1&unique_phone_id=TROLLOLOLOLOLO&note=NO_MEETING_WAS_HELD' http://localhost:8888/meetingfinder/post_meeting_not_there
 
+*** Meeting types ***
+Associate types with a meeting using their respective ids:
+curl -H "Content-Type: application/json" -X POST -d '{"meeting_id": 197, "type_ids": [2, 3]}' 'http://127.0.0.1/meetingfinder/save_types_for_meeting/'
+Note - Any types previously associated with the meeting will be purged before new types are associated
+
+
+
 VM u/p:
 root/reverse
 

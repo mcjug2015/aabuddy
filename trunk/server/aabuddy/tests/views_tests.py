@@ -4,7 +4,7 @@ import django.core.mail as django_mail
 from aabuddy.views import (temp_meeting_to_json_obj, temp_json_obj_to_meeting,
                            DayOfWeekGetParams, TimeParams, get_meetings_count_query_set,
                            send_email_to_user, get_json_obj_for_meetings)
-from aabuddy.models import Meeting
+from aabuddy.models import Meeting, MeetingType
 import datetime
 from django.contrib.auth.models import User
 from django.contrib.gis.geos.factory import fromstr
@@ -190,3 +190,26 @@ class TestTimeParams(TestCase):
         self.assertIsNotNone(re.match(".*WHERE.*end_time.*\<\=.*00:44:55", query_str))
         self.assertIsNone(re.match(".*WHERE.*start_time.*\<\=.*13:44:55", query_str))
         self.assertIsNone(re.match(".*WHERE.*end_time.*\>\=.*12:40:50", query_str))
+        
+
+class TestSaveTypes(TestCase):
+    ''' tests for the save_types_for_meeting method '''
+    fixtures = ['test_users.json', 'test_meetings.json', 'test_meeting_types.json']
+    
+    def test_get(self):
+        ''' verify that get returns a 405 '''
+        response = self.client.get('/meetingfinder/save_types_for_meeting/')
+        self.assertEquals(response.status_code, 405)
+        
+    def test_valid_post(self):
+        ''' test posting a valid list of meeting types for a meeting '''
+        meeting = Meeting.objects.get(pk=1)
+        meeting.types.add(MeetingType.objects.get(pk=1))
+        post_obj = {'meeting_id': 1, 'type_ids': [2, 3]}
+        response = self.client.post('/meetingfinder/save_types_for_meeting/', json.dumps(post_obj), 'application/json')
+        self.assertEquals(response.status_code, 200)
+        response = self.client.get('/meetingfinder/get_meeting_by_id/', {'meeting_id': 1})
+        meeting_obj = json.loads(response.content)['objects'][0]
+        self.assertIn(2, meeting_obj['types'])
+        self.assertIn(3, meeting_obj['types'])
+        self.assertNotIn(1, meeting_obj['types'])
