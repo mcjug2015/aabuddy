@@ -19,5 +19,6 @@ urlpatterns = patterns('',
     url(r'^send_reset_conf', 'aabuddy.views.send_reset_conf'),
     url(r'^find_similar', 'aabuddy.views.find_similar'),
     url(r'^delete_my_meeting', 'aabuddy.views.delete_my_meeting'),
-    url(r'^post_meeting_not_there', 'aabuddy.views.post_meeting_not_there')
+    url(r'^post_meeting_not_there', 'aabuddy.views.post_meeting_not_there'),
+    url(r'^save_types_for_meeting', 'aabuddy.views.save_types_for_meeting')
 )

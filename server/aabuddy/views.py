@@ -1,6 +1,7 @@
 from django.contrib.gis.geos import *
 from django.contrib.gis.measure import D
-from aabuddy.models import Meeting, UserConfirmation, MeetingNotThere
+from aabuddy.models import Meeting, UserConfirmation, MeetingNotThere,\
+    MeetingType
 import json
 from django.http import HttpResponse
 import logging
@@ -411,7 +412,22 @@ def delete_my_meeting(request):
     if request.user.is_authenticated() and request.user.is_active and meeting.creator.username == request.user.username:
         meeting.delete()
         return HttpResponse(status=200)
-    
+
+
+@csrf_exempt
+def save_types_for_meeting(request):
+    if request.method == 'POST':
+        json_obj = json.loads(request.raw_post_data)
+        meeting_id = json_obj['meeting_id']
+        meeting = Meeting.objects.get(pk=meeting_id)
+        meeting.types.clear()
+        for type_id in json_obj['type_ids']:
+            meeting_type = MeetingType.objects.get(pk=type_id)
+            meeting.types.add(meeting_type)
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=405)
+
 
 def do_basic_auth(request, *args, **kwargs):
     from django.contrib.auth import authenticate, login
