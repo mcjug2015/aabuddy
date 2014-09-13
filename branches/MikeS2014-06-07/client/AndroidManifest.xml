@@ -17,10 +17,13 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        >
         <activity
             android:name="org.mcjug.aameetingmanager.AAMeetingManager"
-            android:label="@string/title_activity_main" >
+            android:label="@string/title_activity_main" 
+       		android:launchMode="singleTask"     
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,18 +67,18 @@
         
         
         <service
-            android:name="org.mcjug.aameetingmanager.DownloadServerMessage"
+            android:name="org.mcjug.aameetingmanager.scheduleservice.DownloaderService"
             android:icon="@drawable/ic_launcher16px"
             android:label="@string/serviceName" >
         </service>
         
-        <receiver android:name="org.mcjug.aameetingmanager.ScheduleReceiver" >
+        <receiver android:name="org.mcjug.aameetingmanager.scheduleservice.ScheduleReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
-        <receiver android:name="org.mcjug.aameetingmanager.StartServiceReceiver" >
-        </receiver>
+        
+        <receiver android:name="org.mcjug.aameetingmanager.scheduleservice.StartServiceReceiver" ></receiver>
         
         
     </application>

@@ -2,27 +2,22 @@ package org.mcjug.aameetingmanager;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
 import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
+import org.mcjug.aameetingmanager.jsonobjects.*;
+import org.mcjug.aameetingmanager.scheduleservice.*;
 import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.meetingfinder.R;
 
-import org.mcjug.aameetingmanager.util.ServiceConfig;
-
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -39,21 +34,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class AAMeetingManager extends SherlockFragmentActivity 
-implements LogoutDialogFragment.LogoutDialogListener {
+			implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
 	private CheckBox mCheckboxBoot, mCheckboxAppLoad;
 	private TextView mText;
 	//private DownloadServerMessage downloadService = null;
-	// private BroadcastReceiver receiver = null;
-	private ScheduleReceiver scheduleReceiver;
-	private ServerMessage processedServerMessage = null;	
+	//private BroadcastReceiver receiver = null;
+	//private ScheduleReceiver scheduleReceiver;
+	//private ServerMessage processedServerMessage = null;	
 	private ServiceConfig config;
+	private ServiceHandler serviceHandler;
 	
 	/**
 	 * (non-Javadoc)
@@ -75,93 +69,13 @@ implements LogoutDialogFragment.LogoutDialogListener {
 		addListenerOnSettingsImageView();
 		addListenerOnHelpImageView ();
 		
-		mText = (TextView) findViewById(R.id.messageFromServer);
-			
 		initMessageFromServer();
-
-		// updateTicker(receivedBroadcastMessage);
-		//handler.postDelayed (runnableTicker, 1000);
-		// Show that the message is not fresh:
-		// receivedBroadcastMessage += "_";
-	
 		initRecoveryText();
 		
 	}
 	
-	private void initiateScheduleReceiver () {
-		scheduleReceiver = new ScheduleReceiver(); 
-    	registerReceiver (scheduleReceiver, new IntentFilter(ScheduleReceiver.NOTIFICATION));
-		Intent intent = new Intent(ScheduleReceiver.NOTIFICATION);
-		sendBroadcast(intent);
-	}
 	
 	
-	private String receivedBroadcastMessage = "";
-
-	private BroadcastReceiver localReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			Log.v(TAG, "LocalBroadcastReceiver onReceive: Broadcast intent detected " + intent.getAction());
-			String status = "Undefined";
-			if (intent.hasExtra(ServiceConfig.SERVICESTATUS)) {
-				status = intent.getExtras().getString(ServiceConfig.SERVICESTATUS);	
-			}
-			if (intent.hasExtra(ServiceConfig.LOADEDMESSAGE)) {
-				receivedBroadcastMessage = intent.getExtras().getString(ServiceConfig.LOADEDMESSAGE);
-				if (receivedBroadcastMessage != "") {
-					processServerMessage(receivedBroadcastMessage);
-					if (processedServerMessage != null) {
-						receivedBroadcastMessage = processedServerMessage.toString();
-						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedBroadcastMessage);
-						showServiceMessage();
-					}
-					else {
-						Log.v(TAG, "ServerMessage is empty, status " + status);	
-					}
-				}
-				else {
-					Log.v(TAG, "JSON is empty, status " + status);
-				}
-	        }
-			else {
-				receivedBroadcastMessage = "Not found, status " + status;
-			}
-			
-			Log.v(TAG, "LocalBroadcastReceiver onReceive broadcastResult: " + receivedBroadcastMessage);
-			
-			/*
-			int resultCode = downloadService.getResult();
-			if (resultCode  == RESULT_OK) {
-				String stringJson = downloadService.getLoadedString();
-				if (stringJson !="") {
-					processServerMessage(stringJson);
-					if (receivedServerMessage != null) {
-						receivedBroadcastMessage = receivedServerMessage.toString();
-						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedBroadcastMessage);
-						showServiceMessage();
-					}
-					else
-						Log.v(TAG, "ServerMessage is empty");
-				}
-				else
-					Log.v(TAG, "JSON is empty");
-			}
-			else
-				Log.v(TAG, "Result is not OK");
-			*/
-
-		}
-	};
-
-	/*
-	private int tickerNumber = 0;
-
-	private void updateTicker (String message) {
-		tickerNumber++;
-		mText.setText(tickerNumber + ". " + message);
-	}
-	*/
-
 	public void addListenerOnCheckboxBoot () {
     	mCheckboxBoot = (CheckBox) findViewById(R.id.checkBoxBoot);
     	mCheckboxBoot.setChecked(config.isCheckboxBootChecked());
@@ -271,17 +185,21 @@ implements LogoutDialogFragment.LogoutDialogListener {
 
 		loginInImageView.setOnClickListener(loginImageViewClickListener);
 	}
+	
+	private void initiateScheduler () {		
+		serviceHandler.startScheduler();
+	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
-		registerReceiver(localReceiver, new IntentFilter(DownloadServerMessage.NOTIFICATION));	
+			
         Log.v(TAG, "onResume: localBroadcastReceiver registered");
         // && !config.isActiveScheduleReceiver()
         if (config.isCheckboxAppLoadChecked() && (config.serviceMode.getServiceRunMode() > 0)) {
-        	initiateScheduleReceiver();
+        	initiateScheduler();
         	Log.v(TAG, "onResume: scheduleReceiver registered");
         }
 	}
@@ -291,44 +209,23 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	    super.onPause();
 	    config.saveConfig(getApplicationContext());
         Log.v(TAG, "onPause");
-        unregisterReceiver(localReceiver);
-	    //handler.removeCallbacks(runnableTicker);
+        if (serviceHandler != null) {
+        	serviceHandler.stopReceiver();
+            Log.v(TAG, "onPause: serviceHandler broadcast Receiver unregistered");
+            serviceHandler.stopScheduler();	
+        }
 	}
 	
 	@Override
 	protected void onDestroy() {
-		doUnbindService();
 	    config.saveConfig(getApplicationContext());
 	    Log.v(TAG, "onDestroy: broadcastReceiver unregistered");
+	    if (serviceHandler != null) {
+		    serviceHandler.stopScheduler();
+		    serviceHandler.cancelNotification();
+	    }
 		super.onDestroy();
 	}
-	
-	@SuppressWarnings("unused")
-	private DownloadServerMessage mBoundService;
-	private ServiceConnection mConnection = new ServiceConnection() {
-	    public void onServiceConnected(ComponentName className, IBinder service) {
-	    	Log.v(TAG, "MainActivity onServiceConnected");
-	    	mBoundService = ((DownloadServerMessage.ServiceBinder)service).getService();
-	    }
-	    public void onServiceDisconnected(ComponentName className) {
-	        mBoundService = null;
-	    }
-	};
-	
-	boolean mIsBound = false;
-	void doBindService() {
-		Intent intent = new Intent(this, DownloadServerMessage.class);
-	    bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
-	    mIsBound = true;
-	}
-	
-	void doUnbindService() {
-	    if (mIsBound) {
-	        unbindService(mConnection);
-	        mIsBound = false;
-	    }
-	}
-
 	
 	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
 		Credentials.removeFromPreferences(getApplicationContext());
@@ -360,103 +257,36 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	}	
 
 	private void initMessageFromServer () {
+		
+		mText = (TextView) findViewById(R.id.messageFromServer);
+		
+		serviceHandler = new ServiceHandler(getApplicationContext(), config.getHandlerDataSourceType());
+		
 		if (config.isCheckboxAppLoadChecked()) {
         	if((config.serviceMode.getServiceRunMode() > 0)) {
-            	initiateScheduleReceiver();
+            	initiateScheduler();
             	Log.v(TAG, "onCreate: scheduleReceiver registered");        		
         	}
         	else {
         		// If RUN_ONCE run downloader service once
-        		startService(new Intent(this, DownloadServerMessage.class));
-        		
+        		Intent intent = new Intent(this, DownloaderService.class);
+        		intent.putExtra("URL", config.getURL());
+        		startService(intent);
     			Log.v(TAG, "onCreate: run DownloaderService once");
         	}
-        }
-        Log.v(TAG, "broadcastReceiver initialized: " + receivedBroadcastMessage + "/" + config.serviceMode.name());
+        }    
 	}
 
-/*
-	private Handler handler = new Handler();
-
-	private Runnable runnableTicker = new Runnable() {
-		@Override
-		public void run() {
-			showServerMessage();
-			handler.postDelayed(this, 30000);
-		}
-	};
-	
-	private void showServerMessage () {
-		
-		mText.setVisibility(View.GONE);
-		if (downloadService != null) {
-			int resultCode = downloadService.getResult();
-			if (resultCode  == RESULT_OK) {
-				String stringJson = downloadService.getLoadedString();
-				if (stringJson !="") {
-					processServerMessage(stringJson);
-					if (receivedServerMessage != null) {
-						Log.v(TAG, "ServerMessage created from gson.fromJson: " + receivedServerMessage.toString());
-						mText.setVisibility(View.VISIBLE);
-						String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-						mText.setText(timeStamp + " " + receivedServerMessage.firstShortMessage());
-						// textView.setText(receivedServerMessage.toString());
-					}
-					else
-						Log.v(TAG, "ServerMessage is empty");
-				}
-				else
-					Log.v(TAG, "JSON is empty");	
-			}
-			else 
-				Log.v(TAG, "Result not OK: " + resultCode);
-		}
-		else
-			Log.v(TAG, "Service is disconnected");
-	}
-	*/
-	public void processServerMessage (String messageJson) {
-		if (messageJson.length() > 0) {
-			// Log.v(TAG, "processing " + messageJson);
-			GsonBuilder gsonBuilder = new GsonBuilder();
-			gsonBuilder.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-			Gson gson = gsonBuilder.create();
-			processedServerMessage = gson.fromJson(messageJson, ServerMessage.class);
-			return;
-		}
-		processedServerMessage = null;
-	}
-
-	public void showServiceMessage () {
-		if (processedServerMessage != null) {
+	public void showServerMessage (String messageText) {
+		if (messageText != null) {
 			mText.setVisibility(View.VISIBLE);
-			String timeStamp = new SimpleDateFormat("HH:mm").format(Calendar.getInstance().getTime());
-			mText.setText(timeStamp + " " + processedServerMessage.firstShortMessage());			
+			String timeStamp = new SimpleDateFormat("HH:mm", Locale.US).format(Calendar.getInstance().getTime());
+			mText.setText(timeStamp + " " + messageText);			
 		}
 		else
 			mText.setVisibility(View.INVISIBLE);
 	}
 	
-	/*
-	@SuppressWarnings("unused")
-	private DownloadServerMessage downloadService = null;
-
-	@SuppressWarnings("unused")
-	private ServiceConnection downloadServiceConnection = new ServiceConnection() {
-
-		public void onServiceConnected(ComponentName className, IBinder binder) {
-			DownloadServerMessage.ServiceBinder bndr = (DownloadServerMessage.ServiceBinder) binder;
-			downloadService = bndr.getService();
-			Log.v(TAG, "onServiceConnected");
-		}
-
-		public void onServiceDisconnected(ComponentName className) {
-			downloadService = null;
-			Log.v(TAG, "onServiceDisconnected");
-		}
-	};
-	 */
-
 	private View.OnClickListener setDateClickListener = new View.OnClickListener() {
 		@Override
 		public void onClick(View view) {
@@ -530,25 +360,35 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	public void onButtonStartClick(View v) {
 		
 		if (config.serviceMode != ServiceConfig.ServiceRunModes.RUN_ONCE && !config.isActiveScheduleReceiver()) {
-			initiateScheduleReceiver();
+			initiateScheduler();
 			Log.v(TAG, "onButtonStartClick -- ScheduleReceiver ");
 		}
 		else {
-			startService(new Intent(this, DownloadServerMessage.class));
+			//startService(new Intent(this, DownloaderService.class));
+			serviceHandler.startServiceOnce(config.getURL());
 			Log.v(TAG, "onButtonStartClick -- DownloaderService");
 		}
 		
-		doBindService();
+        serviceHandler.startReceiver();
 	}
 	
 	public void onButtonStopClick (View v) {
 		Log.v(TAG, "onButtonStopClick");
-		doUnbindService();
 	}
 	
 	public void onButtonInfoClick (View v) {
-		CharSequence text = "Hello there!";
-		Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+		if (config.getHandlerDataSourceType() == ServiceConfig.DataSourceTypes.SIMPLE_MESSAGE ) {
+			ServerMessage sm = serviceHandler.getServerMessage();
+			if (sm == null) {
+				showServerMessage (serviceHandler.getReceivedBroadcastMessage());	
+				Log.v(TAG, "onButtonInfoClick: empty getServerMessage, broadcast " + serviceHandler.getReceivedBroadcastMessage());
+			}
+			else {
+				showServerMessage (sm.firstShortMessage());
+			}	
+		}
+		else
+			Log.v(TAG, "onButtonInfoClick: config.getHandlerDataSourceType == " + config.getHandlerDataSourceType());
 	}
 	
 	public void onButtonConfigureClick(View v) {
