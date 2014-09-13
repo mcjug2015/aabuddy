@@ -1,4 +1,4 @@
-package org.mcjug.aameetingmanager;
+package org.mcjug.aameetingmanager.jsonobjects;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
