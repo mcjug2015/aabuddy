@@ -2,18 +2,21 @@ package org.mcjug.aameetingmanager.meeting;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.meeting.DeleteMeetingTask.DeleteMeetingListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.meetingfinder.R;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,6 +29,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,12 +67,11 @@ public class MeetingListFragment extends ListFragment {
 	private ActionMode actionMode;
 	private ListActionModeCallback listActionModeCallback;
 	private String userName;
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		final View view = inflater.inflate(R.layout.meeting_list_fragment, container, false);
-
-		meetingListNumItemsLabel = (TextView)view.findViewById(R.id.meetingListNumItemsLabel);
+		meetingListNumItemsLabel = (TextView) view.findViewById(R.id.meetingListNumItemsLabel);
 		if (null != savedInstanceState) {
 			offset = savedInstanceState.getInt("offset");
 		}
@@ -78,10 +81,11 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
+		MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 
-		NineLinearLayout linearLayout = (NineLinearLayout)activity.getLayoutInflater().inflate(R.layout.abs__action_mode_close_item, null);
-		ImageView imageView = (ImageView)linearLayout.getChildAt(0);
+		NineLinearLayout linearLayout = (NineLinearLayout) activity.getLayoutInflater().inflate(
+				R.layout.abs__action_mode_close_item, null);
+		ImageView imageView = (ImageView) linearLayout.getChildAt(0);
 		imageView.setImageResource(R.drawable.ic_action_search);
 
 		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();
@@ -97,7 +101,8 @@ public class MeetingListFragment extends ListFragment {
 
 		listActionModeCallback = new ListActionModeCallback();
 
-		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView, listActionModeCallback);
+		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView,
+				listActionModeCallback);
 		infiniteScrollListener.setOffset(offset);
 
 		listView.setOnScrollListener(infiniteScrollListener);
@@ -110,7 +115,7 @@ public class MeetingListFragment extends ListFragment {
 		try {
 			prefs = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
 			sortOrderValues = getResources().getStringArray(R.array.sortOrderValues);
-			sortOrderSpinner = (Spinner)getView().findViewById(R.id.meetingListSortOrder);
+			sortOrderSpinner = (Spinner) getView().findViewById(R.id.meetingListSortOrder);
 			sortOrderSpinner.setOnItemSelectedListener(sortOrderItemSelectListener);
 		} catch (Exception e) {
 			Log.d(TAG, "Error setting meeting list");
@@ -121,7 +126,7 @@ public class MeetingListFragment extends ListFragment {
 		private boolean initialSelection = true;
 
 		@Override
-        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 			if (initialSelection) {
 				initialSelection = false;
 			} else {
@@ -130,23 +135,22 @@ public class MeetingListFragment extends ListFragment {
 		}
 
 		@Override
-        public void onNothingSelected(AdapterView<?> parent) {
+		public void onNothingSelected(AdapterView<?> parent) {
 		}
 	};
 
-	
 	@Override
 	public void onListItemClick(ListView listView, View view, int position, long id) {
-		selectedMeeting = (Meeting)listView.getItemAtPosition(position);
+		selectedMeeting = (Meeting) listView.getItemAtPosition(position);
 		listAdapter.setSelectedItem(position);
-		
+
 		if (actionMode == null) {
-			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
+			MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 			actionMode = activity.startActionMode(listActionModeCallback);
 		}
 
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
-		
+
 		if (Build.VERSION.SDK_INT >= 11) {
 			clearPrevSelectedTextFormat();
 			if (view != null) {
@@ -154,7 +158,7 @@ public class MeetingListFragment extends ListFragment {
 				tvDescription.setEllipsize(TextUtils.TruncateAt.MARQUEE);
 				tvDescription.setMarqueeRepeatLimit(-1);
 				tvDescription.setSelected(true);
-				tvDescription.setSingleLine(true);				
+				tvDescription.setSingleLine(true);
 				selectedMeetingDescription = tvDescription;
 				listAdapter.notifyDataSetChanged();
 			}
@@ -168,7 +172,7 @@ public class MeetingListFragment extends ListFragment {
 			selectedMeetingDescription = null;
 		}
 	}
-	
+
 	private void sortList() {
 		String meetingUrl = prefs.getString(getString(R.string.meetingUrl), "");
 		List<NameValuePair> meetingParams = URLEncodedUtils.parse(URI.create(meetingUrl), "utf-8");
@@ -176,7 +180,10 @@ public class MeetingListFragment extends ListFragment {
 		for (int i = 0; i < meetingParams.size(); i++) {
 			param = meetingParams.get(i);
 			if (param.getName().equals("order_by")) {
-				meetingParams.set(i, new BasicNameValuePair(param.getName(),  sortOrderValues[sortOrderSpinner.getSelectedItemPosition()]));
+				meetingParams.set(
+						i,
+						new BasicNameValuePair(param.getName(), sortOrderValues[sortOrderSpinner
+								.getSelectedItemPosition()]));
 
 			} else if (param.getName().equals("offset")) {
 				meetingParams.set(i, new BasicNameValuePair(param.getName(), "0"));
@@ -192,7 +199,8 @@ public class MeetingListFragment extends ListFragment {
 		infiniteScrollListener.reset();
 
 		String paramStr = URLEncodedUtils.format(meetingParams, "utf-8");
-		FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false, getString(R.string.sortMeetingProgressMsg));
+		FindMeetingTask findMeetingTask = new FindMeetingTask(getActivity(), paramStr, false,
+				getString(R.string.sortMeetingProgressMsg));
 		findMeetingTask.execute();
 	}
 
@@ -202,7 +210,7 @@ public class MeetingListFragment extends ListFragment {
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Create the menu from the xml file
-			SherlockFragmentActivity activity = (SherlockFragmentActivity)getActivity();
+			SherlockFragmentActivity activity = (SherlockFragmentActivity) getActivity();
 			if (userName.trim().equals("")) {
 				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
 				meetingNotThereMenuItem = menu.getItem(1);
@@ -215,7 +223,8 @@ public class MeetingListFragment extends ListFragment {
 		}
 
 		// Called each time the action mode is shown. Always called after
-		// onCreateActionMode, but may be called multiple times if the mode is invalidated.
+		// onCreateActionMode, but may be called multiple times if the mode is
+		// invalidated.
 		@Override
 		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
 			return false;
@@ -229,7 +238,8 @@ public class MeetingListFragment extends ListFragment {
 				if (selectedMeeting.getCreator().equals(userName)) {
 					getDeleteMeetingDialog().show();
 				} else {
-					Toast.makeText(getActivity(), getString(R.string.deleteMeetingMustBeCreatorMsg), Toast.LENGTH_LONG).show();
+					Toast.makeText(getActivity(), getString(R.string.deleteMeetingMustBeCreatorMsg), Toast.LENGTH_LONG)
+							.show();
 				}
 				mode.finish();
 				return true;
@@ -241,6 +251,11 @@ public class MeetingListFragment extends ListFragment {
 
 			case R.id.calendar:
 				displayCalendar(selectedMeeting);
+				mode.finish();
+				return true;
+
+			case R.id.editMeetingTypes:
+				displayMeetingTypesEditor(selectedMeeting);
 				mode.finish();
 				return true;
 
@@ -279,13 +294,13 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		try {
-			MeetingListFragmentActivity activity = (MeetingListFragmentActivity)getActivity();
+			MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();
 			MeetingListResults meetingListResults = app.getMeetingListResults();
 			listAdapter.setMeetings(meetingListResults.getMeetings());
 
-			String numItemsLabel = String.format(getString(R.string.meetingListNumItems),
-					listAdapter.getCount(), meetingListResults.getTotalMeetingCount());
+			String numItemsLabel = String.format(getString(R.string.meetingListNumItems), listAdapter.getCount(),
+					meetingListResults.getTotalMeetingCount());
 			meetingListNumItemsLabel.setText(numItemsLabel);
 
 			infiniteScrollListener.setLoading(false);
@@ -315,14 +330,14 @@ public class MeetingListFragment extends ListFragment {
 		if (latitude != null && longitude != null) {
 
 			// Display a marker with the address at the latitude and longitude
-			String intentURI = "geo:" + latitude + ","+ longitude + "?z=17&q=" + latitude + "," + longitude;
+			String intentURI = "geo:" + latitude + "," + longitude + "?z=17&q=" + latitude + "," + longitude;
 			Uri geo = Uri.parse(intentURI);
 			Intent geoMap = new Intent(Intent.ACTION_VIEW, geo);
 			startActivity(geoMap);
 		}
 	}
-	
-	private void displayCalendar(Meeting meeting) {	
+
+	private void displayCalendar(Meeting meeting) {
 		DateTimeUtil.addToCalendar(getActivity(), meeting);
 	}
 
@@ -334,35 +349,100 @@ public class MeetingListFragment extends ListFragment {
 		noteEditText.setHint("Optional Note");
 
 		builder.setTitle(R.string.postMeetingNotThereConfirmDialogTitle)
-		.setMessage(R.string.postMeetingNotThereConfirmDialogMsg)
+				.setMessage(R.string.postMeetingNotThereConfirmDialogMsg)
 
-		.setView(noteEditText)
-		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-			@Override
-            public void onClick(DialogInterface dialog, int which) {
-				meetingNotThereMenuItem.setEnabled(false);
-				ProgressDialog progressDialog = ProgressDialog.show(context, getString(R.string.postMeetingNotThereProgressMsg),
-						context.getString(R.string.waitMsg));
-                new PostMeetingNotThereTask(context, selectedMeeting.getId(), noteEditText.getText().toString(),
-                    progressDialog).execute();
-                dialog.dismiss();
-			}
-		})
+				.setView(noteEditText).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						meetingNotThereMenuItem.setEnabled(false);
+						ProgressDialog progressDialog = ProgressDialog.show(context,
+								getString(R.string.postMeetingNotThereProgressMsg), context.getString(R.string.waitMsg));
+						new PostMeetingNotThereTask(context, selectedMeeting.getId(),
+								noteEditText.getText().toString(), progressDialog).execute();
+						dialog.dismiss();
+					}
+				})
 
-		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+				.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						dialog.dismiss();
+					}
+				});
+
+		return builder;
+	}
+
+	private void displayMeetingTypesEditor(final Meeting selectedMeeting) {
+		SparseArray<MeetingType> meetingTypesMap = AAMeetingApplication.getInstance().getMeetingTypes();
+		final List<MeetingType> meetingTypesToDisplay = new ArrayList<MeetingType>();
+		for (int i = 0; i < meetingTypesMap.size(); i++) {
+			meetingTypesToDisplay.add(meetingTypesMap.get(meetingTypesMap.keyAt(i)));
+		}
+
+		Collections.sort(meetingTypesToDisplay, new Comparator<MeetingType>() {
 			@Override
-            public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
+			public int compare(MeetingType type, MeetingType type1) {
+				return type.getName().compareTo(type1.getName());
 			}
 		});
 
-		return builder;
+		final List<MeetingType> currentMeetingTypes = selectedMeeting.getMeetingTypes();
+		final List<Integer> currentMeetingIds = new ArrayList<Integer>();
+		final boolean[] itemsToSelect = new boolean[meetingTypesToDisplay.size()];
+		final CharSequence[] meetingTypeNames = new CharSequence[meetingTypesToDisplay.size()];
+
+		for (int i = 0; i < meetingTypesToDisplay.size(); i++) {
+			meetingTypeNames[i] = meetingTypesToDisplay.get(i).getName();
+
+			for (int j = 0; j < currentMeetingTypes.size(); j++) {
+				if (currentMeetingTypes.get(j).getId() == meetingTypesToDisplay.get(i).getId()) {
+					itemsToSelect[i] = true;
+					currentMeetingIds.add(currentMeetingTypes.get(j).getId());
+				}
+			}
+		}
+
+		AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+		builder.setTitle(getString(R.string.meetingTypesTitle))
+				.setMultiChoiceItems(meetingTypeNames, (itemsToSelect.length == 0) ? null : itemsToSelect,
+						new DialogInterface.OnMultiChoiceClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int item, boolean isChecked) {
+								MeetingType meetingType = meetingTypesToDisplay.get(item);
+								int id = meetingType.getId();
+								if (isChecked) {
+									currentMeetingIds.add(id);
+									currentMeetingTypes.add(meetingType);
+								} else if (currentMeetingIds.contains(id)) {
+									currentMeetingIds.remove(Integer.valueOf(id));
+									currentMeetingTypes.remove(meetingType);
+								}
+							}
+						})
+
+				.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						selectedMeeting.sortMeetingTypes();
+						listAdapter.notifyDataSetChanged();
+						new UpdateMeetingTypesTask(getActivity(), selectedMeeting.getId(), currentMeetingIds).execute();
+					}
+				}).setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+
+		Dialog dialog = builder.create();
+		dialog.show();
 	}
 
 	private boolean isMeetingInNotThereList(int meetingId) {
 		List<Integer> notThereList = AAMeetingApplication.getInstance().getMeetingNotThereList();
 		if (notThereList != null) {
-			for(Integer notThereMeetingId : notThereList) {
+			for (Integer notThereMeetingId : notThereList) {
 				if (notThereMeetingId == meetingId) {
 					return true;
 				}
@@ -393,9 +473,8 @@ public class MeetingListFragment extends ListFragment {
 
 		.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 			@Override
-            public void onClick(DialogInterface dialog, int which) {
-				deleteProgressDialog = ProgressDialog.show(context,
-						getString(R.string.deleteMeetingProgressMsg),
+			public void onClick(DialogInterface dialog, int which) {
+				deleteProgressDialog = ProgressDialog.show(context, getString(R.string.deleteMeetingProgressMsg),
 						getString(R.string.waitMsg));
 
 				new DeleteMeetingTask(getActivity(), selectedMeeting, deleteMeetingListener).execute();
@@ -405,7 +484,7 @@ public class MeetingListFragment extends ListFragment {
 
 		.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 			@Override
-            public void onClick(DialogInterface dialog, int which) {
+			public void onClick(DialogInterface dialog, int which) {
 				dialog.dismiss();
 			}
 		});
