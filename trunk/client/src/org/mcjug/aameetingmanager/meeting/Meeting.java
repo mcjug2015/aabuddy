@@ -1,5 +1,7 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class Meeting {
 
 	public void setId(int id) {
 		this.id = id;
-	}	
+	}
 
 	public String getName() {
 		return name;
@@ -33,7 +35,7 @@ public class Meeting {
 
 	public void setName(String name) {
 		this.name = name;
-	}	
+	}
 
 	public String getDescription() {
 		return description;
@@ -65,7 +67,7 @@ public class Meeting {
 
 	public void setTimeRange(String timeRange) {
 		this.timeRange = timeRange;
-	}	
+	}
 
 	public Date getStartTime() {
 		return startTime;
@@ -121,6 +123,15 @@ public class Meeting {
 
 	public void setMeetingTypes(List<MeetingType> meetingTypes) {
 		this.meetingTypes = meetingTypes;
+		sortMeetingTypes();
 	}
 
+	public void sortMeetingTypes() {
+		Collections.sort(this.meetingTypes, new Comparator<MeetingType>() {
+			@Override
+			public int compare(MeetingType type, MeetingType type1) {
+				return type.getShortName().compareTo(type1.getShortName());
+			}
+		});
+	}
 }
