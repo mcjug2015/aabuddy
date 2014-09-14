@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/map"
         android:icon="@drawable/map"
@@ -12,13 +11,16 @@
         android:showAsAction="always"
         android:title="@string/calendarMenuItem"/>
     <item
+        android:id="@+id/meetingNotThere"
+        android:showAsAction="always"
+        android:title="@string/meetingNotThereButton"/>
+    <item
+        android:id="@+id/editMeetingTypes"
+        android:showAsAction="always"
+        android:title="@string/meetingTypesButton"/>
+    <item
         android:id="@+id/deleteMeeting"
         android:icon="@drawable/trashcan"
         android:showAsAction="always"
         android:title="@string/deleteMenuItem"/>
-    <item
-        android:id="@+id/meetingNotThere"
-        android:showAsAction="always"
-        android:title="@string/meetingNotThereButton"/>
-
 </menu>
