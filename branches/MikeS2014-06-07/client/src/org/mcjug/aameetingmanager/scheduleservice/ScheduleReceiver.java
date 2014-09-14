@@ -37,7 +37,7 @@ public class ScheduleReceiver extends BroadcastReceiver {
                     // fetch every REPEAT_TIME seconds. InexactRepeating allows Android to optimize the energy consumption
                     alarmManagerService.setInexactRepeating(AlarmManager.RTC_WAKEUP, boot_time.getTimeInMillis(), repeatTime, pending);
 
-                    Log.v(TAG, "org.mcjug.schedulerservice.ScheduleReceiver fired, service started "  + 
+                    Log.v(TAG, "ScheduleReceiver fired, service started "  + 
                                     config.isCheckboxBootChecked() + "/"+ config.isCheckboxAppLoadChecked() + "/" + config.serviceMode +
                                     " repeatTime " + repeatTime );
                     isRegistered = true;

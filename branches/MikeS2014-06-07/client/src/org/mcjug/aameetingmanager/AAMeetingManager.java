@@ -18,6 +18,7 @@ import org.mcjug.meetingfinder.R;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -48,6 +49,8 @@ public class AAMeetingManager extends SherlockFragmentActivity
 	//private ServerMessage processedServerMessage = null;	
 	private ServiceConfig config;
 	private ServiceHandler serviceHandler;
+	private boolean messageReceiverInitiated = false;
+	private boolean refreshServerMessage = false;
 	
 	/**
 	 * (non-Javadoc)
@@ -195,11 +198,12 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		super.onResume();
 		initLoginLogoutButton();
 		initRecoveryText();
-			
+		initMessageFromServer();
         Log.v(TAG, "onResume: localBroadcastReceiver registered");
         // && !config.isActiveScheduleReceiver()
         if (config.isCheckboxAppLoadChecked() && (config.serviceMode.getServiceRunMode() > 0)) {
         	initiateScheduler();
+    		startTicker();
         	Log.v(TAG, "onResume: scheduleReceiver registered");
         }
 	}
@@ -213,6 +217,7 @@ public class AAMeetingManager extends SherlockFragmentActivity
         	serviceHandler.stopReceiver();
             Log.v(TAG, "onPause: serviceHandler broadcast Receiver unregistered");
             serviceHandler.stopScheduler();	
+            messageReceiverInitiated = false;
         }
 	}
 	
@@ -260,27 +265,69 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		
 		mText = (TextView) findViewById(R.id.messageFromServer);
 		
-		serviceHandler = new ServiceHandler(getApplicationContext(), config.getHandlerDataSourceType());
-		
+		if (!messageReceiverInitiated) {
+			serviceHandler = new ServiceHandler(getApplicationContext(), config.getHandlerDataSourceType());	
+			serviceHandler.startReceiver();
+			messageReceiverInitiated = true;
+		}
 		if (config.isCheckboxAppLoadChecked()) {
         	if((config.serviceMode.getServiceRunMode() > 0)) {
             	initiateScheduler();
-            	Log.v(TAG, "onCreate: scheduleReceiver registered");        		
+            	Log.v(TAG, "initMessageFromServer: scheduleReceiver registered");        		
         	}
         	else {
         		// If RUN_ONCE run downloader service once
         		Intent intent = new Intent(this, DownloaderService.class);
         		intent.putExtra("URL", config.getURL());
         		startService(intent);
-    			Log.v(TAG, "onCreate: run DownloaderService once");
+    			Log.v(TAG, "initMessageFromServer: run DownloaderService once");
         	}
-        }    
+        }
+		else {
+	    	Log.v(TAG, "initMessageFromServer: scheduleReceiver not registered");
+		}
+		getServerMessage();
+		serviceHandler.cancelNotification();
 	}
 
+	private Handler handler = new Handler();
+
+	//@SuppressWarnings("unused")
+	private Runnable runnableTicker = new Runnable() {
+		@Override
+		public void run() {
+			if (refreshServerMessage) {
+				String receivedMessage = serviceHandler.getReceivedBroadcastMessage();
+				showServerMessage(receivedMessage);
+				handler.postDelayed(this, 10000);	
+			}
+			else
+				Log.v(TAG, "runnableTicker: stopped");
+		}
+	};
+	
+	private void startTicker () {
+		if (!refreshServerMessage) {
+			refreshServerMessage = true;
+			handler.postDelayed(runnableTicker, 1000);
+		}		
+	}
+	
+	private void getServerMessage () {
+		ServerMessage sm = serviceHandler.getServerMessage();
+		if (sm == null) {
+			showServerMessage (serviceHandler.getReceivedBroadcastMessage());	
+			Log.v(TAG, "onButtonInfoClick: empty getServerMessage, broadcast " + serviceHandler.getReceivedBroadcastMessage());
+		}
+		else {
+			showServerMessage (sm.firstShortMessage());
+		}	
+	}
+	
 	public void showServerMessage (String messageText) {
 		if (messageText != null) {
 			mText.setVisibility(View.VISIBLE);
-			String timeStamp = new SimpleDateFormat("HH:mm", Locale.US).format(Calendar.getInstance().getTime());
+			String timeStamp = new SimpleDateFormat("HH:mm:ss", Locale.US).format(Calendar.getInstance().getTime());
 			mText.setText(timeStamp + " " + messageText);			
 		}
 		else
@@ -361,11 +408,13 @@ public class AAMeetingManager extends SherlockFragmentActivity
 		
 		if (config.serviceMode != ServiceConfig.ServiceRunModes.RUN_ONCE && !config.isActiveScheduleReceiver()) {
 			initiateScheduler();
+			startTicker();
 			Log.v(TAG, "onButtonStartClick -- ScheduleReceiver ");
 		}
 		else {
 			//startService(new Intent(this, DownloaderService.class));
 			serviceHandler.startServiceOnce(config.getURL());
+			refreshServerMessage = false;
 			Log.v(TAG, "onButtonStartClick -- DownloaderService");
 		}
 		
@@ -374,18 +423,12 @@ public class AAMeetingManager extends SherlockFragmentActivity
 	
 	public void onButtonStopClick (View v) {
 		Log.v(TAG, "onButtonStopClick");
+		refreshServerMessage = false;
 	}
 	
 	public void onButtonInfoClick (View v) {
 		if (config.getHandlerDataSourceType() == ServiceConfig.DataSourceTypes.SIMPLE_MESSAGE ) {
-			ServerMessage sm = serviceHandler.getServerMessage();
-			if (sm == null) {
-				showServerMessage (serviceHandler.getReceivedBroadcastMessage());	
-				Log.v(TAG, "onButtonInfoClick: empty getServerMessage, broadcast " + serviceHandler.getReceivedBroadcastMessage());
-			}
-			else {
-				showServerMessage (sm.firstShortMessage());
-			}	
+			getServerMessage();
 		}
 		else
 			Log.v(TAG, "onButtonInfoClick: config.getHandlerDataSourceType == " + config.getHandlerDataSourceType());
@@ -410,5 +453,7 @@ public class AAMeetingManager extends SherlockFragmentActivity
 	    }
 	    Log.v(TAG, "onRadioButtonClicked " + button.getText() + " service mode " + config.serviceMode);
 	}
+	
+	
 	
 }
