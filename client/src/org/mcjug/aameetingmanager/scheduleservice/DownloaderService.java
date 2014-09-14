@@ -45,7 +45,7 @@ public class DownloaderService extends Service {
 	}
 
 	private void publishResults(String loadedMessage, int result) {
-		Log.v(TAG, "DownloaderService publishResults");
+		Log.v(TAG, "DownloaderService publishResults loadedMessage: " + loadedMessage);
 		Intent intent = new Intent(INTENT_NOTIFICATION);
 		intent.putExtra(ServiceConfig.LOADEDSTRING, loadedMessage);
 		intent.putExtra(ServiceConfig.RESULT, result);

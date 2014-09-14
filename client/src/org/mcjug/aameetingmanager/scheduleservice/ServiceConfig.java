@@ -8,7 +8,7 @@ import android.util.Log;
 import android.widget.CheckBox;
 
 public final class ServiceConfig {
-	static final String TAG = "MainActivity";
+	static final String TAG = "ServiceConfig";
 	static final String cbBootName = "checkBoxBoot";
 	static final String cbLoadAppName = "checkBoxAppLoad";
 	static final String radioServiceRunMode = "radioServiceRunMode";
@@ -81,7 +81,7 @@ public final class ServiceConfig {
 	public void setHandlerDataSourceType(int dataSourceType) {
 		switch (dataSourceType) {
 		case 0: this.dataSourceType =  DataSourceTypes.SIMPLE_MESSAGE;                  break;
-		case 1: this.dataSourceType = DataSourceTypes.AA_MEETING ;                              break;
+		case 1: this.dataSourceType = DataSourceTypes.AA_MEETING ;                      break;
 		default: this.dataSourceType = DataSourceTypes.AA_MEETING_TYPE ;                break;
 		}
 	}
@@ -167,7 +167,7 @@ public final class ServiceConfig {
 		default: this.dataSourceType = DataSourceTypes.AA_MEETING_TYPE ;
 		URL = URL_AA_Meeting_Type;  break;
 		}               
-		Log.v(TAG, "Config saveConfig " + mCheckboxBootIsChecked + "/" + mCheckboxAppLoadIsChecked + 
+		Log.v(TAG, "Config loadConfig " + mCheckboxBootIsChecked + "/" + mCheckboxAppLoadIsChecked + 
 				"/" + serviceMode.name() + " /" + dataSourceType);
 	}
 }

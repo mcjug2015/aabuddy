@@ -1,6 +1,8 @@
 package org.mcjug.aameetingmanager.scheduleservice;
 
 
+import java.util.List;
+
 import org.mcjug.aameetingmanager.jsonobjects.ServerMessage;
 import org.mcjug.aameetingmanager.scheduleservice.ServiceConfig.DataSourceTypes;
 import org.mcjug.meetingfinder.R;
@@ -10,10 +12,13 @@ import com.google.gson.GsonBuilder;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -31,6 +36,8 @@ public class ServiceHandler {
         private String jsonSource;
         private ServerMessage serverMessage;
         private DataSourceTypes selectedServiceType;
+        private boolean localReceiverRegistered = false;
+        private boolean frontEndIsActive = true;
         
         public void setSelectedServiceType(DataSourceTypes selectedServiceType) {
                 this.selectedServiceType = selectedServiceType;
@@ -90,12 +97,25 @@ public class ServiceHandler {
         }
 
         public void startReceiver () {
-                context.registerReceiver(localReceiver, new IntentFilter(DownloaderService.INTENT_NOTIFICATION));
+        	if (localReceiverRegistered) {
+        		Log.v(TAG, "Handler's startReceiver exception: local Receiver registered");
+        	}
+        	else {
+        		context.registerReceiver(localReceiver, new IntentFilter(DownloaderService.INTENT_NOTIFICATION));
+                localReceiverRegistered = true;
+                Log.v(TAG, "Handler's startReceiver register local Receiver");
+        	}
         }
         
         public void stopReceiver () {
-        	if (localReceiver != null)
-                context.unregisterReceiver(localReceiver);
+        	if (localReceiverRegistered) {
+        		context.unregisterReceiver(localReceiver);
+            	localReceiverRegistered = false;
+            	Log.v(TAG, "Handler's stopReceiver unregister local Receiver");
+        	}
+        	else {
+        		Log.v(TAG, "Handler's stopReceiver exception: non-registered receiver");
+        	}
         }
         
         private BroadcastReceiver localReceiver = new BroadcastReceiver() {
@@ -139,13 +159,17 @@ public class ServiceHandler {
                 context.startService(downloaderService);
         }
         
-        /*** Show a notification when this service has something to say ***/
+        /*** Show a notification when this service has something to say and the front end is not in foreground ***/
         private NotificationManager mNotificationManager = null;
 
         @SuppressLint("NewApi")
         private void showNotification() {
                 if (mNotificationManager == null) {
                         
+                	if (isFrontEndActive()) {
+                	    Log.v(TAG, "showNotification: frontEnd is active, notification suspended");
+                	}
+                	else {
                         Log.v(TAG, "ServiceHandler showNotification ");
                         Intent intent = new Intent(context, org.mcjug.aameetingmanager.AAMeetingManager.class);
                                 
@@ -172,6 +196,7 @@ public class ServiceHandler {
                         mNotificationManager = (NotificationManager)context.getSystemService(android.content.Context.NOTIFICATION_SERVICE);
                         // Send the notification.
                         mNotificationManager.notify(SERVICE_NOTIFICATION, notification);
+                	}
                 }
         }
 
@@ -181,5 +206,21 @@ public class ServiceHandler {
                           mNotificationManager.cancel(R.string.service_stop);                   
                 }
         }
+        
+        private boolean isFrontEndActive() {
+            ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            List<RunningTaskInfo> tasks = am.getRunningTasks(1);
+            if (!tasks.isEmpty()) {
+                ComponentName topActivity = tasks.get(0).topActivity;
+                Log.v(TAG, "isFrontEndActive: topActivity " + topActivity.getPackageName() + " context " + context.getPackageName());
+                if (!topActivity.getPackageName().equals(context.getPackageName())) {
+                    return false;
+                }
+            }
+            else
+            	Log.v(TAG, "isFrontEndActive: tasks list isEmpty");
+            return true;
+        }
+        
 
 }
