@@ -1,0 +1,245 @@
+<resources>
+
+    <string name="app_name">Meeting Finder</string>
+    <string name="title_activity_main">Meeting Finder</string>
+    <string name="meeting_name">Meeting Name:</string>
+    <string name="meeting_description">Meeting Description:</string>
+    <string name="start_time">Start time:</string>
+    <string name="end_time">End time:</string>
+    <string name="day_of_week">Day of week:</string>
+    <string name="days_of_week">Days of week:</string>
+    <string name="meeting_address">Address:</string>
+    <string name="refresh_location_button">Refresh address</string>
+    <string name="validate_address_button">Validate Address</string>
+    <string name="submit_button">Submit</string>
+    <string name="cancel_submit_button">Cancel Submit</string>
+    <string name="search_within">Within:</string>
+    <string name="search_button">Search</string>
+    <string name="select_type_button">Select Meeting Type</string>
+    <string name="submitted">Submitted</string>
+    <string name="latitude">Latitude:</string>
+    <string name="longitude">Longitude:</string>
+    <string name="startTimeLabel">Start:</string>
+    <string name="endTimeLabel">End:</string>
+    <string name="dayLabel">Day:</string>
+    <string name="day">Monday</string>
+    <string name="startAndEndTimesAreEqual">Please change start and end times so they are not equal.</string>
+    <string name="noMeetingsFound">"No meetings found with the specified search criteria."</string>
+    <string name="meetingDuration">"Meeting time duration: %d minutes."</string>
+    <string name="adminPrefActivityTitle">Settings</string>
+    <string name="serverPreferencesTitle">Server Preferences</string>
+    <string name="meetingServerSecureBaseUrlDefaultValue">https://mcasg.org</string>
+    <string name="meetingServerUnsecureBaseUrlDefaultValue">http://mcasg.org</string>
+    <string name="sslTrustAllFlagPreferenceName">sslTrustAllFlag</string>
+    <string name="sslTrustAllFlagTitle">Trust All Certificates?</string>
+    <string name="sslTrustAllFlagSummaryOff">Self signed certificates will NOT be trusted.</string>
+    <string name="sslTrustAllFlagSummaryOn">All certificates will be trusted.</string>
+    <string name="sslTrustAllFlagDefaultValue">false</string>
+    <string name="save_meeting_url_path">/meetingfinder/save_meeting/</string>
+    <string name="get_meetings_url_path">/meetingfinder/get_meetings/</string>
+    <string name="get_meeting_by_id_url_path">/meetingfinder/get_meeting_by_id/</string>
+    <string name="find_similar_meetings_url_path">/meetingfinder/find_similar/</string>
+    <string name="post_meeting_not_there_url_path">/meetingfinder/post_meeting_not_there</string>
+    <string name="create_user_url_path">/meetingfinder/create_user</string>
+    <string name="validate_user_url_path">/meetingfinder/validate_user_creds</string>
+    <string name="reset_password_url_path">/meetingfinder/send_reset_conf</string>
+    <string name="change_password_url_path">/meetingfinder/change_password</string>
+    <string name="delete_meeting_url_path">/meetingfinder/delete_my_meeting</string>
+    <string name="get_meeting_types_url_path">/meetingfinder/api/v1/meeting_type/?format=json/</string>
+    <string name="update_meeting_types_url_path">/meetingfinder/save_types_for_meeting/</string>
+    <string name="all_days_of_week">All</string>
+    <string name="all_days_of_week_value">Su,M,T,W,Th,F,Sa</string>
+    <string name="sortBy">Sort By:</string>
+    <string name="sortingDefault">distance</string>
+    <string name="meetingUrl">MEETING_URL</string>
+    <string name="meetingNotThereButton">Not\nThere</string>
+    <string name="postMeetingNotThereProgressMsg">Marking Meeting Not There</string>
+    <string name="postMeetingNotThereConfirmDialogTitle">Mark Meeting Not There</string>
+    <string name="postMeetingNotThereConfirmDialogMsg">Are you sure you want to mark this meeting as not there?</string>
+    <string name="postMeetingNotThereErrorDialogTitle">Failed to Mark Meeting As Not There</string>
+    <string name="postMeetingNotThereErrorMessage">Error in marking meeting as not there.</string>
+    <string name="postMeetingNotThereSuccessDialogTitle">Success</string>
+    <string name="postMeetingNotThereSuccessMessage">Meeting was successfully marked as not there.</string>
+    <string name="submitMeetingProgressMsg">Adding Meeting</string>
+    <string name="submitMeetingError">Error adding meeting: %s</string>
+    <string name="submitMeetingSuccess">Meeting has been added.</string>
+    <string name="locationNotFound">Not able to get current location. Please check if GPS is turned or you have a network data connection.</string>
+    <string name="addressNotFound">Not able to get address from location. Please check for a network data connection.</string>
+    <string name="getLocationMsg">Getting location</string>
+    <string name="waitMsg">Please wait&#8230;</string>
+    <string name="findMeeting">Find Meeting</string>
+    <string name="findMeetingProgressMsg">Finding Meetings</string>
+    <string name="submitMeeting">Add Meeting</string>
+    <string name="meetingList">Meeting Search Results</string>
+    <string name="sortMeetingProgressMsg">Sorting Meetings</string>
+    <string name="similarMeetingsList">Similar Meetings List</string>
+    <string name="settings">Settings</string>
+    <string name="login">Log In</string>
+    <string name="loginErrorDialogTitle">Login Failed!</string>
+    <string name="invalidEmailAddress">Please enter a correctly formatted email address.</string>
+    <string name="emptyEmailAddress">Please enter an email address.</string>
+    <string name="emptyPassword">Please enter a password.</string>
+    <string name="loginErrorMessage">Login incorrect.  Please try again.</string>
+    <string name="loginSuccessMessage">Login Successful</string>
+    <string name="logout">Log Out</string>
+    <string name="logoutConfirmationMsg">Are you sure you want to log out?</string>
+    <string name="Help">Help</string>
+    <string name="similarMeetingMsg">The above list contains meetings that have already been added and maybe a duplicate to the meeting you are adding. Please cancel below if the meeting you are adding already exists.</string>
+    <string name="nameRequiredMsg">Please enter a meeting name.</string>
+    <string name="meetingAdded">Meeting Added</string>
+    <string name="addAnotherMeetingButton">Add Another Meeting</string>
+    <string name="goToMainScreenButton">Go To Main Screen</string>
+    <string name="loadingMoreMeetingsProgressMsg">Loading More Meetings</string>
+    <string name="meetingListNumItems">"Showing %1$d of %2$d"</string>
+    <string name="mapImageViewDescription">Go to Map</string>
+    <string name="deleteMeetingProgressMsg">Deleting Meeting</string>
+    <string name="deleteMeetingMustBeCreatorMsg">You must be the creator of the meeting in order to delete it.</string>
+    <string name="deleteMeetingConfirmTitle">Delete Meeting</string>
+    <string name="deleteMeetingConfirmMsg">Are you sure you want to delete meeting %s ?</string>
+    <string name="mapMenuItem">Map</string>
+    <string name="deleteMenuItem">Delete</string>
+    <string name="calendarMenuItem">Calendar</string>
+    <string name="meetingTypesTitle">Meeting Types</string>
+    <string name="meetingTypesButton">Meeting\nTypes</string>
+    <string name="ok">OK</string>
+    <string name="cancel">Cancel</string>
+    
+    <item name="paginationSize" type="integer">50</item>
+
+    <string name="loginActivityTitle">Login to Add a Meeting</string>
+    <string name="loginText">Login to Add a Meeting</string>
+    <string name="emailAddressText">Email Address:</string>
+    <string name="passwordText">Password:</string>
+    <string name="confirmPasswordText">Confirm Password:</string>
+    <string name="loginButton">Login</string>
+    <string name="loggingInProgressMsg">Logging In</string>
+    <string name="loginNotRequiredMsg">Login not required to find meetings</string>
+    <string name="registrationActivityTitle">Registration</string>
+    <string name="registrationText">Haven\'t registered?</string>
+    <string name="registerButton">Register Now</string>
+    <string name="registerErrorDialogTitle">Registration Error</string>
+    <string name="usernamePreferenceName">Username</string>
+    <string name="passwordPreferenceName">Password</string>
+    <string name="loginMenuText">Login</string>
+    <string name="logoutMenuText">Logout</string>
+    <string name="validateCredentialsError">Could not validate username/password: %s</string>
+    <string name="registrationError">Registration Failed!  Please try again.  Error message:  %s</string>
+    <string name="registrationSuccessDialogTitle">Registration Success</string>
+    <string name="registrationSuccess">Please look for an email that will have instructions on how to complete your registration.</string>
+    <string name="passwordsDoNotMatchError">Passwords do not match.</string>
+    <string name="registeringMsg">Registering</string>
+    <string name="resetPasswordActivityTitle">Reset Password</string>
+    <string name="resetPasswordText">Need to reset Password?</string>
+    <string name="resetPasswordButton">Reset Password</string>
+    <string name="resetPasswordErrorDialogTitle">Reset Password Error</string>
+    <string name="resetPasswordError">Reset Password Failed!  Please try again.  Error message:  %s</string>
+    <string name="resetPasswordSuccessDialogTitle">Reset Password Success</string>
+    <string name="resetPasswordSuccess">Please look for an email that will have instructions on how to finish resetting your password.</string>
+    <string name="resetPasswordMsg">Resetting Password</string>
+    <string name="resetPasswordPreferenceTitle">Reset Password</string>
+    <string name="resetPasswordPreferenceKey">resetPassword</string>
+    <string name="newPasswordText">New Password:</string>
+    <string name="passwordChangedMsg">Password has been changed</string>
+    <string name="changePasswordPreferenceTitle">Change Password</string>
+    <string name="changePasswordPreferenceKey">changePassword</string>
+    <string name="changePasswordPreferenceSummary">Must be logged in to be able to change your password.</string>
+    <string name="changePasswordProgressMsg">Changing Password</string>
+    <string name="changePasswordActivityTitle">Change Password</string>
+    <string name="changePasswordButton">Change Password</string>
+    <string name="passwordPreferencesTitle">Password Preferences</string>
+    <string name="helpActivityTitle">Help</string>
+    <string name="recoveryDatePrompt">Set Recovery Date or clear this message</string>
+    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>   	
+    <string name="howToRecoverToastNote">Go to settings to show Recovery Date again</string>
+    <string name="recoveryDatePreferencesTitle">Recovery Date Preferences</string>
+    <string name="recoveryDateAllowedPreferenceKey">recoveryDateAllowed</string>
+    <string name="recoveryDateAllowedPreferenceTitle">Show Recovery Date Note</string>
+    <string name="recoveryDateAllowedPreferenceSummary">Indicates if recovery date note should be shown</string>
+    <string name="recoveryDatePreferenceKey">recoveryDatePreference</string>
+    <string name="recoveryDatePreferenceTitle">Recovery Date</string>
+    <string name="recoveryDatePreferenceSummary">Set recovery date</string>
+    <string name="recoveryDateCongratulationsMsg">Congratulations on your %1$d%2$s day of recovery</string>
+    <string name="recoveryDateSelectDateInPastMsg">Select a recovery date in the past</string>
+    <string name="timeFormatTitle">Time Format</string>
+    <string name="timeFormatKey">timeFormat</string>
+    <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
+    <string name="timePreferencesTitle">Time Preferences</string>
+
+    <string-array name="daysOfWeekLong">
+        <item>Sunday</item>
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+    </string-array>
+    <string-array name="daysOfWeekMedium">
+        <item>Sun</item>
+        <item>Mon</item>
+        <item>Tue</item>
+        <item>Wed</item>
+        <item>Thu</item>
+        <item>Fri</item>
+        <item>Sat</item>
+    </string-array>
+    <string-array name="daysOfWeekShort">
+        <item>Su</item>
+        <item>M</item>
+        <item>T</item>
+        <item>W</item>
+        <item>Th</item>
+        <item>F</item>
+        <item>Sa</item>
+    </string-array>
+    <string-array name="daysOfWeekCalendar">
+        <item>SU</item>
+        <item>MO</item>
+        <item>TU</item>
+        <item>WE</item>
+        <item>TH</item>
+        <item>FR</item>
+        <item>SA</item>
+    </string-array>
+    <string-array name="searchDistances">
+        <item>1 mile</item>
+        <item>2 mile</item>
+        <item>5 miles</item>
+        <item>10 miles</item>
+        <item>20 miles</item>
+        <item>50 miles</item>
+        <item>100 miles</item>
+        <item>200 miles</item>
+        <item>300 miles</item>
+    </string-array>
+    <string-array name="searchDistanceValues">
+        <item>1</item>
+        <item>2</item>
+        <item>5</item>
+        <item>10</item>
+        <item>20</item>
+        <item>50</item>
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+    </string-array>
+    <string-array name="sortOrder">
+        <item>Distance</item>
+        <item>Day Of Week</item>
+        <item>Start Time</item>
+        <item>End Time</item>
+        <item>Address</item>
+        <item>Name</item>
+        <item>Description</item>
+    </string-array>
+    <string-array name="sortOrderValues">
+        <item>distance</item>
+        <item>day_of_week</item>
+        <item>start_time</item>
+        <item>end_time</item>
+        <item>address</item>
+        <item>name</item>
+        <item>description</item>
+    </string-array>
+
+</resources>
