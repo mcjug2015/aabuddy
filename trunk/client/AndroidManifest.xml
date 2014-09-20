@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
         android:name="org.mcjug.aameetingmanager.AAMeetingApplication"
@@ -60,6 +61,20 @@
         <activity
             android:name="org.mcjug.aameetingmanager.help.HelpFragmentActivity"
             android:label="@string/helpActivityTitle" />
+        
+        
+        <service android:name="org.mcjug.aameetingmanager.scheduleservice.DownloaderService" ></service>
+        
+        <!--
+        <receiver android:name="org.mcjug.aameetingmanager.scheduleservice.ScheduleReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+        
+        <receiver android:name="org.mcjug.aameetingmanager.scheduleservice.StartServiceReceiver" ></receiver> 
+         -->
+         
     </application>
 
 </manifest>

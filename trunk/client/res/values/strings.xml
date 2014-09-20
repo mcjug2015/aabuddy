@@ -15,6 +15,7 @@
     <string name="cancel_submit_button">Cancel Submit</string>
     <string name="search_within">Within:</string>
     <string name="search_button">Search</string>
+    <string name="select_type_button">Select Meeting Type</string>
     <string name="submitted">Submitted</string>
     <string name="latitude">Latitude:</string>
     <string name="longitude">Longitude:</string>
