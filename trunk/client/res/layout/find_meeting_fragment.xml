@@ -160,25 +160,12 @@
         android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
         android:entries="@array/searchDistances" />
 
-
-   <ImageButton
-        android:id="@+id/selectMeetingType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/findMeetingSearchWithinTextView"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/select_type_button"
-        android:src="@drawable/select_type32x32"
-         />
-        
     <Button
         android:id="@+id/findMeetingFindButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/findMeetingSearchWithinTextView"
-        android:layout_toRightOf="@+id/selectMeetingType"
-        android:layout_marginLeft="20dp"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:text="@string/search_button" />
 
