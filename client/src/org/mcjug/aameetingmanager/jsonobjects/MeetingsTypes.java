@@ -19,7 +19,6 @@ public class MeetingsTypes  {
 		public final String shortName;
 		public final String name;
 
-
 		public MeetingTypeDetails (String description, int id, String message, String resourceUri, String shortName, String name) {
 			this.description = description;
 			this.id = id;
