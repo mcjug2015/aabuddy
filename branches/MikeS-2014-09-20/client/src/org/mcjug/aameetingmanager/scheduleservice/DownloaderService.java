@@ -21,7 +21,6 @@ public class DownloaderService extends Service {
         private int result = Activity.RESULT_CANCELED;
         public static final String INTENT_NOTIFICATION = "DownloaderServiceBroadcast";
 
-
         static final SimpleDateFormat sdf = new SimpleDateFormat(" > yyyy-M-dd hh:mm:ss <", Locale.US);
         private Date mDate;
 
