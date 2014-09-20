@@ -12,40 +12,28 @@ import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.aameetingmanager.scheduleservice.ServiceConfig;
-import org.mcjug.aameetingmanager.scheduleservice.ServiceHandler;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
 import org.mcjug.meetingfinder.R;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
-
-
-import android.graphics.Color;
-
-
 
 public class FindMeetingFragment extends Fragment {
 	private static final String TAG = FindMeetingFragment.class.getSimpleName();
@@ -58,7 +46,6 @@ public class FindMeetingFragment extends Fragment {
 	private Button startTimeClearButton;
 	private Button endTimeButton;
 	private Button endTimeClearButton;
-	private ImageButton selectMeetingsTypesButton;
 	private Button findMeetingButton;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
@@ -73,21 +60,15 @@ public class FindMeetingFragment extends Fragment {
 
 	private Context context;
 	private boolean is24HourTime;
-	private ServiceConfig serviceConfig;
-	private ServiceHandler serviceHandler;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.i(TAG, "onCreate");
-		serviceConfig = new ServiceConfig(getActivity(), ServiceConfig.DataSourceTypes.AA_MEETING_TYPE);
-		serviceHandler = new ServiceHandler(getActivity(), ServiceConfig.DataSourceTypes.AA_MEETING_TYPE);
-		serviceHandler.startServiceOnce(serviceConfig.getURL());
 	}
 
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		Log.i(TAG, "onCreateView");
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 		
@@ -118,16 +99,6 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 
-		
-		selectMeetingsTypesButton = (ImageButton) view.findViewById(R.id.selectMeetingType);
-		selectMeetingsTypesButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				createDialog();
-			}
-		});
-		
-				
 		findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton);
 		findMeetingButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -155,91 +126,6 @@ public class FindMeetingFragment extends Fragment {
 		return view;
 	}
 
-
-    public void createDialog() {
-    	showPreselected();
-    	AlertDialog.Builder builder =  new AlertDialog.Builder(getActivity())
-    	.setIcon(R.drawable.select_type32x32)
-    	.setTitle(R.string.select_type_button)
-    	.setMultiChoiceItems(serviceHandler.allTypes, serviceHandler.preselected,
-    			new DialogInterface.OnMultiChoiceClickListener() {
-		    		public void onClick(DialogInterface dialog, int whichButton, boolean isChecked) {
-		    			ListView listView = ((AlertDialog)dialog).getListView();
-		    			SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-		    			Log.v(TAG, "Alert Screen - user clicked Yes, set " + checkedItems);
-		    		}
-    	})
-    	.setPositiveButton(R.string.ok,
-    			new DialogInterface.OnClickListener() {
-		    		public void onClick(DialogInterface dialog, int whichButton) {
-		    			Log.v(TAG, "user clicked Yes");
-		    			ListView listView = ((AlertDialog)dialog).getListView();
-		    			saveDialogResults (listView);
-		    	}
-    	})
-    	.setNegativeButton(R.string.cancel,
-    			new DialogInterface.OnClickListener() {
-	    		public void onClick(DialogInterface dialog, int whichButton) {
-	    			clearPreselected();
-	    			Log.v(TAG, "Alert Screen - user clicked No : " + whichButton);
-	    		}
-    	});
-    	builder.show();
-    }
-
-    
-    private void showPreselected () {
-    	Log.i(TAG, "allTypes length %d " + serviceHandler.allTypes.length);
-    	String selectedItems = String.format(" First item %s\r\nPreselected Item(s): ", serviceHandler.allTypes[0].toString());
-    	String delimiter = "";
-    	for (int i=0; i < serviceHandler.preselected.length; i++) {
-    		if (serviceHandler.preselected[i]) {
-    			String item = serviceHandler.allTypes [i].toString();
-    			selectedItems += delimiter + i + ". " + item;
-    			delimiter = ", ";
-    		}
-    	}
-    	if (delimiter == "")
-    		selectedItems += "Any";
-    	Log.i(TAG, selectedItems);
-    }
-    
-    private void clearPreselected() {
-    	for (int i=0; i < serviceHandler.preselected.length; i++) {
-    		serviceHandler.preselected[i] = false;
-    	}
-    	selectMeetingsTypesButton.setBackgroundColor(0x00000000);
-    }
-    
-    private void saveDialogResults (ListView listView) {
-    	SparseBooleanArray checkedItems = listView.getCheckedItemPositions();
-    	String selectedItems = "Selected Items: Any";
-		String delimiter = "";
-		boolean foundCheckedItem = false;
-		if (checkedItems != null) {
-			if (checkedItems.size() > 0) {
-				selectedItems = "Selected Item(s): ";
-				for (int i=0; i < checkedItems.size(); i++) {
-					if (checkedItems.valueAt(i)) {
-						String item = listView.getAdapter().getItem(checkedItems.keyAt(i)).toString();
-						selectedItems += delimiter + checkedItems.keyAt(i) + "." + item;
-						delimiter = ", ";
-						serviceHandler.preselected [checkedItems.keyAt(i)] = true;
-						foundCheckedItem = true;
-					}
-					else
-						serviceHandler.preselected [checkedItems.keyAt(i)] = false;
-				}
-			}
-		}
-		Log.i(TAG, selectedItems);
-		if (foundCheckedItem)
-			selectMeetingsTypesButton.setBackgroundColor(Color.GREEN);
-		else
-			selectMeetingsTypesButton.setBackgroundColor(Color.WHITE);
-    }
-
-    
 	private void updateTimeWidgets(final boolean is24HourTime) {
 		View view = getView();
 		
