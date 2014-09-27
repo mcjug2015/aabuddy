@@ -1,5 +1,9 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -10,17 +14,17 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.meetingfinder.R;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.SparseArray;
 
 public class GetMeetingTypesTask extends AsyncTask<Void, Void, Void> {
 	private final String TAG = getClass().getSimpleName();
 	private Context context;
-	private SparseArray<MeetingType> meetingTypes;
+	private List<MeetingType> meetingTypes;
 
-	public GetMeetingTypesTask(Context context, SparseArray<MeetingType>meetingTypes) {
+	public GetMeetingTypesTask(Context context, List<MeetingType> meetingTypes) {
 		this.context = context;
 		this.meetingTypes = meetingTypes;
 	}
@@ -46,9 +50,9 @@ public class GetMeetingTypesTask extends AsyncTask<Void, Void, Void> {
 		}
 
 		return null;
-	}	
+	}
 
-	private void setMeetingTypes(String jsonStr, SparseArray<MeetingType> meetingTypes) throws Exception {
+	private void setMeetingTypes(String jsonStr, List<MeetingType> meetingTypes) throws Exception {
 		if (jsonStr != null) {
 			JSONObject jsonObj = new JSONObject(jsonStr);
 			JSONArray meetingTypesJson = jsonObj.getJSONArray("objects");
@@ -59,16 +63,23 @@ public class GetMeetingTypesTask extends AsyncTask<Void, Void, Void> {
 					meetingTypeJson = meetingTypesJson.getJSONObject(i);
 
 					meetingType = new MeetingType();
-					int id = meetingTypeJson.getInt("id");
-					meetingType.setId(id);
+					meetingType.setId(meetingTypeJson.getInt("id"));
 					meetingType.setName(meetingTypeJson.getString("name"));
 					meetingType.setDescription(meetingTypeJson.getString("description"));
 					meetingType.setResourceUri(meetingTypeJson.getString("resource_uri"));
 					meetingType.setShortName(meetingTypeJson.getString("short_name"));
 
-					meetingTypes.put(id, meetingType);
+					meetingTypes.add(meetingType);
 				}
+
+				Collections.sort(meetingTypes, new Comparator<MeetingType>() {
+					@Override
+					public int compare(MeetingType type, MeetingType type1) {
+						return type.getName().compareTo(type1.getName());
+					}
+				});
 			}
 		}
 	}
+	
 }
