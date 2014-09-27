@@ -8,7 +8,6 @@ import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 
 import android.app.Application;
-import android.os.Handler;
 
 public class AAMeetingApplication extends Application {
 	private MeetingListResults meetingListResults;
