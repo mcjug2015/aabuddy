@@ -182,6 +182,23 @@
                     android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
                     android:layout_toRightOf="@+id/findMeetingSearchWithinTextView"
                     android:entries="@array/searchDistances" />
+
+                <TextView
+                    android:id="@+id/findMeetingTypesTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/findMeetingSearchWithinTextView"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="15dp"
+                    android:text="@string/meetingTypesLabel"
+                    android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                <org.mcjug.aameetingmanager.MeetingTypesSpinner
+                    android:id="@+id/findMeetingTypesSpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/findMeetingTypesTextView"
+                    android:layout_toRightOf="@+id/findMeetingTypesTextView" />
             </RelativeLayout>
         </LinearLayout>
 

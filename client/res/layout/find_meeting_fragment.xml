@@ -106,13 +106,31 @@
         android:layout_alignBaseline="@+id/findMeetingDayOfWeekTextView"
         android:layout_alignLeft="@+id/findMeetingEndTimeButton"
         android:entries="@array/daysOfWeekLong" />
+    
+     <TextView
+        android:id="@+id/findMeetingTypesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/findMeetingDayOfWeekTextView"
+        android:layout_below="@+id/findMeetingDayOfWeekTextView"
+        android:layout_marginTop="15dp"
+        android:text="@string/meetingTypesLabel"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <org.mcjug.aameetingmanager.MeetingTypesSpinner
+        android:id="@+id/findMeetingTypesSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/findMeetingTypesTextView"
+        android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
+         />
 
     <TextView
         android:id="@+id/findMeetingAddressTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/findMeetingDayOfWeekTextView"
-        android:layout_below="@+id/findMeetingDayOfWeekTextView"
+        android:layout_alignLeft="@+id/findMeetingTypesTextView"
+        android:layout_below="@+id/findMeetingTypesTextView"
         android:layout_marginTop="15dp"
         android:text="@string/meeting_address"
         android:textAppearance="?android:attr/textAppearanceSmall" />
