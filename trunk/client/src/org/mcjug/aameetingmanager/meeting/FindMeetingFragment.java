@@ -3,14 +3,18 @@ package org.mcjug.aameetingmanager.meeting;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.MultiSpinner;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
@@ -22,6 +26,7 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -49,7 +54,8 @@ public class FindMeetingFragment extends Fragment {
 	private Button findMeetingButton;
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
-	private DaysOfWeekMultiSpinner daysOfWeekSpinner;
+	private DaysOfWeekMultiSpinner daysOfWeekSpinner;	
+	private MultiSpinner meetingTypesSpinner;
 	private Spinner distanceSpinner;
 
 	private TimePickerDialog.OnTimeSetListener startTimeDialogListener;
@@ -57,10 +63,10 @@ public class FindMeetingFragment extends Fragment {
 	private ProgressDialog locationProgress;
 	private LocationResult locationResult;
 	private FindMeetingTask findMeetingTask;
+	private Map<String, Integer> meetingTypeIds = new HashMap<String, Integer>();
 
 	private Context context;
-	private boolean is24HourTime;
-	
+	private boolean is24HourTime;	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,10 +83,35 @@ public class FindMeetingFragment extends Fragment {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(day),
-		        getString(R.string.all_days_of_week), daysOfWeekSpinnerListener);
+				getString(R.string.all), 
+				new MultiSpinnerListener() {			
+					@Override
+					public void onItemsSelected(boolean[] selected) {
+					}
+		});
+
+		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
+		final List<String> meetingTypesToDisplay = new ArrayList<String>();
+		meetingTypeIds.clear();
+		for (int i = 0; i < meetingTypes.size(); i++) {
+			MeetingType meetingType = meetingTypes.get(i);
+			meetingTypesToDisplay.add(meetingType.getName());
+			meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
+		}
+
+		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
+		meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.all), getString(R.string.all),
+				new MultiSpinnerListener() {
+					@Override
+					public void onItemsSelected(boolean[] selected) {
+					}
+		});
+		
+		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
+		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
+		distanceSpinner.setSelection(distanceValues.indexOf("10"));
 
 		nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
-
 		addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
 
 		refreshLocationButton = (Button) view.findViewById(R.id.findMeetingRefreshLocationButton);
@@ -120,9 +151,6 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 
-		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
-		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
-		distanceSpinner.setSelection(distanceValues.indexOf("10"));
 		return view;
 	}
 
@@ -244,15 +272,10 @@ public class FindMeetingFragment extends Fragment {
 	public void onResume() {
 		is24HourTime = DateTimeUtil.is24HourTime(context);	
 	    updateTimeWidgets(is24HourTime);
-		super.onResume();
-	}
-	
-	private final MultiSpinnerListener daysOfWeekSpinnerListener = new MultiSpinnerListener() {
-		@Override
-        public void onItemsSelected(boolean[] selected) {
-		}
-	};
 
+		super.onResume();
+	}	
+	
 	private String getFindMeetingParams() throws Exception {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
@@ -278,7 +301,7 @@ public class FindMeetingFragment extends Fragment {
 		}
 
 		String[] daysOfWeekSelections = ((String) daysOfWeekSpinner.getSelectedItem()).split(",");
-		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all_days_of_week))) {
+		if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all))) {
 			daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
 		}
 
@@ -295,7 +318,15 @@ public class FindMeetingFragment extends Fragment {
 			int idx = daysOfWeek.indexOf(str.trim());
 			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
-
+		
+		String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
+		if (!meetingTypeSelections[0].equals(getString(R.string.all))) {
+			for (String str: meetingTypeSelections) {
+				Integer id = meetingTypeIds.get(str.trim());
+				params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
+			}
+		}
+				
 		params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
 
 		int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
