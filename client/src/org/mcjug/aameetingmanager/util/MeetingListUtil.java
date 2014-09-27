@@ -55,7 +55,7 @@ public class MeetingListUtil {
 				Meeting meeting;
 				String startTime;
 				String endTime;
-				SparseArray<MeetingType> allMeetingTypes = AAMeetingApplication .getInstance().getMeetingTypes();
+				List<MeetingType> allMeetingTypes = AAMeetingApplication .getInstance().getMeetingTypes();
 
 				for (int i = 0; i < meetingsJson.length(); i++) {
 					try {
@@ -84,18 +84,19 @@ public class MeetingListUtil {
 						meeting.setLongitude(meetingJson.getDouble(LONGITUDE));
 
 						List<MeetingType> meetingTypes = new ArrayList<MeetingType>();
-						MeetingType meetingType;
 						JSONArray meetingTypeIds = meetingJson.getJSONArray(MEETING_TYPE_IDS);
 						for (int idx = 0; idx < meetingTypeIds.length(); idx++) {
-							int id = (Integer)meetingTypeIds.get(idx);
-							meetingType = allMeetingTypes.get(id);
-							if (meetingType != null) {
-								meetingTypes.add(meetingType);
+							int id = (Integer) meetingTypeIds.get(idx);
+							for (int j = 0; j < allMeetingTypes.size(); j++) {								
+								if (id == allMeetingTypes.get(j).getId()) {
+									meetingTypes.add(allMeetingTypes.get(j));
+								}
 							}
-						}						
+						}
+						
 						meeting.setMeetingTypes(meetingTypes);
-
 						meetings.add(meeting);
+						
 					} catch (Exception e) {
 					}
 				}
