@@ -8,12 +8,12 @@ import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 
 import android.app.Application;
-import android.util.SparseArray;
+import android.os.Handler;
 
 public class AAMeetingApplication extends Application {
 	private MeetingListResults meetingListResults;
 	private List<Integer> meetingNotThereList = null;
-	private SparseArray<MeetingType> meetingTypes = new SparseArray<MeetingType>();
+	private List<MeetingType> meetingTypes = new ArrayList<MeetingType>();
 
 	// instance 
 	private static AAMeetingApplication instance = null;
@@ -22,10 +22,10 @@ public class AAMeetingApplication extends Application {
 	public void onCreate() {
 		super.onCreate();
 
+		new GetMeetingTypesTask(this, meetingTypes).execute();
+
 		LocationFinder locationTask = new LocationFinder(this, null);
 		locationTask.requestLocation();
-
-		new GetMeetingTypesTask(this, meetingTypes).execute();
 
 		// set instance for our static accessor
 		instance = this;
@@ -39,11 +39,11 @@ public class AAMeetingApplication extends Application {
 		this.meetingListResults = meetingListResults;
 	}
 
-	public SparseArray<MeetingType> getMeetingTypes() {
+	public List<MeetingType> getMeetingTypes() {
 		return meetingTypes;
 	}
 
-	public void setMeetingTypes(SparseArray<MeetingType> meetingTypes) {
+	public void setMeetingTypes(List<MeetingType> meetingTypes) {
 		this.meetingTypes = meetingTypes;
 	}
 
