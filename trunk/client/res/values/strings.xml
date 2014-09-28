@@ -101,6 +101,8 @@
     <string name="meetingTypesTitle">Meeting Types</string>
     <string name="meetingTypesLabel">Meeting Types:</string>
     <string name="meetingTypesButton">Meeting\nTypes</string>
+    <string name="meetingTypesKey">meetingTypes</string>
+  
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
     
@@ -164,7 +166,7 @@
     <string name="timeFormatKey">timeFormat</string>
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
-
+    
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
         <item>Monday</item>
