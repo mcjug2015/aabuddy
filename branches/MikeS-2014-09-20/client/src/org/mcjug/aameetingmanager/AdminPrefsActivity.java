@@ -32,7 +32,7 @@ public class AdminPrefsActivity extends SherlockPreferenceActivity {
 		Credentials credentials = Credentials.readFromPreferences(this);
 		changePasswordPreference.setEnabled(credentials.isSet());		
 	}
-
+    
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {

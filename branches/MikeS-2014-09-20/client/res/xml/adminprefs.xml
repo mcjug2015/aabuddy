@@ -49,4 +49,17 @@
         
     </PreferenceCategory>
 
+    <!-- Meeting Details Preferences -->
+    
+    <PreferenceCategory android:title="@string/meetingTypePreferenceTitle" >
+    	<CheckBoxPreference
+            android:id="@+id/meetingTypeCheckbox"
+            android:defaultValue="true"
+            android:key="@string/meetingTypePreferenceKey"
+            android:summary="@string/meetingTypePreferenceSummary"
+            android:title="@string/meetingTypePreferenceCheckboxTitle"
+             />
+    </PreferenceCategory>
+    
+    
 </PreferenceScreen>

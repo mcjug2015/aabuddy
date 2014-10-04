@@ -16,6 +16,7 @@ import org.mcjug.aameetingmanager.scheduleservice.ServiceConfig;
 import org.mcjug.aameetingmanager.scheduleservice.ServiceHandler;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.aameetingmanager.util.MeetingTypeUtil;
 import org.mcjug.meetingfinder.R;
 
 import android.app.AlertDialog;
@@ -75,6 +76,7 @@ public class FindMeetingFragment extends Fragment {
 	private boolean is24HourTime;
 	private ServiceConfig serviceConfig;
 	private ServiceHandler serviceHandler;
+	private boolean showMeetingTypes;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +84,11 @@ public class FindMeetingFragment extends Fragment {
 		Log.i(TAG, "onCreate");
 		serviceConfig = new ServiceConfig(getActivity(), ServiceConfig.DataSourceTypes.AA_MEETING_TYPE);
 		serviceHandler = new ServiceHandler(getActivity(), ServiceConfig.DataSourceTypes.AA_MEETING_TYPE);
-		serviceHandler.startServiceOnce(serviceConfig.getURL());
+		showMeetingTypes = false;
+		if (MeetingTypeUtil.getMeetingTypeShowPref(getActivity())) {
+			showMeetingTypes = true;
+			serviceHandler.startServiceOnce(serviceConfig.getURL());	
+		}
 	}
 
 	@Override
@@ -118,14 +124,19 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 
-		
 		selectMeetingsTypesButton = (ImageButton) view.findViewById(R.id.selectMeetingType);
-		selectMeetingsTypesButton.setOnClickListener(new OnClickListener() {
-			@Override
-            public void onClick(View v) {
-				createDialog();
-			}
-		});
+		if (showMeetingTypes) {
+			selectMeetingsTypesButton.setOnClickListener(new OnClickListener() {
+				@Override
+	            public void onClick(View v) {
+					createDialog();
+				}
+			});
+		}
+		else
+		{
+			selectMeetingsTypesButton.setVisibility(View.INVISIBLE);
+		}
 		
 				
 		findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton);
@@ -355,9 +366,24 @@ public class FindMeetingFragment extends Fragment {
 	}
 	
 	@Override
+	public void onPause () {
+        super.onPause();
+        Log.v(TAG, "onPause");
+        serviceHandler.stopReceiver();
+	}
+
+	@Override
+	public void onDestroy() {
+	    Log.v(TAG, "onDestroy: broadcastReceiver unregistered");
+	    serviceHandler.stopReceiver();
+		super.onDestroy();
+	}
+	
+	@Override
 	public void onResume() {
 		is24HourTime = DateTimeUtil.is24HourTime(context);	
 	    updateTimeWidgets(is24HourTime);
+        serviceHandler.startReceiver();
 		super.onResume();
 	}
 	
