@@ -151,6 +151,12 @@
     <string name="recoveryDatePrompt">Set Recovery Date or clear this message</string>
     <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>   	
     <string name="howToRecoverToastNote">Go to settings to show Recovery Date again</string>
+    
+    <string name="meetingTypePreferenceTitle">Show Meeting Types</string>
+    <string name="meetingTypePreferenceKey">recoveryDatePreference</string>
+    <string name="meetingTypePreferenceCheckboxTitle">Show Recovery Date Note</string>
+    <string name="meetingTypePreferenceSummary">Indicates if meeting types should be shown</string>
+    
     <string name="recoveryDatePreferencesTitle">Recovery Date Preferences</string>
     <string name="recoveryDateAllowedPreferenceKey">recoveryDateAllowed</string>
     <string name="recoveryDateAllowedPreferenceTitle">Show Recovery Date Note</string>
