@@ -46,7 +46,16 @@
             android:key="@string/recoveryDatePreferenceKey"
             android:summary="@string/recoveryDatePreferenceSummary"
             android:title="@string/recoveryDatePreferenceTitle" />
-        
+    </PreferenceCategory>
+
+    <!-- Meeting Types -->
+    <PreferenceCategory android:title="@string/meetingTypesPreferenceCategoryTitle" >
+        <CheckBoxPreference
+            android:id="@+id/meetingTypesPreferenceCheckbox"
+            android:defaultValue="false"
+            android:key="@string/meetingTypesPreferenceKey"
+            android:summary="@string/meetingTypesPreferenceSummary"
+            android:title="@string/meetingTypesPreferenceTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>
