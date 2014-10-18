@@ -350,6 +350,13 @@ def find_similar_to_meeting(meeting):
     return similar_meetings
 
 
+def save_types(json_obj, meeting):
+    if 'type_ids' in json_obj:
+        for type_id in json_obj['type_ids']:
+            if MeetingType.objects.filter(pk=type_id).count() > 0 and meeting.types.filter(pk=type_id).count()==0:
+                meeting.types.add(MeetingType.objects.get(pk=type_id))
+
+
 @csrf_exempt
 def save_meeting(request):
     ''' save a meeting '''
@@ -362,6 +369,7 @@ def save_meeting(request):
         meeting = temp_json_obj_to_meeting(json_obj)
         meeting.creator = request.user
         meeting.save()
+        save_types(json_obj, meeting)
         logger.debug("meeting %s posted!" % meeting.name)
         retval_obj = get_json_obj_for_meetings([Meeting.objects.get(pk = meeting.pk)], 1, 1)
         return HttpResponse(content=json.dumps(retval_obj), status=200)

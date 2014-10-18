@@ -48,8 +48,9 @@ day_of_week goes from 1 to 7
 
 internal_type valid values can be found in aabuddy/models.py/Meeting/INTERNAL_TYPE_CHOICES. They are case insensitive
 when submitted to the url below, so Submitted and submitted are both valid. If success and status 200, the returned number is the meeting id.
+* NEW - you can now send in a type_ids param to save_meeting. It should contain valid type ids and will associate the passed in types with the newly created meeting. *
 curl -v -H "Content-Type: application/json" -X POST -d '{"address": "sfdfdsfsdfsd", "day_of_week": 1, "description": "fdsfdsdfdsf", "end_time": "17:33:59", "lat": -77.4108, "long": 39.4142, "name": "Frederick meeting", "start_time": "16:30:00"}' --user USERNAME:PASSWORD https://108.179.217.242/meetingfinder/save_meeting
-curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00"}' --user victor.semenov@gmail.com:testpassword1 https://mcasg.org/meetingfinder/save_meeting
+curl -v -H "Content-Type: application/json" -X POST -d '{"address": "1850 Rockville pike, Rockville, MD, 20852", "day_of_week": 3, "description": "Awesome meeting", "end_time": "18:45:00", "lat": -77.121946, "long": 39.059950, "name": "Rockville meeting", "start_time": "17:45:00", "type_ids": [1, 2]}' --user victor.semenov@gmail.com:testpassword1 https://mcasg.org/meetingfinder/save_meeting
 
 For querying the day_of_week can be passed in with the following modifiers:
 __eq - day of week equals to
