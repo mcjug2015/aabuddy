@@ -77,6 +77,9 @@ http://localhost:8888/meetingfinder/get_meetings/?lat=39.0839&long=-77.1531&dist
 http://localhost:8888/meetingfinder/get_meetings/?offset=0&limit=3&order_by=description
 -- the 3rd meeting out of the list of all meetings sorted by start_time
 http://localhost:8888/meetingfinder/get_meetings/?offset=2&limit=3&order_by=start_time
+-- get meetings that have either type with id = 1 or with id = 2 
+http://localhost/meetingfinder/get_meetings/?lat=39.1207&long=-84.4516&type_ids=1&type_ids=2
+
 
 The returned json object looks like this:
 {
