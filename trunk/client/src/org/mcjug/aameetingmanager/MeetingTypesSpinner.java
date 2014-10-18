@@ -25,7 +25,9 @@ public class MeetingTypesSpinner extends MultiSpinner {
 	protected void setItemSpinnerText(StringBuffer spinnerBuffer, int itemIdx) {
 		List<String> items = getItems();
 		int numSelected = getNumSelected();
-		if (items.size() == numSelected) {
+		if (numSelected == 0) {
+			spinnerBuffer.append("None");
+		} else if (items.size() == numSelected) {
 			spinnerBuffer.append(getContext().getString(R.string.all));
 		} else {
 			String itemString = items.get(itemIdx);
