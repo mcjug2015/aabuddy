@@ -23,9 +23,11 @@ import org.mcjug.meetingfinder.R;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -36,6 +38,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -66,10 +69,13 @@ public class FindMeetingFragment extends Fragment {
 
 	private Context context;
 	private boolean is24HourTime;	
+	private boolean showMeetingTypes;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AAMeetingApplication.getInstance());
+		showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
 	}
 
 	@Override
@@ -105,6 +111,12 @@ public class FindMeetingFragment extends Fragment {
 					public void onItemsSelected(boolean[] selected) {
 					}
 		});
+		
+		if (!showMeetingTypes) {
+			TextView textView = (TextView)view.findViewById(R.id.findMeetingTypesTextView);
+			textView.setVisibility(View.GONE);
+			meetingTypesSpinner.setVisibility(View.GONE);
+		}
 		
 		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
 		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
@@ -318,11 +330,13 @@ public class FindMeetingFragment extends Fragment {
 			params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
 		}
 		
-		String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
-		if (!meetingTypeSelections[0].equals(getString(R.string.all))) {
-			for (String str: meetingTypeSelections) {
-				Integer id = meetingTypeIds.get(str.trim());
-				params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
+		if (showMeetingTypes) {
+			String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
+			if (!meetingTypeSelections[0].equals(getString(R.string.all))) {
+				for (String str: meetingTypeSelections) {
+					Integer id = meetingTypeIds.get(str.trim());
+					params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
+				}
 			}
 		}
 				
