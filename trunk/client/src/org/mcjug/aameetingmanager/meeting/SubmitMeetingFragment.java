@@ -2,12 +2,17 @@ package org.mcjug.aameetingmanager.meeting;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.aameetingmanager.LocationFinder;
+import org.mcjug.aameetingmanager.MultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
 import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
@@ -60,7 +65,8 @@ public class SubmitMeetingFragment extends Fragment {
 	private Calendar startTimeCalendar;
 	private Calendar endTimeCalendar;
 	private Spinner dayOfWeekSpinner;
-  
+	private MultiSpinner meetingTypesSpinner;
+ 
 	private boolean isTimeValid = true;
 	private boolean is24HourTime;
 	
@@ -72,6 +78,7 @@ public class SubmitMeetingFragment extends Fragment {
 	private Credentials submitCredentials;
 	private String submitMeetingParams;
 	private Context context;
+	private Map<String, Integer> meetingTypeIds = new HashMap<String, Integer>();
 	
 	private static final int BEFORE_SUBMIT_LOGIN_ACTIVITY 	= 1;
 	private static final int AFTER_SUBMIT_LOGIN_ACTIVITY 	= 2;
@@ -206,6 +213,25 @@ public class SubmitMeetingFragment extends Fragment {
 
 		int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 		dayOfWeekSpinner.setSelection(dayOfWeek - 1);
+		
+		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
+		final List<String> meetingTypesToDisplay = new ArrayList<String>();
+		meetingTypesToDisplay.add("None");
+		meetingTypeIds.clear();
+		meetingTypeIds.put("None", 0);
+		for (int i = 0; i < meetingTypes.size(); i++) {
+			MeetingType meetingType = meetingTypes.get(i);
+			meetingTypesToDisplay.add(meetingType.getName());
+			meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
+		}
+
+		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.submitMeetingTypesSpinner);
+		meetingTypesSpinner.setItems(meetingTypesToDisplay, "None", getString(R.string.all),
+				new MultiSpinnerListener() {
+					@Override
+					public void onItemsSelected(boolean[] selected) {
+					}
+		});
 		return view;
 	}
 	
