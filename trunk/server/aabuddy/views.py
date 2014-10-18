@@ -128,7 +128,8 @@ def temp_json_obj_to_meeting(json_obj):
 
 def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                            day_of_week_params, day_of_week_in_params,
-                           time_params, limit, offset, order_by_column):
+                           time_params, limit, offset, order_by_column,
+                           type_ids=None):
     meetings = Meeting.objects.filter(is_active=True)
     if name:
         meetings = meetings.filter(name__icontains=name)
@@ -136,6 +137,8 @@ def get_meetings_count_query_set(name, distance_miles, latitude, longitude,
     if day_of_week_in_params:
         meetings = meetings.filter(day_of_week__in=day_of_week_in_params)
     meetings = time_params.apply_filters(meetings)
+    if type_ids:
+        meetings = meetings.filter(types__pk__in=type_ids)
     if distance_miles and latitude and longitude:
         pnt = fromstr('POINT(%s %s)' % (longitude, latitude), srid=4326)
         meetings = meetings.filter(geo_location__distance_lte=(pnt, D(mi=distance_miles)))
@@ -180,9 +183,10 @@ def get_meetings_within_distance(request):
         limit = request.GET.get("limit", 1000)
         offset = request.GET.get("offset", 0)
         order_by = request.GET.get("order_by", None)
+        type_ids = request.GET.getlist('type_ids', None)
         (count, meetings) = get_meetings_count_query_set(name, distance_miles, latitude, longitude,
                                           day_of_week_params, day_of_week_in_params,
-                                          time_params, limit, offset, order_by)
+                                          time_params, limit, offset, order_by, type_ids)
         logger.debug("Number of meetings in qs is: %s" % len(meetings))
         retval_obj = get_json_obj_for_meetings(meetings, total_count=count)
         return HttpResponse(content=json.dumps(retval_obj))

@@ -1,7 +1,7 @@
 ''' module for views integration tests '''
 from django.test import TestCase
 import aabuddy.views as views
-from aabuddy.models import Meeting, UserConfirmation
+from aabuddy.models import Meeting, UserConfirmation, MeetingType
 import json
 from mockito import unstub, when, any, mock, verify, contains
 from django.contrib.auth.models import User
