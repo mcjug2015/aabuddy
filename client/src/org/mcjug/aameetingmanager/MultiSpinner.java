@@ -65,7 +65,7 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 			spinnerText = defaultText;
 		}
 
-		if (spinnerText.equals(defaultText)) {
+		if (spinnerText.equals(defaultText) && !spinnerText.equalsIgnoreCase("none")) {
 			for (int i = 0; i < items.size(); i++) {
 				selected[i] = true;
 			}
@@ -112,9 +112,9 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 
 		// all selected by default
         selected = new boolean[items.size()];
-		if (items.contains(selectedItemText)) {
+        if (items.contains(selectedItemText)) {
 		    selected[items.indexOf(selectedItemText)] = true;
-		} else {
+		} else if (!selectedItemText.equalsIgnoreCase("none")) {
 	        for (int i = 0; i < selected.length; i++)
 	            selected[i] = true;
 		}

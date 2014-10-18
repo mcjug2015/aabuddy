@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.AAMeetingManager;
@@ -216,9 +218,7 @@ public class SubmitMeetingFragment extends Fragment {
 		
 		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
 		final List<String> meetingTypesToDisplay = new ArrayList<String>();
-		meetingTypesToDisplay.add("None");
-		meetingTypeIds.clear();
-		meetingTypeIds.put("None", 0);
+		meetingTypeIds.clear();		
 		for (int i = 0; i < meetingTypes.size(); i++) {
 			MeetingType meetingType = meetingTypes.get(i);
 			meetingTypesToDisplay.add(meetingType.getName());
@@ -226,7 +226,7 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 
 		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.submitMeetingTypesSpinner);
-		meetingTypesSpinner.setItems(meetingTypesToDisplay, "None", getString(R.string.all),
+		meetingTypesSpinner.setItems(meetingTypesToDisplay, "None", "None",
 				new MultiSpinnerListener() {
 					@Override
 					public void onItemsSelected(boolean[] selected) {
@@ -418,6 +418,16 @@ public class SubmitMeetingFragment extends Fragment {
 		} else {
 		     Log.d(TAG, "Address is invalid: " + address);
 			 throw new Exception("Address is invalid: " + address);
+		}
+
+		String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
+		if (!meetingTypeSelections[0].equalsIgnoreCase("none")) {
+			List<Integer> meetingTypeIdList = new ArrayList<Integer>();
+			for (String str: meetingTypeSelections) {
+				Integer id = meetingTypeIds.get(str.trim());
+				meetingTypeIdList.add(id);
+			}
+			json.put("type_ids", new JSONArray(meetingTypeIdList));
 		}
 		
 		return json.toString();
