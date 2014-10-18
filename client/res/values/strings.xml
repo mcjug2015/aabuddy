@@ -102,10 +102,9 @@
     <string name="meetingTypesLabel">Meeting Types:</string>
     <string name="meetingTypesButton">Meeting\nTypes</string>
     <string name="meetingTypesKey">meetingTypes</string>
-  
     <string name="ok">OK</string>
     <string name="cancel">Cancel</string>
-    
+
     <item name="paginationSize" type="integer">50</item>
 
     <string name="loginActivityTitle">Login to Add a Meeting</string>
@@ -151,7 +150,7 @@
     <string name="passwordPreferencesTitle">Password Preferences</string>
     <string name="helpActivityTitle">Help</string>
     <string name="recoveryDatePrompt">Set Recovery Date or clear this message</string>
-    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>   	
+    <string name="hideRecoveryDateButtonDescription">Hide Recovery Date</string>
     <string name="howToRecoverToastNote">Go to settings to show Recovery Date again</string>
     <string name="recoveryDatePreferencesTitle">Recovery Date Preferences</string>
     <string name="recoveryDateAllowedPreferenceKey">recoveryDateAllowed</string>
@@ -167,6 +166,12 @@
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
     
+    
+    <string name="meetingTypesPreferenceCategoryTitle">Meeting Types Preferences</string>
+    <string name="meetingTypesPreferenceKey">meetingTypesPreferenceKey</string>
+    <string name="meetingTypesPreferenceSummary">Indicates if meeting types will be shown as a selection when searching for meetings</string>
+    <string name="meetingTypesPreferenceTitle">Show Meeting Types In Search</string>
+
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
         <item>Monday</item>

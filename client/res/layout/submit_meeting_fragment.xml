@@ -91,11 +91,28 @@
             android:entries="@array/daysOfWeekLong" />
 
         <TextView
-            android:id="@+id/submitMeetingAddressTextView"
+            android:id="@+id/submitMeetingTypesTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/submitMeetingDayOfWeekTextView"
             android:layout_below="@+id/submitMeetingDayOfWeekTextView"
+            android:layout_marginTop="15dp"
+            android:text="@string/meetingTypesLabel"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <org.mcjug.aameetingmanager.MeetingTypesSpinner
+            android:id="@+id/submitMeetingTypesSpinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/submitMeetingTypesTextView"
+            android:layout_alignLeft="@+id/submitMeetingEndTimeButton" />
+
+        <TextView
+            android:id="@+id/submitMeetingAddressTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/submitMeetingTypesTextView"
+            android:layout_below="@+id/submitMeetingTypesTextView"
             android:layout_marginTop="20dp"
             android:text="@string/meeting_address"
             android:textAppearance="?android:attr/textAppearanceSmall" />
@@ -110,8 +127,8 @@
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/submitMeetingRefreshLocationButton"
             android:inputType="textPostalAddress"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:selectAllOnFocus="true" >
+            android:selectAllOnFocus="true"
+            android:textAppearance="?android:attr/textAppearanceSmall" >
         </EditText>
 
         <Button
