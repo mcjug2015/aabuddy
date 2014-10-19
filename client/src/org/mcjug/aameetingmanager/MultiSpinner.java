@@ -16,7 +16,8 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 	private List<String> items;
 	private boolean[] selected;
 
-	private String defaultText;
+	private String allSelectedText;
+	private String noneSelectedText;
 	private MultiSpinnerListener listener;
 
 	public MultiSpinner(Context context) {
@@ -54,18 +55,18 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		}
 
 		String spinnerText;
-		if (someUnselected) {
+		if (someUnselected || allSelectedText == null) {
 			spinnerText = spinnerBuffer.toString();
 			if (spinnerText.length() == 0) {
-				spinnerText = defaultText;
+				spinnerText = noneSelectedText;				
 			} else if (spinnerText.length() > 2) {
 				spinnerText = spinnerText.substring(0, spinnerText.length() - 2);
 			}
 		} else {
-			spinnerText = defaultText;
+			spinnerText = allSelectedText;
 		}
 
-		if (spinnerText.equals(defaultText) && !spinnerText.equalsIgnoreCase("none")) {
+		if (spinnerText.equals(allSelectedText)) { 
 			for (int i = 0; i < items.size(); i++) {
 				selected[i] = true;
 			}
@@ -105,16 +106,17 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 	 * @param allSelectedText - the text to show when all items are selected
 	 * @param listener - the listener.
 	 */
-	public void setItems(List<String> items, String selectedItemText, String allSelectedText, MultiSpinnerListener listener) {
+	public void setItems(List<String> items, String selectedItemText, String noneSelectedText, String allSelectedText, MultiSpinnerListener listener) {
 		this.items = items;
-		this.defaultText = allSelectedText;
+		this.noneSelectedText = noneSelectedText;
+		this.allSelectedText = allSelectedText;
 		this.listener = listener;
 
 		// all selected by default
         selected = new boolean[items.size()];
         if (items.contains(selectedItemText)) {
 		    selected[items.indexOf(selectedItemText)] = true;
-		} else if (!selectedItemText.equalsIgnoreCase("none")) {
+		} else if (allSelectedText != null && selectedItemText.equals(allSelectedText)) {
 	        for (int i = 0; i < selected.length; i++)
 	            selected[i] = true;
 		}
@@ -125,6 +127,14 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		setAdapter(adapter);
 	}
 
+	public String getAllSelectedText() {
+		return allSelectedText;
+	}
+	
+	public String getNoneSelectedText() {
+		return noneSelectedText;
+	}
+	
 	public int getNumSelected() {
 		int numSelected = 0;
 		for (int i = 0; i < selected.length; i++) {

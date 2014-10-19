@@ -6,22 +6,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.aameetingmanager.LocationFinder;
-import org.mcjug.aameetingmanager.MultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.MultiSpinner;
 import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
 import org.mcjug.aameetingmanager.meeting.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
 import org.mcjug.aameetingmanager.meeting.SubmitMeetingTask.SubmitMeetingListener;
 import org.mcjug.aameetingmanager.util.DateTimeUtil;
 import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.meetingfinder.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -226,7 +225,7 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 
 		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.submitMeetingTypesSpinner);
-		meetingTypesSpinner.setItems(meetingTypesToDisplay, "None", "None",
+		meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.none), getString(R.string.none), null,
 				new MultiSpinnerListener() {
 					@Override
 					public void onItemsSelected(boolean[] selected) {
@@ -421,7 +420,7 @@ public class SubmitMeetingFragment extends Fragment {
 		}
 
 		String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
-		if (!meetingTypeSelections[0].equalsIgnoreCase("none")) {
+		if (!meetingTypeSelections[0].equals(getString(R.string.none))) {
 			List<Integer> meetingTypeIdList = new ArrayList<Integer>();
 			for (String str: meetingTypeSelections) {
 				Integer id = meetingTypeIds.get(str.trim());
