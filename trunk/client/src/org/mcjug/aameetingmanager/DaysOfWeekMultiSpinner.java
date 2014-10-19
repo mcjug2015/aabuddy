@@ -25,7 +25,7 @@ public class DaysOfWeekMultiSpinner extends MultiSpinner {
 			daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekLong);
 		} else if (listSize == 2 || listSize == 3) {
 			daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekMedium);
-		}else {
+		} else {
             daysOfWeek = getContext().getResources().getStringArray(R.array.daysOfWeekShort);
         }
 		spinnerBuffer.append(daysOfWeek[itemIdx]);

@@ -3,7 +3,6 @@ package org.mcjug.aameetingmanager;
 import java.util.List;
 
 import org.mcjug.aameetingmanager.meeting.MeetingType;
-import org.mcjug.meetingfinder.R;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -25,10 +24,8 @@ public class MeetingTypesSpinner extends MultiSpinner {
 	protected void setItemSpinnerText(StringBuffer spinnerBuffer, int itemIdx) {
 		List<String> items = getItems();
 		int numSelected = getNumSelected();
-		if (numSelected == 0) {
-			spinnerBuffer.append("None");
-		} else if (items.size() == numSelected) {
-			spinnerBuffer.append(getContext().getString(R.string.all));
+		if (numSelected == 0) {	
+			spinnerBuffer.append(getNoneSelectedText());	
 		} else {
 			String itemString = items.get(itemIdx);
 			List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();

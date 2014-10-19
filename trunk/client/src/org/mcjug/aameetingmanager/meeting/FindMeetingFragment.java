@@ -70,12 +70,12 @@ public class FindMeetingFragment extends Fragment {
 	private Context context;
 	private boolean is24HourTime;	
 	private boolean showMeetingTypes;
+	private SharedPreferences prefs;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(AAMeetingApplication.getInstance());
-		showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
+		prefs = PreferenceManager.getDefaultSharedPreferences(AAMeetingApplication.getInstance());
 	}
 
 	@Override
@@ -88,6 +88,7 @@ public class FindMeetingFragment extends Fragment {
 		Calendar calendar = Calendar.getInstance();
 		int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 		daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(day),
+				getString(R.string.all),
 				getString(R.string.all), 
 				new MultiSpinnerListener() {			
 					@Override
@@ -105,19 +106,13 @@ public class FindMeetingFragment extends Fragment {
 		}
 
 		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
-		meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.all), getString(R.string.all),
+		meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.any), getString(R.string.any), null,
 				new MultiSpinnerListener() {
 					@Override
 					public void onItemsSelected(boolean[] selected) {
 					}
-		});
-		
-		if (!showMeetingTypes) {
-			TextView textView = (TextView)view.findViewById(R.id.findMeetingTypesTextView);
-			textView.setVisibility(View.GONE);
-			meetingTypesSpinner.setVisibility(View.GONE);
-		}
-		
+		});		
+	
 		distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
 		List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
 		distanceSpinner.setSelection(distanceValues.indexOf("10"));
@@ -284,6 +279,13 @@ public class FindMeetingFragment extends Fragment {
 		is24HourTime = DateTimeUtil.is24HourTime(context);	
 	    updateTimeWidgets(is24HourTime);
 
+		showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
+		if (!showMeetingTypes) {
+			TextView textView = (TextView)getView().findViewById(R.id.findMeetingTypesTextView);
+			textView.setVisibility(View.GONE);
+			meetingTypesSpinner.setVisibility(View.GONE);
+		}
+		
 		super.onResume();
 	}	
 	
@@ -332,7 +334,7 @@ public class FindMeetingFragment extends Fragment {
 		
 		if (showMeetingTypes) {
 			String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
-			if (!meetingTypeSelections[0].equals(getString(R.string.all))) {
+			if (!meetingTypeSelections[0].equals(getString(R.string.any))) {
 				for (String str: meetingTypeSelections) {
 					Integer id = meetingTypeIds.get(str.trim());
 					params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
