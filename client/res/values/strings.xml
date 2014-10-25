@@ -172,7 +172,7 @@
     <string name="meetingTypesPreferenceCategoryTitle">Meeting Types Preferences</string>
     <string name="meetingTypesPreferenceKey">meetingTypesPreferenceKey</string>
     <string name="meetingTypesPreferenceSummary">Indicates if meeting types will be shown as a selection when searching for meetings</string>
-    <string name="meetingTypesPreferenceTitle">Show Meeting Types In Search</string>
+    <string name="meetingTypesPreferenceTitle">Show Meeting Types</string>
 
     <string-array name="daysOfWeekLong">
         <item>Sunday</item>
