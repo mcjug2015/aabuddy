@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/map"
+        android:icon="@drawable/map"
+        android:showAsAction="always"
+        android:title="@string/mapMenuItem"/>
+   <item
+	    android:id="@+id/share"
+	    android:title="@string/shareMenuItem"
+	    android:showAsAction="always"
+	    android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"
+	    /> 
+    <item
+        android:id="@+id/calendar"
+        android:icon="@drawable/calendar"
+        android:showAsAction="always"
+        android:title="@string/calendarMenuItem"/>
+    <item
+        android:id="@+id/meetingNotThere"
+        android:showAsAction="always"
+        android:title="@string/meetingNotThereButton"/>
+    <item
+        android:id="@+id/editMeetingTypes"
+        android:showAsAction="always"
+        android:title="@string/meetingTypesButton"/>
+</menu>
