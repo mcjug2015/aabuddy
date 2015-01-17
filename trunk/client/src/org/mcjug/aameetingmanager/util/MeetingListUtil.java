@@ -17,7 +17,6 @@ import android.content.Context;
 import android.os.Build;
 import android.provider.Settings.Secure;
 import android.util.Log;
-import android.util.SparseArray;
 
 public class MeetingListUtil {
 	private static final String TAG = MeetingListUtil.class.getSimpleName();
