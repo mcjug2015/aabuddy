@@ -398,7 +398,7 @@ public class MeetingListFragment extends ListFragment {
 		emailIntent.setAction(Intent.ACTION_SEND);
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
 		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
-		emailIntent.setType("text/plain");
+		emailIntent.setType("message/rfc822");
 
 		PackageManager packageManager = context.getPackageManager();
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -410,17 +410,16 @@ public class MeetingListFragment extends ListFragment {
 			// Extract the label, append it, and repackage it in a LabeledIntent
 			String packageName = resolveInfo.activityInfo.packageName;
 			if (packageName.contains("android.email")) {
-				emailIntent.setPackage(packageName);
-			} else if (packageName.contains("mms") || packageName.contains("android.apps.inbox")
-					|| packageName.contains("android.gm")) {
-				Intent intent = new Intent();
-				intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
-				intent.setAction(Intent.ACTION_SEND);
-				intent.setType("text/plain");
-				intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
-				intent.putExtra(Intent.EXTRA_TEXT, message);
-				intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
-						resolveInfo.icon));
+                emailIntent.setPackage(packageName);
+            } else if (packageName.contains("mms")){
+                Intent intent = new Intent();
+                intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("message/rfc822");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
+                intent.putExtra(Intent.EXTRA_TEXT, message);
+                intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
+                        resolveInfo.icon));
 			}
 		}
 
