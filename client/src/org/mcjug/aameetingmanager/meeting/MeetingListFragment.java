@@ -2,6 +2,8 @@ package org.mcjug.aameetingmanager.meeting;
 
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.http.NameValuePair;
@@ -16,10 +18,14 @@ import org.mcjug.meetingfinder.R;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.LabeledIntent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -210,7 +216,7 @@ public class MeetingListFragment extends ListFragment {
 			SherlockFragmentActivity activity = (SherlockFragmentActivity) getActivity();
 			if (userName.trim().equals("")) {
 				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
-				meetingNotThereMenuItem = menu.getItem(1);
+				meetingNotThereMenuItem = menu.getItem(2);
 			} else {
 				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu, menu);
 				meetingNotThereMenuItem = menu.getItem(2);
@@ -259,6 +265,10 @@ public class MeetingListFragment extends ListFragment {
 			case R.id.meetingNotThere:
 				getMeetingNotThereDialog().show();
 				mode.finish();
+				return true;
+
+			case R.id.share:
+				shareMeeting(selectedMeeting);
 				return true;
 
 			default:
@@ -368,6 +378,56 @@ public class MeetingListFragment extends ListFragment {
 				});
 
 		return builder;
+	}
+
+	private void shareMeeting(Meeting meeting) {
+		Context context = getActivity();
+		String[] daysOfWeek = getResources().getStringArray(R.array.daysOfWeekLong);
+		String day = daysOfWeek[meeting.getDayOfWeekIdx() - 1];
+
+		Date startTime = meeting.getStartTime();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(startTime);
+		String getTimeStr = DateTimeUtil.getTimeStr(calendar, DateTimeUtil.is24HourTime(context));
+
+		String message = "\n" + "Please join me at " + meeting.getName() + " this coming " + day + " starting at "
+				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!"
+				+ "\n\n" + meeting.getDescription();
+
+		Intent emailIntent = new Intent();
+		emailIntent.setAction(Intent.ACTION_SEND);
+		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
+		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
+		emailIntent.setType("text/plain");
+
+		PackageManager packageManager = context.getPackageManager();
+		Intent sendIntent = new Intent(Intent.ACTION_SEND);
+		sendIntent.setType("text/plain");
+
+		List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(sendIntent, 0);
+		List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
+		for (ResolveInfo resolveInfo : resolveInfoList) {
+			// Extract the label, append it, and repackage it in a LabeledIntent
+			String packageName = resolveInfo.activityInfo.packageName;
+			if (packageName.contains("android.email")) {
+				emailIntent.setPackage(packageName);
+			} else if (packageName.contains("mms") || packageName.contains("android.apps.inbox")
+					|| packageName.contains("android.gm")) {
+				Intent intent = new Intent();
+				intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
+				intent.setAction(Intent.ACTION_SEND);
+				intent.setType("text/plain");
+				intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
+				intent.putExtra(Intent.EXTRA_TEXT, message);
+				intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
+						resolveInfo.icon));
+			}
+		}
+
+		LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
+		Intent openInChooser = Intent.createChooser(emailIntent, getString(R.string.share));
+		openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+		startActivity(openInChooser);
 	}
 
 	private void displayMeetingTypesEditor(final Meeting selectedMeeting) {
