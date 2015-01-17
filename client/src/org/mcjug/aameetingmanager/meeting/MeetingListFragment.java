@@ -410,7 +410,7 @@ public class MeetingListFragment extends ListFragment {
 			String packageName = resolveInfo.activityInfo.packageName;
 			if (packageName.contains("android.email")) {
                 emailIntent.setPackage(packageName);
-            } else if (packageName.contains("mms") || packageName.contains("android.gm")){
+            } else if (packageName.contains("mms") || packageName.contains("android.gm") || packageName.contains("android.apps.inbox")){
                 Intent intent = new Intent();
                 intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
                 intent.setAction(Intent.ACTION_SEND);
