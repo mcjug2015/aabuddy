@@ -394,17 +394,16 @@ public class MeetingListFragment extends ListFragment {
 				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!"
 				+ "\n\n" + meeting.getDescription();
 
-		Intent emailIntent = new Intent();
-		emailIntent.setAction(Intent.ACTION_SEND);
+		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
 		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
-		emailIntent.putExtra(Intent.EXTRA_TEXT, message);
-		emailIntent.setType("message/rfc822");
+        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
 
 		PackageManager packageManager = context.getPackageManager();
 		Intent sendIntent = new Intent(Intent.ACTION_SEND);
 		sendIntent.setType("text/plain");
 
-		List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(sendIntent, 0);
+		List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(sendIntent,
+		        PackageManager.MATCH_DEFAULT_ONLY);
 		List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
 		for (ResolveInfo resolveInfo : resolveInfoList) {
 			// Extract the label, append it, and repackage it in a LabeledIntent
