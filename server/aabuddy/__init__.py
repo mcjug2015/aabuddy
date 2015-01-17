@@ -1,1 +1,0 @@
-''' aa buddy app package '''

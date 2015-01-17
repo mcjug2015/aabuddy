@@ -44,6 +44,7 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
+import com.actionbarsherlock.widget.ShareActionProvider;
 
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
@@ -208,14 +209,38 @@ public class MeetingListFragment extends ListFragment {
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Create the menu from the xml file
 			SherlockFragmentActivity activity = (SherlockFragmentActivity) getActivity();
+			
+			int meetingNotThereMenuItemBias = 3;
 			if (userName.trim().equals("")) {
 				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
-				meetingNotThereMenuItem = menu.getItem(1);
+				meetingNotThereMenuItem = menu.getItem(meetingNotThereMenuItemBias);
 			} else {
 				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu, menu);
-				meetingNotThereMenuItem = menu.getItem(2);
+				meetingNotThereMenuItem = menu.getItem(meetingNotThereMenuItemBias + 1);
 			}
+			
 
+		    MenuItem menuItem = menu.findItem(R.id.share);
+	          // Get the provider and hold onto it to set/change the share intent.
+	        ShareActionProvider shareActionProvider = (ShareActionProvider) menuItem.getActionProvider();
+
+	        // Set the default share intent
+	        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+	        shareIntent.setType("text/plain");
+
+	        String[] daysOfWeek = getResources().getStringArray(R.array.daysOfWeekLong);
+	        String messageText = String.format(getString(R.string.shareInvitationFirst),
+	        		selectedMeeting.getName(),
+	        		daysOfWeek[selectedMeeting.getDayOfWeekIdx() - 1] ,
+	        		selectedMeeting.getStartTime(),
+	        		selectedMeeting.getAddress()
+	        		);
+	        
+	        shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.shareInvitationSubject));
+	        shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, messageText + getString(R.string.shareInvitationSecond));
+
+	        shareActionProvider.setShareIntent(shareIntent);
+	        
 			return true;
 		}
 
@@ -260,7 +285,13 @@ public class MeetingListFragment extends ListFragment {
 				getMeetingNotThereDialog().show();
 				mode.finish();
 				return true;
-
+				
+			/*
+			case R.id.share:
+				Toast.makeText(getActivity(), "Show 'Share Via' dialog here", Toast.LENGTH_LONG).show();
+				return true;
+			*/
+				
 			default:
 				return true;
 			}
