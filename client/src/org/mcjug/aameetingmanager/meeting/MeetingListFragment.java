@@ -394,39 +394,56 @@ public class MeetingListFragment extends ListFragment {
 				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!"
 				+ "\n\n" + meeting.getDescription();
 
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts("mailto", "", null));
-		emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
-        emailIntent.putExtra(Intent.EXTRA_TEXT, message);
-
 		PackageManager packageManager = context.getPackageManager();
-		Intent sendIntent = new Intent(Intent.ACTION_SEND);
-		sendIntent.setType("text/plain");
-
-		List<ResolveInfo> resolveInfoList = packageManager.queryIntentActivities(sendIntent,
-		        PackageManager.MATCH_DEFAULT_ONLY);
 		List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
-		for (ResolveInfo resolveInfo : resolveInfoList) {
-			// Extract the label, append it, and repackage it in a LabeledIntent
-			String packageName = resolveInfo.activityInfo.packageName;
-			if (packageName.contains("android.email")) {
-                emailIntent.setPackage(packageName);
-            } else if (packageName.contains("mms") || packageName.contains("android.gm") || packageName.contains("android.apps.inbox")){
-                Intent intent = new Intent();
-                intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
-                intent.setAction(Intent.ACTION_SEND);
-                intent.setType("message/rfc822");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
-                intent.putExtra(Intent.EXTRA_TEXT, message);
-                intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
-                        resolveInfo.icon));
-			}
-		}
+		cofigureMailClients(packageManager, intentList, message);	
+		cofigureSMSClients(packageManager, intentList, message);
+		
+		if (!intentList.isEmpty()) {
+			Intent chooserIntent = intentList.get(0);
+			intentList.remove(0);
 
-		LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
-		Intent openInChooser = Intent.createChooser(emailIntent, getString(R.string.share));
-		openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-		startActivity(openInChooser);
+			Intent sendIntent = new Intent(Intent.ACTION_SEND);
+			sendIntent.setType("text/plain");
+			LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
+			Intent openInChooser = Intent.createChooser(chooserIntent, getString(R.string.share));
+			openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
+			startActivity(openInChooser);
+		}
 	}
+	
+	private void cofigureMailClients(PackageManager packageManager, List<LabeledIntent> intentList, String message) {
+		Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
+		emailIntent.setData(Uri.parse("mailto:"));	
+		
+		List<ResolveInfo> mailClients = packageManager.queryIntentActivities(emailIntent, 0);
+    	for (ResolveInfo resolveInfo : mailClients) {
+    		String packageName = resolveInfo.activityInfo.packageName;
+    		Intent intent = new Intent(Intent.ACTION_SEND);
+    	    intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
+      		intent.setData(Uri.parse("mailto:"));
+        	intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
+        	intent.putExtra(Intent.EXTRA_TEXT, message);
+            intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
+                    resolveInfo.icon));
+        }
+	}  
+	
+	private void cofigureSMSClients(PackageManager packageManager, List<LabeledIntent> intentList, String message) {
+		Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
+		smsIntent.setData(Uri.parse("sms:"));
+		
+		List<ResolveInfo> smsClients = packageManager.queryIntentActivities(smsIntent, 0);
+    	for (ResolveInfo resolveInfo : smsClients) {
+    		String packageName = resolveInfo.activityInfo.packageName;
+    		Intent intent = new Intent(Intent.ACTION_SEND);
+    	    intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
+      		intent.setData(Uri.parse("sms:"));
+         	intent.putExtra(Intent.EXTRA_TEXT, message);
+            intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager),
+                    resolveInfo.icon));
+        }
+	}  
 
 	private void displayMeetingTypesEditor(final Meeting selectedMeeting) {
 		final List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
