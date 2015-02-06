@@ -391,8 +391,7 @@ public class MeetingListFragment extends ListFragment {
 		String getTimeStr = DateTimeUtil.getTimeStr(calendar, DateTimeUtil.is24HourTime(context));
 
 		String message = "\n" + "Please join me at " + meeting.getName() + " this coming " + day + " starting at "
-				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!"
-				+ "\n\n" + meeting.getDescription();
+				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!";
 
        if (Build.VERSION.SDK_INT < 11) {
            Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
