@@ -15,6 +15,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="android-support-v41" level="project" />
     <orderEntry type="module" module-name="ActionBarSherlock" exported="" />
+    <orderEntry type="module" module-name="ActionBarSherlock" />
   </component>
 </module>
 
