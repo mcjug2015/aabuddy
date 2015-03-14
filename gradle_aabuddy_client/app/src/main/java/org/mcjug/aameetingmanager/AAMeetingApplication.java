@@ -20,6 +20,7 @@ import android.util.Log;
 
 //Testing first git commit.
 //Test marias first git commit.
+//David's first comment
 public class AAMeetingApplication extends Application {
 	private static final String TAG = AAMeetingApplication.class.getSimpleName();	
 	private MeetingListResults meetingListResults;
