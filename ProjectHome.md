@@ -1,0 +1,1 @@
+Users will be able to submit times/dates/locations of meetings they know about and look for meetings others have submitted
