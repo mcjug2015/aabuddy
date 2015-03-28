@@ -77,6 +77,8 @@ def clean():
 
 
 def refresh_local():
+    local("rm -rf %(path)s/releases/%(release)s/%(prj_name)s" % env)
+    local("cp -R . %(path)s/releases/%(release)s/%(prj_name)s" % env)
     dev_setup()
     install_site()
     local_migrate()
