@@ -1,3 +1,11 @@
+Fab stuff:
+[clonobyte@localhost ~]$ cd /var/www/clonobyteweb/git/aabuddy/server/
+[clonobyte@localhost server]$ source /var/www/aabuddy/local-python/bin/activate
+
+
+
+
+----------------------------------------------
 $> sudo sh setuptools-0.6c11-py2.6.egg
 $> sudo easy_install pip
 $> pip install virtualenv
