@@ -7,14 +7,15 @@
 # you're doing.
 Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 80, host: 8888
-    #config.vm.synced_folder "/moooo", "/var/host_machine_stuff"
     config.vm.provision :shell do |shell|
         shell.inline = "mkdir -p /etc/puppet/modules;
                         puppet module install yguenane/repoforge;
                         puppet module install stahnma-epel;
                         puppet module install puppetlabs-apache;
                         puppet module install puppetlabs-stdlib;
-                        puppet module install saz-sudo;"
+                        puppet module install saz-sudo;
+                        puppet module install puppetlabs-postgresql;
+                        puppet module install camptocamp-postgis;"
     end
     config.vm.provision "puppet" do |puppet|
        #puppet.options = "--verbose --debug"

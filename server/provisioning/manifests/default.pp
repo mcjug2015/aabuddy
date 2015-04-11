@@ -1,3 +1,5 @@
+$db_pg_password = "NOPE"
+$db_aabuddy_password = "NOPE"
 include repoforge
 include epel
 $aabuddy_folder = "/opt/aabuddy/"
@@ -58,7 +60,6 @@ class dependencies{
                          "mlocate",
                          "nano",
                          "htop",
-                         "postgresql",
                          "postgresql-devel",
                          "rabbitmq-server",]
 
@@ -68,6 +69,17 @@ class dependencies{
     }
 }
 include dependencies
+
+class do_postgres {
+  class { 'postgresql::server':
+  }
+
+  postgresql::server::db { 'aabuddy':
+    user     => 'aabuddy',
+    password => postgresql_password("aabuddy", "${db_aabuddy_password}"),
+  }
+}
+include do_postgres
 
 class install_pip_venv {
   exec { "download get-pip":
@@ -140,7 +152,8 @@ class finalize_box {
       path => "/etc/selinux/config",
       line => "SELINUX=permissive",
       match => "^(SELINUX=enforcing)$",
-      require => [Class["setup_wsgi"], Class["setup_httpd"], Class["install_pip_venv"], Class["dependencies"], Class["create_groups_users_dirs"], ],
+      require => [Class["setup_wsgi"], Class["setup_httpd"], Class["install_pip_venv"], Class["dependencies"], Class["create_groups_users_dirs"], 
+                  Class["do_postgres"], ],
   }
 }
 include finalize_box
