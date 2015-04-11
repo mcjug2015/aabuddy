@@ -1,14 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.net.URI;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.meetingfinder.R;
-import org.mcjug.aameetingmanager.meeting.MeetingListFragment.ListActionModeCallback;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -17,6 +8,15 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.ListView;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.meeting.MeetingListFragment.ListActionModeCallback;
+import org.mcjug.meetingfinder.R;
+
+import java.net.URI;
+import java.util.List;
 
 public class InfiniteScrollListener implements OnScrollListener {
 	private static final String TAG = InfiniteScrollListener.class.getSimpleName();

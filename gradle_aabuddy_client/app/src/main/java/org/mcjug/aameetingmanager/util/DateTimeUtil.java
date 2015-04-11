@@ -1,11 +1,5 @@
 package org.mcjug.aameetingmanager.util;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import org.mcjug.aameetingmanager.meeting.Meeting;
-import org.mcjug.meetingfinder.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -15,6 +9,12 @@ import android.os.Build;
 import android.preference.PreferenceManager;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Events;
+
+import org.mcjug.aameetingmanager.meeting.Meeting;
+import org.mcjug.meetingfinder.R;
+
+import java.util.Calendar;
+import java.util.Date;
 
 public class DateTimeUtil {
 

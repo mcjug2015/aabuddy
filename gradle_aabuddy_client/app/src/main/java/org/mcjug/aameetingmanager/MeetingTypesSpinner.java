@@ -1,11 +1,11 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.List;
+import android.content.Context;
+import android.util.AttributeSet;
 
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 
-import android.content.Context;
-import android.util.AttributeSet;
+import java.util.List;
 
 public class MeetingTypesSpinner extends MultiSpinner {
 	public MeetingTypesSpinner(Context context) {

@@ -1,7 +1,5 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.List;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -10,6 +8,8 @@ import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+
+import java.util.List;
 
 public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener, OnCancelListener {
 

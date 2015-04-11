@@ -1,8 +1,8 @@
 package org.mcjug.aameetingmanager.util;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -18,9 +18,9 @@ import org.apache.http.params.HttpParams;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.meetingfinder.R;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class HttpUtil {
 

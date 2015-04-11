@@ -1,9 +1,9 @@
 package org.mcjug.aameetingmanager.util;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import android.content.Context;
+import android.os.Build;
+import android.provider.Settings.Secure;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.json.JSONArray;
@@ -13,10 +13,10 @@ import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 
-import android.content.Context;
-import android.os.Build;
-import android.provider.Settings.Secure;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MeetingListUtil {
 	private static final String TAG = MeetingListUtil.class.getSimpleName();

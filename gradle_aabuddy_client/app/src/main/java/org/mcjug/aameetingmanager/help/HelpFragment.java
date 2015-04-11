@@ -1,7 +1,5 @@
 package org.mcjug.aameetingmanager.help;
 
-import org.mcjug.meetingfinder.R;
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,6 +8,8 @@ import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import org.mcjug.meetingfinder.R;
 
 public class HelpFragment extends Fragment {
 	//private static final String TAG = HelpFragment.class.getSimpleName();

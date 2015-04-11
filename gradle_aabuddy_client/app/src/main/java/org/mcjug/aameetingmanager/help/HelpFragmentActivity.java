@@ -1,15 +1,14 @@
 package org.mcjug.aameetingmanager.help;
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
+
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.meetingfinder.R;
 
-import android.content.Intent;
-import android.os.Bundle;
-
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
-
-public class HelpFragmentActivity extends SherlockFragmentActivity {
+public class HelpFragmentActivity extends ActionBarActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

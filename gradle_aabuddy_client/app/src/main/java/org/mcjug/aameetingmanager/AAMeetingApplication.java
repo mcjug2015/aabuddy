@@ -1,9 +1,10 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import android.app.Application;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.preference.PreferenceManager;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,11 +13,10 @@ import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
 import org.mcjug.meetingfinder.R;
 
-import android.app.Application;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.preference.PreferenceManager;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 //Testing first git commit.
 //Test marias first git commit.

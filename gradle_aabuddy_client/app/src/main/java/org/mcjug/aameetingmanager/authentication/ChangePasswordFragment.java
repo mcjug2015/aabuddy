@@ -1,19 +1,5 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.aameetingmanager.AAMeetingManager;
-import org.mcjug.meetingfinder.R;
-import org.mcjug.aameetingmanager.util.HttpUtil;
-
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -30,6 +16,20 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.AAMeetingManager;
+import org.mcjug.aameetingmanager.util.HttpUtil;
+import org.mcjug.meetingfinder.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChangePasswordFragment extends Fragment {
 	private static final String TAG = ChangePasswordFragment.class.getSimpleName();

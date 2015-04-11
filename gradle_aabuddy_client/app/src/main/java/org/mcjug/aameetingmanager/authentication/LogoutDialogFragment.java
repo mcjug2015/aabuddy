@@ -1,13 +1,13 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import org.mcjug.meetingfinder.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+
+import org.mcjug.meetingfinder.R;
 
 public class LogoutDialogFragment extends DialogFragment {
     

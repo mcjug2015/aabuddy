@@ -1,6 +1,7 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.List;
+import android.content.Context;
+import android.os.AsyncTask;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -10,12 +11,11 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
+import org.mcjug.meetingfinder.R;
 
-import android.content.Context;
-import android.os.AsyncTask;
+import java.util.List;
 
 public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meeting>> {
 	private final String TAG = getClass().getSimpleName();

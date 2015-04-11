@@ -1,25 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
-import org.mcjug.aameetingmanager.LocationFinder;
-import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
-import org.mcjug.aameetingmanager.MultiSpinner;
-import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.aameetingmanager.util.DateTimeUtil;
-import org.mcjug.aameetingmanager.util.LocationUtil;
-import org.mcjug.meetingfinder.R;
-
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -41,6 +21,26 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
+import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
+import org.mcjug.aameetingmanager.LocationFinder;
+import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.MultiSpinner;
+import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.meetingfinder.R;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class FindMeetingFragment extends Fragment {
 	private static final String TAG = FindMeetingFragment.class.getSimpleName();

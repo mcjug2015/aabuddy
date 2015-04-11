@@ -1,5 +1,9 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.content.Context;
+import android.os.AsyncTask;
+import android.widget.Toast;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -8,10 +12,6 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.meetingfinder.R;
-
-import android.content.Context;
-import android.os.AsyncTask;
-import android.widget.Toast;
 
 public class DeleteMeetingTask extends AsyncTask<Void, Void, String> {
     private final String TAG = getClass().getSimpleName();

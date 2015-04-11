@@ -1,9 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.List;
-
-import org.mcjug.meetingfinder.R;
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -16,6 +12,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import org.mcjug.meetingfinder.R;
+
+import java.util.List;
 
 public class MeetingAdapter extends ArrayAdapter<Meeting>{
 	private final List<Meeting> meetings;

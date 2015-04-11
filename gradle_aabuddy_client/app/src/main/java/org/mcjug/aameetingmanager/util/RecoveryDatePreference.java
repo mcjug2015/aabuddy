@@ -1,11 +1,4 @@
 package org.mcjug.aameetingmanager.util;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import org.mcjug.meetingfinder.R;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -20,6 +13,14 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.Toast;
+
+import org.mcjug.meetingfinder.R;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 public class RecoveryDatePreference extends DialogPreference implements DatePicker.OnDateChangedListener {
 

@@ -4,7 +4,7 @@
     <!-- Password Preferences -->
     <PreferenceCategory android:title="@string/passwordPreferencesTitle" >
         <Preference
-            android:key="@+string/changePasswordPreferenceKey"
+            android:key="@string/changePasswordPreferenceKey"
             android:summary="@string/changePasswordPreferenceSummary"
             android:title="@string/changePasswordPreferenceTitle" >
             <intent
@@ -13,7 +13,7 @@
                 android:targetPackage="org.mcjug.meetingfinder" />
         </Preference>
         <Preference
-            android:key="@+string/resetPasswordPreferenceKey"
+            android:key="@string/resetPasswordPreferenceKey"
             android:title="@string/resetPasswordPreferenceTitle" >
             <intent
                 android:action="android.intent.action.VIEW"

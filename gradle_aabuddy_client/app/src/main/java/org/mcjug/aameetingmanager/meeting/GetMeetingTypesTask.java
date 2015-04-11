@@ -1,5 +1,12 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.os.AsyncTask;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -8,13 +15,6 @@ import org.apache.http.client.methods.HttpGet;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.meetingfinder.R;
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.util.Log;
 
 public class GetMeetingTypesTask extends AsyncTask<Void, Void, String> {
 	private final String TAG = getClass().getSimpleName();

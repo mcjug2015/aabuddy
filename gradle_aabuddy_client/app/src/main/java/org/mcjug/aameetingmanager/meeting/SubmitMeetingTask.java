@@ -1,5 +1,8 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.content.Context;
+import android.os.AsyncTask;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
@@ -8,13 +11,10 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicHeader;
 import org.apache.http.protocol.HTTP;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
-
-import android.content.Context;
-import android.os.AsyncTask;
+import org.mcjug.meetingfinder.R;
 
 public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
     private final String TAG = getClass().getSimpleName();
