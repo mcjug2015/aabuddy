@@ -2,3 +2,4 @@ app/mooo.txt
 app/app.iml
 .idea/*
 local.properties
+.idea/workspace.xml
