@@ -3,3 +3,5 @@ app/app.iml
 .idea/*
 local.properties
 .idea/workspace.xml
+build/*
+app/build/*
