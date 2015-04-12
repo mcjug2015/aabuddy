@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
+
 import org.mcjug.meetingfinder.R;
 
 public class ResetPasswordFragmentActivity extends ActionBarActivity {

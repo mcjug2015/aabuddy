@@ -1,7 +1,6 @@
 package org.mcjug.aameetingmanager;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -20,10 +19,6 @@ public class AdminPrefsActivity extends PreferenceActivity {
 
         // Admin preferences
         addPreferencesFromResource(R.xml.adminprefs);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-        }
 
         Preference resetPasswordPreference = findPreference(getString(R.string.resetPasswordPreferenceKey));
         Intent intent = resetPasswordPreference.getIntent();
