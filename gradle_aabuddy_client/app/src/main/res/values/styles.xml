@@ -1,6 +1,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <style name="AppTheme" parent="@style/Theme.AppCompat.Light" />
+      <style name="AppTheme" parent="@style/Theme.AppCompat.Light" >
+        <item name="activatedBackgroundIndicator">@drawable/activated_background_halo
+        </item>
+    </style>
 
     <style name="buttonStyle">
 	  <item name="android:textStyle">bold</item>
