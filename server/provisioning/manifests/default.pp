@@ -57,11 +57,9 @@ include create_groups_users_dirs
 
 class dependencies{
     $aabuddy_packages = ["wget",
-                         "mlocate",
                          "nano",
                          "htop",
-                         "postgresql-devel",
-                         "rabbitmq-server",]
+                         "postgresql-devel",]
 
     package { $aabuddy_packages:
         ensure => latest,
@@ -71,12 +69,27 @@ class dependencies{
 include dependencies
 
 class do_postgres {
-  class { 'postgresql::server':
-  }
+
+class {'postgresql::globals':
+  version => '9.3',
+  manage_package_repo => true,
+  encoding => 'UTF8',
+  locale   => "en_US.UTF-8",
+}->
+class { 'postgresql::server':
+  listen_addresses => '*',
+  postgres_password => "${db_pg_password}",
+}
+
+# Install contrib modules
+class { 'postgresql::server::contrib':
+  package_ensure => 'present',
+}
 
   postgresql::server::db { 'aabuddy':
     user     => 'aabuddy',
     password => postgresql_password("aabuddy", "${db_aabuddy_password}"),
+    require => [Class["postgresql::globals"], Class["postgresql::server"], Class["postgresql::server::contrib"]],
   }
 }
 include do_postgres
