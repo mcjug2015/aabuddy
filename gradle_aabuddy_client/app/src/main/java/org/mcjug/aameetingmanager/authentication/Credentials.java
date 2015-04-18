@@ -1,17 +1,17 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.mcjug.meetingfinder.R;
-import org.mcjug.aameetingmanager.util.HttpUtil;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.mcjug.aameetingmanager.util.HttpUtil;
+import org.mcjug.meetingfinder.R;
 
 public class Credentials {
 	

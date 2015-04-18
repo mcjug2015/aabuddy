@@ -1,27 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.aameetingmanager.AAMeetingManager;
-import org.mcjug.aameetingmanager.LocationFinder;
-import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
-import org.mcjug.aameetingmanager.MultiSpinner;
-import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
-import org.mcjug.aameetingmanager.authentication.Credentials;
-import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
-import org.mcjug.aameetingmanager.meeting.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
-import org.mcjug.aameetingmanager.meeting.SubmitMeetingTask.SubmitMeetingListener;
-import org.mcjug.aameetingmanager.util.DateTimeUtil;
-import org.mcjug.aameetingmanager.util.LocationUtil;
-import org.mcjug.meetingfinder.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -52,6 +30,28 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
+import org.mcjug.aameetingmanager.AAMeetingManager;
+import org.mcjug.aameetingmanager.LocationFinder;
+import org.mcjug.aameetingmanager.LocationFinder.LocationResult;
+import org.mcjug.aameetingmanager.MultiSpinner;
+import org.mcjug.aameetingmanager.MultiSpinner.MultiSpinnerListener;
+import org.mcjug.aameetingmanager.authentication.Credentials;
+import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
+import org.mcjug.aameetingmanager.meeting.FindSimilarMeetingsTask.FindSimilarMeetingsListener;
+import org.mcjug.aameetingmanager.meeting.SubmitMeetingTask.SubmitMeetingListener;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.aameetingmanager.util.LocationUtil;
+import org.mcjug.meetingfinder.R;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SubmitMeetingFragment extends Fragment {
 	private static final String TAG = SubmitMeetingFragment.class.getSimpleName();

@@ -1,20 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
-import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.aameetingmanager.authentication.Credentials;
-import org.mcjug.aameetingmanager.meeting.DeleteMeetingTask.DeleteMeetingListener;
-import org.mcjug.aameetingmanager.util.DateTimeUtil;
-import org.mcjug.meetingfinder.R;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -30,26 +15,38 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
+import android.support.v7.view.ActionMode;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout;
-import com.actionbarsherlock.view.ActionMode;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.utils.URLEncodedUtils;
+import org.apache.http.message.BasicNameValuePair;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
+import org.mcjug.aameetingmanager.authentication.Credentials;
+import org.mcjug.aameetingmanager.meeting.DeleteMeetingTask.DeleteMeetingListener;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.meetingfinder.R;
+
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 public class MeetingListFragment extends ListFragment {
 	private static final String TAG = MeetingListFragment.class.getSimpleName();
@@ -84,12 +81,12 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
+        MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 
-		NineLinearLayout linearLayout = (NineLinearLayout) activity.getLayoutInflater().inflate(
-				R.layout.abs__action_mode_close_item, null);
-		ImageView imageView = (ImageView) linearLayout.getChildAt(0);
-		imageView.setImageResource(R.drawable.ic_action_search);
+		//LinearLayout linearLayout = (LinearLayout) activity.getLayoutInflater().inflate(
+		//		R.layout.abc_action_mode_close_item, null);
+		//ImageView imageView = (ImageView) linearLayout.getChildAt(0);
+		//imageView.setImageResource(R.drawable.ic_action_search);
 
 		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();
 		List<Meeting> meetings = new ArrayList<Meeting>();
@@ -148,8 +145,8 @@ public class MeetingListFragment extends ListFragment {
 		listAdapter.setSelectedItem(position);
 
 		if (actionMode == null) {
-			MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
-			actionMode = activity.startActionMode(listActionModeCallback);
+            MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
+			actionMode = activity.startSupportActionMode(listActionModeCallback);
 		}
 
 		meetingNotThereMenuItem.setEnabled(!isMeetingInNotThereList(selectedMeeting.getId()));
@@ -213,12 +210,12 @@ public class MeetingListFragment extends ListFragment {
 		@Override
 		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
 			// Create the menu from the xml file
-			SherlockFragmentActivity activity = (SherlockFragmentActivity) getActivity();
+			FragmentActivity activity = (FragmentActivity) getActivity();
 			if (userName.trim().equals("")) {
-				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
+				activity.getMenuInflater().inflate(R.menu.meeting_list_menu_no_delete, menu);
 				meetingNotThereMenuItem = menu.getItem(2);
 			} else {
-				activity.getSupportMenuInflater().inflate(R.menu.meeting_list_menu, menu);
+				activity.getMenuInflater().inflate(R.menu.meeting_list_menu, menu);
 				meetingNotThereMenuItem = menu.getItem(2);
 			}
 
@@ -301,7 +298,7 @@ public class MeetingListFragment extends ListFragment {
 	@Override
 	public void onResume() {
 		try {
-			MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
+            MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();
 			MeetingListResults meetingListResults = app.getMeetingListResults();
 			listAdapter.setMeetings(meetingListResults.getMeetings());

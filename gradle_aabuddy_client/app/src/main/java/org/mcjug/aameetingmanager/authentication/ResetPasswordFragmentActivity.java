@@ -1,16 +1,15 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import org.mcjug.meetingfinder.R;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
-import com.actionbarsherlock.view.MenuItem;
+import org.mcjug.meetingfinder.R;
 
-public class ResetPasswordFragmentActivity extends SherlockFragmentActivity {
+public class ResetPasswordFragmentActivity extends ActionBarActivity {
 
 	public static String UP_INTENT_CLASS_NAME = "upIntentClassName";
 	

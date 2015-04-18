@@ -2,6 +2,7 @@ package org.mcjug.aameetingmanager;
 
 import android.content.Context;
 import android.util.AttributeSet;
+
 import org.mcjug.meetingfinder.R;
 
 public class DaysOfWeekMultiSpinner extends MultiSpinner {

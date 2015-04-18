@@ -1,15 +1,5 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.meetingfinder.R;
-import org.mcjug.aameetingmanager.util.HttpUtil;
-import org.mcjug.aameetingmanager.util.MeetingListUtil;
-
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +8,16 @@ import android.content.SharedPreferences.Editor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.StatusLine;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.mcjug.aameetingmanager.AAMeetingApplication;
+import org.mcjug.aameetingmanager.util.HttpUtil;
+import org.mcjug.aameetingmanager.util.MeetingListUtil;
+import org.mcjug.meetingfinder.R;
 
 public class FindMeetingTask extends AsyncTask<Void, String, MeetingListResults> {
     private final String TAG = getClass().getSimpleName();

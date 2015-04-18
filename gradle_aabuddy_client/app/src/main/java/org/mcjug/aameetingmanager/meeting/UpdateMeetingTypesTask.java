@@ -1,6 +1,8 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.List;
+import android.content.Context;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -15,9 +17,7 @@ import org.json.JSONObject;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.meetingfinder.R;
 
-import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
+import java.util.List;
 
 public class UpdateMeetingTypesTask extends AsyncTask<Void, Void, Void> {
 	private final String TAG = getClass().getSimpleName();

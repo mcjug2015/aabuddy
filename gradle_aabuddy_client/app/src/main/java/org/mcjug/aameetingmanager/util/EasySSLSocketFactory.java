@@ -19,6 +19,11 @@ package org.mcjug.aameetingmanager.util;
  * under the License.
  */
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.scheme.LayeredSocketFactory;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -28,11 +33,6 @@ import java.net.UnknownHostException;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.TrustManager;
-
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.scheme.LayeredSocketFactory;
-import org.apache.http.params.HttpConnectionParams;
-import org.apache.http.params.HttpParams;
 
 /**
  * This socket factory will create ssl socket that accepts self signed

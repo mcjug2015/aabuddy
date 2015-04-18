@@ -1,5 +1,6 @@
 <resources>
-
-    <style name="AppTheme" parent="Theme.Sherlock.Light">
+    <style name="AppTheme" parent="@style/Theme.AppCompat.Light" >
+        <item name="activatedBackgroundIndicator">@drawable/activated_background_halo
+        </item>
     </style>
 </resources>

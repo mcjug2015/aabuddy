@@ -1,7 +1,12 @@
 package org.mcjug.aameetingmanager.meeting;
 
-import java.util.ArrayList;
-import java.util.List;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.text.TextUtils;
+import android.util.Log;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -11,18 +16,13 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
-import org.mcjug.meetingfinder.R;
 import org.mcjug.aameetingmanager.authentication.Credentials;
 import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
+import org.mcjug.meetingfinder.R;
 
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.text.TextUtils;
-import android.util.Log;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostMeetingNotThereTask extends AsyncTask<Void, String, String> {
     private final String TAG = getClass().getSimpleName();

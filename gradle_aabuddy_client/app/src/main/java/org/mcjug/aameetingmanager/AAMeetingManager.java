@@ -1,20 +1,10 @@
 package org.mcjug.aameetingmanager;
 
-import java.util.Calendar;
-
-import org.mcjug.aameetingmanager.authentication.Credentials;
-import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
-import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
-import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
-import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
-import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
-import org.mcjug.aameetingmanager.util.DateTimeUtil;
-import org.mcjug.meetingfinder.R;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
@@ -26,9 +16,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import org.mcjug.aameetingmanager.authentication.Credentials;
+import org.mcjug.aameetingmanager.authentication.LoginFragmentActivity;
+import org.mcjug.aameetingmanager.authentication.LogoutDialogFragment;
+import org.mcjug.aameetingmanager.help.HelpFragmentActivity;
+import org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity;
+import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
+import org.mcjug.aameetingmanager.util.DateTimeUtil;
+import org.mcjug.meetingfinder.R;
 
-public class AAMeetingManager extends SherlockFragmentActivity 
+import java.util.Calendar;
+
+public class AAMeetingManager extends ActionBarActivity
 implements LogoutDialogFragment.LogoutDialogListener {
 
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
@@ -37,9 +36,10 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see android.support.v4.app.FragmentActivity#onCreate(android.os.Bundle)
+	 * @see android.support.v4.app.ActionBarActivity#onCreate(android.os.Bundle)
 	 */
-	protected void onCreate(Bundle savedInstanceState) {
+	@Override
+    protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Inflate the layout
