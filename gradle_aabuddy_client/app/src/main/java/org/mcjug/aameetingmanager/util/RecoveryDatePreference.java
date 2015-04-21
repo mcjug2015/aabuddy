@@ -161,7 +161,7 @@ public class RecoveryDatePreference extends DialogPreference implements DatePick
 	protected void onRestoreInstanceState(Parcelable state) {
 		if (state == null || !state.getClass().equals(SavedState.class)) {
 			super.onRestoreInstanceState(state);
-			setTheDate(((SavedState) state).dateValue);
+			//setTheDate(((SavedState) state).dateValue);
 		} else {
 			SavedState s = (SavedState) state;
 			super.onRestoreInstanceState(s.getSuperState());
