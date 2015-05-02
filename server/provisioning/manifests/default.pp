@@ -214,3 +214,25 @@ class finalize_box {
   }
 }
 include finalize_box
+
+class do_desktop {
+  exec { "install window stuff":
+      command => '/usr/bin/yum -y groupinstall "X Window System"',
+      cwd     => "/tmp/",
+      require    => [Class["dependencies"],],
+  }
+
+    $desktop_packages = ["gnome-classic-session", "gnome-terminal", "nautilus-open-terminal", "control-center", "liberation-mono-fonts"]
+
+    package { $desktop_packages:
+        ensure => latest,
+        require    => [Exec["install window stuff"], ],
+    }
+
+file { '/etc/systemd/system/default.target':
+   ensure => 'link',
+   target => '/lib/systemd/system/graphical.target',
+   require    => [Package[$desktop_packages], ],
+}
+}
+include do_desktop
