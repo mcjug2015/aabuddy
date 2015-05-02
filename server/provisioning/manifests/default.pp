@@ -78,7 +78,35 @@ class {'postgresql::globals':
 }->
 class { 'postgresql::server':
   listen_addresses => '*',
-  postgres_password => "${db_pg_password}",
+  pg_hba_conf_defaults => false,
+}
+
+postgresql::server::pg_hba_rule { 'ident local postgres':
+  description => "ident local postgres",
+  type => 'local',
+  database => 'all',
+  user => 'postgres',
+  auth_method => 'ident',
+  order => 100,
+}
+
+postgresql::server::pg_hba_rule { 'md5 local all':
+  description => "md5 local all",
+  type => 'local',
+  database => 'all',
+  user => 'all',
+  auth_method => 'md5',
+  order => 200,
+}
+
+postgresql::server::pg_hba_rule { 'md5 localhost all':
+  description => "md5 local all",
+  type => 'host',
+  database => 'all',
+  user => 'all',
+  address => '127.0.0.1/32',
+  auth_method => 'md5',
+  order => 200,
 }
 
 # Install contrib modules
@@ -90,6 +118,22 @@ class { 'postgresql::server::contrib':
     user     => 'aabuddy',
     password => postgresql_password("aabuddy", "${db_aabuddy_password}"),
     require => [Class["postgresql::globals"], Class["postgresql::server"], Class["postgresql::server::contrib"]],
+  }
+  
+  exec {"set postgres password":
+    command => "/usr/bin/psql -c \"ALTER USER Postgres WITH PASSWORD '${db_pg_password}';\"",
+    group   => "postgres",
+    user    => "postgres",
+    require => [Postgresql::Server::Db["aabuddy"],],
+  }
+  
+  class {'postgresql::server::postgis':}
+  
+  exec {"install postgis extensions":
+    command => "/usr/bin/psql aabuddy -c \"CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION postgis_tiger_geocoder;\"",
+    group   => "postgres",
+    user    => "postgres",  
+    require => [Class["postgresql::server::postgis"], ],
   }
 }
 include do_postgres
