@@ -133,7 +133,7 @@ class { 'postgresql::server::contrib':
     command => "/usr/bin/psql aabuddy -c \"CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION postgis_tiger_geocoder;\"",
     group   => "postgres",
     user    => "postgres",  
-    require => [Class["postgresql::server::postgis"], ],
+    require => [Class["postgresql::server::postgis"], Postgresql::Server::Db["aabuddy"], ],
   }
 }
 include do_postgres
