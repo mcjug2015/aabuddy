@@ -59,7 +59,8 @@ class dependencies{
     $aabuddy_packages = ["wget",
                          "nano",
                          "htop",
-                         "postgresql-devel",]
+                         "postgresql-devel",
+                         "postgis2_93",]
 
     package { $aabuddy_packages:
         ensure => latest,
@@ -126,8 +127,6 @@ class { 'postgresql::server::contrib':
     user    => "postgres",
     require => [Postgresql::Server::Db["aabuddy"],],
   }
-  
-  class {'postgresql::server::postgis':}
   
   exec {"install postgis extensions":
     command => "/usr/bin/psql aabuddy -c \"CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION postgis_tiger_geocoder;\"",
