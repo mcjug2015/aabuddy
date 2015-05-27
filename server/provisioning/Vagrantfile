@@ -5,8 +5,11 @@
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
+# vagrant plugin install vagrant-puppet-install
+# vagrant plugin install vagrant-vbguest
 Vagrant.configure(2) do |config|
     config.vm.network "forwarded_port", guest: 80, host: 8888
+    config.puppet_install.puppet_version = "3.7.5"
     config.vm.provision :shell do |shell|
         shell.inline = "mkdir -p /etc/puppet/modules;
                         puppet module install yguenane/repoforge;
@@ -14,13 +17,12 @@ Vagrant.configure(2) do |config|
                         puppet module install puppetlabs-apache;
                         puppet module install puppetlabs-stdlib;
                         puppet module install saz-sudo;
-                        puppet module install puppetlabs-postgresql;
-                        puppet module install camptocamp-postgis;"
+                        puppet module install puppetlabs-postgresql;"
     end
     config.vm.provision "puppet" do |puppet|
        #puppet.options = "--verbose --debug"
     end
-    config.vm.box = "vStone/centos-7.x-puppet.3.x"
+    config.vm.box = "chef/centos-7.0"
     config.vm.provider "virtualbox" do |v|
       v.memory = 4096
       v.cpus = 2

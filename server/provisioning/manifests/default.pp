@@ -68,32 +68,6 @@ class dependencies{
 }
 include dependencies
 
-class do_postgres {
-
-class {'postgresql::globals':
-  version => '9.3',
-  manage_package_repo => true,
-  encoding => 'UTF8',
-  locale   => "en_US.UTF-8",
-}->
-class { 'postgresql::server':
-  listen_addresses => '*',
-  postgres_password => "${db_pg_password}",
-}
-
-# Install contrib modules
-class { 'postgresql::server::contrib':
-  package_ensure => 'present',
-}
-
-  postgresql::server::db { 'aabuddy':
-    user     => 'aabuddy',
-    password => postgresql_password("aabuddy", "${db_aabuddy_password}"),
-    require => [Class["postgresql::globals"], Class["postgresql::server"], Class["postgresql::server::contrib"]],
-  }
-}
-include do_postgres
-
 class install_pip_venv {
   exec { "download get-pip":
       command => "/usr/bin/wget --no-check-certificate --no-verbose --output-document='/tmp/get-pip.py' 'https://bootstrap.pypa.io/get-pip.py'",
@@ -160,6 +134,86 @@ class setup_wsgi {
 }
 include setup_wsgi
 
+
+class do_postgres {
+
+class {'postgresql::globals':
+  version => '9.3',
+  manage_package_repo => true,
+  encoding => 'UTF8',
+  locale   => "en_US.UTF-8",
+}->
+class { 'postgresql::server':
+  listen_addresses => '*',
+  pg_hba_conf_defaults => false,
+}
+
+postgresql::server::pg_hba_rule { 'ident local postgres':
+  description => "ident local postgres",
+  type => 'local',
+  database => 'all',
+  user => 'postgres',
+  auth_method => 'ident',
+  order => 100,
+}
+
+postgresql::server::pg_hba_rule { 'md5 local all':
+  description => "md5 local all",
+  type => 'local',
+  database => 'all',
+  user => 'all',
+  auth_method => 'md5',
+  order => 200,
+}
+
+postgresql::server::pg_hba_rule { 'md5 localhost all':
+  description => "md5 local all",
+  type => 'host',
+  database => 'all',
+  user => 'all',
+  address => '127.0.0.1/32',
+  auth_method => 'md5',
+  order => 200,
+}
+
+# Install contrib modules
+class { 'postgresql::server::contrib':
+  package_ensure => 'present',
+}
+
+  postgresql::server::db { 'aabuddy':
+    user     => 'aabuddy',
+    password => postgresql_password("aabuddy", "${db_aabuddy_password}"),
+    require => [Class["postgresql::globals"], Class["postgresql::server"], Class["postgresql::server::contrib"]],
+  }
+  
+  exec {"set postgres password":
+    command => "/usr/bin/psql -c \"ALTER USER Postgres WITH PASSWORD '${db_pg_password}';\"",
+    group   => "postgres",
+    user    => "postgres",
+    require => [Postgresql::Server::Db["aabuddy"],],
+  }
+  
+  exec {"install postgis2":
+    command => "/bin/yum -y install postgis2_93",
+    group   => "root",
+    user    => "root", 
+    require => [Class["repoforge"], Class["epel"], 
+                Class["dependencies"], Class["setup_wsgi"], 
+                Class["setup_httpd"], Class["install_pip_venv"],
+                Postgresql::Server::Db["aabuddy"], Exec["set postgres password"], ],
+  }
+  
+  exec {"install postgis extensions":
+    command => "/usr/bin/psql aabuddy -c \"CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology; CREATE EXTENSION fuzzystrmatch; CREATE EXTENSION postgis_tiger_geocoder;\"",
+    group   => "postgres",
+    user    => "postgres",  
+    require => [Exec["install postgis2"], ],
+  }
+}
+include do_postgres
+
+
 class finalize_box {
   file_line { "set selinux to permissive":
       path => "/etc/selinux/config",
@@ -169,4 +223,3 @@ class finalize_box {
                   Class["do_postgres"], ],
   }
 }
-include finalize_box
