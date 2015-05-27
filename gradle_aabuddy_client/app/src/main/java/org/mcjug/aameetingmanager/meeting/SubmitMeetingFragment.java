@@ -84,6 +84,12 @@ public class SubmitMeetingFragment extends Fragment {
 	private static final int BEFORE_SUBMIT_LOGIN_ACTIVITY 	= 1;
 	private static final int AFTER_SUBMIT_LOGIN_ACTIVITY 	= 2;
 
+    private final String START_HOUR = "StartHour";
+    private final String START_MIN = "StartMin";
+    private final String END_HOUR = "EndHour";
+    private final String END_MIN = "EndMin";
+    private final String DAY_OF_WEEK = "DayOfWeek";
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -211,37 +217,65 @@ public class SubmitMeetingFragment extends Fragment {
 			}
 			public void onNothingSelected(AdapterView<?> arg0) {}
 		});
+        int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
 
-		int dayOfWeek = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
-		dayOfWeekSpinner.setSelection(dayOfWeek - 1);
+        init_calendars();
+
+        if(savedInstanceState != null) {
+            if (savedInstanceState.isEmpty())
+                Log.i(TAG, "Can't restore state, the bundle is empty.");
+            else
+            {
+                // Restore
+                startTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(START_HOUR) );
+                startTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(START_MIN) );
+                endTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(END_HOUR) );
+                endTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(END_MIN) );
+                dayOfWeek = savedInstanceState.getInt(DAY_OF_WEEK);
+            }
+        }
+
+        dayOfWeekSpinner.setSelection(dayOfWeek - 1);
+
 		
 		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
-		final List<String> meetingTypesToDisplay = new ArrayList<String>();
-		meetingTypeIds.clear();		
-		for (int i = 0; i < meetingTypes.size(); i++) {
-			MeetingType meetingType = meetingTypes.get(i);
-			meetingTypesToDisplay.add(meetingType.getName());
-			meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
-		}
-
 		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.submitMeetingTypesSpinner);
-		meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.none), getString(R.string.none), null,
-				new MultiSpinnerListener() {
-					@Override
-					public void onItemsSelected(boolean[] selected) {
-					}
-		});
+        final List<String> meetingTypesToDisplay = new ArrayList<String>();
+        meetingTypeIds.clear();
+        for (int i = 0; i < meetingTypes.size(); i++) {
+            MeetingType meetingType = meetingTypes.get(i);
+            meetingTypesToDisplay.add(meetingType.getName());
+            meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
+        }
+
+        meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.none), getString(R.string.none), null,
+                new MultiSpinnerListener() {
+                    @Override
+                    public void onItemsSelected(boolean[] selected) {
+                    }
+                });
+
+
+
 		return view;
 	}
-	
+
+    private void init_calendars () {
+        // This should be executed before updateTimeWidgets
+        startTimeCalendar = Calendar.getInstance();
+        clearTimeFields(startTimeCalendar);
+        int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
+        startTimeCalendar.set(Calendar.MINUTE, minutes);
+
+        endTimeCalendar = Calendar.getInstance();
+        endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
+        clearTimeFields(endTimeCalendar);
+        endTimeCalendar.set(Calendar.MINUTE, minutes);
+    }
+
 	private void updateTimeWidgets(final boolean is24HourTime) {
 		View view = getView();
-		
-		startTimeCalendar = Calendar.getInstance();
-		clearTimeFields(startTimeCalendar);
-		int minutes = DateTimeUtil.roundMinutes(startTimeCalendar.get(Calendar.MINUTE));
-		startTimeCalendar.set(Calendar.MINUTE, minutes);
-		
+
 		startTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 				startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -267,12 +301,7 @@ public class SubmitMeetingFragment extends Fragment {
 				timePicker.show();
 			} 
 		}); 
-		
-		endTimeCalendar = Calendar.getInstance();
-		endTimeCalendar.add(Calendar.HOUR_OF_DAY, 1);
-		clearTimeFields(endTimeCalendar);
-		endTimeCalendar.set(Calendar.MINUTE, minutes);
-		
+
 		endTimePickerListener = new TimePickerDialog.OnTimeSetListener() {
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 				endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
@@ -340,9 +369,11 @@ public class SubmitMeetingFragment extends Fragment {
 	
 	public void onActivityCreated(Bundle savedInstanceState) {
 		context = getActivity();
-		is24HourTime = DateTimeUtil.is24HourTime(context);
-		updateTimeWidgets(is24HourTime);
-		
+
+        // Should be executed every time after onCreateView which initializes both calendars
+        is24HourTime = DateTimeUtil.is24HourTime(context);
+        updateTimeWidgets(is24HourTime);
+
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
 		if (address == null || address.equals("")) {
@@ -376,13 +407,22 @@ public class SubmitMeetingFragment extends Fragment {
 		super.onActivityCreated(savedInstanceState);
 	}
 
-	@Override
-	public void onResume() {
-		is24HourTime = DateTimeUtil.is24HourTime(context);
-	    updateTimeWidgets(is24HourTime);
-		super.onResume();
-	}	
-	
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (outState == null) {
+            Log.d(TAG,"onSaveInstanceState: outState == null");
+        }
+        else {
+            outState.putInt(START_HOUR, startTimeCalendar.get(Calendar.HOUR_OF_DAY) );
+            outState.putInt(START_MIN, startTimeCalendar.get(Calendar.MINUTE) );
+            outState.putInt(END_HOUR, endTimeCalendar.get(Calendar.HOUR_OF_DAY) );
+            outState.putInt(END_MIN, endTimeCalendar.get(Calendar.MINUTE) );
+            outState.putInt(DAY_OF_WEEK, dayOfWeekSpinner.getSelectedItemPosition() + 1);
+            Log.i(TAG,"onSaveInstanceState: Saved start and end time");
+        }
+    }
+
 	private void clearTimeFields(Calendar calendar) {
 		calendar.set(Calendar.DAY_OF_YEAR, 1);
 		calendar.set(Calendar.SECOND, 0);

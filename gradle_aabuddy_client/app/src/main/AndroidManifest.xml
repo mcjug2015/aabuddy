@@ -30,7 +30,7 @@
             android:name="org.mcjug.aameetingmanager.meeting.FindMeetingFragmentActivity"
             android:label="@string/findMeeting" />
         <activity
-            android:name="org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity"            
+            android:name="org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity"
             android:label="@string/submitMeeting" />
         <activity
             android:name="org.mcjug.aameetingmanager.meeting.MeetingListFragmentActivity"
