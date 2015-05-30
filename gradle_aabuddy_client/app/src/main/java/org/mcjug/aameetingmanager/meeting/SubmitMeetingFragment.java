@@ -251,14 +251,16 @@ public class SubmitMeetingFragment extends Fragment {
             MeetingType meetingType = meetingTypes.get(i);
             meetingTypesToDisplay.add(meetingType.getName());
             meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
-            if (!meetingTypeIdList.isEmpty()) {
+            if (meetingTypeIdList != null && !meetingTypeIdList.isEmpty()) {
                 int j = 0;
-                for(int selectedMeetingType : meetingTypeIdList) {
-                    if (selectedMeetingType == meetingType.getId()) {
-                        selected[j] = true;
-                    }
-                    j++;
-                }
+				for (int xyz = 0; xyz < meetingTypeIdList.size(); xyz++){
+					if (meetingTypeIdList.get(xyz) != null){
+						if (meetingTypeIdList.get(xyz) == meetingType.getId()) {
+							selected[j] = true;
+						}
+						j++;
+					}
+				}
             }
         }
 
