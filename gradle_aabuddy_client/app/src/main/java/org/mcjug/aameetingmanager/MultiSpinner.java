@@ -127,6 +127,27 @@ public class MultiSpinner extends Spinner implements OnMultiChoiceClickListener,
 		setAdapter(adapter);
 	}
 
+    /**
+     * If you pass in a selected item text thats in the items list, it will get selected.
+     * Otherwise all items will be selected and the selectedItemText will be displayed for the spinner.
+     *
+     * @param items - the items to put in.
+     * @param preSelected - the boolean array with preselected items set as true
+     * @param listener - the listener.
+     */
+    public void setItems(List<String> items, boolean preSelected[], MultiSpinnerListener listener) {
+        this.items = items;
+        this.noneSelectedText = null;
+        this.allSelectedText = null;
+        this.listener = listener;
+        selected = preSelected;
+
+        // all text on the spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),
+                android.R.layout.simple_spinner_item, new String[] { "" });
+        setAdapter(adapter);
+    }
+
 	public String getAllSelectedText() {
 		return allSelectedText;
 	}

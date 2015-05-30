@@ -89,6 +89,7 @@ public class SubmitMeetingFragment extends Fragment {
     private final String END_HOUR = "EndHour";
     private final String END_MIN = "EndMin";
     private final String DAY_OF_WEEK = "DayOfWeek";
+    private final String MEETING_TYPES = "MeetingTypes";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -221,6 +222,9 @@ public class SubmitMeetingFragment extends Fragment {
 
         init_calendars();
 
+        ArrayList<Integer> meetingTypeIdList = new ArrayList<Integer>();
+
+
         if(savedInstanceState != null) {
             if (savedInstanceState.isEmpty())
                 Log.i(TAG, "Can't restore state, the bundle is empty.");
@@ -232,23 +236,33 @@ public class SubmitMeetingFragment extends Fragment {
                 endTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(END_HOUR) );
                 endTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(END_MIN) );
                 dayOfWeek = savedInstanceState.getInt(DAY_OF_WEEK);
+                meetingTypeIdList = savedInstanceState.getIntegerArrayList(MEETING_TYPES);
             }
         }
 
         dayOfWeekSpinner.setSelection(dayOfWeek - 1);
 
-		
 		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
 		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.submitMeetingTypesSpinner);
         final List<String> meetingTypesToDisplay = new ArrayList<String>();
+        boolean selected[] = new boolean[meetingTypes.size()];
         meetingTypeIds.clear();
         for (int i = 0; i < meetingTypes.size(); i++) {
             MeetingType meetingType = meetingTypes.get(i);
             meetingTypesToDisplay.add(meetingType.getName());
             meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
+            if (!meetingTypeIdList.isEmpty()) {
+                int j = 0;
+                for(int selectedMeetingType : meetingTypeIdList) {
+                    if (selectedMeetingType == meetingType.getId()) {
+                        selected[j] = true;
+                    }
+                    j++;
+                }
+            }
         }
 
-        meetingTypesSpinner.setItems(meetingTypesToDisplay, getString(R.string.none), getString(R.string.none), null,
+        meetingTypesSpinner.setItems(meetingTypesToDisplay, selected,
                 new MultiSpinnerListener() {
                     @Override
                     public void onItemsSelected(boolean[] selected) {
@@ -419,7 +433,16 @@ public class SubmitMeetingFragment extends Fragment {
             outState.putInt(END_HOUR, endTimeCalendar.get(Calendar.HOUR_OF_DAY) );
             outState.putInt(END_MIN, endTimeCalendar.get(Calendar.MINUTE) );
             outState.putInt(DAY_OF_WEEK, dayOfWeekSpinner.getSelectedItemPosition() + 1);
-            Log.i(TAG,"onSaveInstanceState: Saved start and end time");
+            String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
+            if (!meetingTypeSelections[0].equals(getString(R.string.none))) {
+                ArrayList<Integer> meetingTypeIdList = new ArrayList<Integer>();
+                for (String str: meetingTypeSelections) {
+                    Integer id = meetingTypeIds.get(str.trim());
+                    meetingTypeIdList.add(id);
+                }
+                outState.putIntegerArrayList(MEETING_TYPES, meetingTypeIdList);
+            }
+            Log.i(TAG,"onSaveInstanceState: Saved Dialog Values");
         }
     }
 
