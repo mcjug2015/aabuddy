@@ -252,13 +252,12 @@ public class SubmitMeetingFragment extends Fragment {
             meetingTypesToDisplay.add(meetingType.getName());
             meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
             if (meetingTypeIdList != null && !meetingTypeIdList.isEmpty()) {
-                int j = 0;
 				for (int xyz = 0; xyz < meetingTypeIdList.size(); xyz++){
 					if (meetingTypeIdList.get(xyz) != null){
 						if (meetingTypeIdList.get(xyz) == meetingType.getId()) {
-							selected[j] = true;
+							selected[i] = true;
+							break;
 						}
-						j++;
 					}
 				}
             }
@@ -444,6 +443,9 @@ public class SubmitMeetingFragment extends Fragment {
                 }
                 outState.putIntegerArrayList(MEETING_TYPES, meetingTypeIdList);
             }
+			else {
+				outState.putIntegerArrayList(MEETING_TYPES, null);
+			}
             Log.i(TAG,"onSaveInstanceState: Saved Dialog Values");
         }
     }
