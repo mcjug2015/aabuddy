@@ -59,7 +59,8 @@ class dependencies{
     $aabuddy_packages = ["wget",
                          "nano",
                          "htop",
-                         "postgresql-devel",]
+                         "postgresql-devel",
+                         "python2-devel",]
 
     package { $aabuddy_packages:
         ensure => latest,
