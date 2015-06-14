@@ -5,6 +5,10 @@ import android.util.AttributeSet;
 
 import org.mcjug.meetingfinder.R;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class DaysOfWeekMultiSpinner extends MultiSpinner {
 	public DaysOfWeekMultiSpinner(Context context) {
 		super(context);
@@ -31,4 +35,39 @@ public class DaysOfWeekMultiSpinner extends MultiSpinner {
         }
 		spinnerBuffer.append(daysOfWeek[itemIdx]);
 	}
+
+	@Override
+	public void setItems(List<String> items, String selectedItemText, String noneSelectedText, String allSelectedText, MultiSpinnerListener listener)  {
+
+		boolean[] selected = new boolean[items.size()];
+
+		String[] selectedItemsArray =  selectedItemText.split(", ");
+		if (allSelectedText != null && selectedItemText.equals(allSelectedText)) {
+			Arrays.fill(selected, Boolean.TRUE);
+		}
+		else {
+
+			String[] allDaysOfWeekArray;
+			List<String> allItems;
+			if (selectedItemsArray[0].length() <= 2) {
+				allDaysOfWeekArray = getContext().getResources().getStringArray(R.array.daysOfWeekShort);
+				allItems = new ArrayList(Arrays.asList(allDaysOfWeekArray));
+			} else if (selectedItemsArray[0].length() == 3) {
+				allDaysOfWeekArray = getContext().getResources().getStringArray(R.array.daysOfWeekMedium);
+				allItems = new ArrayList(Arrays.asList(allDaysOfWeekArray));
+			} else {
+				allItems = items;
+			}
+
+			for (String item : selectedItemsArray) {
+				if (allItems.contains(item)) {
+					selected[allItems.indexOf(item)] = true;
+				}
+			}
+		}
+
+		super.setItems(items, selectedItemText, selected, noneSelectedText, allSelectedText,listener);
+
+	}
+
 }

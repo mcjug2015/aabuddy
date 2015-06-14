@@ -77,13 +77,15 @@ public class FindMeetingFragment extends Fragment {
 	private final String START_MIN = "StartMin";
 	private final String END_HOUR = "EndHour";
 	private final String END_MIN = "EndMin";
-	private final String DAYS_OF_WEEK = "DayOfWeek";
-	private final String MEETING_TYPES = "MeetingTypes";
+	private final String DAYS_OF_WEEK_STRING = "DaysOfWeekString";
+	private final String MEETING_TYPE_SELECTION_TEXT = "MeetingTypeSelectionText";
+	private final String MEETING_TYPE_SELECTION_FLAGS = "MeetingTypeSelectionFlags";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		prefs = PreferenceManager.getDefaultSharedPreferences(AAMeetingApplication.getInstance());
+		showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
 	}
 
 	@Override
@@ -117,7 +119,7 @@ public class FindMeetingFragment extends Fragment {
 		findMeetingButton = (Button) view.findViewById(R.id.findMeetingFindButton);
 		findMeetingButton.setOnClickListener(new OnClickListener() {
 			@Override
-            public void onClick(View v) {
+			public void onClick(View v) {
 				try {
 					FragmentActivity activity = getActivity();
 					String addressName = addressEditText.getText().toString();
@@ -135,25 +137,20 @@ public class FindMeetingFragment extends Fragment {
 			}
 		});
 
-		List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
-		meetingTypesToDisplay = new ArrayList<String>();
-		meetingTypeIds.clear();
-		for (int i = 0; i < meetingTypes.size(); i++) {
-			MeetingType meetingType = meetingTypes.get(i);
-			meetingTypesToDisplay.add(meetingType.getName());
-			meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
-		}
 
-		meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
+
 
 
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
+
 		startTimeCalendar = Calendar.getInstance();
 		endTimeCalendar = Calendar.getInstance();
 		Calendar calendar = Calendar.getInstance();
 
 		boolean need_to_init = true;
+		String meetingTypeSelectionText = null;
+		boolean[] meetingTypeSelectionFlags = null;
 
 		if(savedInstanceState != null) {
 			if (savedInstanceState.isEmpty())
@@ -165,28 +162,22 @@ public class FindMeetingFragment extends Fragment {
 				startTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(START_MIN) );
 				endTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(END_HOUR) );
 				endTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(END_MIN));
-				if (savedInstanceState.containsKey(DAYS_OF_WEEK)) {
-					boolean[] selectedDaysOfWeek = savedInstanceState.getBooleanArray(DAYS_OF_WEEK);
-					daysOfWeekSpinner.setItems(daysOfWeekListItems, selectedDaysOfWeek,
-							new MultiSpinnerListener() {
-								@Override
-								public void onItemsSelected(boolean[] selected) {
-								}
-							});
-				}
 
-				if (showMeetingTypes) {
-					if (savedInstanceState.containsKey(MEETING_TYPES)) {
-						boolean[] selectedMeetingTypes = savedInstanceState.getBooleanArray(MEETING_TYPES);
-						meetingTypesSpinner.setItems(meetingTypesToDisplay,
-								selectedMeetingTypes,
-								new MultiSpinnerListener() {
-									@Override
-									public void onItemsSelected(boolean[] selected) {
-									}
-								});
-					}
-				}
+				meetingTypeSelectionText = savedInstanceState.getString(MEETING_TYPE_SELECTION_TEXT);
+				meetingTypeSelectionFlags = savedInstanceState.getBooleanArray(MEETING_TYPE_SELECTION_FLAGS);
+
+				String selectedDaysOfWeekString = savedInstanceState.getString(DAYS_OF_WEEK_STRING);
+
+				daysOfWeekSpinner.setItems(daysOfWeekListItems,
+						selectedDaysOfWeekString,
+						getString(R.string.all),
+						getString(R.string.all),
+						new MultiSpinnerListener() {
+							@Override
+							public void onItemsSelected(boolean[] selected) {
+							}
+						});
+
 				need_to_init = false;
 			}
 		}
@@ -197,7 +188,8 @@ public class FindMeetingFragment extends Fragment {
 			endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
 			endTimeCalendar.set(Calendar.MINUTE, 59);
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
-			daysOfWeekSpinner.setItems(daysOfWeekListItems, daysOfWeekListItems.get(dayOfWeek),
+			daysOfWeekSpinner.setItems(daysOfWeekListItems,
+					daysOfWeekListItems.get(dayOfWeek),
 					getString(R.string.all),
 					getString(R.string.all),
 					new MultiSpinnerListener() {
@@ -205,9 +197,31 @@ public class FindMeetingFragment extends Fragment {
 						public void onItemsSelected(boolean[] selected) {
 						}
 					});
+		}
+
+		if (showMeetingTypes) {
+
+			meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
+			List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
+			meetingTypesToDisplay = new ArrayList<String>();
+			meetingTypeIds.clear();
+			for (int i = 0; i < meetingTypes.size(); i++) {
+				MeetingType meetingType = meetingTypes.get(i);
+				meetingTypesToDisplay.add(meetingType.getName());
+				meetingTypeIds.put(meetingType.getShortName().trim(), Integer.valueOf(meetingType.getId()));
+			}
+
+			if (meetingTypeSelectionText == null) {
+				meetingTypeSelectionText = getString(R.string.any);
+			}
+			if (meetingTypeSelectionFlags == null || meetingTypeSelectionFlags.length == 0) {
+				meetingTypeSelectionFlags = new boolean[meetingTypesToDisplay.size()];
+			}
+
 			meetingTypesSpinner.setItems(meetingTypesToDisplay,
-					getString(R.string.any), getString(R.string.any),
-					null,
+					meetingTypeSelectionText,
+					meetingTypeSelectionFlags,
+					getString(R.string.any), null,
 					new MultiSpinnerListener() {
 						@Override
 						public void onItemsSelected(boolean[] selected) {
@@ -289,6 +303,8 @@ public class FindMeetingFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
 		context = getActivity();
 
+
+
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
 		if (address == null || address.equals("")) {
@@ -331,11 +347,11 @@ public class FindMeetingFragment extends Fragment {
 		is24HourTime = DateTimeUtil.is24HourTime(context);	
 	    updateTimeWidgets(is24HourTime);
 
-		showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
 		if (!showMeetingTypes) {
 			TextView textView = (TextView)getView().findViewById(R.id.findMeetingTypesTextView);
 			textView.setVisibility(View.GONE);
-			meetingTypesSpinner.setVisibility(View.GONE);
+			if (meetingTypesSpinner != null)
+				meetingTypesSpinner.setVisibility(View.GONE);
 		}
 		
 		super.onResume();
@@ -352,51 +368,11 @@ public class FindMeetingFragment extends Fragment {
 			outState.putInt(START_MIN, startTimeCalendar.get(Calendar.MINUTE) );
 			outState.putInt(END_HOUR, endTimeCalendar.get(Calendar.HOUR_OF_DAY) );
 			outState.putInt(END_MIN, endTimeCalendar.get(Calendar.MINUTE));
-
-			boolean[] selectedDays = new boolean[7];
-			String[] daysOfWeekSelections = ((String) daysOfWeekSpinner.getSelectedItem()).split(",");
-			if (daysOfWeekSelections[0].equalsIgnoreCase(getString(R.string.all))) {
-				daysOfWeekSelections = getString(R.string.all_days_of_week_value).split(",");
-				Arrays.fill(selectedDays, Boolean.TRUE);
-			}
-			else {
-
-				List<String> selectedDaysOfWeek;
-				String[] allDaysOfWeek ;
-				if (daysOfWeekSelections.length == 1) {
-					selectedDaysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
-					allDaysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekLong);
-				} else if (daysOfWeekSelections.length == 2 || daysOfWeekSelections.length == 3) {
-					selectedDaysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekMedium));
-					allDaysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekMedium);
-				} else {
-					selectedDaysOfWeek = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekShort));
-					allDaysOfWeek = context.getResources().getStringArray(R.array.daysOfWeekShort);
-				}
-				for (int selected_inx = 0; selected_inx < selectedDaysOfWeek.size(); selected_inx++) {
-					for (int allWeek_inx = 0; allWeek_inx < allDaysOfWeek.length; allWeek_inx++) {
-						if (allDaysOfWeek[allWeek_inx] == selectedDaysOfWeek.get(selected_inx)) {
-							selectedDays[allWeek_inx] = true;
-							break;
-						}
-					}
-				}
-			}
-			outState.putBooleanArray(DAYS_OF_WEEK, selectedDays);
-
 			if (showMeetingTypes) {
-				String[] meetingTypeSelections = ((String) meetingTypesSpinner.getSelectedItem()).split(",");
-				boolean[] selectedMeetingTypes = new boolean[meetingTypesToDisplay.size()];
-				Arrays.fill(selectedMeetingTypes, Boolean.FALSE);
-				if (!meetingTypeSelections[0].equals(getString(R.string.none))) {
-					for (int selected_inx = 0; selected_inx < meetingTypeSelections.length; selected_inx++) {
-						for (int allMeetingTypes_inx = 0; allMeetingTypes_inx < meetingTypesToDisplay.size(); allMeetingTypes_inx++) {
-							selectedMeetingTypes[allMeetingTypes_inx] = true;
-						}
-					}
-					outState.putBooleanArray(MEETING_TYPES, selectedMeetingTypes);
-				}
+				outState.putString(MEETING_TYPE_SELECTION_TEXT, ((String) meetingTypesSpinner.getSelectedItem()));
+				outState.putBooleanArray(MEETING_TYPE_SELECTION_FLAGS, meetingTypesSpinner.getSelected());
 			}
+			outState.putString(DAYS_OF_WEEK_STRING, (String) daysOfWeekSpinner.getSelectedItem());
 
 			Log.i(TAG, "onSaveInstanceState: Saved Dialog Values");
 		}
