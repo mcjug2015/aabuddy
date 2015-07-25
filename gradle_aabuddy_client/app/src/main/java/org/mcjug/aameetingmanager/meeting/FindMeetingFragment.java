@@ -68,15 +68,20 @@ public class FindMeetingFragment extends Fragment {
 	private Map<String, Integer> meetingTypeIds = new HashMap<String, Integer>();
 
 	private Context context;
-	private boolean is24HourTime;	
+	private boolean is24HourTime;
 	private boolean showMeetingTypes;
 	private SharedPreferences prefs;
 	private List<String> meetingTypesToDisplay;
 
+	/*
 	private final String START_HOUR = "StartHour";
 	private final String START_MIN = "StartMin";
 	private final String END_HOUR = "EndHour";
 	private final String END_MIN = "EndMin";
+	*/
+
+	private final String START_TEXT = "StartText";
+	private final String END_TEXT = "EndText";
 	private final String DAYS_OF_WEEK_STRING = "DaysOfWeekString";
 	private final String MEETING_TYPE_SELECTION_TEXT = "MeetingTypeSelectionText";
 	private final String MEETING_TYPE_SELECTION_FLAGS = "MeetingTypeSelectionFlags";
@@ -138,11 +143,10 @@ public class FindMeetingFragment extends Fragment {
 		});
 
 
-
-
-
 		daysOfWeekSpinner = (DaysOfWeekMultiSpinner) view.findViewById(R.id.findMeetingDaysOfWeekSpinner);
 		List<String> daysOfWeekListItems = Arrays.asList(getResources().getStringArray(R.array.daysOfWeekLong));
+
+		is24HourTime = DateTimeUtil.is24HourTime(getActivity());
 
 		startTimeCalendar = Calendar.getInstance();
 		endTimeCalendar = Calendar.getInstance();
@@ -152,16 +156,39 @@ public class FindMeetingFragment extends Fragment {
 		String meetingTypeSelectionText = null;
 		boolean[] meetingTypeSelectionFlags = null;
 
+		startTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		startTimeCalendar.set(Calendar.MINUTE, 0);
+		endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
+		endTimeCalendar.set(Calendar.MINUTE, 59);
+
+		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
+		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
+
 		if(savedInstanceState != null) {
 			if (savedInstanceState.isEmpty())
 				Log.i(TAG, "Can't restore state, the bundle is empty.");
 			else
 			{
 				// Restore
-				startTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(START_HOUR) );
-				startTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(START_MIN) );
-				endTimeCalendar.set(Calendar.HOUR_OF_DAY, savedInstanceState.getInt(END_HOUR) );
-				endTimeCalendar.set(Calendar.MINUTE, savedInstanceState.getInt(END_MIN));
+				String startCalendarText = savedInstanceState.getString(START_TEXT);
+				if (startCalendarText.equals(EMPTY_TIME)) {
+					startTimeButton.setText(EMPTY_TIME);
+				}
+				else {
+					startTimeButton.setText(startCalendarText);
+					startTimeCalendar.set(Calendar.HOUR_OF_DAY,  Integer.parseInt(startCalendarText.substring(0,1)) );
+					startTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(startCalendarText.substring(3,4)) );
+				}
+
+				String endCalendarText = savedInstanceState.getString(END_TEXT);
+				if (endCalendarText.equals(EMPTY_TIME)) {
+					endTimeButton.setText(EMPTY_TIME);
+				}
+				else {
+					endTimeButton.setText(endCalendarText);
+					endTimeCalendar.set(Calendar.HOUR_OF_DAY,  Integer.parseInt(endCalendarText.substring(0,1)) );
+					endTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(endCalendarText.substring(3,4)) );
+				}
 
 				meetingTypeSelectionText = savedInstanceState.getString(MEETING_TYPE_SELECTION_TEXT);
 				meetingTypeSelectionFlags = savedInstanceState.getBooleanArray(MEETING_TYPE_SELECTION_FLAGS);
@@ -183,10 +210,10 @@ public class FindMeetingFragment extends Fragment {
 		}
 
 		if (need_to_init) {
-			startTimeCalendar.set(Calendar.HOUR_OF_DAY, 0);
-			startTimeCalendar.set(Calendar.MINUTE, 0);
-			endTimeCalendar.set(Calendar.HOUR_OF_DAY, 23);
-			endTimeCalendar.set(Calendar.MINUTE, 59);
+
+			startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
+			endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+
 			int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK) - 1;
 			daysOfWeekSpinner.setItems(daysOfWeekListItems,
 					daysOfWeekListItems.get(dayOfWeek),
@@ -230,14 +257,13 @@ public class FindMeetingFragment extends Fragment {
 
 		}
 
+
+
 		return view;
 	}
 
 	private void updateTimeWidgets(final boolean is24HourTime) {
 		View view = getView();
-
-		startTimeButton = (Button) view.findViewById(R.id.findMeetingStartTimeButton);
-		startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 
 	    startTimeDialogListener = new TimePickerDialog.OnTimeSetListener() {
 				@Override
@@ -246,11 +272,11 @@ public class FindMeetingFragment extends Fragment {
 					startTimeCalendar.set(Calendar.MINUTE, minute);
 					startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
 				}
-		 };
-		
+		};
+
 		startTimeButton.setOnClickListener(new OnClickListener() {
 			@Override
-            public void onClick(View v) {
+			public void onClick(View v) {
 				TimePickerDialog dialog = new TimePickerDialog(getActivity(), startTimeDialogListener, startTimeCalendar
 						.get(Calendar.HOUR_OF_DAY), startTimeCalendar.get(Calendar.MINUTE), is24HourTime);
 				dialog.show();
@@ -275,9 +301,7 @@ public class FindMeetingFragment extends Fragment {
 					endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
 				}
 			};
-			
-		endTimeButton = (Button) view.findViewById(R.id.findMeetingEndTimeButton);
-		endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+
 		endTimeButton.setOnClickListener(new OnClickListener() {
 			@Override
             public void onClick(View v) {
@@ -302,8 +326,6 @@ public class FindMeetingFragment extends Fragment {
 	@Override
     public void onActivityCreated(Bundle savedInstanceState) {
 		context = getActivity();
-
-
 
 		Location location = LocationUtil.getLastKnownLocation(context);
 		String address = LocationUtil.getFullAddress(location, context);
@@ -344,8 +366,8 @@ public class FindMeetingFragment extends Fragment {
 	
 	@Override
 	public void onResume() {
-		is24HourTime = DateTimeUtil.is24HourTime(context);	
-	    updateTimeWidgets(is24HourTime);
+
+		updateTimeWidgets(is24HourTime);
 
 		if (!showMeetingTypes) {
 			TextView textView = (TextView)getView().findViewById(R.id.findMeetingTypesTextView);
@@ -364,10 +386,8 @@ public class FindMeetingFragment extends Fragment {
 			Log.d(TAG,"onSaveInstanceState: outState == null");
 		}
 		else {
-			outState.putInt(START_HOUR, startTimeCalendar.get(Calendar.HOUR_OF_DAY) );
-			outState.putInt(START_MIN, startTimeCalendar.get(Calendar.MINUTE) );
-			outState.putInt(END_HOUR, endTimeCalendar.get(Calendar.HOUR_OF_DAY) );
-			outState.putInt(END_MIN, endTimeCalendar.get(Calendar.MINUTE));
+			outState.putString(START_TEXT, startTimeButton.getText().toString());
+			outState.putString(END_TEXT, endTimeButton.getText().toString());
 			if (showMeetingTypes) {
 				outState.putString(MEETING_TYPE_SELECTION_TEXT, ((String) meetingTypesSpinner.getSelectedItem()));
 				outState.putBooleanArray(MEETING_TYPE_SELECTION_FLAGS, meetingTypesSpinner.getSelected());

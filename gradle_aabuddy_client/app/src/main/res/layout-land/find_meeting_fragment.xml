@@ -53,7 +53,8 @@
                     android:layout_below="@+id/findMeetingNameEditText"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="2dp"
-                    android:drawableRight="@drawable/clock" />
+                    android:drawableRight="@drawable/clock"
+                    android:width="115dp" />
 
                 <TextView
                     android:id="@+id/findMeetingStartTimeTextView"
@@ -62,7 +63,8 @@
                     android:layout_alignBaseline="@+id/findMeetingStartTimeButton"
                     android:layout_alignLeft="@+id/findMeetingNameTextView"
                     android:text="@string/start_time"
-                    android:textAppearance="?android:attr/textAppearanceSmall" />
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    />
 
                 <Button
                     android:id="@+id/findMeetingStartTimeClearButton"
@@ -82,7 +84,9 @@
                     android:layout_alignLeft="@+id/findMeetingStartTimeButton"
                     android:layout_below="@+id/findMeetingStartTimeButton"
                     android:layout_marginTop="2dp"
-                    android:drawableRight="@drawable/clock" />
+                    android:drawableRight="@drawable/clock"
+                    android:width="115dp"
+                    />
 
                 <Button
                     android:id="@+id/findMeetingEndTimeClearButton"
@@ -212,7 +216,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:text="@string/search_button" />
+                android:text="@string/search_button"
+                android:width="115dp"
+                />
         </RelativeLayout>
     </LinearLayout>
 

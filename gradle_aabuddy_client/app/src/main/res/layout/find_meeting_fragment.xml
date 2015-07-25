@@ -37,7 +37,8 @@
         android:layout_below="@+id/findMeetingNameEditText"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
-        android:drawableRight="@drawable/clock" />
+        android:drawableRight="@drawable/clock"
+        android:width="115dp" />
 
     <Button
         android:id="@+id/findMeetingStartTimeClearButton"
@@ -67,7 +68,8 @@
         android:layout_alignLeft="@+id/findMeetingStartTimeButton"
         android:layout_below="@+id/findMeetingStartTimeButton"
         android:layout_marginTop="5dp"
-        android:drawableRight="@drawable/clock" />
+        android:drawableRight="@drawable/clock"
+        android:width="115dp" />
 
     <Button
         android:id="@+id/findMeetingEndTimeClearButton"
@@ -185,6 +187,7 @@
         android:layout_below="@+id/findMeetingSearchWithinTextView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="@string/search_button" />
+        android:text="@string/search_button"
+        android:width="115dp" />
 
 </RelativeLayout>
