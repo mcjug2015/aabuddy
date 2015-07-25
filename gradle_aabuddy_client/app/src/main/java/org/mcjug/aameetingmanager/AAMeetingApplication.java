@@ -22,6 +22,7 @@ import java.util.List;
 //Test marias first git commit.
 //David's first comment
 //Mike was here :)
+//Victor's other comment.
 public class AAMeetingApplication extends Application {
 	private static final String TAG = AAMeetingApplication.class.getSimpleName();	
 	private MeetingListResults meetingListResults;
