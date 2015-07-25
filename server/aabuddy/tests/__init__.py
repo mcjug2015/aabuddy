@@ -1,1 +1,1 @@
-'''aabuddy tests package'''
+'''aabuddy tests package.'''
