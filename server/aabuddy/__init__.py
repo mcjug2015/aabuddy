@@ -1,1 +1,1 @@
-''' aa buddy app package '''
+''' aa buddy app package. '''
