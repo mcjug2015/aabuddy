@@ -169,7 +169,7 @@ public class FindMeetingFragment extends Fragment {
 				Log.i(TAG, "Can't restore state, the bundle is empty.");
 			else
 			{
-				// Restore
+				// Restore Saved Instance after rotation
 				String startCalendarText = savedInstanceState.getString(START_TEXT);
 				if (startCalendarText.equals(EMPTY_TIME)) {
 					startTimeButton.setText(EMPTY_TIME);
