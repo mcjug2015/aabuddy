@@ -8,7 +8,7 @@
     <string name="end_time">End time:</string>
     <string name="day_of_week">Day of week:</string>
     <string name="days_of_week">Days of week:</string>
-    <string name="meeting_address">Address:</string>
+    <string name="meeting_address">Address: (Street, City, State or Zip Code)</string>
     <string name="refresh_location_button">Refresh address</string>
     <string name="validate_address_button">Validate Address</string>
     <string name="submit_button">Submit</string>
