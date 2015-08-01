@@ -15,7 +15,7 @@ import org.mcjug.meetingfinder.R;
 
 import java.util.Calendar;
 import java.util.Date;
-
+// test
 public class DateTimeUtil {
 
 	public static boolean is24HourTime(Context context) {
