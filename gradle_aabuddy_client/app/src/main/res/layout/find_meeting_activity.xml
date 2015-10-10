@@ -10,5 +10,5 @@
             android:layout_height="match_parent"
             class="org.mcjug.aameetingmanager.meeting.FindMeetingFragment" >
         </fragment>
-        
+
 </LinearLayout>
