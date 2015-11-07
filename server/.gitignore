@@ -1,3 +1,4 @@
 /reports/
 *.pyc
 /.coverage
+/venv/
