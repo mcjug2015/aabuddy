@@ -20,7 +20,6 @@ def localvm():
     env.virtualhost_path = env.path
     env.tmppath = '/var/tmp/django_cache/%(prj_name)s' % env
     env.deployment = 'localvm'
-    env.user = 'clonobyte'
     env.release = 'initial'
 
 def prod():
