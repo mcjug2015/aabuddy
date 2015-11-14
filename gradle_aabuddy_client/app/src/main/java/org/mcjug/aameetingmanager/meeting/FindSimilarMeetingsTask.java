@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.StatusLine;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicHeader;
@@ -15,6 +14,9 @@ import org.mcjug.aameetingmanager.util.HttpUtil;
 import org.mcjug.aameetingmanager.util.MeetingListUtil;
 import org.mcjug.meetingfinder.R;
 
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meeting>> {
@@ -32,28 +34,36 @@ public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meetin
 
     @Override
     protected List<Meeting> doInBackground(Void... arg0) {
-        HttpClient client = HttpUtil.createHttpClient();
         List<Meeting> meetings = null;
+        HttpURLConnection connection = null;
         try {
             String baseUrl = HttpUtil.getUnsecureRequestUrl(context, R.string.find_similar_meetings_url_path);
-            HttpPost request = new HttpPost(baseUrl);
+            URL url = new URL(baseUrl);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setDoOutput(true);
+            connection.setDoInput(true);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.connect();
 
-            StringEntity se = new StringEntity(submitMeetingParams);
-            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-            request.setEntity(se);
+            OutputStreamWriter out = new   OutputStreamWriter(connection.getOutputStream());
+            out.write(submitMeetingParams);
+            out.flush();
+            out.close();
 
-            HttpResponse response = client.execute(request);
-            StatusLine statusLine = response.getStatusLine();
-            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-                String jsonStr = HttpUtil.getContent(response);
+            int responseCode = connection.getResponseCode();
+            if (responseCode == HttpURLConnection.HTTP_OK) {
+                String jsonStr = HttpUtil.getContent(connection.getInputStream());
                 meetings = MeetingListUtil.getMeetingList(context, jsonStr).getMeetings();
             } else {
-                errorMsg = statusLine.toString();
+                errorMsg = "Error in Find Similar Meetings " + responseCode;
             }
         } catch (Exception ex) {
             errorMsg = ex.toString();
         } finally {
-            client.getConnectionManager().shutdown();
+            if (connection != null) {
+                connection.disconnect();
+            }
         }
 
         return meetings;

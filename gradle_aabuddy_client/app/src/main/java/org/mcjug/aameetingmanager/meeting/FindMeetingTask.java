@@ -26,15 +26,6 @@ public class FindMeetingTask extends AsyncTask<Void, String, MeetingListResults>
     private boolean appendResults = false;
     private String errorMsg = null;
 
-
-    public FindMeetingTask(Context context, String meetingParams) {
-        this(context, meetingParams, false);
-    }
-
-    public FindMeetingTask(Context context, String meetingParams, boolean appendResults) {
-        this(context, meetingParams, false, null);
-    }
-
     public FindMeetingTask(Context context, String meetingParams, boolean appendResults, String progressMsg) {
         this.context = context;
         this.meetingParams = meetingParams;
