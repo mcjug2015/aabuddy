@@ -24,62 +24,77 @@ import java.io.InputStreamReader;
 
 public class HttpUtil {
 
-	public static DefaultHttpClient createHttpClient() {
-		Context context = AAMeetingApplication.getInstance();
-		boolean defaultSslTrustAllFlag = Boolean.parseBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));
+    public static DefaultHttpClient createHttpClient() {
+        Context context = AAMeetingApplication.getInstance();
+        boolean defaultSslTrustAllFlag = Boolean.parseBoolean(context.getString(R.string.sslTrustAllFlagDefaultValue));
 
-		SchemeRegistry schemeRegistry = new SchemeRegistry();
-		// http scheme
-		schemeRegistry.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		// https scheme
-		schemeRegistry.register(
-				new Scheme("https",
-						   (defaultSslTrustAllFlag ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
-						   443));
+        SchemeRegistry schemeRegistry = new SchemeRegistry();
+        // http scheme
+        schemeRegistry.register(new Scheme("http", PlainSocketFactory
+                .getSocketFactory(), 80));
+        // https scheme
+        schemeRegistry.register(
+                new Scheme("https",
+                        (defaultSslTrustAllFlag ? new EasySSLSocketFactory() : SSLSocketFactory.getSocketFactory()),
+                        443));
 
-		HttpParams httpParams = new BasicHttpParams();
-		ClientConnectionManager cm = new ThreadSafeClientConnManager(httpParams,
-				schemeRegistry);
+        HttpParams httpParams = new BasicHttpParams();
+        ClientConnectionManager cm = new ThreadSafeClientConnManager(httpParams,
+                schemeRegistry);
 
-	   return new DefaultHttpClient(cm, httpParams);
+        return new DefaultHttpClient(cm, httpParams);
 
-	}
+    }
 
-	public static String getSecureRequestUrl(Context context, int requestUrlResourceId) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);
+    public static String getSecureRequestUrl(Context context, int requestUrlResourceId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String defaultServerBase = context.getString(R.string.meetingServerSecureBaseUrlDefaultValue);
 
-		StringBuilder baseUrl = new StringBuilder(defaultServerBase);
-		baseUrl.append(context.getString(requestUrlResourceId));
-		return baseUrl.toString();
-	}
+        StringBuilder baseUrl = new StringBuilder(defaultServerBase);
+        baseUrl.append(context.getString(requestUrlResourceId));
+        return baseUrl.toString();
+    }
 
-	public static String getUnsecureRequestUrl(Context context, int requestUrlResourceId) {
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-		String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);
+    public static String getUnsecureRequestUrl(Context context, int requestUrlResourceId) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        String defaultServerBase = context.getString(R.string.meetingServerUnsecureBaseUrlDefaultValue);
 
-		StringBuilder baseUrl = new StringBuilder(defaultServerBase);
-		baseUrl.append(context.getString(requestUrlResourceId));
-		return baseUrl.toString();
-	}
+        StringBuilder baseUrl = new StringBuilder(defaultServerBase);
+        baseUrl.append(context.getString(requestUrlResourceId));
+        return baseUrl.toString();
+    }
 
-	public static String getContent(HttpResponse httpResponse) throws Exception {
-		StringBuilder responseStr = new StringBuilder();
-		HttpEntity entity = httpResponse.getEntity();
-		if (entity != null) {
-			InputStream inputStream = entity.getContent();
-			try {
-				BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
-				String line = null;
-				while ((line = reader.readLine()) != null) {
-					responseStr.append(line);
-				}
-			} finally {
-				inputStream.close();
-			}
-		}
+    public static String getContent(HttpResponse httpResponse) throws Exception {
+        StringBuilder responseStr = new StringBuilder();
+        HttpEntity entity = httpResponse.getEntity();
+        if (entity != null) {
+            InputStream inputStream = entity.getContent();
+            try {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    responseStr.append(line);
+                }
+            } finally {
+                inputStream.close();
+            }
+        }
 
-		return responseStr.toString();
-	}
+        return responseStr.toString();
+    }
+
+    public static String getContent(InputStream inputStream) throws Exception {
+        StringBuilder responseStr = new StringBuilder();
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                responseStr.append(line);
+            }
+        } finally {
+            inputStream.close();
+        }
+
+        return responseStr.toString();
+    }
 }

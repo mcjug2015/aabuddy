@@ -34,8 +34,7 @@ public class MeetingListUtil {
     private static final String LONGITUDE = "long";
     private static final String MEETING_TYPE_IDS = "types";
 
-    public static MeetingListResults getMeetingList(Context context, HttpResponse httpResponse) throws Exception {
-        String jsonStr = HttpUtil.getContent(httpResponse);
+    public static MeetingListResults getMeetingList(Context context,  String jsonStr) throws Exception {
         Log.d(TAG, "Meeting list: " + jsonStr);
 
         boolean is24HourTime = DateTimeUtil.is24HourTime(context);

@@ -18,52 +18,53 @@ import org.mcjug.meetingfinder.R;
 import java.util.List;
 
 public class FindSimilarMeetingsTask extends AsyncTask<Void, String, List<Meeting>> {
-	private final String TAG = getClass().getSimpleName();
-	private Context context;
-	private String submitMeetingParams;
-	private FindSimilarMeetingsListener listener;
-	private String errorMsg =  null;
+    private final String TAG = getClass().getSimpleName();
+    private Context context;
+    private String submitMeetingParams;
+    private FindSimilarMeetingsListener listener;
+    private String errorMsg = null;
 
-	public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener) {
-		this.context = context;
-		this.submitMeetingParams = submitMeetingParams;
-		this.listener = listener;
-	}
-	
-	@Override
-	protected List<Meeting> doInBackground(Void... arg0) {
-		HttpClient client = HttpUtil.createHttpClient(); 
-		List<Meeting> meetings = null;
-		try {
-			String baseUrl = HttpUtil.getUnsecureRequestUrl(context, R.string.find_similar_meetings_url_path);
-			HttpPost request = new HttpPost(baseUrl);
+    public FindSimilarMeetingsTask(Context context, String submitMeetingParams, FindSimilarMeetingsListener listener) {
+        this.context = context;
+        this.submitMeetingParams = submitMeetingParams;
+        this.listener = listener;
+    }
 
-			StringEntity se = new StringEntity(submitMeetingParams);
-			se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-			request.setEntity(se);
+    @Override
+    protected List<Meeting> doInBackground(Void... arg0) {
+        HttpClient client = HttpUtil.createHttpClient();
+        List<Meeting> meetings = null;
+        try {
+            String baseUrl = HttpUtil.getUnsecureRequestUrl(context, R.string.find_similar_meetings_url_path);
+            HttpPost request = new HttpPost(baseUrl);
 
-			HttpResponse response = client.execute(request);
-			StatusLine statusLine = response.getStatusLine();
-			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-				meetings = MeetingListUtil.getMeetingList(context, response).getMeetings();
-			} else {
-		    	errorMsg = statusLine.toString();
-			}
-		} catch (Exception ex) {
-	    	errorMsg = ex.toString();
-		} finally {
-			client.getConnectionManager().shutdown();
-		}
-		
-		return meetings;
-	}
+            StringEntity se = new StringEntity(submitMeetingParams);
+            se.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
+            request.setEntity(se);
 
-	@Override
-	protected void onPostExecute(List<Meeting> meetings) {
-		listener.findSimilarMeetingsResults(meetings, errorMsg);
-	}
+            HttpResponse response = client.execute(request);
+            StatusLine statusLine = response.getStatusLine();
+            if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
+                String jsonStr = HttpUtil.getContent(response);
+                meetings = MeetingListUtil.getMeetingList(context, jsonStr).getMeetings();
+            } else {
+                errorMsg = statusLine.toString();
+            }
+        } catch (Exception ex) {
+            errorMsg = ex.toString();
+        } finally {
+            client.getConnectionManager().shutdown();
+        }
 
-	public interface FindSimilarMeetingsListener {
-		public void findSimilarMeetingsResults(List<Meeting> meetings, String errorMsg);
-	}
+        return meetings;
+    }
+
+    @Override
+    protected void onPostExecute(List<Meeting> meetings) {
+        listener.findSimilarMeetingsResults(meetings, errorMsg);
+    }
+
+    public interface FindSimilarMeetingsListener {
+        public void findSimilarMeetingsResults(List<Meeting> meetings, String errorMsg);
+    }
 }

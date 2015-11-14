@@ -54,7 +54,8 @@ public class SubmitMeetingTask extends AsyncTask<Void, String, Meeting> {
 			HttpResponse response = client.execute(request);
 			StatusLine statusLine = response.getStatusLine();
 			if (statusLine.getStatusCode() == HttpStatus.SC_OK) {
-			    meeting = MeetingListUtil.getMeetingList(context, response).getMeetings().get(0);
+				String jsonStr = HttpUtil.getContent(response);
+				meeting = MeetingListUtil.getMeetingList(context, jsonStr).getMeetings().get(0);
 			} else {
 		    	errorMsg = statusLine.toString();
 			}
