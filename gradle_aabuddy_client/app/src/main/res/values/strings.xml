@@ -8,7 +8,7 @@
     <string name="end_time">End time:</string>
     <string name="day_of_week">Day of week:</string>
     <string name="days_of_week">Days of week:</string>
-    <string name="meeting_address">Address: (Street, City, State and/or Zip Code)</string>
+    <string name="meeting_address">Zip Code:</string>
     <string name="refresh_location_button">Refresh address</string>
     <string name="validate_address_button">Validate Address</string>
     <string name="submit_button">Submit</string>
@@ -168,8 +168,8 @@
     <string name="timeFormatKey">timeFormat</string>
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
-    
-    
+
+
     <string name="meetingTypesPreferenceCategoryTitle">Meeting Types Preferences</string>
     <string name="meetingTypesPreferenceKey">meetingTypesPreferenceKey</string>
     <string name="meetingTypesPreferenceSummary">Indicates if meeting types will be shown as a selection when searching for meetings</string>
