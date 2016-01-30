@@ -130,7 +130,7 @@ public class FindMeetingFragment extends Fragment {
 					String addressName = addressEditText.getText().toString();
 					Address address = LocationUtil.getAddressFromLocationName(addressName, activity);
 					if (address == null) {
-						Toast.makeText(getActivity(), "Enter a valid zip code, reboot phone if problem persists", Toast.LENGTH_LONG).show();
+						Toast.makeText(getActivity(), "Not able to validate address. Please try entering a zip code or rebooting phone if problem persists", Toast.LENGTH_LONG).show();
 					} else {
 						findMeetingTask = new FindMeetingTask(activity, getFindMeetingParams(), false,
 								activity.getString(R.string.findMeetingProgressMsg));
