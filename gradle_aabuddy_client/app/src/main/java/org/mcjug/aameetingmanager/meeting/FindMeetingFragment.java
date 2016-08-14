@@ -97,7 +97,9 @@ public class FindMeetingFragment extends Fragment {
         distanceSpinner.setSelection(distanceValues.indexOf("10"));
 
         nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
+        nameEditText.setHint("Optional");
         addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
+        addressEditText.requestFocus();
 
         refreshLocationButton = (Button) view.findViewById(R.id.findMeetingRefreshLocationButton);
         refreshLocationButton.setOnClickListener(new OnClickListener() {
