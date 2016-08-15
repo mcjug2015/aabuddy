@@ -60,6 +60,7 @@ public class FindMeetingFragment extends Fragment {
     private DaysOfWeekMultiSpinner daysOfWeekSpinner;
     private MultiSpinner meetingTypesSpinner;
     private Spinner distanceSpinner;
+    private TextView meetingTypesTextView;
 
     private TimePickerDialog.OnTimeSetListener startTimeDialogListener;
     private TimePickerDialog.OnTimeSetListener endTimeDialogListener;
@@ -99,7 +100,7 @@ public class FindMeetingFragment extends Fragment {
         nameEditText = (EditText) view.findViewById(R.id.findMeetingNameEditText);
         nameEditText.setHint("Optional");
         addressEditText = (EditText) view.findViewById(R.id.findMeetingAddressEditText);
-        addressEditText.requestFocus();
+        addressEditText.setSelectAllOnFocus(true);
 
         refreshLocationButton = (Button) view.findViewById(R.id.findMeetingRefreshLocationButton);
         refreshLocationButton.setOnClickListener(new OnClickListener() {
@@ -219,10 +220,10 @@ public class FindMeetingFragment extends Fragment {
                     });
         }
 
+        meetingTypesTextView = (TextView) view.findViewById(R.id.findMeetingTypesTextView);
+        meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
         if (showMeetingTypes) {
-
-            meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
-            List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
+           List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
             meetingTypesToDisplay = new ArrayList<String>();
             meetingTypeIds.clear();
             for (int i = 0; i < meetingTypes.size(); i++) {
@@ -248,7 +249,6 @@ public class FindMeetingFragment extends Fragment {
                         }
                     });
         }
-
 
         return view;
     }
@@ -318,6 +318,13 @@ public class FindMeetingFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         context = getActivity();
 
+        if (!showMeetingTypes) {
+            meetingTypesTextView.setVisibility(View.GONE);
+            if (meetingTypesSpinner != null) {
+                meetingTypesSpinner.setVisibility(View.GONE);
+            }
+        }
+
         Location location = LocationUtil.getLastKnownLocation(context);
         String address = LocationUtil.getFullAddress(location, context);
         if (address == null || address.equals("")) {
@@ -325,6 +332,7 @@ public class FindMeetingFragment extends Fragment {
         } else {
             addressEditText.setText(address);
         }
+        addressEditText.requestFocus();
 
         locationResult = new LocationResult() {
             @Override
@@ -357,16 +365,7 @@ public class FindMeetingFragment extends Fragment {
 
     @Override
     public void onResume() {
-
         updateTimeWidgets(is24HourTime);
-
-        if (!showMeetingTypes) {
-            TextView textView = (TextView) getView().findViewById(R.id.findMeetingTypesTextView);
-            textView.setVisibility(View.GONE);
-            if (meetingTypesSpinner != null)
-                meetingTypesSpinner.setVisibility(View.GONE);
-        }
-
         super.onResume();
     }
 
