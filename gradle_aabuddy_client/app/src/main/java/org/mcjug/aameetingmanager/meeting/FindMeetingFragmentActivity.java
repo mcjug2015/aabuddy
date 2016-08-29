@@ -3,11 +3,13 @@ package org.mcjug.aameetingmanager.meeting;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.meetingfinder.R;
-public class FindMeetingFragmentActivity extends ActionBarActivity {
+//public class FindMeetingFragmentActivity extends ActionBarActivity
+public class FindMeetingFragmentActivity extends AppCompatActivity {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {

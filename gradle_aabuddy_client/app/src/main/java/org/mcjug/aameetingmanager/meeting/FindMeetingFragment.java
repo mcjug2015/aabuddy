@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -86,6 +88,7 @@ public class FindMeetingFragment extends Fragment {
         super.onCreate(savedInstanceState);
         prefs = PreferenceManager.getDefaultSharedPreferences(AAMeetingApplication.getInstance());
         showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
+        Log.i(TAG, "onCreate: showMeetingTypes " + showMeetingTypes);
     }
 
     @Override
@@ -170,18 +173,24 @@ public class FindMeetingFragment extends Fragment {
                 if (startCalendarText.equals(EMPTY_TIME)) {
                     startTimeButton.setText(EMPTY_TIME);
                 } else {
-                    startTimeButton.setText(startCalendarText);
-                    startTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startCalendarText.substring(0, 1)));
-                    startTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(startCalendarText.substring(3, 4)));
+                    //startTimeButton.setText(startCalendarText);
+                    startTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startCalendarText.substring(0, 2)));
+                    startTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(startCalendarText.substring(3, 5)));
+                    startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
                 }
 
                 String endCalendarText = savedInstanceState.getString(END_TEXT);
                 if (endCalendarText.equals(EMPTY_TIME)) {
                     endTimeButton.setText(EMPTY_TIME);
                 } else {
-                    endTimeButton.setText(endCalendarText);
-                    endTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endCalendarText.substring(0, 1)));
-                    endTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(endCalendarText.substring(3, 4)));
+                    //int hour = Integer.parseInt(endCalendarText.substring(0, 2));
+                    endTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endCalendarText.substring(0, 2)));
+                    endTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(endCalendarText.substring(3, 5)));
+                    // endTimeButton.setText(endCalendarText);
+                    endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
+                    Log.i(TAG, "onCreateView: saved END_TEXT " + endCalendarText +
+                            " Start " + startTimeButton.getText().toString() +
+                            " End " + endTimeButton.getText().toString());
                 }
 
                 meetingTypeSelectionText = savedInstanceState.getString(MEETING_TYPE_SELECTION_TEXT);
@@ -222,8 +231,29 @@ public class FindMeetingFragment extends Fragment {
 
         meetingTypesTextView = (TextView) view.findViewById(R.id.findMeetingTypesTextView);
         meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
+
+        // showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
+
+        meetingTypes(true, meetingTypeSelectionText, meetingTypeSelectionFlags);
+
+        Log.i(TAG, "onCreateView: showMeetingTypes " + showMeetingTypes +
+                " Start " + startTimeButton.getText().toString() +
+                " End " + endTimeButton.getText().toString());
+
+        return view;
+    }
+
+    private void meetingTypes(boolean initialize, String meetingTypeSelectionText, boolean[] meetingTypeSelectionFlags  ) {
+        // do nothing if there is no initialization phase or showMeetingTypes was not changed
+        boolean currentShowMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
+        if (!initialize && showMeetingTypes == currentShowMeetingTypes)
+            return;
+
+
+        showMeetingTypes = currentShowMeetingTypes;
         if (showMeetingTypes) {
-           List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
+            Log.i(TAG, "meetingTypes update: creating ");
+            List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();
             meetingTypesToDisplay = new ArrayList<String>();
             meetingTypeIds.clear();
             for (int i = 0; i < meetingTypes.size(); i++) {
@@ -249,8 +279,13 @@ public class FindMeetingFragment extends Fragment {
                         }
                     });
         }
-
-        return view;
+        else {
+            Log.i(TAG, "meetingTypes update: hiding ");
+            meetingTypesTextView.setVisibility(View.GONE);
+            if (meetingTypesSpinner != null) {
+                meetingTypesSpinner.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void updateTimeWidgets(final boolean is24HourTime) {
@@ -296,8 +331,8 @@ public class FindMeetingFragment extends Fragment {
         endTimeButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener, endTimeCalendar
-                        .get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), is24HourTime);
+                TimePickerDialog dialog = new TimePickerDialog(getActivity(), endTimeDialogListener,
+                        endTimeCalendar.get(Calendar.HOUR_OF_DAY), endTimeCalendar.get(Calendar.MINUTE), is24HourTime);
                 dialog.show();
             }
         });
@@ -318,12 +353,14 @@ public class FindMeetingFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         context = getActivity();
 
+        /*
         if (!showMeetingTypes) {
             meetingTypesTextView.setVisibility(View.GONE);
             if (meetingTypesSpinner != null) {
                 meetingTypesSpinner.setVisibility(View.GONE);
             }
         }
+        */
 
         Location location = LocationUtil.getLastKnownLocation(context);
         String address = LocationUtil.getFullAddress(location, context);
@@ -366,7 +403,20 @@ public class FindMeetingFragment extends Fragment {
     @Override
     public void onResume() {
         updateTimeWidgets(is24HourTime);
+        meetingTypes(false, null, null);
+        Log.i(TAG, "onResume: showMeetingTypes=" + showMeetingTypes  +
+                " Start " + startTimeButton.getText().toString() +
+                " End " + endTimeButton.getText().toString());
+        //meetingTypes(true, meetingTypeSelectionText, meetingTypeSelectionFlags);
         super.onResume();
+    }
+
+    @Override
+    public void onStart() {
+        Log.i(TAG, "onStart: showMeetingTypes=" + showMeetingTypes +
+                " Start " + startTimeButton.getText().toString() +
+                " End " + endTimeButton.getText().toString());
+        super.onStart();
     }
 
     public void toast(int millisec, String msg) {
@@ -401,32 +451,42 @@ public class FindMeetingFragment extends Fragment {
             }
             outState.putString(DAYS_OF_WEEK_STRING, (String) daysOfWeekSpinner.getSelectedItem());
 
-            Log.i(TAG, "onSaveInstanceState: Saved Dialog Values");
+            Log.i(TAG, "onSaveInstanceState: Saved Start " +
+                    startTimeButton.getText().toString() +
+                    " End " + endTimeButton.getText().toString());
         }
     }
 
     private String getFindMeetingParams() throws Exception {
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        StringBuilder builder = new StringBuilder();
+        //List<NameValuePair> params = new ArrayList<NameValuePair>();
+
 
         String addressName = addressEditText.getText().toString();
         Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
-        params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
-        params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
+        //params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
+        //params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
+        builder.append("lat=" + String.valueOf(address.getLatitude()));
+        builder.append("&long=" + String.valueOf(address.getLongitude()));
 
         String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
-        params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
+        //params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
+        builder.append("&distance_miles=" + mileValues[distanceSpinner.getSelectedItemPosition()]);
 
         String name = nameEditText.getText().toString().trim();
         if (!name.equals("")) {
-            params.add(new BasicNameValuePair("name", name));
+            //params.add(new BasicNameValuePair("name", name));
+            builder.append("&name=" + Uri.encode(name));
         }
 
         if (!startTimeButton.getText().equals(EMPTY_TIME)) {
-            params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
+            //params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
+            builder.append("&start_time__gte=" + DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar));
         }
 
         if (!endTimeButton.getText().equals(EMPTY_TIME)) {
-            params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
+            //params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
+            builder.append("&end_time__lte=" + DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar));
         }
 
         String[] daysOfWeekSelections = ((String) daysOfWeekSpinner.getSelectedItem()).split(",");
@@ -445,7 +505,8 @@ public class FindMeetingFragment extends Fragment {
 
         for (String str : daysOfWeekSelections) {
             int idx = daysOfWeek.indexOf(str.trim());
-            params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
+            //params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
+            builder.append("&day_of_week_in=" + String.valueOf(idx + 1));
         }
 
         if (showMeetingTypes) {
@@ -453,20 +514,24 @@ public class FindMeetingFragment extends Fragment {
             if (!meetingTypeSelections[0].equals(getString(R.string.any))) {
                 for (String str : meetingTypeSelections) {
                     Integer id = meetingTypeIds.get(str.trim());
-                    params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
+                    //params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
+                    builder.append("&type_ids=" + String.valueOf(id));
                 }
             }
         }
 
-        params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
+        //params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
+        builder.append("&order_by=" + getString(R.string.sortingDefault));
 
         int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
-        params.add(new BasicNameValuePair("offset", "0"));
-        params.add(new BasicNameValuePair("limit", String.valueOf(paginationSize)));
+        //params.add(new BasicNameValuePair("offset", "0"));
+        //params.add(new BasicNameValuePair("limit", String.valueOf(paginationSize)));
+        builder.append("&offset=0");
+        builder.append("&limit=" + String.valueOf(paginationSize));
 
-        String paramStr = URLEncodedUtils.format(params, "utf-8");
-        Log.d(TAG, "Find meeting request params: " + paramStr);
+        //String paramStr = URLEncodedUtils.format((List<? extends NameValuePair>) params, "utf-8");
+        Log.d(TAG, "Find meeting request params: " + builder.toString());
 
-        return paramStr;
+        return builder.toString();
     }
 }
