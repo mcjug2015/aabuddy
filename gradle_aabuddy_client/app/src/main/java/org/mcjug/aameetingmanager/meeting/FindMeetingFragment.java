@@ -168,13 +168,18 @@ public class FindMeetingFragment extends Fragment {
             if (savedInstanceState.isEmpty())
                 Log.i(TAG, "Can't restore state, the bundle is empty.");
             else {
+                int hourOfDay;
                 // Restore Saved Instance after rotation
                 String startCalendarText = savedInstanceState.getString(START_TEXT);
                 if (startCalendarText.equals(EMPTY_TIME)) {
                     startTimeButton.setText(EMPTY_TIME);
                 } else {
-                    //startTimeButton.setText(startCalendarText);
-                    startTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(startCalendarText.substring(0, 2)));
+                    hourOfDay = 0;
+                    if(startCalendarText.split(" ").length == 2)
+                        if (startCalendarText.split(" ")[1].equals("PM"))
+                            hourOfDay = 12;
+                    hourOfDay += Integer.parseInt(startCalendarText.substring(0, 2));
+                    startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     startTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(startCalendarText.substring(3, 5)));
                     startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
                 }
@@ -183,10 +188,13 @@ public class FindMeetingFragment extends Fragment {
                 if (endCalendarText.equals(EMPTY_TIME)) {
                     endTimeButton.setText(EMPTY_TIME);
                 } else {
-                    //int hour = Integer.parseInt(endCalendarText.substring(0, 2));
-                    endTimeCalendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(endCalendarText.substring(0, 2)));
+                    hourOfDay = 0;
+                    if(endCalendarText.split(" ").length == 2)
+                        if (endCalendarText.split(" ")[1].equals("PM"))
+                            hourOfDay = 12;
+                    hourOfDay += Integer.parseInt(endCalendarText.substring(0, 2));
+                    endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     endTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(endCalendarText.substring(3, 5)));
-                    // endTimeButton.setText(endCalendarText);
                     endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
                     Log.i(TAG, "onCreateView: saved END_TEXT " + endCalendarText +
                             " Start " + startTimeButton.getText().toString() +
