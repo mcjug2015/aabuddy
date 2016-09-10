@@ -174,11 +174,13 @@ public class FindMeetingFragment extends Fragment {
                 if (startCalendarText.equals(EMPTY_TIME)) {
                     startTimeButton.setText(EMPTY_TIME);
                 } else {
-                    hourOfDay = 0;
-                    if(startCalendarText.split(" ").length == 2)
+                    hourOfDay = Integer.parseInt(startCalendarText.substring(0, 2));
+                    if(startCalendarText.split(" ").length == 2) {
+                        if (hourOfDay == 12) hourOfDay = 0;
                         if (startCalendarText.split(" ")[1].equals("PM"))
-                            hourOfDay = 12;
-                    hourOfDay += Integer.parseInt(startCalendarText.substring(0, 2));
+                            hourOfDay += 12;
+                    }
+
                     startTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     startTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(startCalendarText.substring(3, 5)));
                     startTimeButton.setText(DateTimeUtil.getTimeStr(startTimeCalendar, is24HourTime));
@@ -188,11 +190,13 @@ public class FindMeetingFragment extends Fragment {
                 if (endCalendarText.equals(EMPTY_TIME)) {
                     endTimeButton.setText(EMPTY_TIME);
                 } else {
-                    hourOfDay = 0;
-                    if(endCalendarText.split(" ").length == 2)
+                    hourOfDay = Integer.parseInt(endCalendarText.substring(0, 2));
+                    if(endCalendarText.split(" ").length == 2) {
+                        if (hourOfDay == 12) hourOfDay = 0;
                         if (endCalendarText.split(" ")[1].equals("PM"))
-                            hourOfDay = 12;
-                    hourOfDay += Integer.parseInt(endCalendarText.substring(0, 2));
+                            hourOfDay += 12;
+                    }
+
                     endTimeCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
                     endTimeCalendar.set(Calendar.MINUTE, Integer.parseInt(endCalendarText.substring(3, 5)));
                     endTimeButton.setText(DateTimeUtil.getTimeStr(endTimeCalendar, is24HourTime));
