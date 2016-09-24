@@ -281,6 +281,8 @@ public class FindMeetingFragment extends Fragment {
                 meetingTypeSelectionFlags = new boolean[meetingTypesToDisplay.size()];
             }
 
+            meetingTypesTextView.setVisibility(View.VISIBLE);
+
             meetingTypesSpinner.setItems(meetingTypesToDisplay,
                     meetingTypeSelectionText,
                     meetingTypeSelectionFlags,
@@ -290,6 +292,7 @@ public class FindMeetingFragment extends Fragment {
                         public void onItemsSelected(boolean[] selected) {
                         }
                     });
+            meetingTypesSpinner.setVisibility(View.VISIBLE);
         }
         else {
             Log.i(TAG, "meetingTypes update: hiding ");
