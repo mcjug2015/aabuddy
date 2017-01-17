@@ -89,24 +89,25 @@ public class MeetingListFragment extends ListFragment {
 		//imageView.setImageResource(R.drawable.ic_action_search);
 
 		AAMeetingApplication app = (AAMeetingApplication) getActivity().getApplicationContext();
+		footerView = getActivity().getLayoutInflater().inflate(R.layout.meeting_list_footer, null);
+		listActionModeCallback = new ListActionModeCallback();
+
 		List<Meeting> meetings = new ArrayList<Meeting>();
 		meetings.addAll(app.getMeetingListResults().getMeetings());
-
 		ListView listView = getListView();
-		footerView = getActivity().getLayoutInflater().inflate(R.layout.meeting_list_footer, null);
 		listView.addFooterView(footerView);
-
 		listAdapter = new MeetingAdapter(getActivity(), R.layout.meeting_list_row, meetings);
 		listView.setAdapter(listAdapter);
 
-		listActionModeCallback = new ListActionModeCallback();
-
-		infiniteScrollListener = new InfiniteScrollListener(getActivity(), getListView(), footerView,
-				listActionModeCallback);
+		infiniteScrollListener = new InfiniteScrollListener(
+											getActivity(),
+											getListView(),
+											footerView,
+											listActionModeCallback);
 		infiniteScrollListener.setOffset(offset);
-
 		listView.setOnScrollListener(infiniteScrollListener);
 		listView.setItemsCanFocus(false);
+
 		getListView().setSelector(android.R.color.transparent);
 
 		Credentials credentials = Credentials.readFromPreferences(activity);
@@ -301,13 +302,16 @@ public class MeetingListFragment extends ListFragment {
             MeetingListFragmentActivity activity = (MeetingListFragmentActivity) getActivity();
 			AAMeetingApplication app = (AAMeetingApplication) activity.getApplicationContext();
 			MeetingListResults meetingListResults = app.getMeetingListResults();
+
 			listAdapter.setMeetings(meetingListResults.getMeetings());
 
-			String numItemsLabel = String.format(getString(R.string.meetingListNumItems), listAdapter.getCount(),
-					meetingListResults.getTotalMeetingCount());
+			int numOfMeetingsInAdapter = listAdapter.getCount();
+			int totalNumOfMeetings = meetingListResults.getTotalMeetingCount();
+			String numItemsLabel = String.format(getString(R.string.meetingListNumItems), numOfMeetingsInAdapter, totalNumOfMeetings);
 			meetingListNumItemsLabel.setText(numItemsLabel);
 
 			infiniteScrollListener.setLoading(false);
+
 			getListView().removeFooterView(footerView);
 
 			if (deleteProgressDialog != null) {

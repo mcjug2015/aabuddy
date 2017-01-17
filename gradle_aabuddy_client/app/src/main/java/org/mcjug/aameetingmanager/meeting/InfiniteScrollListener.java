@@ -41,8 +41,39 @@ public class InfiniteScrollListener implements OnScrollListener {
  	}
 
 	public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-		 int lastInScreen = firstVisibleItem + visibleItemCount; 
-		 if ((lastInScreen >= totalItemCount) && !(loading) && (previousTotal != totalItemCount)) {  
+		int lastInScreen = firstVisibleItem + visibleItemCount;
+		boolean needToLoad = false;
+
+		if (lastInScreen < totalItemCount) {
+			if (previousTotal == -1)
+				previousTotal = totalItemCount;
+		}
+		else {
+			if (totalItemCount > previousTotal && totalItemCount <  paginationSize ) {
+				previousTotal = totalItemCount;
+			}
+			else {
+				if (!(loading) && (previousTotal < totalItemCount))
+					needToLoad = true;
+				else {
+					if (offset > totalItemCount) {
+						offset -= paginationSize;
+					}
+					else {
+						if ((offset + paginationSize) == totalItemCount) {
+							org.mcjug.aameetingmanager.AAMeetingApplication app = (org.mcjug.aameetingmanager.AAMeetingApplication) context.getApplicationContext();
+							int totalMeetingCount = app.getMeetingListResults().getTotalMeetingCount();
+							if (totalMeetingCount > totalItemCount && totalMeetingCount > offset) {
+								needToLoad = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		//if ((lastInScreen >= totalItemCount) && !(loading) && (previousTotal != totalItemCount)) {
+		 if (needToLoad) {
 			 loading = true;
 			 previousTotal = totalItemCount;
 			 loadMeetings();
