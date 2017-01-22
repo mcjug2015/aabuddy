@@ -56,8 +56,9 @@ public class InfiniteScrollListener implements OnScrollListener {
 				if (!(loading) && (previousTotal < totalItemCount))
 					needToLoad = true;
 				else {
-					if (offset > totalItemCount) {
+					if (offset >= totalItemCount) {
 						offset -= paginationSize;
+						if (offset < 0) offset = 0;
 					}
 					else {
 						if ((offset + paginationSize) == totalItemCount) {
