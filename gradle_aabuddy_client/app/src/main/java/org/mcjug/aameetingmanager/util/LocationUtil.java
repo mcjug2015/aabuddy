@@ -24,8 +24,7 @@ public class LocationUtil {
 				try {
 					gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				} catch (SecurityException e) {
-					// TODO: let the user know there is a problem with the gps
-					Log.d(TAG, "SecurityException on getLastKnownLocation GPS_PROVIDER: " + e.getMessage());
+					Log.e(TAG, "SecurityException on getLastKnownLocation GPS_PROVIDER: " + e.getMessage());
 				}
     		}
     		
@@ -33,8 +32,7 @@ public class LocationUtil {
 				try {
 					networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 				} catch (SecurityException e) {
-					// TODO: let the user know there is a problem with the gps
-					Log.d(TAG, "SecurityException on getLastKnownLocation NETWORK_PROVIDER: " + e.getMessage());
+					Log.e(TAG, "SecurityException on getLastKnownLocation NETWORK_PROVIDER: " + e.getMessage());
 				}
     		}
       		
