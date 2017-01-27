@@ -399,7 +399,9 @@ public class FindMeetingFragment extends Fragment {
                             (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
                             location = LocationUtil.getLastKnownLocation(getActivity());
                             if (location == null) {
-                                Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getActivity(),
+                                        "Not able to get current location. Please check if GPS is turned or you have a network data connection.",
+                                        Toast.LENGTH_LONG).show();
                             }
                     }
                     else {
