@@ -4,14 +4,17 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -392,14 +395,19 @@ public class FindMeetingFragment extends Fragment {
                 locationProgress.cancel();
 
                 if (location == null) {
-                    location = LocationUtil.getLastKnownLocation(getActivity());
+                    if ( Build.VERSION.SDK_INT >= 23 &&
+                            (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
+                            location = LocationUtil.getLastKnownLocation(getActivity());
+                            if (location == null) {
+                                Toast.makeText(getActivity(), "Not able to get current location. Please check if GPS is turned or you have a network data connection.", Toast.LENGTH_LONG).show();
+                            }
+                    }
+                    else {
+                        Toast.makeText(getActivity(), "Grant Location Permission to the APP to use this feature", Toast.LENGTH_LONG).show();
+                    }
                 }
 
-                if (location == null) {
-                    Toast.makeText(getActivity(),
-                            "Not able to get current location. Please check if GPS is turned or you have a network data connection.",
-                            Toast.LENGTH_LONG).show();
-                } else {
+                if (location != null) {
                     String addressStr = LocationUtil.getFullAddress(location, getActivity());
                     if (addressStr.trim().equals("")) {
                         Toast.makeText(getActivity(),
@@ -409,6 +417,7 @@ public class FindMeetingFragment extends Fragment {
                         addressEditText.setText(addressStr);
                     }
                 }
+
             }
         };
 

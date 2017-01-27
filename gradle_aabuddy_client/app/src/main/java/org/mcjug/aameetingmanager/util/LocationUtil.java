@@ -21,11 +21,21 @@ public class LocationUtil {
     		
     		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
     		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-    			gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				try {
+					gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+				} catch (SecurityException e) {
+					// TODO: let the user know there is a problem with the gps
+					Log.d(TAG, "SecurityException on getLastKnownLocation GPS_PROVIDER: " + e.getMessage());
+				}
     		}
     		
       		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-      			networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				try {
+					networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				} catch (SecurityException e) {
+					// TODO: let the user know there is a problem with the gps
+					Log.d(TAG, "SecurityException on getLastKnownLocation NETWORK_PROVIDER: " + e.getMessage());
+				}
     		}
       		
       		if (gpsLocation != null && networkLocation != null) {
