@@ -1,8 +1,11 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -15,6 +18,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
@@ -51,6 +55,11 @@ import java.util.Map;
 public class FindMeetingFragment extends Fragment {
     private static final String TAG = FindMeetingFragment.class.getSimpleName();
     private static final String EMPTY_TIME = "--:--";
+    public static final String[] LOCATION_FINDER_PERMS= {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    protected static final int FIND_MEETING_FRAGMENT_REQUEST = 1;
 
     private EditText nameEditText;
     private EditText addressEditText;
@@ -395,6 +404,40 @@ public class FindMeetingFragment extends Fragment {
                 locationProgress.cancel();
 
                 if (location == null) {
+                    if ( Build.VERSION.SDK_INT >= 23) {
+                        if (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                            location = LocationUtil.getLastKnownLocation(getActivity());
+                            if (location == null) {
+                                Log.d(TAG, "Cannot get current location. Offline?");
+                                Toast.makeText(getActivity(),
+                                        "Not able to get current location. Please check if GPS is turned or you have a network data connection.",
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }
+                        else {
+                            //ActivityCompat.requestPermissions(getActivity(), LOCATION_FINDER_PERMS, FIND_MEETING_FRAGMENT_REQUEST);
+                            showMessageOKCancel(
+                                    new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Log.d(TAG, "Requesting not granted permissions");
+                                            ActivityCompat.requestPermissions(getActivity(), LOCATION_FINDER_PERMS, FIND_MEETING_FRAGMENT_REQUEST);
+                                        }
+                                    },
+                                  new DialogInterface.OnClickListener() {
+                                      public void onClick(DialogInterface dialog, int id) {
+                                          Log.d(TAG, "Permissions Request: User Clicked NO");
+                                          Toast.makeText(getActivity(),"You clicked No !!",Toast.LENGTH_SHORT).show();
+                                      }
+                                  });
+                            return;
+                        }
+                    }
+                    else {
+
+                    }
+
+
                     if ( Build.VERSION.SDK_INT >= 23 &&
                             (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
                             location = LocationUtil.getLastKnownLocation(getActivity());
@@ -559,5 +602,24 @@ public class FindMeetingFragment extends Fragment {
         Log.d(TAG, "Find meeting request params: " + builder.toString());
 
         return builder.toString();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == FIND_MEETING_FRAGMENT_REQUEST) {
+            Log.d(TAG, "Find meeting onRequestPermissionsResult: FIND_MEETING_FRAGMENT_REQUEST ");
+        }
+        else if (requestCode ==  LocationFinder.LOCATION_FINDER_REQUEST) {
+            Log.d(TAG, "Find meeting onRequestPermissionsResult: LOCATION_FINDER_REQUEST ");
+        }
+    }
+
+    private void showMessageOKCancel(DialogInterface.OnClickListener okListener, DialogInterface.OnClickListener cancelListener) {
+        Log.d(TAG, "FindMeetingFragment: showMessageOKCancel");
+        new android.app.AlertDialog.Builder(getActivity())
+                .setMessage("Hello, I am showMessageOKCancel")
+                .setPositiveButton("OK", okListener)
+                .setNegativeButton("Cancel", cancelListener)
+                .create().show();
     }
 }

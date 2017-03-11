@@ -18,11 +18,14 @@ public class LocationUtil {
         try {
         	Location gpsLocation = null;
     		Location networkLocation = null;
-    		
-    		LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
+			Log.d(TAG,"getLastKnownLocation: getSystemService Context.LOCATION_SERVICE");
+			LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
     		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
 				try {
 					gpsLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+					Log.d(TAG,"getLastKnownLocation: locationManager GPS_PROVIDER is OK ");
 				} catch (SecurityException e) {
 					Log.e(TAG, "SecurityException on getLastKnownLocation GPS_PROVIDER: " + e.getMessage());
 				}
@@ -31,6 +34,7 @@ public class LocationUtil {
       		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
 				try {
 					networkLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+					Log.d(TAG,"getLastKnownLocation: locationManager NETWORK_PROVIDER is OK ");
 				} catch (SecurityException e) {
 					Log.e(TAG, "SecurityException on getLastKnownLocation NETWORK_PROVIDER: " + e.getMessage());
 				}
@@ -50,7 +54,7 @@ public class LocationUtil {
       		}
     		
 		} catch (Exception e) {
-		    Log.d(TAG, "Error getting location");
+		    Log.e(TAG, "Error getting location");
 		}
         return location;
 	}
@@ -75,7 +79,7 @@ public class LocationUtil {
 				}
 				addressStr = sb.toString();
 			} catch (Exception e) {
-			    Log.d(TAG, "Error getting address");
+			    Log.e(TAG, "Error getting address");
 			}
 		}
 		return addressStr;
