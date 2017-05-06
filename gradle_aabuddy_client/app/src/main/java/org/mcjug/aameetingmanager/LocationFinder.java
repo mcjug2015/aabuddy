@@ -40,45 +40,41 @@ public class LocationFinder {
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 	}
 
-	public void requestLocation() {
+	public boolean requestLocation() {
 		handler = new Handler();
 		locationTimeoutTask = new LocationTimeoutTask();
 		handler.postDelayed(locationTimeoutTask, LOCATION_TIMEOUT);
 
 		locationListener = new LocationUpdater();
 		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-			requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
+			return requestLocationUpdates(LocationManager.GPS_PROVIDER, locationListener);
 		}
 
 		if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-			requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
+			return requestLocationUpdates(LocationManager.NETWORK_PROVIDER, locationListener);
 		}
 
 		if (locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)) {
-			requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
+			return requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, locationListener);
 		}
+		return false;
 	}
 
-	private void requestLocationUpdates(String providerName, LocationListener locationListener) {
+	private boolean requestLocationUpdates(String providerName, LocationListener locationListener) {
 		try {
 			if (ActivityCompat.checkSelfPermission(context,
 					Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
 					ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-				/*
-				TODO: Consider calling ActivityCompat#requestPermissions to request the missing permissions,
-				and then overriding
-				public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
-				to handle the case where the user grants the permission.
-				*/
-				if(context instanceof Activity)
-					requestPermissions ((Activity) context, FindMeetingFragment.LOCATION_FINDER_PERMS, LOCATION_FINDER_REQUEST);
-
-				return;
+				if(context instanceof Activity) {
+					requestPermissions((Activity) context, FindMeetingFragment.LOCATION_FINDER_PERMS, LOCATION_FINDER_REQUEST);
+				}
 			}
 			locationManager.requestLocationUpdates(providerName, MIN_UPDATE_TIME, MIN_UPDATE_DISTANCE, locationListener);
+			return true;
 		} catch (Exception ex) {
 			Log.d(TAG, "Error requesting location for provider: " + providerName);
 		}
+		return false;
 	}
 
 

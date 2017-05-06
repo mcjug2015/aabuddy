@@ -1,7 +1,6 @@
 package org.mcjug.aameetingmanager.meeting;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -11,16 +10,17 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+//import android.app.Fragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.app.ActivityCompat;
+//import android.support.v4.app.FragmentActivity;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,9 +32,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
@@ -121,15 +118,15 @@ public class FindMeetingFragment extends Fragment {
         refreshLocationButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                Context context = getActivity();
+                locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
                 try {
-                    Context context = getActivity();
-                    locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
-                            context.getString(R.string.waitMsg));
                     LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
-                    locationTask.requestLocation();
+                    Log.d(TAG, "requestLocation returned " + locationTask.requestLocation());
                 } catch (Exception ex) {
-                    Log.d(TAG, "Error current location " + ex);
+                    Log.e(TAG, "Error in refreshLocationButton.setOnClickListener " + ex);
                 }
+                locationProgress.cancel();
             }
         });
 
@@ -434,38 +431,38 @@ public class FindMeetingFragment extends Fragment {
                         }
                     }
                     else {
-
+                        Log.d(TAG, "Build.VERSION.SDK_INT < 23?");
                     }
-
 
                     if ( Build.VERSION.SDK_INT >= 23 &&
                             (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
                             location = LocationUtil.getLastKnownLocation(getActivity());
                             if (location == null) {
-                                Toast.makeText(getActivity(),
-                                        "Not able to get current location. Please check if GPS is turned or you have a network data connection.",
-                                        Toast.LENGTH_LONG).show();
+                                Log.d(TAG, "Not able to get current location");
+                                toast(30000, "Not able to get current location. Please check if GPS is turned or you have a network data connection.");
                             }
                     }
                     else {
-                        Toast.makeText(getActivity(), "Grant Location Permission to the APP to use this feature", Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "toast asked to grant permissions");
+                        toast(30000, "Grant Location Permission to the APP to use this feature");
                     }
                 }
 
                 if (location != null) {
                     String addressStr = LocationUtil.getFullAddress(location, getActivity());
                     if (addressStr.trim().equals("")) {
-                        Toast.makeText(getActivity(),
-                                "Not able to get address from location. Please check for a network data connection",
-                                Toast.LENGTH_LONG).show();
+                        Log.d(TAG, "Not able to get address from location");
+                        toast(30000, "Not able to get address from location. Please check for a network data connection");
                     } else {
                         addressEditText.setText(addressStr);
+                        Log.d(TAG, "Setting address " + addressStr);
                     }
                 }
-
+                Log.d(TAG, "Done with onActivityCreated - setLocation");
             }
         };
 
+        Log.d(TAG, "onActivityCreated - super");
         super.onActivityCreated(savedInstanceState);
     }
 
@@ -529,7 +526,6 @@ public class FindMeetingFragment extends Fragment {
     private String getFindMeetingParams() throws Exception {
         StringBuilder builder = new StringBuilder();
         //List<NameValuePair> params = new ArrayList<NameValuePair>();
-
 
         String addressName = addressEditText.getText().toString();
         Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
