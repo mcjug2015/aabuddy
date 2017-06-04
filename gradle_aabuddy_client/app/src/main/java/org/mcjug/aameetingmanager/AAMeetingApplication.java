@@ -140,4 +140,5 @@ public class AAMeetingApplication extends Application {
     public List<Integer> getMeetingNotThereList() {
         return meetingNotThereList;
     }
+
 }

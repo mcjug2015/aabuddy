@@ -1,5 +1,6 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
@@ -51,6 +52,13 @@ import java.util.Map;
 public class FindMeetingFragment extends Fragment {
     private static final String TAG = FindMeetingFragment.class.getSimpleName();
     private static final String EMPTY_TIME = "--:--";
+    private static final String enterZipCode = "Please type in zip code or refresh";
+    public static final String[] LOCATION_FINDER_PERMS= {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    public static int LOCATION_FINDER_REQUEST = 64;
+    //protected static final int FIND_MEETING_FRAGMENT_REQUEST = 65;
 
     private EditText nameEditText;
     private EditText addressEditText;
@@ -79,6 +87,7 @@ public class FindMeetingFragment extends Fragment {
     private boolean showMeetingTypes;
     private SharedPreferences prefs;
     private List<String> meetingTypesToDisplay;
+    private LocationFinder locationTask;
 
     private final String START_TEXT = "StartText";
     private final String END_TEXT = "EndText";
@@ -93,6 +102,7 @@ public class FindMeetingFragment extends Fragment {
         showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
         Log.i(TAG, "onCreate: showMeetingTypes " + showMeetingTypes);
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,10 +124,14 @@ public class FindMeetingFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     Context context = getActivity();
-                    locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
-                            context.getString(R.string.waitMsg));
-                    LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
-                    locationTask.requestLocation();
+                    locationTask = new LocationFinder(getActivity(), locationResult);
+                    if (locationTask.checkPerms()) {
+                        locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+                        locationTask.requestLocation();
+                    }
+                    else
+                        requestPermissions(LOCATION_FINDER_PERMS, LOCATION_FINDER_REQUEST);
+
                 } catch (Exception ex) {
                     Log.d(TAG, "Error current location " + ex);
                 }
@@ -382,11 +396,9 @@ public class FindMeetingFragment extends Fragment {
 
         Location location = LocationUtil.getLastKnownLocation(context);
         String address = LocationUtil.getFullAddress(location, context);
-        if (address == null || address.equals("")) {
-            addressEditText.setText("Please type in zip code or refresh");
-        } else {
-            addressEditText.setText(address);
-        }
+
+        addressEditText.setText((address != null && address.equals("")) ?
+                        address : enterZipCode);
         addressEditText.requestFocus();
 
         locationResult = new LocationResult() {
@@ -395,35 +407,39 @@ public class FindMeetingFragment extends Fragment {
                 locationProgress.cancel();
 
                 if (location == null) {
-                    if ( Build.VERSION.SDK_INT >= 23 &&
-                            (ContextCompat.checkSelfPermission ( getActivity(), android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED )) {
-                            location = LocationUtil.getLastKnownLocation(getActivity());
-                            if (location == null) {
-                                Toast.makeText(getActivity(),
-                                        "Not able to get current location. Please check if GPS is turned or you have a network data connection.",
-                                        Toast.LENGTH_LONG).show();
-                            }
-                    }
-                    else {
-                        Toast.makeText(getActivity(), "Grant Location Permission to the APP to use this feature", Toast.LENGTH_LONG).show();
-                    }
+                    Toast.makeText(getActivity(),
+                            "Not able to get current location. Please check if GPS is turned on and you have a network data connection.",
+                            Toast.LENGTH_LONG).show();
                 }
-
-                if (location != null) {
+                else {
                     String addressStr = LocationUtil.getFullAddress(location, getActivity());
                     if (addressStr.trim().equals("")) {
                         Toast.makeText(getActivity(),
                                 "Not able to get address from location. Please check for a network data connection",
                                 Toast.LENGTH_LONG).show();
+                        addressEditText.setText(enterZipCode);
                     } else {
                         addressEditText.setText(addressStr);
                     }
                 }
-
             }
         };
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LOCATION_FINDER_REQUEST) {
+            Log.d(TAG, "Find meeting onRequestPermissionsResult: FIND_MEETING_FRAGMENT_REQUEST ");
+            // locationProgress.cancel();
+            if (locationTask.checkPerms()) {
+                locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+                locationTask.requestLocation();
+            }
+            else
+                addressEditText.setText(enterZipCode);
+        }
     }
 
     @Override

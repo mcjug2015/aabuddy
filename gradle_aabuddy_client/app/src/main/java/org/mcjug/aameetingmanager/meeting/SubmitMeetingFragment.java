@@ -1,5 +1,6 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -55,7 +56,11 @@ import java.util.Map;
 
 public class SubmitMeetingFragment extends Fragment {
     private static final String TAG = SubmitMeetingFragment.class.getSimpleName();
-
+    public static final String[] LOCATION_FINDER_PERMS= {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+    };
+    public static int LOCATION_FINDER_REQUEST = 64;
     private EditText nameEditText;
     private EditText descriptionEditText;
     private EditText addressEditText;
@@ -75,6 +80,7 @@ public class SubmitMeetingFragment extends Fragment {
     private TimePickerDialog.OnTimeSetListener endTimePickerListener;
     private ProgressDialog locationProgress;
     private ProgressDialog submitProgressDialog;
+    LocationFinder locationTask;
     private LocationResult locationResult;
     private Credentials submitCredentials;
     private String submitMeetingParams;
@@ -104,34 +110,6 @@ public class SubmitMeetingFragment extends Fragment {
             Intent loginIntent = new Intent(getActivity(), LoginFragmentActivity.class);
             loginIntent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivityForResult(loginIntent, BEFORE_SUBMIT_LOGIN_ACTIVITY);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case BEFORE_SUBMIT_LOGIN_ACTIVITY:
-                if (resultCode != Activity.RESULT_OK) {
-                    getActivity().finish();
-                    //go back to home
-                    startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                }
-                break;
-
-            case AFTER_SUBMIT_LOGIN_ACTIVITY:
-                if (resultCode != Activity.RESULT_OK) {
-                    getActivity().finish();
-                    //go back to home
-                    startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
-                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
-                } else {
-                    Credentials credentials = Credentials.readFromPreferences(getActivity());
-                    submitMeeting(credentials);
-                }
-                break;
         }
     }
 
@@ -173,10 +151,13 @@ public class SubmitMeetingFragment extends Fragment {
             public void onClick(View v) {
                 try {
                     Context context = getActivity();
-                    locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg),
-                            context.getString(R.string.waitMsg));
-                    LocationFinder locationTask = new LocationFinder(getActivity(), locationResult);
-                    locationTask.requestLocation();
+                    locationTask = new LocationFinder(getActivity(), locationResult);
+                    if (locationTask.checkPerms()) {
+                        locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+                        locationTask.requestLocation();
+                    }
+                    else
+                        requestPermissions(LOCATION_FINDER_PERMS, LOCATION_FINDER_REQUEST);
                 } catch (Exception ex) {
                     Log.d(TAG, "Error current location " + ex);
                 }
@@ -278,6 +259,35 @@ public class SubmitMeetingFragment extends Fragment {
                 });
         return view;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case BEFORE_SUBMIT_LOGIN_ACTIVITY:
+                if (resultCode != Activity.RESULT_OK) {
+                    getActivity().finish();
+                    //go back to home
+                    startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                }
+                break;
+
+            case AFTER_SUBMIT_LOGIN_ACTIVITY:
+                if (resultCode != Activity.RESULT_OK) {
+                    getActivity().finish();
+                    //go back to home
+                    startActivity(new Intent(getActivity().getApplicationContext(), AAMeetingManager.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP));
+                } else {
+                    Credentials credentials = Credentials.readFromPreferences(getActivity());
+                    submitMeeting(credentials);
+                }
+                break;
+        }
+    }
+
 
     private void init_calendars() {
         // This should be executed before updateTimeWidgets
@@ -395,11 +405,8 @@ public class SubmitMeetingFragment extends Fragment {
 
         Location location = LocationUtil.getLastKnownLocation(context);
         String address = LocationUtil.getFullAddress(location, context);
-        if (address == null || address.equals("")) {
-            addressEditText.setText("Please type in address or refresh");
-        } else {
-            addressEditText.setText(address);
-        }
+        addressEditText.setText(address == null || address.equals("") ?
+                "Please type in address or refresh" : address);
 
         locationResult = new LocationResult() {
             @Override
@@ -411,7 +418,8 @@ public class SubmitMeetingFragment extends Fragment {
                 }
 
                 if (location == null) {
-                    Toast.makeText(getActivity(), getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),
+                            getString(R.string.locationNotFound), Toast.LENGTH_LONG).show();
                 } else {
                     String address = LocationUtil.getFullAddress(location, getActivity());
                     if (address.trim().equals("")) {
@@ -424,6 +432,20 @@ public class SubmitMeetingFragment extends Fragment {
         };
 
         super.onActivityCreated(savedInstanceState);
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == LOCATION_FINDER_REQUEST) {
+            Log.d(TAG, "Find meeting onRequestPermissionsResult: FIND_MEETING_FRAGMENT_REQUEST ");
+            // locationProgress.cancel();
+            if (locationTask.checkPerms()) {
+                locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
+                locationTask.requestLocation();
+            }
+            // else addressEditText.setText("Please type in address of the meeting");
+        }
     }
 
     @Override
