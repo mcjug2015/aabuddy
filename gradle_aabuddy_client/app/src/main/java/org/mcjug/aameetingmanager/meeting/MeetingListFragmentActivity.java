@@ -14,9 +14,4 @@ public class MeetingListFragmentActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.meeting_list);
    }
-    
- 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		return true;
-	}
 }

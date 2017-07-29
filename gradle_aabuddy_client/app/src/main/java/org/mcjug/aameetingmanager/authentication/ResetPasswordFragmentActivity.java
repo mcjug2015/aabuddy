@@ -20,8 +20,7 @@ public class ResetPasswordFragmentActivity extends ActionBarActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.reset_password);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
+
 		if (getIntent().getExtras() != null) {
 		
 			String upIntentClassName = getIntent().getExtras().getString(UP_INTENT_CLASS_NAME);
@@ -39,17 +38,5 @@ public class ResetPasswordFragmentActivity extends ActionBarActivity {
 		}
 		
     }
-    
- 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				// app icon in action bar clicked; go back to the caller of the activity
-				Intent upIntent = new Intent(this, upIntentClass);
 
-				NavUtils.navigateUpTo(this, upIntent);
-				break;
-		}
-		return true;
-	}
 }

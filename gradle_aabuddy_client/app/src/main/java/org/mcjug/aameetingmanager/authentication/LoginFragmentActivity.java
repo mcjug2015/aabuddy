@@ -16,21 +16,7 @@ public class LoginFragmentActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
  
 		setContentView(R.layout.login);
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		
-		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);     
+		this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 	}
-    
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				// app icon in action bar clicked; go home
-				Intent intent = new Intent(this, AAMeetingManager.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
-				break;
-		}
-		return true;
-	}
+
 }
