@@ -64,7 +64,7 @@ public class LocationUtil {
 				StringBuilder sb = new StringBuilder();
 				if (addresses.size() > 0) {
 					Address address = addresses.get(0);
-					for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
+					for (int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
 						sb.append(address.getAddressLine(i)).append("\n");
 					}
 				}
@@ -75,7 +75,7 @@ public class LocationUtil {
 				}
 				addressStr = sb.toString();
 			} catch (Exception e) {
-			    Log.d(TAG, "Error getting address");
+			    Log.d(TAG, "Error getting Full address");
 			}
 		}
 		return addressStr;
@@ -92,7 +92,7 @@ public class LocationUtil {
 					addressStr = address.getLocality() + "," + address.getAdminArea() + " " + address.getPostalCode();
 				}
 			} catch (Exception e) {
-				Log.d(TAG, "Error getting address");
+				Log.d(TAG, "Error getting Short address");
 			}
 		}
 		return addressStr;
@@ -107,7 +107,7 @@ public class LocationUtil {
             	isValid = true;
             } 
 		} catch (Exception e) {
-		    Log.d(TAG, "Error validating address");
+		    Log.d(TAG, "Error validating address: " + e.getMessage());
 		}
         return isValid;
 	}
@@ -121,7 +121,7 @@ public class LocationUtil {
 				location = address.get(0);
 			}
 		} catch (Exception e) {
-		    Log.d(TAG, "Error getting address");
+		    Log.d(TAG, "Error getting address from LocName");
 		}
 		
 		/*********** If does not work - imitate **************/
