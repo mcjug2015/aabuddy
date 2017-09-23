@@ -1,5 +1,6 @@
 package org.mcjug.aameetingmanager.meeting;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -8,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.LabeledIntent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -15,6 +17,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Telephony;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.support.v7.view.ActionMode;
@@ -390,61 +393,22 @@ public class MeetingListFragment extends ListFragment {
 		String message = "\n" + "Please join me at " + meeting.getName() + " this coming " + day + " starting at "
 				+ getTimeStr + ", located at " + meeting.getAddress() + ". Looking forward to seeing you there!";
 
+        Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
+
+
 		if (Build.VERSION.SDK_INT < 11) {
-			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Meeting");
 			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, message);
 			startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
 		} else {
-			PackageManager packageManager = context.getPackageManager();
-			List<LabeledIntent> intentList = new ArrayList<LabeledIntent>();
-			configureMailClients(packageManager, intentList, message);
-			configureSMSClients(packageManager, intentList, message);
-
-			if (!intentList.isEmpty()) {
-				Intent chooserIntent = intentList.get(0);
-				intentList.remove(0);
-				Intent openInChooser = Intent.createChooser(chooserIntent, getString(R.string.share));
-				if (intentList.size() > 0) {
-					LabeledIntent[] extraIntents = intentList.toArray(new LabeledIntent[intentList.size()]);
-					openInChooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, extraIntents);
-					startActivity(openInChooser);
-				}
-			}
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
 		}
 	}
 
-	private void configureMailClients(PackageManager packageManager, List<LabeledIntent> intentList, String message) {
-		Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-		emailIntent.setData(Uri.parse("mailto:"));
-
-		List<ResolveInfo> mailClients = packageManager.queryIntentActivities(emailIntent, 0);
-		for (ResolveInfo resolveInfo : mailClients) {
-			String packageName = resolveInfo.activityInfo.packageName;
-			Intent intent = new Intent(Intent.ACTION_SENDTO);
-			intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
-			intent.setData(Uri.parse("mailto:"));
-			intent.putExtra(Intent.EXTRA_SUBJECT, "Meeting");
-			intent.putExtra(Intent.EXTRA_TEXT, message);
-			intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager), resolveInfo.icon));
-		}
-	}
-
-	private void configureSMSClients(PackageManager packageManager, List<LabeledIntent> intentList, String message) {
-		Intent smsIntent = new Intent(Intent.ACTION_SENDTO);
-		smsIntent.setData(Uri.parse("sms:"));
-
-		List<ResolveInfo> smsClients = packageManager.queryIntentActivities(smsIntent, 0);
-		for (ResolveInfo resolveInfo : smsClients) {
-			String packageName = resolveInfo.activityInfo.packageName;
-			Intent intent = new Intent(Intent.ACTION_SEND);
-			intent.setComponent(new ComponentName(packageName, resolveInfo.activityInfo.name));
-			intent.setData(Uri.parse("sms:"));
-			intent.putExtra(Intent.EXTRA_TEXT, message);
-			intentList.add(new LabeledIntent(intent, packageName, resolveInfo.loadLabel(packageManager), resolveInfo.icon));
-		}
-	}
 
 	private void displayMeetingTypesEditor(final Meeting selectedMeeting) {
 		final List<MeetingType> meetingTypes = AAMeetingApplication.getInstance().getMeetingTypes();

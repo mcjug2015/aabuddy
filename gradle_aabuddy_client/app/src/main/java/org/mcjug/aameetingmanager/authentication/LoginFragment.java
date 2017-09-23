@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.meetingfinder.R;
 
 public class LoginFragment extends Fragment {
@@ -140,11 +142,15 @@ public class LoginFragment extends Fragment {
 				Thread thread = new Thread(new Runnable() {
 					@Override
 					public void run() {
+						FragmentActivity activity = getActivity();
 						try {
 							Thread.sleep(2000);
-							getActivity().setResult(Activity.RESULT_OK);
-							getActivity().finish();
+							activity.setResult(Activity.RESULT_OK);
+							startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
+									.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+							activity.finish();
 						} catch (Exception e) {
+							Log.d(TAG, "Error finishing activity: " + e.getMessage());
 						}
 					}
 				});	
