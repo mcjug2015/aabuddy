@@ -1,15 +1,13 @@
 package org.mcjug.aameetingmanager.authentication;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
-import android.view.MenuItem;
+import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
-import org.mcjug.aameetingmanager.AAMeetingManager;
+//import org.mcjug.aameetingmanager.AAMeetingManager;
 import org.mcjug.meetingfinder.R;
 
-public class LoginFragmentActivity extends ActionBarActivity {
+public class LoginFragmentActivity extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
