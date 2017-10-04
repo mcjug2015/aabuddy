@@ -2,13 +2,16 @@ package org.mcjug.aameetingmanager;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBarActivity;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.method.MovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageButton;
@@ -33,18 +36,12 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	private static final String TAG = AAMeetingManager.class.getSimpleName();	
 	private static final String LOGOUT_TAG = "logoutTag";
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see android.support.v4.app.ActionBarActivity#onCreate(android.os.Bundle)
-	 */
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		// Inflate the layout
 		setContentView(R.layout.aa_meeting_manager);
-
 		ImageView findMeetingImageView = (ImageView) findViewById(R.id.findMeetingImageView);
 		findMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -53,14 +50,16 @@ implements LogoutDialogFragment.LogoutDialogListener {
 			}
 		});
 
+		/*
 		ImageView submitMeetingImageView = (ImageView) findViewById(R.id.submitMeetingImageView);
 		submitMeetingImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				startActivity(new Intent(getApplicationContext(), SubmitMeetingFragmentActivity.class)
 				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-
 			}
 		});
+		initSubmitMeetingButton();
+		*/
 
 		ImageView settingsImageView = (ImageView)findViewById(R.id.settingsImageView);
 		settingsImageView.setOnClickListener(new OnClickListener() {
@@ -69,7 +68,6 @@ implements LogoutDialogFragment.LogoutDialogListener {
 				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
-
 		ImageView helpImageView = (ImageView)findViewById(R.id.helpImageView);
 		helpImageView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -77,9 +75,38 @@ implements LogoutDialogFragment.LogoutDialogListener {
 				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
 			}
 		});
-
-		initRecoveryText();		
+		initRecoveryText();
 	}
+
+    public void initSubmitMeetingButton() {
+        ImageView submitMeetingImageView = (ImageView)findViewById(R.id.submitMeetingImageView);
+        OnClickListener submitMeetingImageViewClickListener = null;
+		Context context = getApplicationContext();
+        Credentials credentials = Credentials.readFromPreferences(context);
+        //toggle login/submit functionality
+        if (!credentials.isSet()) {
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putBoolean(context.getString(R.string.redirectToRegister), true);
+            editor.commit();
+			Log.d(TAG, "Redirect to Register added to Shared Preferences");
+            submitMeetingImageViewClickListener = new OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            };
+        } else {
+            submitMeetingImageViewClickListener = new OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), SubmitMeetingFragmentActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            };
+        }
+
+        submitMeetingImageView.setOnClickListener(submitMeetingImageViewClickListener);
+    }
 
 	public void initLoginLogoutButton() {
 		ImageView loginInImageView = (ImageView)findViewById(R.id.loginImageView);
@@ -120,6 +147,7 @@ implements LogoutDialogFragment.LogoutDialogListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
+		initSubmitMeetingButton();
 		initLoginLogoutButton();
 		initRecoveryText();
 	}

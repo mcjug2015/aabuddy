@@ -6,8 +6,10 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
@@ -20,6 +22,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.mcjug.aameetingmanager.AAMeetingManager;
+import org.mcjug.aameetingmanager.meeting.SubmitMeetingFragmentActivity;
 import org.mcjug.meetingfinder.R;
 
 public class LoginFragment extends Fragment {
@@ -146,8 +149,20 @@ public class LoginFragment extends Fragment {
 						try {
 							Thread.sleep(2000);
 							activity.setResult(Activity.RESULT_OK);
-							startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
-									.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+
+                            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+                            boolean toRegister =  prefs.getBoolean(getString(R.string.redirectToRegister), false);
+                            if(toRegister) {
+								Log.d(TAG, "Redirecting to Register");
+								startActivity(new Intent(activity.getApplicationContext(), SubmitMeetingFragmentActivity.class)
+										.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+							}
+                            else {
+								Log.d(TAG, "Redirecting to AAMeetingManager");
+								startActivity(new Intent(activity.getApplicationContext(), AAMeetingManager.class)
+										.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+							}
+
 							activity.finish();
 						} catch (Exception e) {
 							Log.d(TAG, "Error finishing activity: " + e.getMessage());
