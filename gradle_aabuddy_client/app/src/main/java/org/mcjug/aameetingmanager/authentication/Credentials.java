@@ -27,23 +27,10 @@ public class Credentials {
 		return username;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
 	public boolean isSet() {
 		if (username != null && !username.equals("") && password != null && !password.equals("")) {
 			return true;
 		}
-		
 		return false;
 	}
 
@@ -62,7 +49,8 @@ public class Credentials {
 		
 		editor.remove(context.getString(R.string.usernamePreferenceName));
 		editor.remove(context.getString(R.string.passwordPreferenceName));
-		
+        editor.remove(context.getString(R.string.redirectToRegister));
+
 		editor.commit();
 	}
 	
