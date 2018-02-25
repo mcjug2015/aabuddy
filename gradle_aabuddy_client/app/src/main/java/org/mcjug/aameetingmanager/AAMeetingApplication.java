@@ -27,7 +27,7 @@ public class AAMeetingApplication extends Application {
     private List<Integer> meetingNotThereList = null;
     private List<MeetingType> meetingTypes = new ArrayList<MeetingType>();
 
-    // instance
+
     private static AAMeetingApplication instance = null;
 
     @Override
