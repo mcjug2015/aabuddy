@@ -6,7 +6,7 @@ android {
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "org.mcjug.meetingfinder"
-        minSdkVersion 8
+        minSdkVersion 10
         targetSdkVersion 23
     }
     buildTypes {
