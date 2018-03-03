@@ -183,7 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
             android:layout_alignLeft="@+id/findMeetingDaysOfWeekSpinner"
-            android:entries="@array/searchDistances" />
+            android:entries="@array/searchDistanceMiles" />
 
         <Button
             android:id="@+id/findMeetingFindButton"

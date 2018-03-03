@@ -58,4 +58,14 @@
             android:title="@string/meetingTypesPreferenceTitle" />
     </PreferenceCategory>
 
+    <PreferenceCategory android:title="@string/distancePreferencesTitle" >
+        <ListPreference
+            android:defaultValue="Miles"
+            android:entries="@array/distanceFormat"
+            android:entryValues="@array/distanceFormatValues"
+            android:key="@string/distanceFormatKey"
+            android:summary="@string/distanceFormatSummary"
+            android:title="@string/distanceFormatTitle" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -170,6 +170,10 @@
     <string name="timeFormatSummary">Select meeting time format (12 or 24 hour)</string>
     <string name="timePreferencesTitle">Time Preferences</string>
 
+    <string name="distanceFormatTitle">Distance Format</string>
+    <string name="distanceFormatKey">distanceFormat</string>
+    <string name="distanceFormatSummary">Select distance format (Miles or Kilometers)</string>
+    <string name="distancePreferencesTitle">Distance Preferences</string>
 
     <string name="meetingTypesPreferenceCategoryTitle">Meeting Types Preferences</string>
     <string name="meetingTypesPreferenceKey">meetingTypesPreferenceKey</string>
@@ -212,7 +216,7 @@
         <item>FR</item>
         <item>SA</item>
     </string-array>
-    <string-array name="searchDistances">
+    <string-array name="searchDistanceMiles">
         <item>1 mile</item>
         <item>2 mile</item>
         <item>5 miles</item>
@@ -233,6 +237,17 @@
         <item>100</item>
         <item>200</item>
         <item>300</item>
+    </string-array>
+    <string-array name="searchDistanceKilometers">
+        <item>1 km</item>
+        <item>2 km</item>
+        <item>5 km</item>
+        <item>10 km</item>
+        <item>20 km</item>
+        <item>50 km</item>
+        <item>100 km</item>
+        <item>200 km</item>
+        <item>300 km</item>
     </string-array>
     <string-array name="sortOrder">
         <item>Distance</item>

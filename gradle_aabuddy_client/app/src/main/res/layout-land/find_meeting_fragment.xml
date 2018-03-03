@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBaseline="@+id/findMeetingSearchWithinTextView"
                     android:layout_toRightOf="@+id/findMeetingSearchWithinTextView"
-                    android:entries="@array/searchDistances" />
+                    android:entries="@array/searchDistanceMiles" />
 
                 <TextView
                     android:id="@+id/findMeetingTypesTextView"
