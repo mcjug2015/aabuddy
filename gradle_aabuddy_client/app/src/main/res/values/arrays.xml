@@ -8,4 +8,12 @@
         <item name="12">12</item>
         <item name="24">24 </item>
     </string-array>
+    <string-array name="distanceFormat">
+        <item name="Miles">Miles</item>
+        <item name="Kilometers">Kilometers (km)</item>
+    </string-array>
+    <string-array name="distanceFormatValues">
+        <item name="Miles">Miles</item>
+        <item name="Kilometers">Kilometers</item>
+    </string-array>
 </resources>

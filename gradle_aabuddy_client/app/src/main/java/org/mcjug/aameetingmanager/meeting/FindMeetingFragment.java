@@ -5,23 +5,20 @@ import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -29,9 +26,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.client.utils.URLEncodedUtils;
-import org.apache.http.message.BasicNameValuePair;
 import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.DaysOfWeekMultiSpinner;
 import org.mcjug.aameetingmanager.LocationFinder;
@@ -53,7 +47,7 @@ public class FindMeetingFragment extends Fragment {
     private static final String TAG = FindMeetingFragment.class.getSimpleName();
     private static final String EMPTY_TIME = "--:--";
     private static final String enterZipCode = "Please type in zip code or refresh";
-    public static final String[] LOCATION_FINDER_PERMS= {
+    public static final String[] LOCATION_FINDER_PERMS = {
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_COARSE_LOCATION
     };
@@ -103,13 +97,24 @@ public class FindMeetingFragment extends Fragment {
         Log.i(TAG, "onCreate: showMeetingTypes " + showMeetingTypes);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.find_meeting_fragment, container, false);
 
         distanceSpinner = (Spinner) view.findViewById(R.id.findMeetingDistanceSpinner);
+
+        String distanceFormat = prefs.getString(getString(R.string.distanceFormatKey), "Miles");
+        String[] distanceDisplayValues;
+        if (!distanceFormat.equalsIgnoreCase("Kilometers")) {
+            distanceDisplayValues = getResources().getStringArray(R.array.searchDistanceMiles);
+        } else {
+            distanceDisplayValues = getResources().getStringArray(R.array.searchDistanceKilometers);
+        }
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this.getActivity(), android.R.layout.simple_spinner_dropdown_item, distanceDisplayValues);
+        distanceSpinner.setAdapter(spinnerArrayAdapter);
+
         List<String> distanceValues = Arrays.asList(getResources().getStringArray(R.array.searchDistanceValues));
         distanceSpinner.setSelection(distanceValues.indexOf("10"));
 
@@ -128,8 +133,7 @@ public class FindMeetingFragment extends Fragment {
                     if (locationTask.checkPerms()) {
                         locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
                         locationTask.requestLocation();
-                    }
-                    else
+                    } else
                         requestPermissions(LOCATION_FINDER_PERMS, LOCATION_FINDER_REQUEST);
 
                 } catch (Exception ex) {
@@ -192,7 +196,7 @@ public class FindMeetingFragment extends Fragment {
                     startTimeButton.setText(EMPTY_TIME);
                 } else {
                     hourOfDay = Integer.parseInt(startCalendarText.substring(0, 2));
-                    if(startCalendarText.split(" ").length == 2) {
+                    if (startCalendarText.split(" ").length == 2) {
                         if (hourOfDay == 12) hourOfDay = 0;
                         if (startCalendarText.split(" ")[1].equals("PM"))
                             hourOfDay += 12;
@@ -208,7 +212,7 @@ public class FindMeetingFragment extends Fragment {
                     endTimeButton.setText(EMPTY_TIME);
                 } else {
                     hourOfDay = Integer.parseInt(endCalendarText.substring(0, 2));
-                    if(endCalendarText.split(" ").length == 2) {
+                    if (endCalendarText.split(" ").length == 2) {
                         if (hourOfDay == 12) hourOfDay = 0;
                         if (endCalendarText.split(" ")[1].equals("PM"))
                             hourOfDay += 12;
@@ -261,8 +265,6 @@ public class FindMeetingFragment extends Fragment {
         meetingTypesTextView = (TextView) view.findViewById(R.id.findMeetingTypesTextView);
         meetingTypesSpinner = (MultiSpinner) view.findViewById(R.id.findMeetingTypesSpinner);
 
-        // showMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
-
         meetingTypes(true, meetingTypeSelectionText, meetingTypeSelectionFlags);
 
         Log.i(TAG, "onCreateView: showMeetingTypes " + showMeetingTypes +
@@ -272,7 +274,7 @@ public class FindMeetingFragment extends Fragment {
         return view;
     }
 
-    private void meetingTypes(boolean initialize, String meetingTypeSelectionText, boolean[] meetingTypeSelectionFlags  ) {
+    private void meetingTypes(boolean initialize, String meetingTypeSelectionText, boolean[] meetingTypeSelectionFlags) {
         // do nothing if there is no initialization phase or showMeetingTypes was not changed
         boolean currentShowMeetingTypes = prefs.getBoolean(getString(R.string.meetingTypesPreferenceKey), false);
         if (!initialize && showMeetingTypes == currentShowMeetingTypes)
@@ -310,8 +312,7 @@ public class FindMeetingFragment extends Fragment {
                         }
                     });
             meetingTypesSpinner.setVisibility(View.VISIBLE);
-        }
-        else {
+        } else {
             Log.i(TAG, "meetingTypes update: hiding ");
             meetingTypesTextView.setVisibility(View.GONE);
             if (meetingTypesSpinner != null) {
@@ -398,7 +399,7 @@ public class FindMeetingFragment extends Fragment {
         String address = LocationUtil.getFullAddress(location, context);
 
         addressEditText.setText((address != null && address.equals("")) ?
-                        address : enterZipCode);
+                address : enterZipCode);
         addressEditText.requestFocus();
 
         locationResult = new LocationResult() {
@@ -410,8 +411,7 @@ public class FindMeetingFragment extends Fragment {
                     Toast.makeText(getActivity(),
                             "Not able to get current location. Please check if GPS is turned on and you have a network data connection.",
                             Toast.LENGTH_LONG).show();
-                }
-                else {
+                } else {
                     String addressStr = LocationUtil.getFullAddress(location, getActivity());
                     if (addressStr.trim().equals("")) {
                         Toast.makeText(getActivity(),
@@ -436,8 +436,7 @@ public class FindMeetingFragment extends Fragment {
             if (locationTask.checkPerms()) {
                 locationProgress = ProgressDialog.show(context, context.getString(R.string.getLocationMsg), context.getString(R.string.waitMsg));
                 locationTask.requestLocation();
-            }
-            else
+            } else
                 addressEditText.setText(enterZipCode);
         }
     }
@@ -446,7 +445,7 @@ public class FindMeetingFragment extends Fragment {
     public void onResume() {
         updateTimeWidgets(is24HourTime);
         meetingTypes(false, null, null);
-        Log.i(TAG, "onResume: showMeetingTypes=" + showMeetingTypes  +
+        Log.i(TAG, "onResume: showMeetingTypes=" + showMeetingTypes +
                 " Start " + startTimeButton.getText().toString() +
                 " End " + endTimeButton.getText().toString());
         //meetingTypes(true, meetingTypeSelectionText, meetingTypeSelectionFlags);
@@ -464,10 +463,10 @@ public class FindMeetingFragment extends Fragment {
     public void toast(int millisec, String msg) {
         Handler handler = null;
         final Toast[] toasts = new Toast[1];
-        for(int i = 0; i < millisec; i+=2000) {
+        for (int i = 0; i < millisec; i += 2000) {
             toasts[0] = Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT);
             toasts[0].show();
-            if(handler == null) {
+            if (handler == null) {
                 handler = new Handler();
                 handler.postDelayed(new Runnable() {
                     @Override
@@ -501,33 +500,25 @@ public class FindMeetingFragment extends Fragment {
 
     private String getFindMeetingParams() throws Exception {
         StringBuilder builder = new StringBuilder();
-        //List<NameValuePair> params = new ArrayList<NameValuePair>();
-
 
         String addressName = addressEditText.getText().toString();
         Address address = LocationUtil.getAddressFromLocationName(addressName, getActivity());
-        //params.add(new BasicNameValuePair("lat", String.valueOf(address.getLatitude())));
-        //params.add(new BasicNameValuePair("long", String.valueOf(address.getLongitude())));
         builder.append("lat=" + String.valueOf(address.getLatitude()));
         builder.append("&long=" + String.valueOf(address.getLongitude()));
 
         String[] mileValues = getResources().getStringArray(R.array.searchDistanceValues);
-        //params.add(new BasicNameValuePair("distance_miles", mileValues[distanceSpinner.getSelectedItemPosition()]));
         builder.append("&distance_miles=" + mileValues[distanceSpinner.getSelectedItemPosition()]);
 
         String name = nameEditText.getText().toString().trim();
         if (!name.equals("")) {
-            //params.add(new BasicNameValuePair("name", name));
             builder.append("&name=" + Uri.encode(name));
         }
 
         if (!startTimeButton.getText().equals(EMPTY_TIME)) {
-            //params.add(new BasicNameValuePair("start_time__gte", DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar)));
             builder.append("&start_time__gte=" + DateTimeUtil.getFindMeetingTimeStr(startTimeCalendar));
         }
 
         if (!endTimeButton.getText().equals(EMPTY_TIME)) {
-            //params.add(new BasicNameValuePair("end_time__lte", DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar)));
             builder.append("&end_time__lte=" + DateTimeUtil.getFindMeetingTimeStr(endTimeCalendar));
         }
 
@@ -547,8 +538,7 @@ public class FindMeetingFragment extends Fragment {
 
         for (String str : daysOfWeekSelections) {
             int idx = daysOfWeek.indexOf(str.trim());
-            //params.add(new BasicNameValuePair("day_of_week_in", String.valueOf(idx + 1)));
-            builder.append("&day_of_week_in=" + String.valueOf(idx + 1));
+             builder.append("&day_of_week_in=" + String.valueOf(idx + 1));
         }
 
         if (showMeetingTypes) {
@@ -556,22 +546,17 @@ public class FindMeetingFragment extends Fragment {
             if (!meetingTypeSelections[0].equals(getString(R.string.any))) {
                 for (String str : meetingTypeSelections) {
                     Integer id = meetingTypeIds.get(str.trim());
-                    //params.add(new BasicNameValuePair("type_ids", String.valueOf(id)));
                     builder.append("&type_ids=" + String.valueOf(id));
                 }
             }
         }
 
-        //params.add(new BasicNameValuePair("order_by", getString(R.string.sortingDefault)));
         builder.append("&order_by=" + getString(R.string.sortingDefault));
 
         int paginationSize = getActivity().getResources().getInteger(R.integer.paginationSize);
-        //params.add(new BasicNameValuePair("offset", "0"));
-        //params.add(new BasicNameValuePair("limit", String.valueOf(paginationSize)));
         builder.append("&offset=0");
         builder.append("&limit=" + String.valueOf(paginationSize));
 
-        //String paramStr = URLEncodedUtils.format((List<? extends NameValuePair>) params, "utf-8");
         Log.d(TAG, "Find meeting request params: " + builder.toString());
 
         return builder.toString();

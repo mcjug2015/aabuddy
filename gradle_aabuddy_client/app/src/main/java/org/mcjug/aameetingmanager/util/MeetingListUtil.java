@@ -1,7 +1,9 @@
 package org.mcjug.aameetingmanager.util;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.PreferenceManager;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
@@ -12,6 +14,7 @@ import org.mcjug.aameetingmanager.AAMeetingApplication;
 import org.mcjug.aameetingmanager.meeting.Meeting;
 import org.mcjug.aameetingmanager.meeting.MeetingListResults;
 import org.mcjug.aameetingmanager.meeting.MeetingType;
+import org.mcjug.meetingfinder.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -34,10 +37,14 @@ public class MeetingListUtil {
     private static final String LONGITUDE = "long";
     private static final String MEETING_TYPE_IDS = "types";
 
-    public static MeetingListResults getMeetingList(Context context,  String jsonStr) throws Exception {
+    public static MeetingListResults getMeetingList(Context context, String jsonStr) throws Exception {
         Log.d(TAG, "Meeting list: " + jsonStr);
 
         boolean is24HourTime = DateTimeUtil.is24HourTime(context);
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String distanceFormat = prefs.getString(context.getString(R.string.distanceFormatKey), "Miles");
+        boolean isDistanceInMiles = distanceFormat.equalsIgnoreCase("Miles") ? true : false;
 
         MeetingListResults meetingListResults = new MeetingListResults();
         List<Meeting> meetings = new ArrayList<Meeting>();
@@ -76,7 +83,14 @@ public class MeetingListUtil {
                         meeting.setTimeRange(startTime + " - " + endTime);
 
                         meeting.setAddress(meetingJson.getString(ADDRESS));
-                        meeting.setDistance(String.format("%.2f", Double.parseDouble(meetingJson.getString(DISTANCE))));
+
+                        Double distanceMiles = Double.parseDouble(meetingJson.getString(DISTANCE));
+                        if (isDistanceInMiles) {
+                            meeting.setDistance(String.format("%.2f", distanceMiles));
+                        } else {
+                            distanceMiles *= 1.60934;
+                            meeting.setDistance(String.format("%.2f%s", distanceMiles, " km"));
+                        }
 
                         meeting.setLatitude(meetingJson.getDouble(LATITUDE));
                         meeting.setLongitude(meetingJson.getDouble(LONGITUDE));

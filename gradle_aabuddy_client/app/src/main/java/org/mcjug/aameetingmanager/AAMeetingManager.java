@@ -31,65 +31,54 @@ import org.mcjug.meetingfinder.R;
 import java.util.Calendar;
 
 public class AAMeetingManager extends ActionBarActivity
-implements LogoutDialogFragment.LogoutDialogListener {
+        implements LogoutDialogFragment.LogoutDialogListener {
 
-	private static final String TAG = AAMeetingManager.class.getSimpleName();	
-	private static final String LOGOUT_TAG = "logoutTag";
+    private static final String TAG = AAMeetingManager.class.getSimpleName();
+    private static final String LOGOUT_TAG = "logoutTag";
 
-	@Override
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		// Inflate the layout
-		setContentView(R.layout.aa_meeting_manager);
-		ImageView findMeetingImageView = (ImageView) findViewById(R.id.findMeetingImageView);
-		findMeetingImageView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), FindMeetingFragmentActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-			}
-		});
+        // Inflate the layout
+        setContentView(R.layout.aa_meeting_manager);
+        ImageView findMeetingImageView = (ImageView) findViewById(R.id.findMeetingImageView);
+        findMeetingImageView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), FindMeetingFragmentActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            }
+        });
 
-		/*
-		ImageView submitMeetingImageView = (ImageView) findViewById(R.id.submitMeetingImageView);
-		submitMeetingImageView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), SubmitMeetingFragmentActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-			}
-		});
-		initSubmitMeetingButton();
-		*/
-
-		ImageView settingsImageView = (ImageView)findViewById(R.id.settingsImageView);
-		settingsImageView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-			}
-		});
-		ImageView helpImageView = (ImageView)findViewById(R.id.helpImageView);
-		helpImageView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				startActivity(new Intent(getApplicationContext(), HelpFragmentActivity.class)
-				.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-			}
-		});
-		initRecoveryText();
-	}
+        ImageView settingsImageView = (ImageView) findViewById(R.id.settingsImageView);
+        settingsImageView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            }
+        });
+        ImageView helpImageView = (ImageView) findViewById(R.id.helpImageView);
+        helpImageView.setOnClickListener(new OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), HelpFragmentActivity.class)
+                        .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+            }
+        });
+        initRecoveryText();
+    }
 
     public void initSubmitMeetingButton() {
-        ImageView submitMeetingImageView = (ImageView)findViewById(R.id.submitMeetingImageView);
+        ImageView submitMeetingImageView = (ImageView) findViewById(R.id.submitMeetingImageView);
         OnClickListener submitMeetingImageViewClickListener = null;
-		Context context = getApplicationContext();
+        Context context = getApplicationContext();
         Credentials credentials = Credentials.readFromPreferences(context);
         //toggle login/submit functionality
         if (!credentials.isSet()) {
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean(context.getString(R.string.redirectToRegister), true);
             editor.commit();
-			Log.d(TAG, "Redirect to Register added to Shared Preferences");
+            Log.d(TAG, "Redirect to Register added to Shared Preferences");
             submitMeetingImageViewClickListener = new OnClickListener() {
                 public void onClick(View v) {
                     startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
@@ -108,145 +97,146 @@ implements LogoutDialogFragment.LogoutDialogListener {
         submitMeetingImageView.setOnClickListener(submitMeetingImageViewClickListener);
     }
 
-	public void initLoginLogoutButton() {
-		ImageView loginInImageView = (ImageView)findViewById(R.id.loginImageView);
-		final TextView loginTextView = (TextView)findViewById(R.id.loginTextView);
-		OnClickListener loginImageViewClickListener = null;
+    public void initLoginLogoutButton() {
+        ImageView loginInImageView = (ImageView) findViewById(R.id.loginImageView);
+        final TextView loginTextView = (TextView) findViewById(R.id.loginTextView);
+        OnClickListener loginImageViewClickListener = null;
 
-		Credentials credentials = Credentials.readFromPreferences(getApplicationContext());
+        Credentials credentials = Credentials.readFromPreferences(getApplicationContext());
 
-		//toggle login/logout functionality
-		if (!credentials.isSet()) {
-			//show login button
-			loginInImageView.setImageResource(R.drawable.login);
-			loginTextView.setText(getString(R.string.login));
+        //toggle login/logout functionality
+        if (!credentials.isSet()) {
+            //show login button
+            loginInImageView.setImageResource(R.drawable.login);
+            loginTextView.setText(getString(R.string.login));
 
-			loginImageViewClickListener = new OnClickListener() {
-				public void onClick(View v) {
-					startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
-					.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-				}
-			};
+            loginImageViewClickListener = new OnClickListener() {
+                public void onClick(View v) {
+                    startActivity(new Intent(getApplicationContext(), LoginFragmentActivity.class)
+                            .addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+                }
+            };
 
-		} else {
-			// show logout button
-			loginInImageView.setImageResource(R.drawable.logout);
-			loginTextView.setText(getString(R.string.logout));
+        } else {
+            // show logout button
+            loginInImageView.setImageResource(R.drawable.logout);
+            loginTextView.setText(getString(R.string.logout));
 
-			loginImageViewClickListener = new OnClickListener() {
-				public void onClick(View v) {
-					LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();					
-					logoutDialogFragment.show(getSupportFragmentManager(), LOGOUT_TAG);
-				}
-			};
-		}
+            loginImageViewClickListener = new OnClickListener() {
+                public void onClick(View v) {
+                    LogoutDialogFragment logoutDialogFragment = new LogoutDialogFragment();
+                    logoutDialogFragment.show(getSupportFragmentManager(), LOGOUT_TAG);
+                }
+            };
+        }
 
-		loginInImageView.setOnClickListener(loginImageViewClickListener);
-	}
+        loginInImageView.setOnClickListener(loginImageViewClickListener);
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
-		initSubmitMeetingButton();
-		initLoginLogoutButton();
-		initRecoveryText();
-	}
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initSubmitMeetingButton();
+        initLoginLogoutButton();
+        initRecoveryText();
+    }
 
-	public void onLogoutDialogPositiveClick(DialogFragment dialog) {
-		Credentials.removeFromPreferences(getApplicationContext());
-		initLoginLogoutButton();
-	}
+    public void onLogoutDialogPositiveClick(DialogFragment dialog) {
+        Credentials.removeFromPreferences(getApplicationContext());
+        initLoginLogoutButton();
+    }
 
-	private void initRecoveryText () {
-		TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
+    private void initRecoveryText() {
+        TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
 
-		if (DateTimeUtil.getRecoveryDateAllowed(getApplicationContext())) {
-			Calendar recoveryDate = DateTimeUtil.getRecoveryDate(getApplicationContext());
-			if (buildRecoveryDateText(getApplicationContext(), recoveryDate, textView)) {
+        if (DateTimeUtil.getRecoveryDateAllowed(getApplicationContext())) {
+            Calendar recoveryDate = DateTimeUtil.getRecoveryDate(getApplicationContext());
+            if (buildRecoveryDateText(getApplicationContext(), recoveryDate, textView)) {
 
-				String recoveryDatePrompt = getApplicationContext().getString(R.string.recoveryDatePrompt);
-				SpannableString link = new SpannableString(recoveryDatePrompt);
-				int spanStart = recoveryDatePrompt.indexOf("Recovery Date");
-				makeLinkSpan(link, spanStart, spanStart + "Recovery Date".length(), setDateClickListener);
-				makeLinksFocusable(textView);
-				textView.setText(link);				
-			}
+                String recoveryDatePrompt = getApplicationContext().getString(R.string.recoveryDatePrompt);
+                SpannableString link = new SpannableString(recoveryDatePrompt);
+                int spanStart = recoveryDatePrompt.indexOf("Recovery Date");
+                makeLinkSpan(link, spanStart, spanStart + "Recovery Date".length(), setDateClickListener);
+                makeLinksFocusable(textView);
+                textView.setText(link);
+            }
 
-			ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
-			imageButton.setVisibility(View.VISIBLE);
-		} else {
-			textView.setVisibility(View.GONE);
-			ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
-			imageButton.setVisibility(View.GONE);
-		}
-	}	
+            ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
+            imageButton.setVisibility(View.VISIBLE);
+        } else {
+            textView.setVisibility(View.GONE);
+            ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
+            imageButton.setVisibility(View.GONE);
+        }
+    }
 
-	private View.OnClickListener setDateClickListener = new View.OnClickListener() {
-		@Override
-		public void onClick(View view) {
-			startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class).
-					addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
-		}
-	};
+    private View.OnClickListener setDateClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            startActivity(new Intent(getApplicationContext(), AdminPrefsActivity.class).
+                    addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT));
+        }
+    };
 
-	private static boolean buildRecoveryDateText(Context context, Calendar recoveryDate, TextView textView) {
-		boolean needToAddDate = false;
-		textView.setVisibility(View.VISIBLE);
+    private static boolean buildRecoveryDateText(Context context, Calendar recoveryDate, TextView textView) {
+        boolean needToAddDate = false;
+        textView.setVisibility(View.VISIBLE);
 
-		if (recoveryDate != null) {
-			Calendar today = Calendar.getInstance();
-			long diffInMillisec = today.getTimeInMillis() - recoveryDate.getTimeInMillis();
-			if (diffInMillisec >= 1) {
-				long diffInDays = diffInMillisec / (24 * 60 * 60 * 1000) + 1;
-				String ordinal = DateTimeUtil.getOrdinalFor ((int) diffInDays);
-				String congratulationsMsg = context.getString(R.string.recoveryDateCongratulationsMsg);
-				String message = String.format(congratulationsMsg, diffInDays, ordinal);
+        if (recoveryDate != null) {
+            Calendar today = Calendar.getInstance();
+            long diffInMillisec = today.getTimeInMillis() - recoveryDate.getTimeInMillis();
+            if (diffInMillisec >= 1) {
+                long diffInDays = diffInMillisec / (24 * 60 * 60 * 1000) + 1;
+                String ordinal = DateTimeUtil.getOrdinalFor((int) diffInDays);
+                String congratulationsMsg = context.getString(R.string.recoveryDateCongratulationsMsg);
+                String message = String.format(congratulationsMsg, diffInDays, ordinal);
 
-				textView.setText(message);
-			}
-		} else {
-			needToAddDate = true;
-		}
+                textView.setText(message);
+            }
+        } else {
+            needToAddDate = true;
+        }
 
-		return needToAddDate;
-	}
+        return needToAddDate;
+    }
 
-	private void makeLinksFocusable(TextView textView) {
-		MovementMethod movementMethodm = textView.getMovementMethod();  
-		if ((movementMethodm == null) || !(movementMethodm instanceof LinkMovementMethod)) {  
-			if (textView.getLinksClickable()) {  
-				textView.setMovementMethod(LinkMovementMethod.getInstance());  
-			}  
-		}
-	}
+    private void makeLinksFocusable(TextView textView) {
+        MovementMethod movementMethodm = textView.getMovementMethod();
+        if ((movementMethodm == null) || !(movementMethodm instanceof LinkMovementMethod)) {
+            if (textView.getLinksClickable()) {
+                textView.setMovementMethod(LinkMovementMethod.getInstance());
+            }
+        }
+    }
 
-	private void makeLinkSpan(SpannableString link, int spanStart, int spanEnd, View.OnClickListener listener) {
-		link.setSpan(new ClickableString(listener), spanStart, spanEnd, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
-	}
+    private void makeLinkSpan(SpannableString link, int spanStart, int spanEnd, View.OnClickListener listener) {
+        link.setSpan(new ClickableString(listener), spanStart, spanEnd, SpannableString.SPAN_INCLUSIVE_EXCLUSIVE);
+    }
 
-	private static class ClickableString extends ClickableSpan {  
-		private View.OnClickListener mListener;          
-		public ClickableString(View.OnClickListener listener) {              
-			mListener = listener;  
-		} 
+    private static class ClickableString extends ClickableSpan {
+        private View.OnClickListener mListener;
 
-		@Override  
-		public void onClick(View v) { 
-			mListener.onClick(v);  
-		}   
-	}    
+        public ClickableString(View.OnClickListener listener) {
+            mListener = listener;
+        }
 
-	public void onClickHideRecoveryDate (View view) {
-		TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
-		textView.setVisibility(View.GONE);
+        @Override
+        public void onClick(View v) {
+            mListener.onClick(v);
+        }
+    }
 
-		ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
-		imageButton.setVisibility(View.GONE);
+    public void onClickHideRecoveryDate(View view) {
+        TextView textView = (TextView) findViewById(R.id.textViewRecoveryDate);
+        textView.setVisibility(View.GONE);
 
-		DateTimeUtil.setRecoveryDateAllowed(getApplicationContext(), false);
+        ImageButton imageButton = (ImageButton) findViewById(R.id.imageButtonRecoveryDateHide);
+        imageButton.setVisibility(View.GONE);
 
-		Toast.makeText(getApplicationContext(), 
-				getApplicationContext().getString(R.string.howToRecoverToastNote), 
-				Toast.LENGTH_LONG).show();	
-	}
+        DateTimeUtil.setRecoveryDateAllowed(getApplicationContext(), false);
+
+        Toast.makeText(getApplicationContext(),
+                getApplicationContext().getString(R.string.howToRecoverToastNote),
+                Toast.LENGTH_LONG).show();
+    }
 }
