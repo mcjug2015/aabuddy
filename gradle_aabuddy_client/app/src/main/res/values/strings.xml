@@ -28,7 +28,7 @@
     <string name="adminPrefActivityTitle">Settings</string>
     <string name="serverPreferencesTitle">Server Preferences</string>
     <string name="meetingServerSecureBaseUrlDefaultValue">https://mcasg.org</string>
-    <string name="meetingServerUnsecureBaseUrlDefaultValue">http://mcasg.org</string>
+    <string name="meetingServerUnsecureBaseUrlDefaultValue">https://mcasg.org</string>
     <string name="sslTrustAllFlagPreferenceName">sslTrustAllFlag</string>
     <string name="sslTrustAllFlagTitle">Trust All Certificates?</string>
     <string name="sslTrustAllFlagSummaryOff">Self signed certificates will NOT be trusted.</string>
