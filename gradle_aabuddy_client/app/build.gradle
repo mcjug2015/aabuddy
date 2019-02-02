@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 
 android {
     useLibrary 'org.apache.http.legacy'
-    compileSdkVersion 23
-    buildToolsVersion '25.0.0'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "org.mcjug.meetingfinder"
-        minSdkVersion 10
-        targetSdkVersion 23
+        minSdkVersion 23
+        targetSdkVersion 28
     }
     buildTypes {
         release {
@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:23.0.0'
-    compile 'com.android.support:support-v4:23.0.0'
+    implementation 'com.android.support:appcompat-v7:25.0.0'
+    implementation 'com.android.support:support-v4:25.0.0'
 }
